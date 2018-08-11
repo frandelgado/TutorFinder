@@ -13,4 +13,16 @@
     <module>persistance</module>
     <module>services</module>
   </modules>
+  <properties>
+    <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
+  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>${org.springframework.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
