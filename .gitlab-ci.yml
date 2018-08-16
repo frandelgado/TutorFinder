@@ -15,6 +15,3 @@ maven-build:
   image: maven:3-jdk-10
   stage: build
   script: "mvn package -B"
-  artifacts:
-    paths:
-      - target/*.jar
