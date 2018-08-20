@@ -3,15 +3,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>tutor-finder</artifactId>
-    <groupId>ar.edu.itba.paw.tutor-finder</groupId>
+    <groupId>ar.edu.itba.paw</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>ar.edu.itba.paw.persistance</groupId>
-  <artifactId>persistance</artifactId>
+  <groupId>ar.edu.itba.paw</groupId>
+  <artifactId>persistence</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>persistance</name>
+  <name>persistence</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -29,15 +29,19 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>ar.edu.itba.paw.interfaces</groupId>
+      <groupId>ar.edu.itba.paw</groupId>
       <artifactId>interfaces</artifactId>
       <version>${parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>ar.edu.itba.paw.model</groupId>
+      <groupId>ar.edu.itba.paw</groupId>
       <artifactId>model</artifactId>
       <version>${parent.version}</version>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
     </dependency>
     </dependencies>
 

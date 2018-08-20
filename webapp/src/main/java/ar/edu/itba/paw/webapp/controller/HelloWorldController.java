@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 //TODO: Creo que este UserService deberia estar en un paquete que se llama interface.Userservice
+
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class HelloWorldController {
 
     @Autowired
+    @Qualifier("userServiceImpl")
     private UserService us;
 
     @RequestMapping("/")

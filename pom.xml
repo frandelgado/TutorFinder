@@ -11,7 +11,7 @@
     <module>webapp</module>
     <module>interfaces</module>
     <module>model</module>
-    <module>persistance</module>
+    <module>persistence</module>
     <module>services</module>
   </modules>
   <properties>

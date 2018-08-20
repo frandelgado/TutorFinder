@@ -10,14 +10,14 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "ar.edu.itba.paw.webapp.controller" })
+@ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence" })
 public class WebConfig {
 
     @Bean
     public ViewResolver viewResolver(){
         final InternalResourceViewResolver vr = new InternalResourceViewResolver();
         vr.setViewClass(JstlView.class);
-        vr.setPrefix("/WEB-INF/jsp");
+        vr.setPrefix("/WEB-INF/jsp/");
         vr.setSuffix(".jsp");
         return vr;
     }
