@@ -17,7 +17,7 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     </param-value>
   </context-param>
   <context-param>
-    <param-name>ContextConfigLocation</param-name>
+    <param-name>contextConfigLocation</param-name>
     <param-value>
         ar.edu.itba.paw.webapp.config.WebConfig,
     </param-value>
