@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>tutor-finder</artifactId>
-    <groupId>ar.edu.itba.paw.tutor-finder</groupId>
+    <groupId>ar.edu.itba.paw</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>ar.edu.itba.paw.webapp</groupId>
+  <groupId>ar.edu.itba.paw</groupId>
   <artifactId>webapp</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
@@ -34,13 +34,14 @@
       <artifactId>spring-webmvc</artifactId>
     </dependency>
     <dependency>
-      <groupId>ar.edu.itba.paw.services</groupId>
+      <groupId>javax.servlet</groupId>
+      <groupId>ar.edu.itba.paw</groupId>
       <artifactId>services</artifactId>
       <version>${parent.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>ar.edu.itba.paw.interfaces</groupId>
+      <groupId>ar.edu.itba.paw</groupId>
       <artifactId>interfaces</artifactId>
       <version>${parent.version}</version>
     </dependency>
