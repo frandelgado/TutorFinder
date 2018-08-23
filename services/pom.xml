@@ -29,12 +29,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>ar.edu.itba.paw</groupId>
-        <artifactId>model</artifactId>
-        <version>${parent.version}</version>
-        <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
