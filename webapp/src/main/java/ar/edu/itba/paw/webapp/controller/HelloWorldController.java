@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 //TODO: Creo que este UserService deberia estar en un paquete que se llama interface.Userservice
 
-import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.User;
-import ar.edu.itba.paw.interfaces.UserDao;
+import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import org.springframework.stereotype.Repository;
 
 
