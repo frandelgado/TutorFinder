@@ -6,7 +6,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
-    <link rel="stylesheet" href="../../../css/stylesheet.css">
     <!--
     <link rel="stylesheet" type="text/css" href="./css/stylesheet.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
@@ -17,7 +16,7 @@
 <body class="body">
 <div class="nav-var">
     <a href="/" class="logo-box">
-        <img alt="Tu Teoria" class="logo" src="assets/logo_invert.jpg" />
+        <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo.png" />" />
     </a>
     <div class="navbar-buttons">
         <button class="navbar-button">Register</button>
@@ -26,7 +25,7 @@
 </div>
 <div class="content">
     <div class="search-box">
-        <img alt="Tu Teoria" class="search-logo" src="assets/logo.png" />
+        <img alt="Tu Teoria" class="search-logo" src="<c:url value="/resources/images/logo.png" />" />
         <div class="search-bar">
             <input class="search-input"/>
             <button class="search-button">
