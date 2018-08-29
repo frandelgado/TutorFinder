@@ -1,0 +1,144 @@
+*{
+    font-family:  Helvetica, sans-serif;
+}
+
+.navbar {
+    grid-area: navbar;
+    background-color: #F47C48;
+    display: grid;
+    max-height: 65px;
+    padding: 5px 20px;
+}
+
+.logo-box {
+}
+
+.logo {
+    max-width: 65px;
+    padding-right: 10px;
+}
+
+body {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 25% auto 25%;
+    grid-template-rows: 75px 100px auto 100px;
+    grid-template-areas: "navbar navbar  navbar"
+                         "...... ....... ......"
+                         "...... content ......"
+                         "...... ....... ......"
+                        ;
+}
+
+.navbar-button {
+    background-color: inherit;
+    border: none;
+    display: grid;
+    height: 100%;
+    padding: 26px 10px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+}
+
+.navbar-button:hover {
+    background-color: rgb(247, 92, 36);
+}
+
+.navbar div ul {
+    display: none;
+}
+
+.navbar div ul:hover {
+    display: block;
+}
+
+.navbar-buttons {
+    display: grid;
+    align-items: center;  
+}
+
+.content {
+    grid-area: content;
+    display: grid;
+    grid-template-columns: auto 40px;
+    grid-template-rows: auto 40px;
+    grid-template-areas: "search-logo search-logo"
+                         "search-bar ......"
+                        ;
+}
+
+.staticSearchResults {
+}
+
+.staticHome .content {
+}
+
+.search-input {
+    height: 44px;
+    width: 630px
+}
+
+.search-img {
+    max-width: 44px;
+}
+
+.search-button {
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;   
+    background-color: inherit; 
+}
+
+.filter-panel {
+    padding-left: 5px;
+}
+
+.search-results {
+    display: grid;
+}
+
+.search-box {
+}
+
+.search-bar {
+    grid-area: search-bar;
+}
+
+.search-data {
+    margin-bottom: 40px;
+}
+
+.search-result {
+    display: grid;
+    border: 5px solid #F47C48;
+}
+
+.search-result .search-img {
+    object-fit: contain;
+    
+}
+
+.search-title {
+
+}
+
+.search-description {
+    
+}
+
+.search-logo {
+    grid-area: search-logo;
+    max-width: 272px;
+    margin-top: 120px;
+}
+
+.logo-box {
+}
+
+.footer {
+    grid-area: footer;
+}
