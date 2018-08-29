@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface SubjectDao {
     Optional<Subject> findById(final long id);
+
+    Subject create(final String name, final String description);
 }
