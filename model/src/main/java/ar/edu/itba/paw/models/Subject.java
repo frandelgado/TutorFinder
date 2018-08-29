@@ -5,6 +5,12 @@ public class Subject {
     private String description;
     private String name;
 
+    public Subject(Long id, String description, String name) {
+        this.id = id;
+        this.description = description;
+        this.name = name;
+    }
+
     String getDescrption(){
         return description;
     }
