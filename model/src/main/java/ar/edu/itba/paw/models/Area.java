@@ -2,17 +2,23 @@ package ar.edu.itba.paw.models;
 
 public class Area {
 
-    private Long id;
-    private String description;
-    private String name;
+    private final Long id;
+    private final String description;
+    private final String name;
 
-    String getDescrption(){
+    public Area(Long id, String description, String name) {
+        this.id = id;
+        this.description = description;
+        this.name = name;
+    }
+
+    public String getDescrption(){
      return description;
     }
-    Long getId(){
+    public Long getId(){
         return id;
     }
-    String getName(){
+    public String getName(){
         return name;
     }
 }
