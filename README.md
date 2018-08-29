@@ -32,4 +32,6 @@ mvn test
 ## Authors
 
 * **Francisco Delgado**  - [fdelgado96](https://github.com/fdelgado96)
-
+* **Sebastian Favaron**
+* **Rodrigo Manuel Navarro Lajous**
+* **Agustín Calatayud**
