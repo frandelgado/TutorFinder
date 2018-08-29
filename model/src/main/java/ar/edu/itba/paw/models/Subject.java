@@ -11,13 +11,13 @@ public class Subject {
         this.name = name;
     }
 
-    String getDescrption(){
+    public String getDescrption(){
         return description;
     }
-    Long getId(){
+    public Long getId(){
         return id;
     }
-    String getName(){
+    public String getName(){
         return name;
     }
     //TODO: Deberia incluir la referencia a un area o consultar a un DAO con el subject para que me de el area asociada?
