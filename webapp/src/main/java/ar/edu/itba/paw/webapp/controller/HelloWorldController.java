@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-//TODO: Creo que este UserService deberia estar en un paquete que se llama interface.Userservice
-
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.interfaces.service.SubjectService;
 import ar.edu.itba.paw.models.Subject;

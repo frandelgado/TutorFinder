@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.interfaces.persistence;
-//TODO: estos paquetes deberian ser de  interfaces.persistence y no solamente persistence no?
 
 import ar.edu.itba.paw.models.User;
 
