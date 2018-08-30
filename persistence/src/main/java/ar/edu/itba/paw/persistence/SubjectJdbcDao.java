@@ -44,7 +44,7 @@ public class SubjectJdbcDao implements SubjectDao {
     }
 
     @Override
-    public Subject create(String name, String description) {
+    public Subject create(final String name, final String description) {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
         args.put("description", description);
