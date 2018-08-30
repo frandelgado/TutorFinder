@@ -42,7 +42,7 @@ public class HelloWorldController {
         )
     {
         final Subject s = ss.create(name, description);
-        return new ModelAndView("redirect:/Subject/?subjectId=" + s.getId());
+        return new ModelAndView("redirect:/Subject/" + s.getId());
     }
 
 }
