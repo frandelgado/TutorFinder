@@ -38,7 +38,7 @@ public class SubjectJdbcDao implements SubjectDao {
     @Override
     public Optional<Subject> findById(final long id) {
         final List<Subject> list = jdbcTemplate.query(
-                "SELECT * FROM subjects WHERE userid = ?", ROW_MAPPER, id
+                "SELECT * FROM subjects WHERE subject_id = ?", ROW_MAPPER, id
         );
         return list.stream().findFirst();
     }
@@ -48,6 +48,7 @@ public class SubjectJdbcDao implements SubjectDao {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
         args.put("description", description);
+        args.put("area_id", null);
         final Number subjectId = jdbcInsert.executeAndReturnKey(args);
         return new Subject(subjectId.longValue(), description, name);
     }
