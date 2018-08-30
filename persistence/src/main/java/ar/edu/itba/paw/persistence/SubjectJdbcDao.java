@@ -52,4 +52,12 @@ public class SubjectJdbcDao implements SubjectDao {
         final Number subjectId = jdbcInsert.executeAndReturnKey(args);
         return new Subject(subjectId.longValue(), description, name);
     }
+
+    @Override
+    public List<Subject> filterSubjectsByName(String name) {
+        final List<Subject> list = jdbcTemplate.query(
+                "SELECT * FROM subjects WHERE name LIKE = '%?%'", ROW_MAPPER, name
+        );
+        return list;
+    }
 }
