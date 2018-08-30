@@ -4,6 +4,7 @@
   <build>
     <plugins>
       <plugin>
+        <!--TODO: is this plugin really needed?-->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
