@@ -6,6 +6,8 @@ import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SubjectServiceImpl implements SubjectService {
 
@@ -24,5 +26,9 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectDao.create(name,description);
     }
 
+    @Override
+    public List<Subject> filterSubjectsByName(final String name){
+        return subjectDao.filterSubjectsByName(name);
+    }
 
 }
