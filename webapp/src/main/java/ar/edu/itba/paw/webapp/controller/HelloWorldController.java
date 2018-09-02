@@ -28,7 +28,7 @@ public class HelloWorldController {
         mav.addObject("user", us.findUserById(0));
         return mav;
     }
-    @RequestMapping("/subjects/{id}")
+    @RequestMapping("/Subject/{id}")
     public ModelAndView subject(@PathVariable(value = "id") long id){
         final ModelAndView mav = new ModelAndView("subject");
         mav.addObject("subject", ss.findSubjectById(id));
