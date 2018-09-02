@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS subjects (
 subject_id SERIAL PRIMARY KEY,
 name VARCHAR(128) UNIQUE NOT NULL,
 description VARCHAR(512) NOT NULL,
-area_id INT,
+area_id INT NOT NULL,
 FOREIGN KEY(area_id) REFERENCES areas(area_id) ON DELETE CASCADE
 );
 
@@ -22,15 +22,15 @@ lastname VARCHAR(128) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS professors (
-user_id BIGINT,
+user_id BIGINT NOT NULL,
 description VARCHAR(512) NOT NULL,
 FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
 PRIMARY KEY(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS courses (
-user_id BIGINT,
-subject_id BIGINT,
+user_id BIGINT NOT NULL,
+subject_id BIGINT NOT NULL,
 description VARCHAR(512) NOT NULL,
 price REAL NOT NULL CHECK(price >= 0),
 rating REAL NOT NULL CHECK(rating >= 0 AND rating <= 5),
