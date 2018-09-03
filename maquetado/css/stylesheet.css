@@ -5,6 +5,7 @@
 .navbar {
     grid-area: navbar;
     background-color: #F47C48;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     display: grid;
     max-height: 65px;
     padding: 5px 20px;
@@ -80,6 +81,44 @@ body {
     align-items: center;  
 }
 
+.search-dropdown-area {
+    display: grid;
+    align-self: center;
+}
+
+.search-dropdown-area {
+    position: relative;
+    height: 65px;
+    padding: 5px 0px;
+}
+
+.search-dropdown-area:hover .search-dropdown {
+    display: grid;
+    margin-top: 50px;
+    position: absolute;
+    grid-auto-flow: row;
+}
+
+.search-dropdown-button {
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.search-dropdown {
+    grid-area: search-dropdown;
+    display: none;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    background-color: #F47C48;
+}
+
+.search-dropdown button {
+    padding: 10px 10px;
+
+}
+
+.search-dropdown button:hover {
+    background-color: rgb(247, 92, 36);
+}
+
 .content {
     grid-area: content;
 }
@@ -129,7 +168,7 @@ body {
     max-width: 44px;
 }
 
-.search-button {
+button {
     border: none;
     cursor: pointer;
     text-align: center;
@@ -146,16 +185,18 @@ body {
 .search-results {
     grid-area: search-results;
     display: grid;
-    grid-auto-rows: 250px;
-    grid-row-gap: 20px;
-    grid-template-rows: 100px;
+    margin-top: 40px;
+    grid-auto-rows: 220px;
+    grid-row-gap: 40px;
+    grid-template-rows: 40px;
     grid-template-areas: "search-data"
 }
 
 .search-bar {
     grid-area: search-bar;
     display: grid;
-    grid-template-areas: "search-input search-button";
+    grid-auto-flow: column;
+    /*grid-template-areas: "search-input search-dropdown search-button";*/
 }
 
 .search-data {
@@ -169,9 +210,12 @@ body {
     border: 5px solid #F47C48;
     height: 100%;
     align-content: center;
+    font-size: 20px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);    
     grid-template-rows: 50px 154px;
     grid-template-areas: "search-result-img search-result-title"
                          "search-result-img search-result-description"
+    
 }
 
 .search-result-img {
