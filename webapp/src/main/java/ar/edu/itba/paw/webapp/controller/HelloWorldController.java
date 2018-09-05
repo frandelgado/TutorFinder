@@ -35,6 +35,14 @@ public class HelloWorldController {
         return mav;
     }
 
+    @RequestMapping("/searchResults")
+    public ModelAndView search(@RequestParam(value = "search") String name){
+        final ModelAndView mav = new ModelAndView("searchResults");
+        mav.addObject("results", ss.filterSubjectsByName(name));
+        mav.addObject("search", name);
+        return mav;
+    }
+
     @RequestMapping("/createSubject")
     public ModelAndView create(
             @RequestParam(value="name", required=true) final String name,

@@ -55,8 +55,9 @@ public class SubjectJdbcDao implements SubjectDao {
 
     @Override
     public List<Subject> filterSubjectsByName(String name) {
+        final String search = "%" + name + "%";
         final List<Subject> list = jdbcTemplate.query(
-                "SELECT * FROM subjects WHERE name LIKE = '%?%'", ROW_MAPPER, name
+                "SELECT * FROM subjects WHERE name LIKE ?", ROW_MAPPER, search
         );
         return list;
     }

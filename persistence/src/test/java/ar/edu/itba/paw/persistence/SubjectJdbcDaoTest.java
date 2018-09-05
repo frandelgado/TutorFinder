@@ -45,7 +45,7 @@ public class SubjectJdbcDaoTest {
         final Subject subject = subjectDao.create(NAME, DESCRIPTION);
         assertNotNull(subject);
         assertEquals(NAME, subject.getName());
-        assertEquals(DESCRIPTION, subject.getDescrption());
+        assertEquals(DESCRIPTION, subject.getDescription());
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "subjects"));
     }
 }
