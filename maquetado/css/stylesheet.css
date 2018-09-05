@@ -116,7 +116,12 @@ body {
     max-width: 30px;
 }
 
-.staticHome .content {
+.navbar .dropdown .dropdown-area {
+    display: none;
+}
+
+.navbar .dropdown:hover .dropdown-area {
+    display: grid;
 }
 
 .search-input {
@@ -129,7 +134,7 @@ body {
     max-width: 44px;
 }
 
-.search-button {
+button {
     border: none;
     cursor: pointer;
     text-align: center;
