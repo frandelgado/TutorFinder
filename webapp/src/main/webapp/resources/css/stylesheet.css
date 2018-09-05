@@ -2,45 +2,127 @@
     font-family:  Helvetica, sans-serif;
 }
 
-.nav-var {
-    background-color: coral;
-    display: flex;
-    align-content: center;
+.navbar {
+    grid-area: navbar;
+    background-color: #F47C48;
+    display: grid;
     max-height: 65px;
     padding: 5px 20px;
 }
 
-.logo {
-    max-height: 65px;
+.staticSearchResults .navbar {
+    grid-template-areas: "logo-box search-bar";
 }
 
-.body {
+.staticHome .navbar {
+    grid-template-areas: "logo-box";
+}
+
+.logo-box {
+    grid-area: logo-box;
+}
+
+.logo {
+    max-width: 65px;
+    padding-right: 10px;
+}
+
+body {
     margin: 0;
+    display: grid;
+    grid-template-columns: 25fr 50fr 25fr;
+    grid-template-rows: 75px 100px auto 100px;
+}
+
+.staticHome {
+    grid-template-areas: "navbar navbar  navbar"
+    "...... ....... ......"
+    "...... content ......"
+    "...... ....... ......"
+;
+}
+
+.staticSearchResults {
+    grid-template-areas: "navbar  navbar  navbar"
+    "content content content"
+    "content content content"
+    "content content content"
+;
 }
 
 .navbar-button {
     background-color: inherit;
     border: none;
+    display: grid;
+    height: 100%;
+    padding: 26px 10px;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
     color: white;
-    font-size: 18px;    
+    font-size: 18px;
 }
+
 .navbar-button:hover {
-    background-color: #3e8e41;
+    background-color: rgb(247, 92, 36);
+}
+
+.navbar div ul {
+    display: none;
+}
+
+.navbar div ul:hover {
+    display: block;
+}
+
+.navbar-buttons {
+    display: grid;
+    align-items: center;
 }
 
 .content {
-    width: 100%;
-    display: flex;
-    align-content: center;
-    justify-content: center;
+    grid-area: content;
+}
+
+.staticSearchResults .content {
+    display: grid;
+    grid-template-columns: 25fr 50fr 25fr;
+    grid-template-areas: "filter-panel search-results ...."
+}
+
+.search-box {
+    grid-area: search-box;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 50px;
+    grid-template-areas: "search-logo"
+    "search-bar"
+;
+    grid-row-gap: 10px;
+    justify-items: center;
+    align-items: center;
+}
+
+.navbar .search-bar {
+    justify-content: end;
+}
+
+.navbar .search-bar .search-input {
+    height: 40%;
+    max-width: 300px;
+}
+
+.navbar .search-bar .search-img {
+    max-width: 30px;
+}
+
+.staticHome .content {
 }
 
 .search-input {
     height: 44px;
-    width: 630px
+    width: 630px;
+    align-self: center;
 }
 
 .search-img {
@@ -51,35 +133,65 @@
     border: none;
     cursor: pointer;
     text-align: center;
-    text-decoration: none;   
-    background-color: inherit; 
+    text-decoration: none;
+    background-color: inherit;
 }
 
-.navbar-buttons {
-    display: flex;
-    align-items: center;  
+.filter-panel {
+    grid-area: filter-panel;
+    margin-top: 50px;
+    margin-left: 5px;
 }
 
-.search-box {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
+.search-results {
+    grid-area: search-results;
+    display: grid;
+    grid-auto-rows: 250px;
+    grid-row-gap: 20px;
+    grid-template-rows: 100px;
+    grid-template-areas: "search-data"
 }
 
 .search-bar {
-    display: flex;
-    justify-content: center;
+    grid-area: search-bar;
+    display: grid;
+    grid-template-areas: "search-input search-button";
+}
+
+.search-data {
+    grid-area: search-data;
+    margin: 0;
+    align-self: center;
+}
+
+.search-result {
+    display: grid;
+    border: 5px solid #F47C48;
+    height: 100%;
     align-content: center;
-    flex-direction: row;
+    grid-template-rows: 50px 154px;
+    grid-template-areas: "search-result-img search-result-title"
+    "search-result-img search-result-description"
+}
+
+.search-result-img {
+    grid-area: search-result-img;
+    align-self: center;
+}
+
+.search-result-title {
+    grid-area: search-result-title;
+}
+
+.search-result-description {
+    grid-area: search-result-description;
 }
 
 .search-logo {
+    grid-area: search-logo;
     max-width: 272px;
-    align-self: center;
-    margin-top: 120px;
 }
 
-.logo-box {
-    flex-grow: 1;
+.footer {
+    grid-area: footer;
 }
