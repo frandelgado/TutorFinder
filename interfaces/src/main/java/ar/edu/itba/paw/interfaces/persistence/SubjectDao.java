@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface SubjectDao {
     Optional<Subject> findById(final long id);
 
-    Subject create(final String name, final String description);
+    Subject create(final String name, final String description, final Long area_id);
 
     List<Subject> filterSubjectsByName(final String name);
 }
