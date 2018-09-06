@@ -23,6 +23,7 @@ public class SubjectJdbcDaoTest {
 
     private static final String NAME = "TestName";
     private static final String DESCRIPTION = "TestDescription";
+    private static final Long AREA_ID = 1l;
 
     @Autowired
     private DataSource ds;
@@ -42,7 +43,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testCreate() {
-        final Subject subject = subjectDao.create(NAME, DESCRIPTION);
+        final Subject subject = subjectDao.create(NAME, DESCRIPTION, AREA_ID);
         assertNotNull(subject);
         assertEquals(NAME, subject.getName());
         assertEquals(DESCRIPTION, subject.getDescription());

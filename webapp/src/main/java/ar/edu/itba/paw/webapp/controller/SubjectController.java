@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.interfaces.service.SubjectService;
 import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,22 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class HelloWorldController {
-
-    @Autowired
-    @Qualifier("userServiceImpl")
-    private UserService us;
+public class SubjectController {
 
     @Autowired
     @Qualifier("subjectServiceImpl")
     private SubjectService ss;
 
-    @RequestMapping("/")
-    public ModelAndView helloWorld(){
-        final ModelAndView mav = new ModelAndView("index");
-        mav.addObject("user", us.findUserById(0));
-        return mav;
-    }
+
     @RequestMapping("/Subject/{id}")
     public ModelAndView subject(@PathVariable(value = "id") long id){
         final ModelAndView mav = new ModelAndView("subject");
@@ -35,22 +25,15 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping("/searchResults")
-    public ModelAndView search(@RequestParam(value = "search") String name){
-        final ModelAndView mav = new ModelAndView("searchResults");
-        mav.addObject("results", ss.filterSubjectsByName(name));
-        mav.addObject("search", name);
-        return mav;
-    }
 
     @RequestMapping("/createSubject")
     public ModelAndView create(
             @RequestParam(value="name", required=true) final String name,
-            @RequestParam(value="description", required=true) final String description
-        )
+            @RequestParam(value="description", required=true) final String description,
+            @RequestParam(value="area", required=true) final Long area_id
+    )
     {
-        final Subject s = ss.create(name, description);
+        final Subject s = ss.create(name, description, area_id);
         return new ModelAndView("redirect:/Subject/" + s.getId());
     }
-
 }
