@@ -44,19 +44,21 @@ public class SubjectJdbcDao implements SubjectDao {
     }
 
     @Override
-    public Subject create(final String name, final String description) {
+    public Subject create(final String name, final String description, final Long area_id) {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
         args.put("description", description);
-        args.put("area_id", null);
+        args.put("area_id", area_id);
         final Number subjectId = jdbcInsert.executeAndReturnKey(args);
         return new Subject(subjectId.longValue(), description, name);
     }
 
     @Override
     public List<Subject> filterSubjectsByName(String name) {
+        //TODO: no hacerlo con concatenacion, bobby;DROP TABLE cursos
+        final String search = "%" + name + "%";
         final List<Subject> list = jdbcTemplate.query(
-                "SELECT * FROM subjects WHERE name LIKE = '%?%'", ROW_MAPPER, name
+                "SELECT * FROM subjects WHERE UPPER(name) LIKE UPPER(?)", ROW_MAPPER, search
         );
         return list;
     }
