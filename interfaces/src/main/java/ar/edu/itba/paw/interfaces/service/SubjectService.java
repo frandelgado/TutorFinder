@@ -7,7 +7,7 @@ import java.util.List;
 public interface SubjectService {
     Subject findSubjectById(final long id);
 
-    Subject create(final String name, final String description);
+    Subject create(final String name, final String description, final Long area_id);
 
     List<Subject> filterSubjectsByName(String name);
 }

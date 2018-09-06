@@ -22,8 +22,8 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Subject create(String name, String description) {
-        return subjectDao.create(name,description);
+    public Subject create(String name, String description, Long area_id) {
+        return subjectDao.create(name,description, area_id);
     }
 
     @Override
