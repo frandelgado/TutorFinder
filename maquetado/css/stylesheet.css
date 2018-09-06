@@ -2,7 +2,7 @@
     font-family:  Helvetica, sans-serif;
 }
 
-.navbar, .search-result, .dropdown-area {
+.navbar, .search-result, .dropdown-area, .contact-button, .class {
     box-shadow: 0 15px 35px -15px grey;
 }
 
@@ -10,7 +10,7 @@
     grid-area: navbar;
     background-color: #F47C48;
     display: grid;
-    grid-template-areas: "logo-box search";
+    grid-template-areas: "logo-box search-bar";
     padding: 0 20px;
 }
 
@@ -37,14 +37,23 @@ body {
     display: grid;
     grid-template-columns: 25fr 50fr 25fr;
     grid-template-rows: 65px 100px auto 100px;
+    grid-template-areas: "navbar  navbar  navbar"
+                         "content content content"
+                         "content content content"
+                         "content content content"
+                        ;
 }
 
-.staticHome {
+.staticHome, .staticClass, .staticProfile {
     grid-template-areas: "navbar navbar  navbar"
                          "...... ....... ......"
                          "...... content ......"
                          "...... ....... ......"
                         ;
+}
+
+.staticProfile {
+    grid-template-columns: 20fr 60fr 20fr;
 }
 
 .staticSearchResults {
@@ -222,6 +231,105 @@ button {
 .search-logo {
     grid-area: search-logo;
     max-width: 272px;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: 80px auto;
+    grid-template-areas: 
+        "profile-picture profile-name"
+        "profile-picture profile-description"
+}
+
+.profile-name {
+    grid-area: profile-name;
+}
+
+.profile-description {
+    grid-area: profile-description;
+}
+
+.profile-picture {
+    grid-area: profile-picture;
+}
+
+.profile-picture {
+    max-width: 65px;
+}
+
+.contact-button {
+    background-color: #F47C48;
+    border-radius: 5px;
+    font-size: 20px;
+    width: 100%;
+    min-height: 40px;
+}
+
+.staticProfile .profile-picture {
+    max-width: 100px;
+}
+
+.staticProfile .content {
+    display: grid;
+    grid-template-columns: 120px auto;
+    grid-template-rows: 50px 50px 80px auto;
+    grid-template-areas:
+        "profile-picture profile-name"
+        "profile-picture profile-description"
+        "............... ..................."
+        "classes         classes"
+        ;
+    
+}
+
+.classes {
+    grid-area: classes;
+    display: grid;
+    grid-auto-rows: 100px;
+    grid-row-gap: 20px;
+}
+
+.class {
+    position: relative;
+    border: 5px solid #F47C48;
+}
+
+.class-content {
+    display: grid;
+    height: 100%;
+    grid-column-gap: 10px;
+    grid-template-areas: "class-title divider class-description button";
+}
+
+.class-button {
+    grid-area: button;
+    position: absolute;
+    top: 0;
+    left: 0;;
+    width: 100%;
+    height: 100%;
+}
+
+.class .divider {
+    grid-area: divider;
+    width: 5px;
+    background-color: #F47C48;
+}
+
+.class-title {
+    grid-area: class-title;
+    align-self: center;
+    justify-self: center;
+}
+
+.class-description {
+    grid-area: class-description;
+    align-self: center;
+}
+
+.class button {
+    grid-area: button;
+    background-color: rgb(243, 143, 101);
 }
 
 .footer {

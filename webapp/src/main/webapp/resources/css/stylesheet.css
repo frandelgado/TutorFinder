@@ -2,12 +2,16 @@
     font-family:  Helvetica, sans-serif;
 }
 
+.navbar, .search-result, .dropdown-area, .contact-button, .class {
+    box-shadow: 0 15px 35px -15px grey;
+}
+
 .navbar {
     grid-area: navbar;
     background-color: #F47C48;
     display: grid;
-    max-height: 65px;
-    padding: 5px 20px;
+    grid-template-areas: "logo-box search-bar";
+    padding: 0 20px;
 }
 
 .staticSearchResults .navbar {
@@ -20,10 +24,11 @@
 
 .logo-box {
     grid-area: logo-box;
+    height: 65px;
 }
 
 .logo {
-    max-width: 65px;
+    height: 100%;
     padding-right: 10px;
 }
 
@@ -31,23 +36,32 @@ body {
     margin: 0;
     display: grid;
     grid-template-columns: 25fr 50fr 25fr;
-    grid-template-rows: 75px 100px auto 100px;
+    grid-template-rows: 65px 100px auto 100px;
+    grid-template-areas: "navbar  navbar  navbar"
+                         "content content content"
+                         "content content content"
+                         "content content content"
+                        ;
 }
 
-.staticHome {
+.staticHome, .staticClass, .staticProfile {
     grid-template-areas: "navbar navbar  navbar"
-    "...... ....... ......"
-    "...... content ......"
-    "...... ....... ......"
-;
+                         "...... ....... ......"
+                         "...... content ......"
+                         "...... ....... ......"
+                        ;
+}
+
+.staticProfile {
+    grid-template-columns: 20fr 60fr 20fr;
 }
 
 .staticSearchResults {
     grid-template-areas: "navbar  navbar  navbar"
-    "content content content"
-    "content content content"
-    "content content content"
-;
+                         "content content content"
+                         "content content content"
+                         "content content content"
+                        ;
 }
 
 .navbar-button {
@@ -63,21 +77,9 @@ body {
     font-size: 18px;
 }
 
-.navbar-button:hover {
-    background-color: rgb(247, 92, 36);
-}
-
-.navbar div ul {
-    display: none;
-}
-
-.navbar div ul:hover {
-    display: block;
-}
-
 .navbar-buttons {
     display: grid;
-    align-items: center;
+    align-items: center;  
 }
 
 .content {
@@ -96,8 +98,8 @@ body {
     grid-template-columns: 1fr;
     grid-template-rows: auto 50px;
     grid-template-areas: "search-logo"
-    "search-bar"
-;
+                         "search-bar"
+                        ;
     grid-row-gap: 10px;
     justify-items: center;
     align-items: center;
@@ -107,16 +109,54 @@ body {
     justify-content: end;
 }
 
-.navbar .search-bar .search-input {
+.navbar .search-input {
     height: 40%;
     max-width: 300px;
 }
 
-.navbar .search-bar .search-img {
+.navbar .search-img {
     max-width: 30px;
 }
 
-.staticHome .content {
+select {
+    background-color: #F47C48;
+    height: 30px;
+    align-self: center;
+    border: none;
+}
+
+.navbar .dropdown {
+    grid-area: dropdown;
+    display: grid;
+    margin: 0px 10px;
+    height: 100%;
+}
+
+.dropdown-button {
+    position: relative;
+    height: 100%;
+}
+
+.dropdown .dropdown-button:hover {
+    background-color: rgb(247, 92, 36);
+}
+
+.dropdown .dropdown-area {
+    display: none;
+    position: absolute;
+}
+
+.dropdown:hover .dropdown-area {
+    display: grid;
+    background-color: #F47C48;
+}
+
+.dropdown-area button {
+    padding: 10px;
+}
+
+.dropdown-area button:hover {
+    background-color: rgb(247, 92, 36);
 }
 
 .search-input {
@@ -129,7 +169,7 @@ body {
     max-width: 44px;
 }
 
-.search-button {
+button {
     border: none;
     cursor: pointer;
     text-align: center;
@@ -146,21 +186,22 @@ body {
 .search-results {
     grid-area: search-results;
     display: grid;
-    grid-auto-rows: 250px;
-    grid-row-gap: 20px;
-    grid-template-rows: 100px;
+    grid-auto-rows: 210px;
+    grid-row-gap: 50px;
+    grid-template-rows: 25px;
     grid-template-areas: "search-data"
 }
 
 .search-bar {
     grid-area: search-bar;
     display: grid;
-    grid-template-areas: "search-input search-button";
+    grid-template-areas: "search-input dropdown search-button";
 }
 
 .search-data {
     grid-area: search-data;
     margin: 0;
+    margin-top: 50px;
     align-self: center;
 }
 
@@ -171,7 +212,7 @@ body {
     align-content: center;
     grid-template-rows: 50px 154px;
     grid-template-areas: "search-result-img search-result-title"
-    "search-result-img search-result-description"
+                         "search-result-img search-result-description"
 }
 
 .search-result-img {
@@ -190,6 +231,105 @@ body {
 .search-logo {
     grid-area: search-logo;
     max-width: 272px;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: 80px auto;
+    grid-template-areas: 
+        "profile-picture profile-name"
+        "profile-picture profile-description"
+}
+
+.profile-name {
+    grid-area: profile-name;
+}
+
+.profile-description {
+    grid-area: profile-description;
+}
+
+.profile-picture {
+    grid-area: profile-picture;
+}
+
+.profile-picture {
+    max-width: 65px;
+}
+
+.contact-button {
+    background-color: #F47C48;
+    border-radius: 5px;
+    font-size: 20px;
+    width: 100%;
+    min-height: 40px;
+}
+
+.staticProfile .profile-picture {
+    max-width: 100px;
+}
+
+.staticProfile .content {
+    display: grid;
+    grid-template-columns: 120px auto;
+    grid-template-rows: 50px 50px 80px auto;
+    grid-template-areas:
+        "profile-picture profile-name"
+        "profile-picture profile-description"
+        "............... ..................."
+        "classes         classes"
+        ;
+    
+}
+
+.classes {
+    grid-area: classes;
+    display: grid;
+    grid-auto-rows: 100px;
+    grid-row-gap: 20px;
+}
+
+.class {
+    position: relative;
+    border: 5px solid #F47C48;
+}
+
+.class-content {
+    display: grid;
+    height: 100%;
+    grid-column-gap: 10px;
+    grid-template-areas: "class-title divider class-description button";
+}
+
+.class-button {
+    grid-area: button;
+    position: absolute;
+    top: 0;
+    left: 0;;
+    width: 100%;
+    height: 100%;
+}
+
+.class .divider {
+    grid-area: divider;
+    width: 5px;
+    background-color: #F47C48;
+}
+
+.class-title {
+    grid-area: class-title;
+    align-self: center;
+    justify-self: center;
+}
+
+.class-description {
+    grid-area: class-description;
+    align-self: center;
+}
+
+.class button {
+    grid-area: button;
+    background-color: rgb(243, 143, 101);
 }
 
 .footer {
