@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.service.SubjectService;
+import ar.edu.itba.paw.interfaces.service.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -12,14 +12,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class SearchController {
 
     @Autowired
-    @Qualifier("subjectServiceImpl")
-    private SubjectService ss;
+    @Qualifier("areaServiceImpl")
+    private AreaService as;
 
-
+    //TODO: Search with dropdown, for now just searches areas
     @RequestMapping("/searchResults")
     public ModelAndView search(@RequestParam(value = "search") String name){
         final ModelAndView mav = new ModelAndView("searchResults");
-        mav.addObject("results", ss.filterSubjectsByName(name));
+        mav.addObject("results", as.filterAreasByName(name));
         mav.addObject("search", name);
         return mav;
     }
