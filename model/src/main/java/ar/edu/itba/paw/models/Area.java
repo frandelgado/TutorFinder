@@ -12,7 +12,7 @@ public class Area {
         this.name = name;
     }
 
-    public String getDescrption(){
+    public String getDescription(){
      return description;
     }
     public Long getId(){
