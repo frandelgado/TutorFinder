@@ -1,17 +1,12 @@
 package ar.edu.itba.paw.models;
 
-public class Professor {
+public class Professor extends User{
 
-    private final User user;
     private final String description;
 
-    public Professor(User user, String description) {
-        this.user = user;
+    public Professor(Long id, String username, String name, String lastname, String password, String email, String description) {
+        super(id, username, name, lastname, password, email);
         this.description = description;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public String getDescription() {
