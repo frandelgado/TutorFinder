@@ -18,13 +18,14 @@ import java.util.Optional;
 public class UserJdbcDao implements UserDao {
 
     private JdbcTemplate jdbcTemplate;
+
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<User> ROW_MAPPER = (rs, rowNum) -> new User(
             rs.getLong("user_id"),
             rs.getString("username"),
             rs.getString("name"),
-            rs.getString("username"),
+            rs.getString("lastname"),
             rs.getString("password"),
             rs.getString("email")
     );
