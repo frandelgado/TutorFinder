@@ -1,15 +1,14 @@
 <%@ taglib prefix="c" uri ="http://java.sun.com/jstl/core_rt" %>
-
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
-    <title>Tu Teoria | Home</title>
+    <title>Tu Teoria | Profile</title>
 </head>
 
-<body class="staticHome">
+<body class="staticProfile">
 
 <div class="navbar">
     <a href="<c:url value="/" />" class="logo-box">
@@ -24,15 +23,16 @@
 </div>
 
 <div class="content">
-    <div class="search-box">
-        <img alt="Tu Teoria" class="search-logo" src="<c:url value="/resources/images/logo.png" />" />
-        <div class="search-bar">
-            <form role="search" action="<c:url value="/searchResults" />">
-                <input class="search-input" type="search" name="search" placeholder="Search..."/>
-                <button type="submit" class="search-button">
-                    <img class="search-img" src="https://static.thenounproject.com/png/337699-200.png" />
-                </button>
-            </form>
+    <%--<img class="profile-picture" alt="Profile picture" src="<c:url value="/resources/images/logo_invert.jpg" />" />--%>
+    <h1 class="profile-name">Raul</h1>
+    <h3 class="profile-description">Ingeniero Naval - Master en Fisica Aplicada</h3>
+    <div class="classes">
+        <div class="class">
+            <a class="class-button" href="linkALaClase"></a>
+            <div class="class-title">Matematica</div>
+            <div class="class-description">La clase de Matematica de Raul esta orientada a alumnos de primaria aprendiendo
+                supersimetria
+            </div>
         </div>
     </div>
 </div>

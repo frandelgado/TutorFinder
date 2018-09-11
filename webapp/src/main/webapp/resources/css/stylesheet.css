@@ -6,6 +6,10 @@
     box-shadow: 0 15px 35px -15px grey;
 }
 
+.class {
+    box-shadow: 0 0 35px 0 grey;
+}
+
 .navbar {
     grid-area: navbar;
     background-color: #F47C48;
@@ -44,16 +48,12 @@ body {
                         ;
 }
 
-.staticHome, .staticClass, .staticProfile {
+.staticHome, .staticClass, .staticProfile, .register {
     grid-template-areas: "navbar navbar  navbar"
                          "...... ....... ......"
                          "...... content ......"
                          "...... ....... ......"
                         ;
-}
-
-.staticProfile {
-    grid-template-columns: 20fr 60fr 20fr;
 }
 
 .staticSearchResults {
@@ -62,6 +62,10 @@ body {
                          "content content content"
                          "content content content"
                         ;
+}
+
+.staticProfile {
+    grid-template-columns: 20fr 60fr 20fr;
 }
 
 .navbar-button {
@@ -90,6 +94,11 @@ body {
     display: grid;
     grid-template-columns: 25fr 50fr 25fr;
     grid-template-areas: "filter-panel search-results ...."
+}
+
+.register .content {
+    display: grid;
+    justify-content: center;
 }
 
 .search-box {
@@ -291,14 +300,11 @@ button {
 
 .class {
     position: relative;
-    border: 5px solid #F47C48;
-}
 
-.class-content {
     display: grid;
-    height: 100%;
     grid-column-gap: 10px;
-    grid-template-areas: "class-title divider class-description button";
+    justify-content: center;
+    grid-template-areas: "class-title class-description";
 }
 
 .class-button {
@@ -310,26 +316,44 @@ button {
     height: 100%;
 }
 
-.class .divider {
-    grid-area: divider;
-    width: 5px;
-    background-color: #F47C48;
-}
-
 .class-title {
     grid-area: class-title;
-    align-self: center;
+    position: relative;
     justify-self: center;
+    align-self: center;
+}
+
+.class-title::after {
+    position: absolute;
+    content: "";
+    margin-left: 5px;
+    height: 40px;
+    top: -10px;
+    border-right: 1px solid rgba(200,200,200,0.7);
 }
 
 .class-description {
     grid-area: class-description;
+    margin-left: 5px;
     align-self: center;
 }
 
-.class button {
-    grid-area: button;
-    background-color: rgb(243, 143, 101);
+.add-class {
+    justify-self: center;
+    align-self: center;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-form div {
+    margin-bottom: 20px;
+}
+
+.register-form div:last-child{
+    margin-bottom: 0;
 }
 
 .footer {

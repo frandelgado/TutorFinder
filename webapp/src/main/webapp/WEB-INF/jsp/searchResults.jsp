@@ -20,11 +20,11 @@
                 <img alt="Tu Teoria" class="logo" src="<c:url value=" /resources/images/logo_invert.jpg " />" />
             </a>
             <!--
-    <a class="navbar-button" href="./staticHome.html">Home</a>
-    <a class="navbar-button" href="javascript:void(0)">Courses</a>
-    <a class="navbar-button" href="javascript:void(0)">Tutors</a>
-    <a class="navbar-button" href="https://google.com">Profile</a>
--->
+            <a class="navbar-button" href="./staticHome.html">Home</a>
+            <a class="navbar-button" href="javascript:void(0)">Courses</a>
+            <a class="navbar-button" href="javascript:void(0)">Tutors</a>
+            <a class="navbar-button" href="https://google.com">Profile</a>
+            -->
             <div class="search-bar">
                 <input class="search-input" />
                 <div class="dropdown">
@@ -68,14 +68,6 @@
                 </c:forEach>
             </div>
         </div>
-
-        <!--JS-->
-        <!--
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="./js/bootstrap.min.js"></script>
--->
     </body>
 
     </html>
