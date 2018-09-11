@@ -12,8 +12,10 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Autowired
     ProfessorDao professorDao;
+
     @Autowired
     UserDao userDao;
+    
     @Override
     public Professor create(Long userId, String description) {
         //como el usuario tiene que existir, se chequea que exista antes de crear un profesor
