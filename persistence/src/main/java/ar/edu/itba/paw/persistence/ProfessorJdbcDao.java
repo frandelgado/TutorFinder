@@ -21,14 +21,12 @@ public class ProfessorJdbcDao implements ProfessorDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Professor> ROW_MAPPER = (rs, rowNum) -> new Professor(
-            new User(
-                    rs.getLong("user_id"),
-                    rs.getString("username"),
-                    rs.getString("name"),
-                    rs.getString("lastName"),
-                    rs.getString("password"),
-                    rs.getString("email")
-            ),
+            rs.getLong("user_id"),
+            rs.getString("username"),
+            rs.getString("name"),
+            rs.getString("lastName"),
+            rs.getString("password"),
+            rs.getString("email"),
             rs.getString("description")
     );
 
@@ -45,6 +43,7 @@ public class ProfessorJdbcDao implements ProfessorDao {
         args.put("user_id", user.getId());
         args.put("description", description);
         jdbcInsert.execute(args);
-        return new Professor(user, description);
+        return new Professor(user.getId(), user.getUsername(), user.getName(),
+                user.getLastname(), user.getPassword(), user.getEmail(), description);
     }
 }
