@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Subject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,8 +38,6 @@ public class SubjectJdbcDaoTest {
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(ds);
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "subjects");
-
-
     }
 
     @Test
@@ -48,5 +47,11 @@ public class SubjectJdbcDaoTest {
         assertEquals(NAME, subject.getName());
         assertEquals(DESCRIPTION, subject.getDescription());
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "subjects"));
+    }
+
+    @After
+    public void tearDown(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
     }
 }

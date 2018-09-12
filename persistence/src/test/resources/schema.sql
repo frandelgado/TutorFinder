@@ -29,4 +29,4 @@ PRIMARY KEY(user_id)
 );
 
 Insert into areas (area_id, name, description) values (1, 'matematica', 'este area es dificil');
-INSERT into users (user_id, username, password, email, name, lastname) values (2, "juanchopanza", "12345", "juan@hotmail.com", "juan", "lopez" );
+INSERT into users (user_id, username, password, email, name, lastname) values (2, 'juanchopanza', '12345', 'juan@hotmail.com', 'juan', 'lopez' );

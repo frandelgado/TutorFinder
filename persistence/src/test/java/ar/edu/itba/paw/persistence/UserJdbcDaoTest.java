@@ -39,6 +39,7 @@ public class UserJdbcDaoTest {
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
         JdbcTestUtils.deleteFromTables(jdbcTemplate,"users");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
     }
 
     @Test
