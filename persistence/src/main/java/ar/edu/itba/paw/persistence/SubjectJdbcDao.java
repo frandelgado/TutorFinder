@@ -37,10 +37,10 @@ public class SubjectJdbcDao implements SubjectDao {
     }
     @Override
     public Optional<Subject> findById(final long id) {
-        final List<Subject> list = jdbcTemplate.query(
+        final List<Subject> subjects = jdbcTemplate.query(
                 "SELECT * FROM subjects WHERE subject_id = ?", ROW_MAPPER, id
         );
-        return list.stream().findFirst();
+        return subjects.stream().findFirst();
     }
 
     @Override
