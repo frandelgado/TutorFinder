@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
-    <title>Tu Teoria | Class</title>
+    <title>Tu Teoria | Register</title>
 </head>
 
 <body class="register">
@@ -28,7 +28,7 @@
     <h2>Register</h2>
     <form:form cssClass="register-form" modelAttribute="registerForm" action="${postPath}" method="post">
         <div>
-            <form:label path="name">Username: </form:label>
+            <form:label path="name">Name: </form:label>
             <form:input type="text" path="name"/>
             <form:errors cssClass="formError" path="name" element="p"/>
         </div>
