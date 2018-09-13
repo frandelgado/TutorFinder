@@ -16,23 +16,21 @@
     </a>
     <!--
     <div class="navbar-buttons">
-        <button class="navbar-button">Register</button>
-        <button class="navbar-button">Log In</button>
+        <button class="navbar-button"><spring:message code="register"/></button>
+        <button class="navbar-button"><spring:message code="login"/></button>
     </div>
     -->
 </div>
 
 <div class="content">
     <%--<img class="profile-picture" alt="Profile picture" src="<c:url value="/resources/images/logo_invert.jpg" />" />--%>
-    <h1 class="profile-name">Raul</h1>
-    <h3 class="profile-description">Ingeniero Naval - Master en Fisica Aplicada</h3>
+    <h1 class="profile-name"><spring:message code="professor.name" arguments="${professor.name}"/></h1>
+    <h3 class="profile-description"><spring:message code="professor.description" arguments="${professor.description}"/></h3>
     <div class="classes">
         <div class="class">
             <a class="class-button" href="linkALaClase"></a>
-            <div class="class-title">Matematica</div>
-            <div class="class-description">La clase de Matematica de Raul esta orientada a alumnos de primaria aprendiendo
-                supersimetria
-            </div>
+            <div class="class-title"><spring:message code="class.name" arguments="${class.name}"/></div>
+            <div class="class-description"><spring:message code="class.description" arguments="${class.description}"/></div>
         </div>
     </div>
 </div>

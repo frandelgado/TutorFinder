@@ -339,23 +339,91 @@ button {
 }
 
 .add-class {
-    justify-self: center;
-    align-self: center;
+    justify-content: center;
+    align-content: center;
+    font-size: 32px;
 }
 
-.register-form {
+.form {
     display: flex;
     flex-direction: column;
 }
 
-.register-form div {
+.form div {
     margin-bottom: 20px;
 }
 
-.register-form div:last-child{
+.form div:last-child{
     margin-bottom: 0;
 }
 
 .footer {
     grid-area: footer;
+}
+
+
+.input-request {
+    border-width: 0;
+    border-bottom: 2px solid #F47C48;
+    border-radius: 0;
+    padding: 4px 0;
+    background-color: white;
+    font-size: 15px;
+    color: #402039;
+    width: 100%;
+}
+
+.select {
+    height: 30px;
+    display: block;
+}
+
+.label {
+  color:#402039;
+}
+
+.custom-input-container,
+.custom-select-container,
+.custom-field-array-container {
+    position: relative;
+    margin: 0 0 25px 0;
+}
+
+.custom-select-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.double {
+    margin-right: 20px;
+}
+
+.error-text {
+    position: absolute;
+    top: 100%;
+    color: red;
+    font-size: 12px;
+}
+
+.button-2 {
+    cursor: pointer;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #F47C48;
+    border-radius: 4px;
+    background: transparent;
+    color: #402039;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 20px;
+    padding: 10px 32px;
+
+}
+
+.button-container {
+    display: flex;
+    align-content: center;
+    justify-content: center;
 }

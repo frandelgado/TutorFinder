@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri ="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><html>
 <html>
 
 <head>
@@ -15,10 +16,10 @@
         <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
     </a>
     <!-- 
-    <div class="navbar-buttons"> 
-        <button class="navbar-button">Register</button> 
-        <button class="navbar-button">Log In</button> 
-    </div> 
+    <div class="navbar-buttons">
+        <button class="navbar-button"><spring:message code="register"/></button>
+        <button class="navbar-button"><spring:message code="login"/></button>
+    </div>
     -->
 </div>
 

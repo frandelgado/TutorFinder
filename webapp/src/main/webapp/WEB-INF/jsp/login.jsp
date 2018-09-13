@@ -11,23 +11,41 @@
 </head>
 
 <body>
-    <c:url value="/login" var="loginUrl" />
-    <form action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded">
-        <div>
-            <label for="username"><spring:message code="user.username"/></label>
-            <input id="username" name="username" type="text"/>
+
+<div class="navbar">
+    <a href="<c:url value="/" />" class="logo-box">
+        <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
+    </a>
+    <!--
+    <div class="navbar-buttons">
+        <button class="navbar-button"><spring:message code="register"/></button>
+        <button class="navbar-button"><spring:message code="login"/></button>
+    </div>
+    -->
+</div>
+
+    <div class="content">
+        <div class="button-container">
+          <h1 class="label"><spring:message code="login"/></h1>
         </div>
-        <div>
-            <label for="password"><spring:message code="user.password"/></label>
-            <input id="password" name="password" type="password"/>
-        </div>
-        <div>
-            <label><input name="rememberme" type="checkbox"/><spring:message code="remember_me"/></label>
-        </div>
-        <div>
-            <input type="submit" value="<spring:message code="login"/>" />
-        </div>
-    </form>
+        <c:url value="/login" var="loginUrl" />
+        <form class="form" action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded">
+            <div>
+                <label class="label" for="username"><spring:message code="user.username"/></label>
+                <input class="input-request" id="username" name="username" type="text"/>
+            </div>
+            <div>
+                <label class="label" for="password"><spring:message code="user.password"/></label>
+                <input class="input-request" id="password" name="password" type="password"/>
+            </div>
+            <div>
+                <label class="label" ><input name="rememberme" type="checkbox"/><spring:message code="remember_me"/></label>
+            </div>
+            <div class="button-container">
+                <input class="button-2" type="submit" value="<spring:message code="login"/>" />
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>

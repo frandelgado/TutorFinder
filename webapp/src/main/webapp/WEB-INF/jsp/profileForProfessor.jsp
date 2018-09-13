@@ -16,8 +16,8 @@
     </a>
     <!--
     <div class="navbar-buttons">
-        <button class="navbar-button">Register</button>
-        <button class="navbar-button">Log In</button>
+        <button class="navbar-button"><spring:message code="register"/></button>
+        <button class="navbar-button"><spring:message code="login"/></button>
     </div>
     -->
 </div>
@@ -28,7 +28,7 @@
     <h3 class="profile-description">Ingeniero Naval - Master en Fisica Aplicada</h3>
     <div class="classes">
         <div class="class add-class">
-            <a class="class-button" href="linkALaClase"></a>
+            <a class="class-button" href="/createCourse"></a>
             +
         </div>
         <div class="class">
