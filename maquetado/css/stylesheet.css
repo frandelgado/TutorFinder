@@ -379,3 +379,46 @@ button {
 .footer {
     grid-area: footer;
 }
+
+.input-request {
+    border-width: 0;
+    border-bottom: 2px solid #F47C48;
+    border-radius: 0;
+    padding: 4px 0;
+    background-color: white;
+    font-size: 15px;
+    color: white;
+    width: 100%;
+}
+
+.select {
+    height: 30px;
+    display: block;
+}
+
+.select-label {
+    padding-bottom: 4px;
+}
+
+.custom-input-container,
+.custom-select-container,
+.custom-field-array-container {
+    position: relative;
+    margin: 0 0 25px 0;
+}
+
+.custom-select-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.double {
+    margin-right: 20px;
+}
+
+.error-text {
+    position: absolute;
+    top: 100%;
+    color: red;
+    font-size: 12px;
+}
