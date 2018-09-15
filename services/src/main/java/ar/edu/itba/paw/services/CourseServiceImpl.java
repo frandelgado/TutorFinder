@@ -3,6 +3,8 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.List;
 @Service
 public class CourseServiceImpl implements CourseService {
 
+    private final static Double INITIAL_RATING = 3.0;
 
     @Autowired
     private CourseDao courseDao;
@@ -24,6 +27,11 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> filterCoursesByName(final String name){
         return courseDao.filterCoursesByName(name);
+    }
+
+    @Override
+    public Course create(Professor professor, Subject subject, String description, Double price) {
+        return courseDao.create(professor, subject, description, price, INITIAL_RATING);
     }
 
 }
