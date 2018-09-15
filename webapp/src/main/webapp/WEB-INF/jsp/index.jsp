@@ -27,8 +27,8 @@
 <div class="content">
     <div class="search-box">
         <img alt="Tu Teoria" class="search-logo" src="<c:url value="/resources/images/logo.png" />" />
-        <div class="search-bar">
-            <form role="search" action="<c:url value="/searchResults" />">
+        <div>
+            <form role="search" action="<c:url value="/searchResults" />" class="search-bar">
                 <input class="search-input" type="search" name="search" placeholder="<spring:message code="search"/>"/>
                 <button type="submit" class="search-button">
                     <img class="search-img" src="https://static.thenounproject.com/png/337699-200.png" />
