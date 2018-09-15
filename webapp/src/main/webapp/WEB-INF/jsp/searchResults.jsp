@@ -60,8 +60,12 @@
                 <c:forEach var="result" items="${results}">
                     <div class="search-result">
                         <a class="search-result-img"><img src="https://static.thenounproject.com/png/337699-200.png" /></a>
-                        <a class="search-result-title">
-                            <c:out value="${result.name}" escapeXml="true" /></a>
+                        <a class="search-result-title" href="<c:url value="/Course/?professor=${result.professor.id}&subject=${result.subject.id}" />">
+                            <c:out value="${result.subject.name} - ${result.subject.name}" escapeXml="true" /></a>
+                        <a class="search-result-professor">
+                            <c:out value="${result.professor.name}" escapeXml="true" /></a>
+                        <a class="search-result-specs">
+                            <c:out value="${result.price} - ${result.rating}"/></a>
                         <a class="search-result-description">
                             <c:out value="${result.description}" escapeXml="true" /></a>
                     </div>
