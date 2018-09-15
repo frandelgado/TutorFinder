@@ -76,5 +76,17 @@ public class CourseJdbcDao implements CourseDao {
         );
         return courses;
     }
+
+    @Override
+    public Course create(final Professor professor, final Subject subject, final String description,
+                         final Double price, final Double rating) {
+        final Map<String, Object> args = new HashMap<>();
+        args.put("user_id", professor.getId());
+        args.put("subject_id", subject.getId());
+        args.put("description", description);
+        args.put("price", price);
+        args.put("rating", rating);
+        jdbcInsert.execute(args);
+        return new Course(professor, subject, description, price, rating);
     }
 }
