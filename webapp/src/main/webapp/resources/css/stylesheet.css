@@ -219,8 +219,9 @@ button {
     border: 5px solid #F47C48;
     height: 100%;
     align-content: center;
-    grid-template-rows: 50px 154px;
     grid-template-areas: "search-result-img search-result-title"
+                        "search-result-img search-result-professor"
+                        "search-result-img search-result-specs"
                          "search-result-img search-result-description"
 }
 
@@ -235,6 +236,14 @@ button {
 
 .search-result-description {
     grid-area: search-result-description;
+}
+
+.search-result-specs {
+    grid-area: search-result-specs;
+}
+
+.search-result-professor {
+    grid-area: search-result-professor;
 }
 
 .search-logo {
