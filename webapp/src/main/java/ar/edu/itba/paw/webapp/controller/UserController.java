@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,6 +22,10 @@ public class UserController {
     @Qualifier("userServiceImpl")
     private UserService us;
 
+    @Autowired
+    @Qualifier("professorServiceImpl")
+    private ProfessorService ps;
+
     @RequestMapping("/register")
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
         return new ModelAndView("register");
@@ -30,7 +37,9 @@ public class UserController {
         if(errors.hasErrors()) {
             return register(form);
         }
-        return new ModelAndView("redirect:/");
+        final User u = us.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
+        final Professor p = ps.create(u.getId(), form.getDescription());
+        return new ModelAndView("redirect:/?userId="+ p.getId());
     }
 
     @RequestMapping("/login")
