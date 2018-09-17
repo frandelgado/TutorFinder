@@ -4,11 +4,13 @@ public class Subject {
     private final Long id;
     private final String description;
     private final String name;
+    private final Area area;
 
-    public Subject(Long id, String description, String name) {
+    public Subject(Long id, String description, String name, Area area) {
         this.id = id;
         this.description = description;
         this.name = name;
+        this.area = area;
     }
 
     public String getDescription(){
@@ -20,5 +22,7 @@ public class Subject {
     public String getName(){
         return name;
     }
-    //TODO: Deberia incluir la referencia a un area o consultar a un DAO con el subject para que me de el area asociada?
+    public Area getArea() {
+        return area;
+    }
 }
