@@ -7,7 +7,9 @@ import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.exceptions.ProfessorWithoutUserException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProfessorServiceImpl implements ProfessorService {
 
     @Autowired
