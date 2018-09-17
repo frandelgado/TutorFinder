@@ -22,12 +22,12 @@ public class UserJdbcDao implements UserDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<User> ROW_MAPPER = (rs, rowNum) -> new User(
-            rs.getLong("user_id"),
-            rs.getString("username"),
-            rs.getString("name"),
-            rs.getString("lastname"),
-            rs.getString("password"),
-            rs.getString("email")
+            rs.getLong(1),
+            rs.getString(2),
+            rs.getString(3),
+            rs.getString(4),
+            rs.getString(5),
+            rs.getString(6)
     );
 
     @Autowired
@@ -39,15 +39,26 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public Optional<User> findById(long id) {
+    public Optional<User> findById(final long id) {
         final List<User> users = jdbcTemplate.query(
-                "SELECT * FROM users WHERE user_id = ?", ROW_MAPPER, id
+                "SELECT user_id, username, name, lastname, password," +
+                        " email FROM users WHERE user_id = ?", ROW_MAPPER, id
         );
         return users.stream().findFirst();
     }
 
     @Override
-    public User create(String username, String password, String email, String name, String lastName) {
+    public Optional<User> findByUsername(final String username) {
+        final List<User> users = jdbcTemplate.query(
+                "SELECT user_id, username, name, lastname, password," +
+                        "email FROM users WHERE username = ?", ROW_MAPPER, username
+        );
+        return users.stream().findFirst();
+    }
+
+    @Override
+    public User create(final String username, final String password, final String email,
+                       final String name, final String lastName) {
         final Map<String, Object> args = new HashMap<>();
         args.put("username", username);
         args.put("password", password);

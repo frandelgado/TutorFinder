@@ -21,9 +21,9 @@ public class AreaJdbcDao implements AreaDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Area> ROW_MAPPER = (rs, rowNum) -> new Area(
-            rs.getLong("area_id"),
-            rs.getString("description"),
-            rs.getString("name")
+            rs.getLong(1),
+            rs.getString(2),
+            rs.getString(3)
     );
 
     @Autowired
@@ -36,7 +36,7 @@ public class AreaJdbcDao implements AreaDao {
     @Override
     public Optional<Area> findById(final long id) {
         final List<Area> list = jdbcTemplate.query(
-                "SELECT * FROM areas WHERE area_id = ?", ROW_MAPPER, id
+                "SELECT area_id, description, name FROM areas WHERE area_id = ?", ROW_MAPPER, id
         );
         return list.stream().findFirst();
     }
@@ -54,7 +54,8 @@ public class AreaJdbcDao implements AreaDao {
     public List<Area> filterAreasByName(String name) {
         final String search = "%" + name + "%";
         final List<Area> list = jdbcTemplate.query(
-                "SELECT * FROM areas WHERE UPPER(name) LIKE UPPER(?)", ROW_MAPPER, search
+                "SELECT area_id, description, name FROM areas WHERE UPPER(name) LIKE UPPER(?)",
+                ROW_MAPPER, search
         );
         return list;
     }

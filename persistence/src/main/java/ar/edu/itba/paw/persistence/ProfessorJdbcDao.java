@@ -12,7 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class ProfessorJdbcDao implements ProfessorDao {
@@ -21,13 +23,13 @@ public class ProfessorJdbcDao implements ProfessorDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Professor> ROW_MAPPER = (rs, rowNum) -> new Professor(
-            rs.getLong("user_id"),
-            rs.getString("username"),
-            rs.getString("name"),
-            rs.getString("lastName"),
-            rs.getString("password"),
-            rs.getString("email"),
-            rs.getString("description")
+            rs.getLong(1),
+            rs.getString(2),
+            rs.getString(3),
+            rs.getString(4),
+            rs.getString(5),
+            rs.getString(6),
+            rs.getString(7)
     );
 
     @Autowired
@@ -38,12 +40,30 @@ public class ProfessorJdbcDao implements ProfessorDao {
     }
 
     @Override
-    public Professor create(User user, String description) {
+    public Professor create(final User user, final String description) {
         final Map<String, Object> args = new HashMap<>();
         args.put("user_id", user.getId());
         args.put("description", description);
         jdbcInsert.execute(args);
         return new Professor(user.getId(), user.getUsername(), user.getName(),
                 user.getLastname(), user.getPassword(), user.getEmail(), description);
+    }
+
+    @Override
+    public Optional<Professor> findById(final Long id) {
+        final List<Professor> professors = jdbcTemplate.query(
+                "SELECT user_id, username, name, lastname, password," +
+                        " email, desciption FROM professors, users WHERE user_id = ?", ROW_MAPPER, id
+        );
+        return professors.stream().findFirst();
+    }
+
+    @Override
+    public Optional<Professor> findByUsername(final String username) {
+        final List<Professor> professors = jdbcTemplate.query(
+                "SELECT user_id, username, name, lastname, password," +
+                        " email, desciption FROM professors, users WHERE username = ?", ROW_MAPPER, username
+        );
+        return professors.stream().findFirst();
     }
 }

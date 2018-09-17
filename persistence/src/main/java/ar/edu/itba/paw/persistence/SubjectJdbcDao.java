@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.SubjectDao;
+import ar.edu.itba.paw.models.Area;
 import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,8 +10,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +22,20 @@ public class SubjectJdbcDao implements SubjectDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Subject> ROW_MAPPER = (rs, rowNum) -> new Subject(
-            rs.getLong("subject_id"),
-            rs.getString("description"),
-            rs.getString("name")
+            rs.getLong(1),
+            rs.getString(3),
+            rs.getString(2),
+            new Area(
+                    rs.getLong(4),
+                    rs.getString(6),
+                    rs.getString(5)
+            )
+    );
+
+    private final static RowMapper<Area> AREA_ROW_MAPPER= (rs, rowNum) -> new Area(
+            rs.getLong(1),
+            rs.getString(3),
+            rs.getString(2)
     );
 
     @Autowired
@@ -38,7 +48,11 @@ public class SubjectJdbcDao implements SubjectDao {
     @Override
     public Optional<Subject> findById(final long id) {
         final List<Subject> subjects = jdbcTemplate.query(
-                "SELECT * FROM subjects WHERE subject_id = ?", ROW_MAPPER, id
+                "SELECT subject_id, subjects.name as subjects_name, " +
+                        "subjects.description as subject_description, " +
+                        "subjects.area_id as area_id, areas.name as areas_name, " +
+                        "areas.description as areas_description FROM subjects, areas " +
+                        "WHERE subject_id = ? AND areas.area_id=subjects.area_id;", ROW_MAPPER, id
         );
         return subjects.stream().findFirst();
     }
@@ -50,16 +64,24 @@ public class SubjectJdbcDao implements SubjectDao {
         args.put("description", description);
         args.put("area_id", area_id);
         final Number subjectId = jdbcInsert.executeAndReturnKey(args);
-        return new Subject(subjectId.longValue(), description, name);
+        //TODO: hacer mi propia excepcion
+        final Area area = jdbcTemplate.query(
+                "SELECT area_id, name, description FROM areas where area_id = ?", AREA_ROW_MAPPER, area_id
+        ).stream().findFirst().orElseThrow(RuntimeException::new);
+        return new Subject(subjectId.longValue(), description, name, area);
     }
 
     @Override
-    public List<Subject> filterSubjectsByName(String name) {
-        //TODO: no hacerlo con concatenacion, bobby;DROP TABLE cursos
+    public List<Subject> filterSubjectsByName(final String name) {
         final String search = "%" + name + "%";
-        final List<Subject> list = jdbcTemplate.query(
-                "SELECT * FROM subjects WHERE UPPER(name) LIKE UPPER(?)", ROW_MAPPER, search
+
+        final List<Subject> subjects = jdbcTemplate.query(
+                "SELECT subject_id, subjects.name as subjects_name, " +
+                        "subjects.description as subject_description, " +
+                        "subjects.area_id as area_id, areas.name as areas_name, " +
+                        "areas.description as areas_description FROM subjects, areas " +
+                        "WHERE UPPER(subjects.name) LIKE UPPER(?)", ROW_MAPPER, search
         );
-        return list;
+        return subjects;
     }
 }
