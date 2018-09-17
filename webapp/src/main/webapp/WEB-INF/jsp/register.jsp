@@ -28,7 +28,7 @@
     <div class="button-container">
         <h2 class="label">Register</h2>
     </div>
-    <c:url value="/register" var="postPath"/>
+    <c:url value="/create" var="postPath"/>
     <form:form cssClass="form" modelAttribute="registerForm" action="${postPath}" method="post">
         <div>
             <form:label cssClass="label" path="name"><spring:message code="user.name"/></form:label>

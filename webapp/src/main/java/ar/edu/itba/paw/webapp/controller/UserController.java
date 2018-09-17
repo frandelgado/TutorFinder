@@ -24,7 +24,7 @@ public class UserController {
         return new ModelAndView("register");
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ModelAndView create(@Valid @ModelAttribute("registerForm") final RegisterForm form,
                                final BindingResult errors) {
         if(errors.hasErrors()) {
