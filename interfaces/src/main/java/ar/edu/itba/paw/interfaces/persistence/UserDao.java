@@ -10,4 +10,6 @@ public interface UserDao {
 
     User create(final String username, final String password,
                 final String email, final String name, final String lastName);
+
+    Optional<User> findByUsername(final String username);
 }
