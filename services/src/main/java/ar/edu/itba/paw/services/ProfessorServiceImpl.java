@@ -14,14 +14,33 @@ public class ProfessorServiceImpl implements ProfessorService {
     ProfessorDao professorDao;
 
     @Autowired
-    UserDao userDao;
-    
+    UserDao userService;
+
     @Override
-    public Professor create(Long userId, String description) {
+    public Professor findById(final Long id) {
+        return professorDao.findById(id).orElse(null);
+    }
+
+    @Override
+    public Professor findByUsername(final String username) {
+        return professorDao.findByUsername(username).orElse(null);
+    }
+
+    @Override
+    public Professor create(final Long userId,final String description) {
         //como el usuario tiene que existir, se chequea que exista antes de crear un profesor
         //esto puede tener problemas de concurrencia >:(
-        User user = userDao.findById(userId).orElseThrow(() -> new ProfessorWithoutUserException("A valid user id must be provided in order to "));
+        final User user = userService.findById(userId).orElseThrow(() ->
+                new ProfessorWithoutUserException("A valid user id must be provided in order to "));
 
+        return professorDao.create(user, description);
+    }
+
+    @Override
+    public Professor createWithUser(final Long id, final String username, final String name,
+                                    final String lastname, final String password, final String email,
+                                    final String description){
+        final User user = userService.create(username, password, email, name, lastname);
         return professorDao.create(user, description);
     }
 }

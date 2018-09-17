@@ -19,7 +19,7 @@ public class AreaServiceImpl implements AreaService {
     //TODO: I dont think it is a good idea to return null if there is no user, maybe an exception?
     @Override
     public Area findAreaById(long id) {
-        return areaDao.findById(id).orElse(null);
+        return areaDao.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @Override
