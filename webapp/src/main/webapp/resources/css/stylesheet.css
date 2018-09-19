@@ -23,12 +23,13 @@
 }
 
 .staticHome .navbar {
-    grid-template-areas: "logo-box";
+    grid-template-areas: "logo-box navbar-buttons";
 }
 
 .logo-box {
     grid-area: logo-box;
     height: 65px;
+    width: 75px;
 }
 
 .logo {
@@ -79,11 +80,14 @@ body {
     text-decoration: none;
     color: white;
     font-size: 18px;
+    width: fit-content;
 }
 
 .navbar-buttons {
-    display: grid;
-    align-items: center;  
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 .content {
@@ -172,6 +176,7 @@ select {
     height: 44px;
     width: 630px;
     align-self: center;
+    padding-left: 5px;
 }
 
 .search-img {
@@ -379,6 +384,11 @@ button {
     grid-area: footer;
 }
 
+.login-error {
+    align-self: center;
+    color: red;
+}
+
 
 .input-request {
     border-width: 0;
@@ -437,6 +447,7 @@ button {
     font-weight: 700;
     line-height: 20px;
     padding: 10px 32px;
+    margin: 20px;
 
 }
 

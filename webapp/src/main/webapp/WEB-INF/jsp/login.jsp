@@ -30,16 +30,6 @@
         </div>
         <c:url value="/login" var="loginUrl" />
         <form class="form" action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded">
-            <c:if test="${param.error != null}">
-                <p>
-                    <spring:message code="login.error"/>
-                </p>
-            </c:if>
-            <c:if test="${param.logout != null}">
-                <p>
-                    <spring:message code="logged.out"/>
-                </p>
-            </c:if>
             <div>
                 <label class="label" for="username"><spring:message code="user.username"/></label>
                 <input class="input-request" id="username" name="username" type="text"/>
@@ -53,10 +43,13 @@
             </div>
             <div class="button-container">
                 <input class="button-2" type="submit" value="<spring:message code="login"/>" />
-            </div>
-            <div class="button-container">
                 <a href="<c:url value="/register" />" class="button-2"><spring:message code="register"/></a>
             </div>
+            <c:if test="${param.error != null}">
+                <p class="login-error">
+                    <spring:message code="login.error"/>
+                </p>
+            </c:if>
         </form>
     </div>
 </body>
