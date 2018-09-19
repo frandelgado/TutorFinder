@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
+import ar.edu.itba.paw.models.Area;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Subject;
@@ -41,7 +42,12 @@ public class CourseJdbcDao implements CourseDao {
             new Subject(
                     rs.getLong(2),
                     rs.getString(12),
-                    rs.getString(13)
+                    rs.getString(13),
+                    new Area(
+                            rs.getLong(16),
+                            rs.getString(15),
+                            rs.getString(14)
+                            )
                     ),
             rs.getString(3),
             rs.getDouble(4),
@@ -63,6 +69,16 @@ public class CourseJdbcDao implements CourseDao {
                         "AND users.user_id = courses.user_id AND courses.subject_id = subjects.subject_id"
                 , ROW_MAPPER, professor_id, subject_id);
         return list.stream().findFirst();
+    }
+
+    @Override
+    public List<Course> findByProfessorId(long professor_id) {
+        final List<Course> courses = jdbcTemplate.query(
+                COURSES_SELECT_FROM + "WHERE courses.user_id = ? AND professors.user_id = users.user_id" +
+                        " AND areas.area_id = subjects.area_id AND users.user_id = courses.user_id " +
+                        "AND courses.subject_id = subjects.subject_id", ROW_MAPPER, professor_id
+        );
+        return courses;
     }
 
     @Override
