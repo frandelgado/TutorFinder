@@ -38,3 +38,14 @@ FOREIGN KEY(subject_id) REFERENCES subjects(subject_id) ON DELETE CASCADE,
 FOREIGN KEY(user_id) REFERENCES professors(user_id) ON DELETE CASCADE,
 PRIMARY KEY(user_id, subject_id)
 );
+
+CREATE TABLE IF NOT EXISTS comments (
+user_id BIGINT NOT NULL,
+subject_id BIGINT NOT NULL,
+comment VARCHAR(1024) NOT NULL,
+rating REAL NOT NULL,
+created TIMESTAMP NOT NULL DEFAULT NOW(),
+FOREIGN KEY(subject_id) REFERENCES subjects(subject_id) ON DELETE CASCADE,
+FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+PRIMARY KEY(user_id, subject_id)
+);
