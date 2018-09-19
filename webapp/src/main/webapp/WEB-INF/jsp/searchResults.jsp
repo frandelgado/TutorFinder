@@ -20,17 +20,12 @@
     <a class="logo-box" href="<c:url value=" / "/>">
         <img alt="Tu Teoria" class="logo" src="<c:url value=" /resources/images/logo_invert.jpg " />" />
     </a>
-    <!--
-    <a class="navbar-button" href="./staticHome.html">Home</a>
-    <a class="navbar-button" href="javascript:void(0)">Courses</a>
-    <a class="navbar-button" href="javascript:void(0)">Tutors</a>
-    <a class="navbar-button" href="https://google.com">Profile</a>
-    -->
+
     <div class="search-bar">
         <form role="search" action="<c:url value="/searchResults" />" class="search-bar">
             <input class="search-input" type="search" name="search" placeholder="<spring:message code="search"/>"/>
             <div class="dropdown">
-                <select name="type">
+                <select class="select-search-type" name="type">
                     <option value="" selected disabled><spring:message code="search.category" /> </option>
                     <option value="professor"><spring:message code="professor" /> </option>
                     <option value="course"><spring:message code="course.title" /> </option>
@@ -41,6 +36,11 @@
                 <img class="search-img" src="<c:url value="https://static.thenounproject.com/png/337699-200.png" />" />
             </button>
         </form>
+    </div>
+
+    <div class="navbar-buttons">
+        <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
+        <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
     </div>
 </div>
 

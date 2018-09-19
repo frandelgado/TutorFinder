@@ -22,7 +22,7 @@
     <form:form cssClass="form" modelAttribute="CourseForm" action="${postPath}" method="post">
         <div>
             <form:label cssClass="label" path="subjectId"><spring:message code="course.subject"/></form:label>
-            <form:select path="subjectId">
+            <form:select cssClass="select-subject" path="subjectId">
                 <form:option selected="selected" value="">------</form:option>
                 <c:forEach var="subject" items="${subjects}">
                     <form:option value="${subject.id}">${subject.name}</form:option>

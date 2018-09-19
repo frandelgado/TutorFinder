@@ -19,7 +19,9 @@
 }
 
 .staticSearchResults .navbar {
-    grid-template-areas: "logo-box search-bar";
+    grid-template-areas: "logo-box search-bar navbar-buttons";
+    grid-template-rows: 65px;
+    grid-template-columns: 200px 1fr 200px;
 }
 
 .staticHome .navbar {
@@ -73,7 +75,6 @@ body {
     background-color: inherit;
     border: none;
     display: grid;
-    height: 100%;
     padding: 26px 10px;
     cursor: pointer;
     text-align: center;
@@ -120,10 +121,15 @@ body {
 
 .navbar .search-bar {
     justify-content: end;
+    margin-bottom: 0px;
+    width: fit-content;
+    height: fit-content;
+    align-self: center;
+    justify-self: center;
 }
 
 .navbar .search-input {
-    height: 70%;
+    height: 30px;
     max-width: 300px;
 }
 
@@ -131,18 +137,44 @@ body {
     max-width: 30px;
 }
 
-select {
-    background-color: #F47C48;
+.select-search-type {
+    height: 30px;
+    background-color: white;
+    align-self: center;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 1px solid grey;
+    border-left: none;
+    padding: 1px;
+}
+
+.select-searchbar-type {
+    background-color: white;
+    height: 44px;
+    align-self: center;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 1px solid grey;
+    border-left: none;
+    padding: 1px;
+}
+
+.dropdown {
+    padding: 1px;
+}
+
+.select-subject {
+    background-color: white;
     height: 30px;
     align-self: center;
     border: none;
+    border-bottom: 2px solid #F47C48;
 }
 
 .navbar .dropdown {
-    grid-area: dropdown;
-    display: grid;
-    margin: 0px 10px;
-    height: 100%;
+    width: fit-content;
+    height: 30px;
+    align-self: center;
 }
 
 .dropdown-button {
@@ -177,6 +209,9 @@ select {
     width: 630px;
     align-self: center;
     padding-left: 5px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 1px solid grey;
 }
 
 .search-img {
@@ -207,9 +242,7 @@ button {
 }
 
 .search-bar {
-    grid-area: search-bar;
-    display: grid;
-    grid-template-areas: "search-input dropdown search-button";
+    display: flex;
 }
 
 .search-data {
