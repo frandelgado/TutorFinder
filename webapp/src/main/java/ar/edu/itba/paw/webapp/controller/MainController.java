@@ -24,4 +24,8 @@ public class MainController {
         return mav;
     }
 
+    @RequestMapping("favicon.ico")
+    String favicon() {
+        return "forward:/resources/images/favicon.ico";
+    }
 }
