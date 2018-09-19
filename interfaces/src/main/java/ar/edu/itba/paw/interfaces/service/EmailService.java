@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Professor;
 
 public interface EmailService {
 
-    public void sendMessage(String to, String subject, String text);
+    void sendEmail(String to, String subject, String text);
+
     public void sendMailToProfessor(Professor professor, String subject, String text);
 }

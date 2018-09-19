@@ -5,14 +5,16 @@ import ar.edu.itba.paw.models.Professor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
     public JavaMailSender emailSender;
 
     @Override
-    public void sendMessage(String to, String subject, String text) {
+    public void sendEmail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
@@ -22,7 +24,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendMailToProfessor(Professor professor, String subject, String text) {
-        sendMessage(professor.getEmail(), subject, text);
+        sendEmail(professor.getEmail(), subject, text);
     }
 
 }
