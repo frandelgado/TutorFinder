@@ -131,6 +131,11 @@
         <artifactId>mockito-all</artifactId>
         <version>${org.mockito.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context-support</artifactId>
+        <version>${org.springframework.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
