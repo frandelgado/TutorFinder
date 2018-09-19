@@ -27,18 +27,20 @@
     <a class="navbar-button" href="https://google.com">Profile</a>
     -->
     <div class="search-bar">
-        <input class="search-input" />
-        <div class="dropdown">
-            <select>
-                <option value="" selected disabled><spring:message code="search.category" /> </option>
-                <option><spring:message code="professor" /> </option>
-                <option><spring:message code="course.title" /> </option>
-                <option><spring:message code="area" /></option>
-            </select>
-        </div>
-        <button class="search-button">
-            <img class="search-img" src="<c:url value="https://static.thenounproject.com/png/337699-200.png" />" />
-        </button>
+        <form role="search" action="<c:url value="/searchResults" />" class="search-bar">
+            <input class="search-input" type="search" name="search" placeholder="<spring:message code="search"/>"/>
+            <div class="dropdown">
+                <select name="type">
+                    <option value="" selected disabled><spring:message code="search.category" /> </option>
+                    <option value="professor"><spring:message code="professor" /> </option>
+                    <option value="course"><spring:message code="course.title" /> </option>
+                    <option value="area"><spring:message code="area" /></option>
+                </select>
+            </div>
+            <button type="submit" class="search-button">
+                <img class="search-img" src="<c:url value="https://static.thenounproject.com/png/337699-200.png" />" />
+            </button>
+        </form>
     </div>
 </div>
 
@@ -56,18 +58,17 @@
 
     <div class="search-results">
         <h3 class="search-data"><spring:message code="search.message" arguments="${search}" htmlEscape="true"/></h3>
-        <c:forEach var="result" items="${results}">
-            <div class="search-result">
-                <a class="search-result-img"><img src="<c:url value="https://static.thenounproject.com/png/337699-200.png" />"/></a>
-                <a class="search-result-title" href="<c:url value="/Course/?professor=${result.professor.id}&subject=${result.subject.id}" />">
-                    <c:out value="${result.subject.area.name} - ${result.subject.name}" escapeXml="true" /></a>
-                <a class="search-result-professor" href="<c:url value="/Professor/${result.professor.id}"/>" >
-                    <c:out value="${result.professor.name}" escapeXml="true" /></a>
-                <a class="search-result-specs"><spring:message code="course.specs" arguments="${result.price},${result.rating}" htmlEscape="true" /></a>
-                <a class="search-result-description">
-                    <c:out value="${result.description}" escapeXml="true" /></a>
-            </div>
-        </c:forEach>
+        <c:choose>
+            <c:when test="${type == 'professor'}">
+                <%@ include file="professorSearch.jsp" %>
+            </c:when>
+            <c:when test="${type == 'course'}">
+                <%@ include file="courseSearch.jsp" %>
+            </c:when>
+            <c:when test="${type == 'area'}">
+                <%@ include file="areaSearch.jsp" %>
+            </c:when>
+        </c:choose>
     </div>
 </div>
 </body>
