@@ -27,25 +27,24 @@
         <div class="profile-description">${course.professor.description}</div>
     </div>
     <hr/>
-    <button class="contact-button">Contactar</button>
     <div class="button-container">
-        <h2 class="label">Register</h2>
+        <h2 class="label">Send email</h2>
     </div>
     </p>
-    <c:url value="/create" var="postPath"/>
+    <c:url value="/contact?professorEmail=${course.professor.email}" var="postPath"/>
     <form:form cssClass="form" modelAttribute="contactForm" action="${postPath}" method="post">
         <div>
-            <form:label cssClass="label" path="name"><spring:message code="contact.subject"/></form:label>
+            <form:label cssClass="label" path="subject"><spring:message code="contact.subject"/></form:label>
             <form:input cssClass="input-request" type="text" path="subject"/>
-            <form:errors cssClass="formError" path="name" element="p"/>
+            <form:errors cssClass="formError" path="subject" element="p"/>
         </div>
         <div>
-            <form:label cssClass="label" path="lastname"><spring:message code="contact.body"/></form:label>
+            <form:label cssClass="label" path="subject"><spring:message code="contact.body"/></form:label>
             <form:input cssClass="input-request" type="text" path="body"/>
-            <form:errors cssClass="formError" path="lastname" element="p"/>
+            <form:errors cssClass="formError" path="body" element="p"/>
         </div>
         <div class="button-container">
-            <input class="button-2" type="submit" value="<spring:message code="register"/>"/>
+            <input class="button-2" type="submit" value="<spring:message code="Contact"/>"/>
         </div>
     </form:form>
 </div>
