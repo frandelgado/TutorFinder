@@ -80,7 +80,7 @@ public class SubjectJdbcDao implements SubjectDao {
                         "subjects.description as subject_description, " +
                         "subjects.area_id as area_id, areas.name as areas_name, " +
                         "areas.description as areas_description FROM subjects, areas " +
-                        "WHERE UPPER(subjects.name) LIKE UPPER(?)", ROW_MAPPER, search
+                        "WHERE UPPER(subjects.name) LIKE UPPER(?) AND subjects.area_id = areas.area_id", ROW_MAPPER, search
         );
         return subjects;
     }

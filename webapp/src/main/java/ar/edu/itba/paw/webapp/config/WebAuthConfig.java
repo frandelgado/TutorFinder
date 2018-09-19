@@ -23,17 +23,19 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)
                 .sessionManagement()
-                /*.invalidSessionUrl("/login")*/
+                    .invalidSessionUrl("/login")
                 .and().authorizeRequests()
-                    .antMatchers("/login").anonymous()
-                    .antMatchers("/admin/**").hasAnyRole("ADMIN")
+                    .antMatchers("/login", "/register").anonymous()
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .antMatchers("/createCourse/**").hasRole("PROFESSOR")
+                    .anyRequest().authenticated()
                 .and().formLogin()
                     .usernameParameter("username")
                     .passwordParameter("password")
                     .defaultSuccessUrl("/", false)
                     .loginPage("/login")
                 .and().rememberMe()
-                    .rememberMeParameter("remember_me")
+                    .rememberMeParameter("rememberme")
                     .userDetailsService(userDetailsService)
                     //TODO: IMPORTANTE NO DEJAR ESTO, CAMBIAR CUANDO DIGA COMO
                     .key("guybrushthreepwoodmightypirate")
@@ -49,7 +51,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/css/**", "/js/**", "/img/**",
+                .antMatchers("/resources/css/**", "/resources/js/**", "/resources/images/**",
                         "/favicon.ico", "/403");
     }
 

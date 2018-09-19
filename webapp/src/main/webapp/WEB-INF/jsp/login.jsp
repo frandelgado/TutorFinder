@@ -7,10 +7,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
-    <title>Tu Teoria | Login</title>
+    <title>Tu Teoria | <spring:message code="login" /> </title>
 </head>
 
-<body>
+<body class="register">
 
 <div class="navbar">
     <a href="<c:url value="/" />" class="logo-box">
@@ -30,6 +30,16 @@
         </div>
         <c:url value="/login" var="loginUrl" />
         <form class="form" action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded">
+            <c:if test="${param.error != null}">
+                <p>
+                    <spring:message code="login.error"/>
+                </p>
+            </c:if>
+            <c:if test="${param.logout != null}">
+                <p>
+                    <spring:message code="logged.out"/>
+                </p>
+            </c:if>
             <div>
                 <label class="label" for="username"><spring:message code="user.username"/></label>
                 <input class="input-request" id="username" name="username" type="text"/>
@@ -43,6 +53,9 @@
             </div>
             <div class="button-container">
                 <input class="button-2" type="submit" value="<spring:message code="login"/>" />
+            </div>
+            <div class="button-container">
+                <a href="<c:url value="/register" />" class="button-2"><spring:message code="register"/></a>
             </div>
         </form>
     </div>

@@ -1,10 +1,43 @@
 package ar.edu.itba.paw.webapp.form;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.DecimalMin;
 
 public class CourseForm {
 
-    private String description;
-    private Integer price;
+    @NotNull
+    private Long subjectId;
 
+    @NotNull
+    @Size(min = 1, max = 512)
+    private String description;
+
+    @NotNull
+    @DecimalMin("0")
+    private Double price;
+
+    public Long getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Long subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 }

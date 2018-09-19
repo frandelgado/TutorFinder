@@ -52,8 +52,9 @@ public class ProfessorJdbcDao implements ProfessorDao {
     @Override
     public Optional<Professor> findById(final Long id) {
         final List<Professor> professors = jdbcTemplate.query(
-                "SELECT user_id, username, name, lastname, password," +
-                        " email, desciption FROM professors, users WHERE user_id = ?", ROW_MAPPER, id
+                "SELECT users.user_id, username, name, lastname, password," +
+                        " email, description FROM professors, users WHERE users.user_id = ?" +
+                        "AND users.user_id = professors.user_id", ROW_MAPPER, id
         );
         return professors.stream().findFirst();
     }
@@ -61,8 +62,8 @@ public class ProfessorJdbcDao implements ProfessorDao {
     @Override
     public Optional<Professor> findByUsername(final String username) {
         final List<Professor> professors = jdbcTemplate.query(
-                "SELECT user_id, username, name, lastname, password," +
-                        " email, desciption FROM professors, users WHERE username = ?", ROW_MAPPER, username
+                "SELECT users.user_id, username, name, lastname, password," +
+                        " email, description FROM professors, users WHERE username = ?", ROW_MAPPER, username
         );
         return professors.stream().findFirst();
     }
