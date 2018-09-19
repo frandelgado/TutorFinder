@@ -55,6 +55,10 @@
       <artifactId>interfaces</artifactId>
       <version>${parent.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+    </dependency>
   </dependencies>
 
 </project>
