@@ -25,6 +25,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<Course> findCourseByProfessorId(long professor_id) {
+        return courseDao.findByProfessorId(professor_id);
+    }
+
+    @Override
     public List<Course> filterCoursesByName(final String name){
         return courseDao.filterCoursesByName(name);
     }
