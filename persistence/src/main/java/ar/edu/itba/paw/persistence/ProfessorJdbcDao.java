@@ -67,4 +67,15 @@ public class ProfessorJdbcDao implements ProfessorDao {
         );
         return professors.stream().findFirst();
     }
+
+    @Override
+    public List<Professor> filterByFullName(String fullName) {
+        final String search = "%" + fullName + "%";
+        final List<Professor> professors = jdbcTemplate.query(
+                "SELECT users.user_id, username, name, lastname, password, email, " +
+                        "description FROM professors, users WHERE " +
+                        "UPPER (concat(name, ' ', lastname)) LIKE UPPER(?)", ROW_MAPPER, search
+        );
+        return professors;
+    }
 }
