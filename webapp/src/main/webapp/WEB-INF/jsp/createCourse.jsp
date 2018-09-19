@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
-    <title>Tu Teoria | <spring:message code="register"/></title>
+    <title>Tu Teoria | <spring:message code="course.create"/></title>
 </head>
 
 <body class="register">
@@ -32,7 +32,7 @@
         </div>
         <div>
             <form:label cssClass="label" path="description"><spring:message code="register.description"/></form:label>
-            <form:input cssClass="input-request" type="textarea" path="description"/>
+            <form:textarea cssClass="input-request" type="text" path="description"/>
             <form:errors cssClass="formError" path="description" element="p"/>
         </div>
         <div>

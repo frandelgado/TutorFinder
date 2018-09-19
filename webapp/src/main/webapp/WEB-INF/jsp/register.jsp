@@ -26,7 +26,7 @@
 
 <div class="content">
     <div class="button-container">
-        <h2 class="label">Register</h2>
+        <h2 class="label"><spring:message code="register" /> </h2>
     </div>
     <c:url value="/create" var="postPath"/>
     <form:form cssClass="form" modelAttribute="registerForm" action="${postPath}" method="post">
@@ -62,7 +62,7 @@
         </div>
         <div>
             <form:label cssClass="label" path="description"><spring:message code="register.description"/></form:label>
-            <form:input cssClass="input-request" type="text" path="description"/>
+            <form:textarea cssClass="input-request" type="text" path="description"/>
             <form:errors cssClass="formError" path="description" element="p"/>
         </div>
         <div class="button-container">

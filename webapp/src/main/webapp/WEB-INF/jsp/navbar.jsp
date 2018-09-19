@@ -4,8 +4,8 @@
     </a>
     <!--
     <div class="navbar-buttons">
-        <button class="navbar-button">Register</button>
-        <button class="navbar-button">Log In</button>
+        <button class="navbar-button"><spring:message code="register"/></button>
+        <button class="navbar-button"><spring:message code="login"/></button>
     </div>
     -->
 </div>
