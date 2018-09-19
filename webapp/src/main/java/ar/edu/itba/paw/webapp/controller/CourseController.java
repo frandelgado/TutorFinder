@@ -9,6 +9,8 @@ import ar.edu.itba.paw.models.Subject;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,11 +61,16 @@ public class CourseController {
             return createCourse(form);
         }
 
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final String professorName = auth.getName();
+
+        final Professor professor = professorService.findByUsername(professorName);
+
         final Subject subject = subjectService.findSubjectById(form.getSubjectId());
 
-        //TODO: Catch null && replace professor null
+        //TODO: Catch null
 
-        final Course course = courseService.create(null, subject, form.getDescription(), form.getPrice());
+        final Course course = courseService.create(professor, subject, form.getDescription(), form.getPrice());
 
         return new ModelAndView("redirect:/Course/?professor=" + course.getProfessor().getId() +
                 "&subject=" + course.getSubject().getId());
