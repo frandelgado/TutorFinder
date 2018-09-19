@@ -4,5 +4,6 @@
     </a>
     <div class="navbar-buttons">
         <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
+        <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
     </div>
 </div>
