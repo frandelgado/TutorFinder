@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri ="http://java.sun.com/jstl/core_rt" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><html>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<html>
 <html>
 
 <head>
@@ -25,7 +27,26 @@
         <div class="profile-description">${course.professor.description}</div>
     </div>
     <hr/>
-    <button class="contact-button"><spring:message code="course.contact"/></button>
+    <div class="button-container">
+        <h2 class="label">Send email</h2>
+    </div>
+    </p>
+    <c:url value="/contact?professorEmail=${course.professor.email}" var="postPath"/>
+    <form:form cssClass="form" modelAttribute="contactForm" action="${postPath}" method="post">
+        <div>
+            <form:label cssClass="label" path="subject"><spring:message code="contact.subject"/></form:label>
+            <form:input cssClass="input-request" type="text" path="subject"/>
+            <form:errors cssClass="formError" path="subject" element="p"/>
+        </div>
+        <div>
+            <form:label cssClass="label" path="subject"><spring:message code="contact.body"/></form:label>
+            <form:input cssClass="input-request" type="text" path="body"/>
+            <form:errors cssClass="formError" path="body" element="p"/>
+        </div>
+        <div class="button-container">
+            <input class="button-2" type="submit" value="<spring:message code="Contact"/>"/>
+        </div>
+    </form:form>
 </div>
 <div class="footer">
 </div>
