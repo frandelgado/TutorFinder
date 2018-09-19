@@ -2,11 +2,15 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.models.Professor;
 
+import java.util.List;
+
 public interface ProfessorService {
 
     Professor findById(final Long id);
 
     Professor findByUsername(final String username);
+
+    List<Professor> filterByFullName(final String fullName);
 
     Professor create(final Long userId, final String description);
 

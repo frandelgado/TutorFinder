@@ -9,6 +9,8 @@ import ar.edu.itba.paw.services.exceptions.ProfessorWithoutUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
 
@@ -26,6 +28,11 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public Professor findByUsername(final String username) {
         return professorDao.findByUsername(username).orElse(null);
+    }
+
+    @Override
+    public List<Professor> filterByFullName(String fullName) {
+        return professorDao.filterByFullName(fullName);
     }
 
     @Override
