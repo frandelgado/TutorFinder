@@ -81,4 +81,34 @@ public class UserController {
         mav.addObject("professor", professor);
         return mav;
     }
+
+
+    @RequestMapping(value = "/registerAsProfessor", method = RequestMethod.POST)
+    public ModelAndView createProfessor(@Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
+                               final BindingResult errors) {
+        if(errors.hasErrors()) {
+            return registerProfessor(form);
+        }
+
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities());
+        updatedAuthorities.add(new SimpleGrantedAuthority("ROLE_PROFESSOR"));
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                auth.getPrincipal(),
+                auth.getCredentials(),
+                updatedAuthorities
+        );
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        final String username = newAuth.getName();
+        final User user = us.findByUsername(username);
+        final Professor p = ps.create(user.getId(), form.getDescription());
+        return new ModelAndView("redirect:/?userId="+ p.getId());
+    }
+
+    @RequestMapping("/registerAsProfessor")
+    public ModelAndView registerProfessor(@ModelAttribute("registerForm") final RegisterProfessorForm form) {
+        return new ModelAndView("registerAsProfessorForm");
+    }
 }
