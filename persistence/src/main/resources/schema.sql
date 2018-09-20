@@ -58,3 +58,11 @@ created TIMESTAMP NOT NULL DEFAULT NOW(),
 FOREIGN KEY(conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE,
 FOREIGN KEY(sender_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS schedules (
+user_id BIGINT NOT NULL,
+day INTEGER NOT NULL,
+hour INTEGER NOT NULL,
+FOREIGN KEY(user_id) REFERENCES professors(user_id) ON DELETE CASCADE,
+PRIMARY KEY(user_id, day, hour)
+);
