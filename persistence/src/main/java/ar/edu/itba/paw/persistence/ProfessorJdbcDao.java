@@ -63,7 +63,8 @@ public class ProfessorJdbcDao implements ProfessorDao {
     public Optional<Professor> findByUsername(final String username) {
         final List<Professor> professors = jdbcTemplate.query(
                 "SELECT users.user_id, username, name, lastname, password," +
-                        " email, description FROM professors, users WHERE username = ?", ROW_MAPPER, username
+                        " email, description FROM professors, users WHERE username = ?" +
+                        "AND users.user_id = professors.user_id", ROW_MAPPER, username
         );
         return professors.stream().findFirst();
     }
@@ -74,7 +75,8 @@ public class ProfessorJdbcDao implements ProfessorDao {
         final List<Professor> professors = jdbcTemplate.query(
                 "SELECT users.user_id, username, name, lastname, password, email, " +
                         "description FROM professors, users WHERE " +
-                        "UPPER (concat(name, ' ', lastname)) LIKE UPPER(?)", ROW_MAPPER, search
+                        "UPPER (concat(name, ' ', lastname)) LIKE UPPER(?) " +
+                        "AND users.user_id = professors.user_id", ROW_MAPPER, search
         );
         return professors;
     }
