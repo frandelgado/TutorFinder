@@ -33,10 +33,6 @@ public class RegisterForm {
     @Size(min = 1, max = 64)
     private String repeatPassword;
 
-    @NotNull
-    @Size(min = 1, max = 512)
-    private String description;
-
     public void setName(String name) {
         this.name = name;
     }
@@ -59,10 +55,6 @@ public class RegisterForm {
 
     public void setRepeatPassword(String repeatPassword) {
         this.repeatPassword = repeatPassword;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getName() {
@@ -89,7 +81,4 @@ public class RegisterForm {
         return repeatPassword;
     }
 
-    public String getDescription() {
-        return description;
-    }
 }
