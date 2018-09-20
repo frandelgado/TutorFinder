@@ -7,18 +7,18 @@ public class ContactForm {
 
     @NotNull
     @Size(min = 1, max = 128)
-    private String subject;
+    private String messageSubject;
 
     @NotNull
     @Size(min = 1, max = 512)
     private String body;
 
-    public String getSubject() {
-        return subject;
+    public String getMessageSubject() {
+        return messageSubject;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setMessageSubject(String subject) {
+        this.messageSubject = subject;
     }
 
     public String getBody() {

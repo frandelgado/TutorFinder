@@ -54,13 +54,13 @@ public class CourseController {
         return mav;
     }
 
-    @RequestMapping("/contact")
+    @RequestMapping(value = "/contact", method = RequestMethod.POST)
     public ModelAndView contactProfessor(
-            @Valid @ModelAttribute("ContactForm") final ContactForm form,
+            @Valid @ModelAttribute("contactForm") final ContactForm form,
             @RequestParam(value="professorEmail", required = true) final String professorEmail
     ){
         //TODO: deberiamos checkear que sea valido el email aca?
-        emailService.sendEmail(professorEmail, form.getSubject(), form.getBody());
+        emailService.sendEmail(professorEmail, form.getMessageSubject(), form.getBody());
         return new ModelAndView("redirect:/");
     }
 
