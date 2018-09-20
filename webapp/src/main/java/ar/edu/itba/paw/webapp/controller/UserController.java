@@ -108,7 +108,7 @@ public class UserController {
     }
 
     @RequestMapping("/registerAsProfessor")
-    public ModelAndView registerProfessor(@ModelAttribute("registerForm") final RegisterProfessorForm form) {
+    public ModelAndView registerProfessor(@ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form) {
         return new ModelAndView("registerAsProfessorForm");
     }
 }

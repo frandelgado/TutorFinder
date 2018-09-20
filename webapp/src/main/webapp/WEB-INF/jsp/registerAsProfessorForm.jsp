@@ -29,7 +29,7 @@
         <h2 class="label"><spring:message code="register.professor" /> </h2>
     </div>
     <c:url value="/registerAsProfessor" var="postPath"/>
-    <form:form cssClass="form" modelAttribute="registerForm" action="${postPath}" method="post">
+    <form:form cssClass="form" modelAttribute="registerAsProfessorForm" action="${postPath}" method="post">
         <div>
             <form:label cssClass="label" path="description"><spring:message code="register.description"/></form:label>
             <form:textarea cssClass="input-request" type="text" path="description"/>
