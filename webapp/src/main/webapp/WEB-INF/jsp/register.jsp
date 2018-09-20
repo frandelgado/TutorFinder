@@ -60,11 +60,6 @@
             <form:input cssClass="input-request" type="password" path="repeatPassword"/>
             <form:errors cssClass="formError" path="repeatPassword" element="p"/>
         </div>
-        <div>
-            <form:label cssClass="label" path="description"><spring:message code="register.description"/></form:label>
-            <form:textarea cssClass="input-request" type="text" path="description"/>
-            <form:errors cssClass="formError" path="description" element="p"/>
-        </div>
         <div class="button-container">
             <input class="button-2" type="submit" value="<spring:message code="register"/>"/>
         </div>
