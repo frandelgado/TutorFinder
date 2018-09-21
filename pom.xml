@@ -30,6 +30,7 @@
     <org.mockito.version>1.9.5</org.mockito.version>
     <javax.mail.version>1.4</javax.mail.version>
     <joda-time.version>2.10</joda-time.version>
+    <org.junit.version>4.11</org.junit.version>
   </properties>
 
   <dependencyManagement>
@@ -142,6 +143,10 @@
         <groupId>javax.mail</groupId>
         <artifactId>mail</artifactId>
         <version>${javax.mail.version}</version>
+      </dependency><dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${org.junit.version}</version>
       </dependency>
       <dependency>
         <groupId>joda-time</groupId>
