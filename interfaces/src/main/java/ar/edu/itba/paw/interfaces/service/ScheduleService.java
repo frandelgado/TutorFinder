@@ -7,5 +7,5 @@ import java.util.Set;
 
 public interface ScheduleService {
 
-    Set<Timeslot> createSchedule(Professor professor, Set<Timeslot> timeslots);
+    Set<Timeslot> reserveTimeSlot(Professor professor, Integer day, Integer startTime, Integer EndTime);
 }
