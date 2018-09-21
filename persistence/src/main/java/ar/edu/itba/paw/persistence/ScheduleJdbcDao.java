@@ -33,9 +33,10 @@ public class ScheduleJdbcDao implements ScheduleDao {
     @Override
     public Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) {
         final Map<String, Object> args = new HashMap<>();
-        args.put("professor_id", professor.getId());
+        args.put("user_id", professor.getId());
         args.put("day", day);
         args.put("hour", hour);
+        jdbcInsert.execute(args);
         return new Timeslot(day, hour);
 
     }

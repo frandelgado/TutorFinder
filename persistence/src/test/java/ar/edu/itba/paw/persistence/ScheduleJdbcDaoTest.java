@@ -2,10 +2,12 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Timeslot;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -37,7 +39,8 @@ public class ScheduleJdbcDaoTest {
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate,"schedules");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "courses");
     }
     
     @Test
@@ -53,7 +56,7 @@ public class ScheduleJdbcDaoTest {
         assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
-    @Test
+    @Test(expected = DuplicateKeyException.class)
     public void testReserveOccupied(){
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
@@ -62,5 +65,12 @@ public class ScheduleJdbcDaoTest {
 
         Timeslot reservedTimeSlot = scheduleJdbcDao.reserveTimeSlot(mockProfessor, DAY,HOUR);
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
+    }
+
+
+    @After
+    public void tearDown(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "schedules");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
     }
 }
