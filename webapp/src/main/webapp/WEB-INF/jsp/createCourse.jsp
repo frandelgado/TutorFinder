@@ -8,6 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
     <title>Tu Teoria | <spring:message code="course.create"/></title>
+
+    <link href="<c:url value="/resources/css/select2.min.css" />" rel="stylesheet" />
+    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
+    <script src="<c:url value="/resources/js/select2.min.js" />"></script>
+    <script src="<c:url value="/resources/js/courseForm.js" />"></script>
+
 </head>
 
 <body class="register">
@@ -23,7 +29,7 @@
         <div>
             <form:label cssClass="label" path="subjectId"><spring:message code="course.subject"/></form:label>
             <form:select cssClass="select-subject" path="subjectId">
-                <form:option selected="selected" value="">------</form:option>
+                <form:option selected="selected" value=""><spring:message code="select.subject"/></form:option>
                 <c:forEach var="subject" items="${subjects}">
                     <form:option value="${subject.id}">${subject.name}</form:option>
                 </c:forEach>
@@ -31,7 +37,7 @@
             <form:errors cssClass="formError" path="subjectId" element="p"/>
         </div>
         <div>
-            <form:label cssClass="label" path="description"><spring:message code="register.description"/></form:label>
+            <form:label cssClass="label" path="description"><spring:message code="description"/></form:label>
             <form:textarea cssClass="input-request" type="text" path="description"/>
             <form:errors cssClass="formError" path="description" element="p"/>
         </div>

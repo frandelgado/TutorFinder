@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
+import org.hibernate.validator.constraints.Email;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -18,7 +20,7 @@ public class RegisterForm {
 
     @NotNull
     @Size(min = 1, max = 512)
-    @Pattern(regexp = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
+    @Email
     private String email;
 
     @NotNull
@@ -32,10 +34,6 @@ public class RegisterForm {
     @NotNull
     @Size(min = 1, max = 64)
     private String repeatPassword;
-
-    @NotNull
-    @Size(min = 1, max = 512)
-    private String description;
 
     public void setName(String name) {
         this.name = name;
@@ -59,10 +57,6 @@ public class RegisterForm {
 
     public void setRepeatPassword(String repeatPassword) {
         this.repeatPassword = repeatPassword;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getName() {
@@ -89,7 +83,4 @@ public class RegisterForm {
         return repeatPassword;
     }
 
-    public String getDescription() {
-        return description;
-    }
 }

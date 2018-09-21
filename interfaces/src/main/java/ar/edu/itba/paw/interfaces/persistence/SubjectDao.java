@@ -11,4 +11,6 @@ public interface SubjectDao {
     Subject create(final String name, final String description, final Long area_id);
 
     List<Subject> filterSubjectsByName(final String name);
+
+    List<Subject> getAvailableSubjects(final long id);
 }

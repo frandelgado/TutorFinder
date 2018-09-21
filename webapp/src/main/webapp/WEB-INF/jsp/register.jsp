@@ -16,12 +16,6 @@
     <a href="<c:url value="/" />" class="logo-box">
         <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
     </a>
-    <!-- 
-    <div class="navbar-buttons">
-        <button class="navbar-button"><spring:message code="register"/></button>
-        <button class="navbar-button"><spring:message code="login"/></button>
-    </div>
-    -->
 </div>
 
 <div class="content">
@@ -59,11 +53,6 @@
             <form:label cssClass="label" path="repeatPassword"><spring:message code="user.repeat_password"/></form:label>
             <form:input cssClass="input-request" type="password" path="repeatPassword"/>
             <form:errors cssClass="formError" path="repeatPassword" element="p"/>
-        </div>
-        <div>
-            <form:label cssClass="label" path="description"><spring:message code="register.description"/></form:label>
-            <form:textarea cssClass="input-request" type="text" path="description"/>
-            <form:errors cssClass="formError" path="description" element="p"/>
         </div>
         <div class="button-container">
             <input class="button-2" type="submit" value="<spring:message code="register"/>"/>
