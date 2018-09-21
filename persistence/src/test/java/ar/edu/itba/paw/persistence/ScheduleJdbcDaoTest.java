@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Sql("classpath:schema.sql")
-public class SceduleJdbcDaoTest {
+public class ScheduleJdbcDaoTest {
 
 
     @Autowired
