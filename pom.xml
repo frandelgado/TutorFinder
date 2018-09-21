@@ -29,6 +29,7 @@
     <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
     <org.mockito.version>1.9.5</org.mockito.version>
     <javax.mail.version>1.4</javax.mail.version>
+    <joda-time.version>2.10</joda-time.version>
   </properties>
 
   <dependencyManagement>
@@ -141,6 +142,11 @@
         <groupId>javax.mail</groupId>
         <artifactId>mail</artifactId>
         <version>${javax.mail.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>joda-time</groupId>
+        <artifactId>joda-time</artifactId>
+        <version>${joda-time.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
