@@ -31,4 +31,9 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectDao.filterSubjectsByName(name);
     }
 
+    @Override
+    public List<Subject> getAvailableSubjects(long id) {
+        return subjectDao.getAvailableSubjects(id);
+    }
+
 }

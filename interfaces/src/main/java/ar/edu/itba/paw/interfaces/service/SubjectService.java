@@ -10,4 +10,6 @@ public interface SubjectService {
     Subject create(final String name, final String description, final Long area_id);
 
     List<Subject> filterSubjectsByName(String name);
+
+    List<Subject> getAvailableSubjects(final long id);
 }
