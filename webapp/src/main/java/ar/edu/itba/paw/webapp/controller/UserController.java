@@ -71,7 +71,12 @@ public class UserController {
     }
 
     @RequestMapping("/Professor/{id}")
-    public ModelAndView professorProfile(@PathVariable(value = "id") long id) {
+    public ModelAndView professorProfile(@PathVariable(value = "id") long id,
+                                         @ModelAttribute("currentUser") final User loggedUser,
+                                         @ModelAttribute("currentUserIsProfessor") final boolean isProfessor) {
+        if(loggedUser != null && loggedUser.getId() == id && isProfessor)
+            return profile(loggedUser);
+
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("courses", cs.findCourseByProfessorId(id));
         mav.addObject("professor", ps.findById(id));
@@ -79,16 +84,13 @@ public class UserController {
     }
 
     @RequestMapping("/Profile")
-    public ModelAndView profile() {
+    public ModelAndView profile(@ModelAttribute("currentUser") final User loggedUser) {
+        final Professor professor = ps.findById(loggedUser.getId());
         final ModelAndView mav = new ModelAndView("profileForProfessor");
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        final String username = auth.getName();
-
-        final Professor professor = ps.findByUsername(username);
 
         mav.addObject("courses", cs.findCourseByProfessorId(professor.getId()));
         mav.addObject("professor", professor);
+
         return mav;
     }
 
