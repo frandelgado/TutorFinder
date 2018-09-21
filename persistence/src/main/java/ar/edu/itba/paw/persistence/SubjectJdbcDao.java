@@ -84,4 +84,19 @@ public class SubjectJdbcDao implements SubjectDao {
         );
         return subjects;
     }
+
+    @Override
+    public List<Subject> getAvailableSubjects(final long id) {
+
+        final List<Subject> subjects = jdbcTemplate.query(
+                "SELECT subjects.subject_id, subjects.name as subjects_name, " +
+                        "subjects.description as subject_description, " +
+                        "subjects.area_id as area_id, areas.name as areas_name, " +
+                        "areas.description as areas_description FROM subjects, areas " +
+                        "WHERE subjects.area_id = areas.area_id AND NOT EXISTS " +
+                        "(SELECT * FROM courses WHERE courses.subject_id = subjects.subject_id " +
+                        "AND courses.user_id = ?)", ROW_MAPPER, id
+        );
+        return subjects;
+    }
 }
