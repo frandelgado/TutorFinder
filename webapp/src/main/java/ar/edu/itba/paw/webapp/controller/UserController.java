@@ -9,11 +9,13 @@ import ar.edu.itba.paw.webapp.form.RegisterForm;
 import ar.edu.itba.paw.webapp.form.RegisterProfessorForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,9 @@ public class UserController {
     @Qualifier("courseServiceImpl")
     private CourseService cs;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @RequestMapping("/register")
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
         return new ModelAndView("register");
@@ -47,12 +54,15 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView create(@Valid @ModelAttribute("registerForm") final RegisterForm form,
-                               final BindingResult errors) {
+                               final BindingResult errors, HttpServletRequest request) {
         if(errors.hasErrors()) {
             return register(form);
         }
         final User u = us.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
-        return new ModelAndView("redirect:/?userId="+ u.getId());
+
+        authenticateRegistered(request, u.getUsername(), u.getPassword());
+
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping("/login")
@@ -80,6 +90,16 @@ public class UserController {
         mav.addObject("courses", cs.findCourseByProfessorId(professor.getId()));
         mav.addObject("professor", professor);
         return mav;
+    }
+
+
+    public void authenticateRegistered(HttpServletRequest request, String username, String password) {
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+        authToken.setDetails(new WebAuthenticationDetails(request));
+
+        Authentication authentication = authenticationManager.authenticate(authToken);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 
