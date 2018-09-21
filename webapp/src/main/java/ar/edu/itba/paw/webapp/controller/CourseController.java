@@ -7,6 +7,7 @@ import ar.edu.itba.paw.interfaces.service.SubjectService;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.ContactForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import com.sun.xml.internal.bind.v2.TODO;
@@ -65,23 +66,22 @@ public class CourseController {
     }
 
     @RequestMapping("/createCourse")
-    public ModelAndView createCourse(@ModelAttribute("CourseForm") final CourseForm form) {
+    public ModelAndView createCourse(@ModelAttribute("CourseForm") final CourseForm form,
+                                     @ModelAttribute("currentUser") final User user) {
         final ModelAndView mav = new ModelAndView("createCourse");
-        mav.addObject("subjects", subjectService.filterSubjectsByName(""));
+        mav.addObject("subjects", subjectService.getAvailableSubjects(user.getId()));
         return mav;
     }
 
     @RequestMapping(value = "/createCourse", method = RequestMethod.POST)
     public ModelAndView create(@Valid @ModelAttribute("CourseForm") final CourseForm form,
+                               @ModelAttribute("currentUser") final User user,
                                final BindingResult errors) {
         if(errors.hasErrors()) {
-            return createCourse(form);
+            return createCourse(form, user);
         }
 
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        final String professorName = auth.getName();
-
-        final Professor professor = professorService.findByUsername(professorName);
+        final Professor professor = professorService.findById(user.getId());
 
         final Subject subject = subjectService.findSubjectById(form.getSubjectId());
 
