@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Set;
+import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -24,26 +24,26 @@ public class ScheduleServiceImplTest {
     private ScheduleService scheduleService;
 
     @Test
-    public void testValidRange(){
+    public void testValidRange() throws InvalidTimeRangeException, InvalidTimeException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
         Integer START_HOUR = 14;
         Integer END_HOUR = 16;
 
-        Set<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
         assertEquals(2, timeslots.size());
     }
 
     @Test
-    public void testUnitaryRange(){
+    public void testUnitaryRange() throws InvalidTimeRangeException, InvalidTimeException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
         Integer START_HOUR = 14;
         Integer END_HOUR = 15;
 
-        Set<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
         assertEquals(1, timeslots.size());
         Timeslot timeslot = timeslots.iterator().next();
 
@@ -53,58 +53,58 @@ public class ScheduleServiceImplTest {
     }
 
     @Test(expected = InvalidTimeRangeException.class)
-    public void testInvalidRange(){
+    public void testInvalidRange() throws InvalidTimeRangeException, InvalidTimeException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;
 
-        Set<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
     }
 
     @Test(expected = InvalidTimeException.class)
-    public void testInvalidHourUpper(){
+    public void testInvalidHourUpper() throws InvalidTimeRangeException, InvalidTimeException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
         Integer START_HOUR = -3;
         Integer END_HOUR = 12;
 
-        Set<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
     }
 
     @Test(expected = InvalidTimeException.class)
-    public void testInvalidHourLower(){
+    public void testInvalidHourLower() throws InvalidTimeRangeException, InvalidTimeException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
         Integer START_HOUR = 14;
         Integer END_HOUR = 27;
 
-        Set<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
     }
 
 
     @Test(expected = InvalidTimeException.class)
-    public void testInvalidDayUpper(){
+    public void testInvalidDayUpper() throws InvalidTimeRangeException, InvalidTimeException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 8;
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;
 
-        Set<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
     }
 
     @Test(expected = InvalidTimeException.class)
-    public void testInvalidDayLower(){
+    public void testInvalidDayLower() throws InvalidTimeRangeException, InvalidTimeException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = -4;
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
 
-        Set<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
     }
 }
