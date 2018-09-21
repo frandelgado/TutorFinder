@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.exceptions.InvalidDateException;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Timeslot;
 import org.junit.Before;
@@ -58,12 +57,10 @@ public class ScheduleJdbcDaoTest {
     public void testReserveOccupied(){
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
-        Integer DAY = 1;
-        Integer HOUR = 4;
+        Integer DAY = 2;
+        Integer HOUR = 2;
 
         Timeslot reservedTimeSlot = scheduleJdbcDao.reserveTimeSlot(mockProfessor, DAY,HOUR);
-        assertEquals(DAY, reservedTimeSlot.getDay());
-        assertEquals(HOUR, reservedTimeSlot.getHour());
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 }
