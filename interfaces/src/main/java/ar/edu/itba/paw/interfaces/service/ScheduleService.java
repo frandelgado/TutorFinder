@@ -10,7 +10,7 @@ import java.util.Set;
 
 public interface ScheduleService {
 
-    List<Timeslot> reserveTimeSlot(Professor professor, Integer day, Integer startTime, Integer endTime) throws InvalidTimeException, InvalidTimeRangeException;
+    List<Timeslot> reserveTimeSlot(Long professor_id, Integer day, Integer startTime, Integer endTime) throws InvalidTimeException, InvalidTimeRangeException;
 
     List<Timeslot> getScheduleForProfessor(Professor professor);
 }
