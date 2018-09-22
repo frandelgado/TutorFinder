@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.exceptions.NonexistentConversationException;
 import ar.edu.itba.exceptions.SameUserConversationException;
 import ar.edu.itba.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
@@ -52,8 +53,11 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public Conversation findById(final Long conversation_id, final Long userId)
-            throws UserNotInConversationException {
+            throws UserNotInConversationException, NonexistentConversationException {
         final Conversation conversation = conversationDao.findById(conversation_id);
+
+        if(conversation == null)
+            throw new NonexistentConversationException();
 
         if(!conversation.belongs(userId))
             throw new UserNotInConversationException();

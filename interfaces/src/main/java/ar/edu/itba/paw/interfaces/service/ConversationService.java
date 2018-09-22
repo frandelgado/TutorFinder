@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
+import ar.edu.itba.exceptions.NonexistentConversationException;
 import ar.edu.itba.exceptions.SameUserConversationException;
 import ar.edu.itba.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.models.Conversation;
@@ -18,5 +19,5 @@ public interface ConversationService {
 
     List<Conversation> findByUserId(final Long userId);
 
-    Conversation findById(final Long conversation_id, final  Long userId) throws UserNotInConversationException;
+    Conversation findById(final Long conversation_id, final  Long userId) throws UserNotInConversationException, NonexistentConversationException;
 }

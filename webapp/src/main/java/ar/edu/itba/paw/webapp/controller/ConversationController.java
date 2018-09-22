@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.exceptions.NonexistentConversationException;
 import ar.edu.itba.exceptions.SameUserConversationException;
 import ar.edu.itba.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.service.*;
@@ -51,7 +52,8 @@ public class ConversationController {
     @RequestMapping("/Conversation")
     public ModelAndView conversation(@RequestParam(value="id", required=true) final Long id,
                                      @ModelAttribute("messageForm") final MessageForm form,
-                                     @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException {
+                                     @ModelAttribute("currentUser") final User loggedUser)
+            throws UserNotInConversationException, NonexistentConversationException {
 
         final ModelAndView mav = new ModelAndView("conversation");
         mav.addObject("conversation", conversationService.findById(id, loggedUser.getId()));
@@ -63,7 +65,7 @@ public class ConversationController {
     public ModelAndView sendMessage(@Valid @ModelAttribute("messageForm") final MessageForm form,
                                      final BindingResult errors,
                                      @ModelAttribute("currentUser") final User loggedUser)
-            throws UserNotInConversationException {
+            throws UserNotInConversationException, NonexistentConversationException {
 
         if(errors.hasErrors()) {
             return conversation(form.getConversationId(), form, loggedUser);
