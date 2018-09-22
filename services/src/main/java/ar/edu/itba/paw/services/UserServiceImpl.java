@@ -29,6 +29,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(final String username, final String password, final String email,
                        final String name, final String lastName) {
+
+        if(username.isEmpty() || password.isEmpty() || email.isEmpty() || name.isEmpty() || lastName.isEmpty()){
+            return null;
+        }
+        if(!name.matches("[a-zA-Z]+") && !lastName.matches("[a-zA-Z]+")){
+            return null;
+        }
+        if(!email.matches("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+")){
+            return null;
+        }
+
         return userDao.create(username, encoder.encode(password), email, name, lastName);
     }
 }
