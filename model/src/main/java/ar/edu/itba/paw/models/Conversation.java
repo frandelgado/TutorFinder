@@ -43,4 +43,6 @@ public class Conversation {
     public void addMessages(List<Message> messages) {
         this.messages.addAll(messages);
     }
+
+    public boolean belongs(Long id) {return (user.getId().equals(id) || professor.getId().equals(id)); }
 }

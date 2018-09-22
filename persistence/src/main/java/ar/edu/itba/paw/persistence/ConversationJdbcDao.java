@@ -100,7 +100,7 @@ public class ConversationJdbcDao implements ConversationDao {
     @Override
     public Message create(final User sender, final String text, final Conversation conversation) {
         final Map<String, Object> args = new HashMap<>();
-        final LocalDateTime currentTime = new LocalDateTime();
+        final LocalDateTime currentTime = LocalDateTime.now();
         args.put("sender_id", sender.getId());
         args.put("conversation_id", conversation.getId());
         args.put("message", text);
