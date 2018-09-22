@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 
@@ -73,10 +74,9 @@ public class ConversationController {
 
         boolean sent = conversationService.sendMessage(user, conversation, form.getBody());
         if(sent) {
-            errors.addError(new FieldError("MessageSent", "extraMessage", null,
-                    false, new String[]{"MessageSent"},null, "Mensaje Enviado!"));
-            form.setBody(null);
-            return conversation(form.getConversationId(), form, loggedUser);
+            final RedirectView view = new RedirectView("/Conversation?id=" + form.getConversationId());
+            view.setExposeModelAttributes(false);
+            return new ModelAndView(view);
         }
         errors.addError(new FieldError("SendMessageError", "extraMessage", null,
                 false, new String[]{"SendMessageError"},null, "Error al enviar el mensaje."));

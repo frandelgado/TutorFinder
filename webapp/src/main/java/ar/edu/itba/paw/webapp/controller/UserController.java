@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -62,7 +63,9 @@ public class UserController {
 
         authenticateRegistered(request, u.getUsername(), u.getPassword());
 
-        return new ModelAndView("redirect:/");
+        final RedirectView view = new RedirectView("/" );
+        view.setExposeModelAttributes(false);
+        return new ModelAndView(view);
     }
 
     @RequestMapping("/login")
@@ -126,7 +129,10 @@ public class UserController {
         final String username = newAuth.getName();
         final User user = us.findByUsername(username);
         final Professor p = ps.create(user.getId(), form.getDescription());
-        return new ModelAndView("redirect:/?userId="+ p.getId());
+
+        final RedirectView view = new RedirectView("/" );
+        view.setExposeModelAttributes(false);
+        return new ModelAndView(view);
     }
 
     @RequestMapping("/registerAsProfessor")
