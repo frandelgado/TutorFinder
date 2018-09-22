@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -24,7 +25,7 @@ public class CourseJdbcDao implements CourseDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private static final String COURSES_SELECT_FROM = "SELECT courses.user_id, courses.subject_id," +
-            "courses.description, price, rating, professors.description, users.username," +
+            "courses.description, price, professors.description, users.username," +
             "users.name, users.lastname, users.password, users.email, subjects.description," +
             "subjects.name, areas.name, areas.description, areas.area_id " +
             "FROM courses, professors, users, subjects, areas ";
@@ -32,26 +33,25 @@ public class CourseJdbcDao implements CourseDao {
     private final static RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
             new Professor(
                     rs.getLong(1),
+                    rs.getString(6),
                     rs.getString(7),
                     rs.getString(8),
                     rs.getString(9),
                     rs.getString(10),
-                    rs.getString(11),
-                    rs.getString(6)
+                    rs.getString(5)
                     ),
             new Subject(
                     rs.getLong(2),
+                    rs.getString(11),
                     rs.getString(12),
-                    rs.getString(13),
                     new Area(
-                            rs.getLong(16),
-                            rs.getString(15),
-                            rs.getString(14)
+                            rs.getLong(15),
+                            rs.getString(14),
+                            rs.getString(13)
                             )
                     ),
             rs.getString(3),
-            rs.getDouble(4),
-            rs.getDouble(5)
+            rs.getDouble(4)
     );
 
     @Autowired
@@ -95,14 +95,17 @@ public class CourseJdbcDao implements CourseDao {
 
     @Override
     public Course create(final Professor professor, final Subject subject, final String description,
-                         final Double price, final Double rating) {
+                         final Double price) {
         final Map<String, Object> args = new HashMap<>();
         args.put("user_id", professor.getId());
         args.put("subject_id", subject.getId());
         args.put("description", description);
         args.put("price", price);
-        args.put("rating", rating);
-        jdbcInsert.execute(args);
-        return new Course(professor, subject, description, price, rating);
+        try {
+            jdbcInsert.execute(args);
+        } catch (DuplicateKeyException e) {
+            return null;
+        }
+        return new Course(professor, subject, description, price);
     }
 }

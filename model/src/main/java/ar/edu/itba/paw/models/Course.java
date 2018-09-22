@@ -6,14 +6,12 @@ public class Course {
     private final Subject subject;
     private final String description;
     private final Double price;
-    private final Double rating;
 
-    public Course(Professor professor, Subject subject, String description, Double price, Double rating) {
+    public Course(Professor professor, Subject subject, String description, Double price) {
         this.professor = professor;
         this.subject = subject;
         this.description = description;
         this.price = price;
-        this.rating = rating;
     }
 
     public Professor getProfessor() {
@@ -30,9 +28,5 @@ public class Course {
 
     public Double getPrice() {
         return price;
-    }
-
-    public Double getRating() {
-        return rating;
     }
 }

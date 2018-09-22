@@ -28,7 +28,6 @@ public class CourseJdbcDaoTest {
 
     private static final String DESCRIPTION = "En este curso estudiaremos el algebra de forma dinamica";
     private static final Double PRICE = 45.5;
-    private static final Double RATING = 4.0;
     private static final Long SUBJECT_ID = 1l;
     private static final Long PROFESSOR_ID = 2l;
 
@@ -52,7 +51,7 @@ public class CourseJdbcDaoTest {
         Subject mockSubject = mock(Subject.class);
         when(mockProfessor.getId()).thenReturn(PROFESSOR_ID);
         when(mockSubject.getId()).thenReturn(SUBJECT_ID);
-        final Course course = courseDao.create(mockProfessor, mockSubject, DESCRIPTION, PRICE, RATING);
+        final Course course = courseDao.create(mockProfessor, mockSubject, DESCRIPTION, PRICE);
 
         assertNotNull(course);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "courses",

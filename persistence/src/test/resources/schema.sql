@@ -33,7 +33,6 @@ user_id BIGINT NOT NULL,
 subject_id BIGINT NOT NULL,
 description VARCHAR(512) NOT NULL,
 price REAL NOT NULL,
-rating REAL NOT NULL,
 FOREIGN KEY(subject_id) REFERENCES subjects(subject_id) ON DELETE CASCADE,
 FOREIGN KEY(user_id) REFERENCES professors(user_id) ON DELETE CASCADE,
 PRIMARY KEY(user_id, subject_id)

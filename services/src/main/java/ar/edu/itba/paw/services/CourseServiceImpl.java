@@ -13,8 +13,6 @@ import java.util.List;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    private final static Double INITIAL_RATING = 3.0;
-
     @Autowired
     private CourseDao courseDao;
 
@@ -36,7 +34,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course create(Professor professor, Subject subject, String description, Double price) {
-        return courseDao.create(professor, subject, description, price, INITIAL_RATING);
+        return courseDao.create(professor, subject, description, price);
     }
 
 }
