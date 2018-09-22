@@ -12,33 +12,39 @@
     <title>Tu Teoria | <spring:message code="conversations.title"/></title>
 </head>
 
-<body>
+<body class="conversation">
 
 <%@ include file="navbar.jsp" %>
 
 <div class="content">
-    <c:forEach var="message" items="${conversation.messages}">
-        <div>
-            <h1><c:out value="${message.sender.name}: ${message.text}   A las: ${message.created.toDateTime()}" /></h1>
-        </div>
-    </c:forEach>
 
-    <c:url value="/Conversation" var="postPath"/>
-    <form:form cssClass="form" modelAttribute="messageForm" action="${postPath}" method="post">
-        <form:hidden path="conversationId" />
-        <div>
-            <form:label cssClass="label" path="body"><spring:message code="contact.body"/></form:label>
-            <form:input cssClass="input-request" type="text" path="body"/>
-            <form:errors cssClass="formError" path="body" element="p"/>
-        </div>
-        <div>
-            <form:hidden path="extraMessage" />
-            <form:errors cssClass="formError" path="extraMessage" element="p"/>
-        </div>
-        <div class="button-container">
-            <input class="button-2" type="submit" value="<spring:message code="Contact"/>"/>
-        </div>
-    </form:form>
+    <div class="conversation-messages">
+        <c:forEach var="message" items="${conversation.messages}">
+            <div class="message">
+                <h5 class="message-text"><c:out value="${message.sender.name}: ${message.text}" /></h5>
+                <h6 class="message-time"><c:out value="A las: ${message.created.toDateTime()}" /></h6>
+            </div>
+        </c:forEach>
+    </div>
+
+    <div class="form-container">
+        <c:url value="/Conversation" var="postPath"/>
+        <form:form cssClass="form" modelAttribute="messageForm" action="${postPath}" method="post">
+            <form:hidden path="conversationId" />
+            <div>
+                <form:label cssClass="label" path="body"><spring:message code="contact.body"/></form:label>
+                <form:input cssClass="input-request" type="text" path="body"/>
+                <form:errors cssClass="formError" path="body" element="p"/>
+            </div>
+            <div>
+                <form:hidden path="extraMessage" />
+                <form:errors cssClass="formError" path="extraMessage" element="p"/>
+            </div>
+            <div class="button-container">
+                <input class="button-2" type="submit" value="<spring:message code="Contact"/>"/>
+            </div>
+        </form:form>
+    </div>
 </div>
 </body>
 

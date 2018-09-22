@@ -10,16 +10,25 @@
     <title>Tu Teoria | <spring:message code="conversations.title"/></title>
 </head>
 
-<body>
+<body class="conversations">
 
 <%@ include file="navbar.jsp" %>
 
 <div class="content">
+    <p class="help-message"><spring:message code="conversations.help"/></p>
+    <div class="inbox-message">
+        <hr>
+        <p><spring:message code="conversations.inbox"/></p>
+        <hr>
+    </div>
     <c:forEach var="conversation" items="${conversations}">
-        <div>
-            <a href = "<c:url value="/Conversation?id=${conversation.id}" />"><c:out value="${conversation.subject.name}" /></a>
-            <h1><c:out value="${conversation.professor.name} - ${conversation.user.name}" /></h1>
-            <h2><c:out value="${conversation.latestMessage.toDateTime()}" /></h2>
+        <div class="chat">
+            <a class="conversation-link" href = "<c:url value="/Conversation?id=${conversation.id}" />"/>
+            <a class="conversation-subject-name"><c:out value="${conversation.subject.name}" /></a>
+            <h2 class="conversation-participants">
+                <c:out value="${conversation.professor.name} - ${conversation.user.name}" />
+            </h2>
+            <h6 class="conversation-last-time"><c:out value="${conversation.latestMessage.toDateTime()}" /></h6>
         </div>
     </c:forEach>
 </div>
