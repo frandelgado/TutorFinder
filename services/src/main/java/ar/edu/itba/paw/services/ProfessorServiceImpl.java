@@ -50,6 +50,10 @@ public class ProfessorServiceImpl implements ProfessorService {
                                     final String lastname, final String password, final String email,
                                     final String description){
         final User user = userService.create(username, password, email, name, lastname);
+
+        if(description.length() < 50 || description.length() > 300)
+            return null;
+
         return professorDao.create(user, description);
     }
 }
