@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
-
 @ControllerAdvice
 @Controller
 public class MainController {
@@ -25,9 +23,7 @@ public class MainController {
 
     @RequestMapping("/")
     public ModelAndView helloWorld(){
-        final ModelAndView mav = new ModelAndView("index");
-        mav.addObject("user", us.findUserById(0));
-        return mav;
+        return new ModelAndView("index");
     }
 
     @RequestMapping("favicon.ico")
