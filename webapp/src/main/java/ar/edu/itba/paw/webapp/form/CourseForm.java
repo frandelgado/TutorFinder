@@ -10,7 +10,7 @@ public class CourseForm {
     private Long subjectId;
 
     @NotNull
-    @Size(min = 1, max = 512)
+    @Size(min = 50, max = 300)
     private String description;
 
     @NotNull

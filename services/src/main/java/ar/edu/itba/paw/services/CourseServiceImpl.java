@@ -39,7 +39,16 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course create(Professor professor, Subject subject, String description, Double price) {
-        return courseDao.create(professor, subject, description, price);
+
+        if(price <= 0){
+            return null;
+        }
+
+        if(description.length() < 50 && description.length() > 300)
+            return null;
+        
+        return courseDao.create(professor, subject, description, price, INITIAL_RATING);
     }
+
 
 }
