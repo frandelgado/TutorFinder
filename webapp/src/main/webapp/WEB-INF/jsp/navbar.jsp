@@ -23,6 +23,7 @@
     <div class="navbar-buttons">
         <c:choose>
             <c:when test="${currentUser != null}">
+                <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
                 <c:choose>
                     <c:when test="${currentUserIsProfessor == true}">
                         <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>

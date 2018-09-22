@@ -52,9 +52,9 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public Conversation findById(final Long conversation_id, final Long userId)
+    public Conversation findById(final Long conversationId, final Long userId)
             throws UserNotInConversationException, NonexistentConversationException {
-        final Conversation conversation = conversationDao.findById(conversation_id);
+        final Conversation conversation = conversationDao.findById(conversationId);
 
         if(conversation == null)
             throw new NonexistentConversationException();
