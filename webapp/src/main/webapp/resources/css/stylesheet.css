@@ -425,9 +425,12 @@ button {
 }
 
 .form {
-    grid-area: form;
     display: flex;
     flex-direction: column;
+}
+
+.staticProfile .form {
+    grid-area: form;
 }
 
 .form div {
