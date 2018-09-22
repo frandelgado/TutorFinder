@@ -38,10 +38,6 @@ public class ScheudleServiceImpl implements ScheduleService {
 
         Professor professor = ps.findById(professor_id);
 
-        for(int hour = startTime; hour < endTime; hour++ ){
-            reservedTimeslots.add(sd.reserveTimeSlot(professor, day, hour++));
-        }
-
         return IntStream
                 .range(startTime, endTime)
                 .mapToObj(i -> sd.reserveTimeSlot(professor, day, i))
