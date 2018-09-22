@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri ="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <html>
 <html>
 
@@ -8,33 +9,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
-    <title>Tu Teoria | <spring:message code="course.title"/></title>
+    <title>Tu Teoria | <spring:message code="conversations.title"/></title>
 </head>
 
-<body class="staticClass">
+<body>
 
 <%@ include file="navbar.jsp" %>
 
 <div class="content">
-    <h1 class="title"><c:out value="${course.subject.area.name} - ${course.subject.name}" escapeXml="true"/></h1>
-    <h4 class="description">${course.description}</h4>
-    <hr/>
-    <div class="profile">
-        <a href="<c:url value="/Professor/${course.professor.id}"/>">
-            <img class="profile-picture" alt="Profile picture" src="<c:url value="/resources/images/logo_invert.jpg" />"/>
-        </a>
-        <div class="profile-name">${course.professor.name}</div>
-        <div class="profile-description">${course.professor.description}</div>
-    </div>
-    <hr/>
-    <div class="button-container">
-        <h2 class="label"><spring:message code="course.contact"/></h2>
-    </div>
-    </p>
-    <c:url value="/sendMessage" var="postPath"/>
+    <c:forEach var="message" items="${conversation.messages}">
+        <div>
+            <h1><c:out value="${message.sender.name}: ${message.text}   A las: ${message.created.toDateTime()}" /></h1>
+        </div>
+    </c:forEach>
+
+    <c:url value="/Conversation" var="postPath"/>
     <form:form cssClass="form" modelAttribute="messageForm" action="${postPath}" method="post">
-        <form:hidden path="professorId" />
-        <form:hidden path="subjectId" />
+        <form:hidden path="conversationId" />
         <div>
             <form:label cssClass="label" path="body"><spring:message code="contact.body"/></form:label>
             <form:input cssClass="input-request" type="text" path="body"/>
@@ -48,8 +39,6 @@
             <input class="button-2" type="submit" value="<spring:message code="Contact"/>"/>
         </div>
     </form:form>
-</div>
-<div class="footer">
 </div>
 </body>
 

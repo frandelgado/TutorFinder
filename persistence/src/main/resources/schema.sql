@@ -39,13 +39,23 @@ FOREIGN KEY(user_id) REFERENCES professors(user_id) ON DELETE CASCADE,
 PRIMARY KEY(user_id, subject_id)
 );
 
-CREATE TABLE IF NOT EXISTS comments (
+CREATE TABLE IF NOT EXISTS conversations (
+conversation_id BIGSERIAL PRIMARY KEY,
 user_id BIGINT NOT NULL,
+professor_id BIGINT NOT NULL,
 subject_id BIGINT NOT NULL,
-comment VARCHAR(1024) NOT NULL,
-rating REAL NOT NULL,
-created TIMESTAMP NOT NULL DEFAULT NOW(),
 FOREIGN KEY(subject_id) REFERENCES subjects(subject_id) ON DELETE CASCADE,
 FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-PRIMARY KEY(user_id, subject_id)
+FOREIGN KEY(professor_id) REFERENCES professors(user_id) ON DELETE CASCADE,
+UNIQUE(user_id, subject_id, professor_id)
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+message_id BIGSERIAL PRIMARY KEY,
+conversation_id BIGINT NOT NULL,
+sender_id BIGINT NOT NULL,
+message VARCHAR(1024) NOT NULL,
+created TIMESTAMP NOT NULL DEFAULT NOW(),
+FOREIGN KEY(conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE,
+FOREIGN KEY(sender_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
