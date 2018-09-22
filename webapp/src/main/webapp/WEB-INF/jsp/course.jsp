@@ -28,16 +28,13 @@
     </div>
     <hr/>
     <div class="button-container">
-        <h2 class="label">Send email</h2>
+        <h2 class="label"><spring:message code="course.contact"/></h2>
     </div>
     </p>
-    <c:url value="/contact?professorEmail=${course.professor.email}" var="postPath"/>
-    <form:form cssClass="form" modelAttribute="contactForm" action="${postPath}" method="post">
-        <div>
-            <form:label cssClass="label" path="messageSubject"><spring:message code="contact.subject"/></form:label>
-            <form:input cssClass="input-request" type="text" path="messageSubject"/>
-            <form:errors cssClass="formError" path="messageSubject" element="p"/>
-        </div>
+    <c:url value="/sendMessage" var="postPath"/>
+    <form:form cssClass="form" modelAttribute="messageForm" action="${postPath}" method="post">
+        <form:hidden path="professorId" />
+        <form:hidden path="subjectId" />
         <div>
             <form:label cssClass="label" path="body"><spring:message code="contact.body"/></form:label>
             <form:input cssClass="input-request" type="text" path="body"/>
