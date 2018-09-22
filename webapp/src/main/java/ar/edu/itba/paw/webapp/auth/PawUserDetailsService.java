@@ -45,7 +45,7 @@ public class PawUserDetailsService implements UserDetailsService {
         }
 
         final Collection<? extends GrantedAuthority> userAuthorities = Arrays.asList(
-                new SimpleGrantedAuthority("ROLE_PROFESSOR"), new SimpleGrantedAuthority("ROLE_USER"));
+                new SimpleGrantedAuthority("ROLE_PROFESSOR"));
 
         return new org.springframework.security.core.userdetails.User(username,
                 professor.getPassword(), userAuthorities);
