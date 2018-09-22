@@ -33,7 +33,7 @@ public class ScheduleServiceImplTest {
         Integer START_HOUR = 14;
         Integer END_HOUR = 16;
 
-        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor.getId(), DAY, START_HOUR, END_HOUR);
         assertEquals(2, timeslots.size());
     }
 
@@ -45,7 +45,7 @@ public class ScheduleServiceImplTest {
         Integer START_HOUR = 14;
         Integer END_HOUR = 15;
 
-        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor.getId(), DAY, START_HOUR, END_HOUR);
         assertEquals(1, timeslots.size());
         Timeslot timeslot = timeslots.iterator().next();
 
@@ -62,7 +62,7 @@ public class ScheduleServiceImplTest {
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;
 
-        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor.getId(), DAY, START_HOUR, END_HOUR);
     }
 
     @Test(expected = InvalidTimeException.class)
@@ -73,7 +73,7 @@ public class ScheduleServiceImplTest {
         Integer START_HOUR = -3;
         Integer END_HOUR = 12;
 
-        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor.getId(), DAY, START_HOUR, END_HOUR);
     }
 
     @Test(expected = InvalidTimeException.class)
@@ -84,7 +84,7 @@ public class ScheduleServiceImplTest {
         Integer START_HOUR = 14;
         Integer END_HOUR = 27;
 
-        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor.getId(), DAY, START_HOUR, END_HOUR);
     }
 
 
@@ -96,7 +96,7 @@ public class ScheduleServiceImplTest {
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;
 
-        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor.getId(), DAY, START_HOUR, END_HOUR);
     }
 
     @Test(expected = InvalidTimeException.class)
@@ -106,7 +106,7 @@ public class ScheduleServiceImplTest {
         Integer DAY = -4;
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;
-        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor, DAY, START_HOUR, END_HOUR);
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(mockProfessor.getId(), DAY, START_HOUR, END_HOUR);
 
     }
 }

@@ -365,6 +365,7 @@ button {
         "............... ..................."
         "classes         classes"
         "............... ..................."
+
         "schedule        schedule"
         ;
     
@@ -424,6 +425,7 @@ button {
 }
 
 .form {
+    grid-area: form;
     display: flex;
     flex-direction: column;
 }
@@ -519,7 +521,7 @@ button {
     grid-template-columns: 12%;
     grid-template-rows: 25px;
     grid-auto-rows: 20px;
-    justify-items = center;
+    justify-items: center;
     grid-template-areas:
         "divider monday tuesday wednesday thursday friday saturday sunday"
 }

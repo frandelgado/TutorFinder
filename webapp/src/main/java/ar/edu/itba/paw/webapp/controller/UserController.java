@@ -1,12 +1,16 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.InvalidTimeException;
+import ar.edu.itba.paw.exceptions.InvalidTimeRangeException;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
+import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import ar.edu.itba.paw.webapp.form.RegisterProfessorForm;
+import ar.edu.itba.paw.webapp.form.ScheduleForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,6 +52,9 @@ public class UserController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private ScheduleService ss;
 
     @RequestMapping("/register")
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
@@ -94,6 +101,7 @@ public class UserController {
     @RequestMapping("/Profile")
     public ModelAndView profile(@ModelAttribute("currentUser") final User loggedUser) {
         final Professor professor = ps.findById(loggedUser.getId());
+
         final ModelAndView mav = new ModelAndView("profileForProfessor");
 
         mav.addObject("courses", cs.findCourseByProfessorId(professor.getId()));
@@ -143,5 +151,33 @@ public class UserController {
     @RequestMapping("/registerAsProfessor")
     public ModelAndView registerProfessor(@ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form) {
         return new ModelAndView("registerAsProfessorForm");
+    }
+
+    @RequestMapping(value = "/CreateTimeSlot", method = RequestMethod.POST)
+    public ModelAndView createTimeslot(
+            @Valid @ModelAttribute("newScheduleForm") final ScheduleForm form,
+            final BindingResult errors
+    ){
+        if(errors.hasErrors() || !form.validForm()) {
+            if(!form.validForm()) {
+                errors.addError(new FieldError("profile.add_schedule.timeError", "time", form.getEndHour(),
+                false, new String[]{"profile.add_schedule.timeError"}, null, "El horario de comienzo debe ser menor al de finalización"));
+            }
+            return profile(form);
+        }
+
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final String username = auth.getName();
+
+        final Professor professor = ps.findByUsername(username);
+
+        try {
+            ss.reserveTimeSlot(professor.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
+        } catch (InvalidTimeException e) {
+            //TODO: alguna de las horas no tienen sentido (numeros negativos o mayores a su tope) . Redirigir.
+        } catch (InvalidTimeRangeException e) {
+            //TODO: startHour es mas grande que endHour, manejar el error
+        }
+        return profile(form);
     }
 }
