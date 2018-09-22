@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +56,11 @@ public class UserController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView create(@Valid @ModelAttribute("registerForm") final RegisterForm form,
                                final BindingResult errors, HttpServletRequest request) {
-        if(errors.hasErrors()) {
+        if(errors.hasErrors() || !form.checkRepeatPassword()) {
+            if(!form.checkRepeatPassword()) {
+                errors.addError(new FieldError("RepeatPasswordError", "repeatPassword", form.getRepeatPassword(),
+                        false, new String[]{"RepeatPassword"}, null, "Las contraseñas deben coincidir"));
+            }
             return register(form);
         }
         final User u = us.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
