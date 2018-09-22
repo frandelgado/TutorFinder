@@ -13,6 +13,8 @@ public class MessageForm {
 
     private Long professorId;
 
+    private String extraMessage;
+
     public String getBody() {
         return body;
     }
@@ -35,5 +37,13 @@ public class MessageForm {
 
     public void setProfessorId(Long professorId) {
         this.professorId = professorId;
+    }
+
+    public String getExtraMessage() {
+        return extraMessage;
+    }
+
+    public void setExtraMessage(String extraMessage) {
+        this.extraMessage = extraMessage;
     }
 }

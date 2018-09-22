@@ -40,6 +40,10 @@
             <form:input cssClass="input-request" type="text" path="body"/>
             <form:errors cssClass="formError" path="body" element="p"/>
         </div>
+        <div>
+            <form:hidden path="extraMessage" />
+            <form:errors cssClass="formError" path="extraMessage" element="p"/>
+        </div>
         <div class="button-container">
             <input class="button-2" type="submit" value="<spring:message code="Contact"/>"/>
         </div>
