@@ -26,8 +26,10 @@ public class ConversationJdbcDao implements ConversationDao {
             "u.user_id, u.username, u.name, u.lastname, u.password, u.email," +
             " p.user_id, p.username, p.name, p.lastname, p.password, p.email, professors.description," +
             " subjects.subject_id, subjects.description, subjects.name, " +
-            "areas.area_id, areas.description, areas.name " +
-            "FROM users as u, users as p, professors, subjects, areas, conversations ";
+            "areas.area_id, areas.description, areas.name, m.latest " +
+            "FROM users as u, users as p, professors, subjects, areas, conversations LEFT OUTER JOIN " +
+            "(SELECT max(created) AS latest, conversation_id AS c_id FROM messages GROUP BY" +
+            " conversation_id) AS m ON m.c_id = conversations.conversation_id ";
 
     private final static RowMapper<Conversation> CONVERSATION_ROW_MAPPER = (rs, rowNum) -> {
         return new Conversation(
@@ -57,8 +59,8 @@ public class ConversationJdbcDao implements ConversationDao {
                                 rs.getString(19),
                                 rs.getString(20)
                         )
-                )
-        );
+                ),
+                new LocalDateTime(rs.getTimestamp(21)));
     };
 
     private final static RowMapper<Message> MESSAGE_ROW_MAPPER = (rs, rowNum) -> {
@@ -94,7 +96,7 @@ public class ConversationJdbcDao implements ConversationDao {
         args.put("professor_id", professor.getId());
         args.put("subject_id", subject.getId());
         final Number id = jdbcInsertConversation.executeAndReturnKey(args);
-        return new Conversation(id.longValue(), user, professor, subject);
+        return new Conversation(id.longValue(), user, professor, subject, null);
     }
 
     @Override
@@ -154,7 +156,7 @@ public class ConversationJdbcDao implements ConversationDao {
                         "users.name, users.lastname, users.password, users.email, messages.message_id," +
                         " messages.message, messages.created FROM users, messages " +
                         "WHERE users.user_id = messages.sender_id AND messages.conversation_id = ? " +
-                        "ORDER BY messages.created DESC", MESSAGE_ROW_MAPPER, conversation_id);
+                        "ORDER BY messages.created", MESSAGE_ROW_MAPPER, conversation_id);
         return messages;
     }
 }

@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.joda.time.LocalDateTime;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,13 +12,15 @@ public class Conversation {
     private final Professor professor;
     private final Subject subject;
     private final List<Message> messages;
+    private final LocalDateTime latestMessage;
 
 
-    public Conversation(Long id, final User user, final Professor professor, final Subject subject) {
+    public Conversation(Long id, final User user, final Professor professor, final Subject subject, LocalDateTime latestMessage) {
         this.id = id;
         this.user = user;
         this.professor = professor;
         this.subject = subject;
+        this.latestMessage = latestMessage;
         this.messages = new LinkedList<>();
     }
 
@@ -38,6 +42,10 @@ public class Conversation {
 
     public List<Message> getMessages() {
         return messages;
+    }
+
+    public LocalDateTime getLatestMessage() {
+        return latestMessage;
     }
 
     public void addMessages(List<Message> messages) {

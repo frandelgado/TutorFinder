@@ -29,10 +29,10 @@ public class ConversationJdbcDaoTest {
     private static final Long SUBJECT_ID = 1l;
     private static final Long PROFESSOR_ID = 2l;
     private static final Long USER_ID = 3l;
-    private static final Long SENDER_1 = 2l;
-    private static final Long SENDER_2 = 3l;
-    private static final String BODY_1 = "Hola";
-    private static final String BODY_2 = "Hola2";
+    private static final Long SENDER_2 = 2l;
+    private static final Long SENDER_1 = 3l;
+    private static final String BODY_2 = "Hola";
+    private static final String BODY_1 = "Hola2";
     private static final Long CONVERSATION_ID = 1l;
     private static final int CONVERSATION_NUMBER = 2;
 
