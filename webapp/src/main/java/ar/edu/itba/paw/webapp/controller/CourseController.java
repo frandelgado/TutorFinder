@@ -75,8 +75,8 @@ public class CourseController {
 
     @RequestMapping(value = "/createCourse", method = RequestMethod.POST)
     public ModelAndView create(@Valid @ModelAttribute("CourseForm") final CourseForm form,
-                               @ModelAttribute("currentUser") final User user,
-                               final BindingResult errors) {
+                               final BindingResult errors,
+                               @ModelAttribute("currentUser") final User user) {
         if(errors.hasErrors()) {
             return createCourse(form, user);
         }
