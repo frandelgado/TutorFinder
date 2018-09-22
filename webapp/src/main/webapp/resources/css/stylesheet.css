@@ -333,12 +333,14 @@ button {
 .staticProfile .content {
     display: grid;
     grid-template-columns: 120px auto;
-    grid-template-rows: 50px 50px 80px auto;
+    grid-template-rows: 50px 50px 80px auto 80px auto;
     grid-template-areas:
         "profile-picture profile-name"
         "profile-picture profile-description"
         "............... ..................."
         "classes         classes"
+        "............... ..................."
+        "schedule        schedule"
         ;
     
 }
@@ -484,4 +486,62 @@ button {
     display: flex;
     align-content: center;
     justify-content: center;
+}
+
+.schedule {
+    grid-area: schedule;
+    display: grid;
+    grid-template-columns: 12%;
+    grid-template-rows: 25px;
+    grid-auto-rows: 20px;
+    justify-items = center;
+    grid-template-areas:
+        "divider monday tuesday wednesday thursday friday saturday sunday"
+}
+
+.schedule a {
+    height: 100%;
+    overflow: hidden;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.schedule-divider {
+    grid-area: divider;
+    background-color: white;
+}
+
+.monday {
+    grid-area: monday;
+    background-color: #c5e8ec;
+}
+
+.tuesday {
+    background-color: #99ff99;
+    grid-area: tuesday;
+}
+
+.wednesday {
+    background-color: #ffff80;
+    grid-area: wednesday;
+}
+
+.thursday {
+    background-color: #ff9999;
+    grid-area: thursday;
+}
+
+.friday {
+    background-color: #cc99ff;
+    grid-area: friday;
+}
+
+.saturday {
+    background-color: #80ffbf;
+    grid-area: saturday;
+}
+
+.sunday {
+    background-color: #ffc266;
+    grid-area: sunday;
 }
