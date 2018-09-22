@@ -22,6 +22,8 @@ public class ScheduleForm {
     private Integer endHour;
 
     public boolean validForm() {
+        if(startHour == null || endHour == null)
+            return false;
         return startHour < endHour;
     }
 
