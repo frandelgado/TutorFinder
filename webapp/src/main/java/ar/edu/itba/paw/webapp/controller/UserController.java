@@ -90,7 +90,7 @@ public class UserController {
                                          @ModelAttribute("currentUser") final User loggedUser,
                                          @ModelAttribute("currentUserIsProfessor") final boolean isProfessor) {
         if(loggedUser != null && loggedUser.getId() == id && isProfessor)
-            return profile(loggedUser);
+            return profile(loggedUser, new ScheduleForm());
 
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("courses", cs.findCourseByProfessorId(id));
@@ -99,7 +99,10 @@ public class UserController {
     }
 
     @RequestMapping("/Profile")
-    public ModelAndView profile(@ModelAttribute("currentUser") final User loggedUser) {
+    public ModelAndView profile(
+            @ModelAttribute("currentUser") final User loggedUser,
+            @ModelAttribute("ScheduleForm") final ScheduleForm schdeuleForm
+    ) {
         final Professor professor = ps.findById(loggedUser.getId());
 
         final ModelAndView mav = new ModelAndView("profileForProfessor");
@@ -155,6 +158,7 @@ public class UserController {
 
     @RequestMapping(value = "/CreateTimeSlot", method = RequestMethod.POST)
     public ModelAndView createTimeslot(
+            @ModelAttribute("currentUser") final User loggedUser,
             @Valid @ModelAttribute("newScheduleForm") final ScheduleForm form,
             final BindingResult errors
     ){
@@ -163,7 +167,7 @@ public class UserController {
                 errors.addError(new FieldError("profile.add_schedule.timeError", "time", form.getEndHour(),
                 false, new String[]{"profile.add_schedule.timeError"}, null, "El horario de comienzo debe ser menor al de finalización"));
             }
-            return profile(form);
+            return profile(loggedUser, form);
         }
 
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -178,6 +182,8 @@ public class UserController {
         } catch (InvalidTimeRangeException e) {
             //TODO: startHour es mas grande que endHour, manejar el error
         }
-        return profile(form);
+        final RedirectView view = new RedirectView("/Profile" );
+        view.setExposeModelAttributes(false);
+        return new ModelAndView(view);
     }
 }
