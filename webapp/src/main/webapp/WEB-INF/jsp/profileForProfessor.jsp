@@ -21,7 +21,7 @@
     <h3 class="profile-description"><c:out value="${professor.description}" escapeXml="true"/></h3>
     <div class="classes">
         <div class="class add-class">
-            <a class="class-button" href="/createCourse"></a>
+            <a class="class-button" href="<c:url value="/createCourse" />"></a>
             +
         </div>
         <c:forEach var="course" items="${courses}">
