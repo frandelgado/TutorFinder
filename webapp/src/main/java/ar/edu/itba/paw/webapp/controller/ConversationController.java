@@ -3,10 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.exceptions.SameUserConversationException;
 import ar.edu.itba.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.Subject;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,27 +41,46 @@ public class ConversationController {
     private ConversationService conversationService;
 
     @RequestMapping("/Conversations")
-    public ModelAndView conversations(){
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        final String username = auth.getName();
-        final User user = userService.findByUsername(username);
-
+    public ModelAndView conversations(@ModelAttribute("currentUser") final User loggedUser){
         final ModelAndView mav = new ModelAndView("conversations");
-        mav.addObject("conversations", conversationService.findByUserId(user.getId()));
+        mav.addObject("conversations", conversationService.findByUserId(loggedUser.getId()));
         return mav;
     }
 
-    @RequestMapping("/Conversations/")
-    public ModelAndView conversation(@RequestParam(value="id", required=true) final Long id) throws UserNotInConversationException {
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        final String username = auth.getName();
-        final User user = userService.findByUsername(username);
+    @RequestMapping("/Conversation")
+    public ModelAndView conversation(@RequestParam(value="id", required=true) final Long id,
+                                     @ModelAttribute("messageForm") final MessageForm form,
+                                     @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException {
 
         final ModelAndView mav = new ModelAndView("conversation");
-        mav.addObject("conversation", conversationService.findById(id, user.getId()));
+        mav.addObject("conversation", conversationService.findById(id, loggedUser.getId()));
+        form.setConversationId(id);
         return mav;
+    }
+
+    @RequestMapping(value = "/Conversation", method = RequestMethod.POST)
+    public ModelAndView sendMessage(@Valid @ModelAttribute("messageForm") final MessageForm form,
+                                     final BindingResult errors,
+                                     @ModelAttribute("currentUser") final User loggedUser)
+            throws UserNotInConversationException {
+
+        if(errors.hasErrors()) {
+            return conversation(form.getConversationId(), form, loggedUser);
+        }
+
+        final User user = userService.findUserById(loggedUser.getId());
+        final Conversation conversation = conversationService.findById(form.getConversationId(), loggedUser.getId());
+
+        boolean sent = conversationService.sendMessage(user, conversation, form.getBody());
+        if(sent) {
+            errors.addError(new FieldError("MessageSent", "extraMessage", null,
+                    false, new String[]{"MessageSent"},null, "Mensaje Enviado!"));
+            form.setBody(null);
+            return conversation(form.getConversationId(), form, loggedUser);
+        }
+        errors.addError(new FieldError("SendMessageError", "extraMessage", null,
+                false, new String[]{"SendMessageError"},null, "Error al enviar el mensaje."));
+        return conversation(form.getConversationId(), form, loggedUser);
     }
 
 }

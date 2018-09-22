@@ -17,8 +17,9 @@
 <div class="content">
     <c:forEach var="conversation" items="${conversations}">
         <div>
-            <a href = "<c:url value="Conversations/?id=${conversation.id}" />"><c:out value="${conversation.subject.name}" /></a>
+            <a href = "<c:url value="/Conversation?id=${conversation.id}" />"><c:out value="${conversation.subject.name}" /></a>
             <h1><c:out value="${conversation.professor.name} - ${conversation.user.name}" /></h1>
+            <h2><c:out value="${conversation.latestMessage.toDateTime()}" /></h2>
         </div>
     </c:forEach>
 </div>
