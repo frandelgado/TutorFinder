@@ -39,6 +39,9 @@ public class MainController {
     @ModelAttribute("currentUser")
     public User loggedUser() {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth == null)
+            return null;
+
         final String username = auth.getName();
         if(!username.equals("anonymousUser"))
             return us.findByUsername(username);
@@ -48,6 +51,8 @@ public class MainController {
     @ModelAttribute("currentUserIsProfessor")
     public boolean isProfessor() {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth == null)
+            return false;
 
         for (GrantedAuthority authority: auth.getAuthorities()) {
             if(authority.getAuthority().equals("ROLE_PROFESSOR"))
