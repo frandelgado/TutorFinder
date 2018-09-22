@@ -84,7 +84,9 @@ public class RegisterForm {
     }
 
     public boolean checkRepeatPassword() {
-            return repeatPassword.equals(password);
+        if(repeatPassword == null || password == null)
+            return false;
+        return repeatPassword.equals(password);
     }
 
 }

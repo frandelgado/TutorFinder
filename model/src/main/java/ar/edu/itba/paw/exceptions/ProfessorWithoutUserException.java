@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.services.exceptions;
+package ar.edu.itba.paw.exceptions;
 
 public class ProfessorWithoutUserException extends RuntimeException {
     public ProfessorWithoutUserException(String s) {
