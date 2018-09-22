@@ -44,10 +44,10 @@ public class CourseServiceImpl implements CourseService {
             return null;
         }
 
-        if(description.length() < 50 && description.length() > 300)
+        if(description.length() < 50 || description.length() > 300)
             return null;
         
-        return courseDao.create(professor, subject, description, price, INITIAL_RATING);
+        return courseDao.create(professor, subject, description, price);
     }
 
 
