@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 
@@ -109,8 +110,11 @@ public class CourseController {
 
         final Course course = courseService.create(professor, subject, form.getDescription(), form.getPrice());
 
-        return new ModelAndView("redirect:/Course/?professor=" + course.getProfessor().getId() +
-                "&subject=" + course.getSubject().getId());
+
+        final RedirectView view = new RedirectView("/Course/?professor=" + course.getProfessor().getId()
+                + "&subject=" + course.getSubject().getId());
+        view.setExposeModelAttributes(false);
+        return new ModelAndView(view);
     }
 
 }
