@@ -598,6 +598,8 @@ button {
 }
 
 .conversation-messages {
+    overflow-y: auto;
+    max-height: 550px;
     margin-bottom: 20px;
 }
 
