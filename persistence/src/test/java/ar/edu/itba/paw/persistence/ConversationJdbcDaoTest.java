@@ -69,7 +69,7 @@ public class ConversationJdbcDaoTest {
     }
 
     @Test
-    public void findById() {
+    public void testfindByIdValid() {
 
         final Conversation conversation = conversationDao.findById(CONVERSATION_ID);
 
@@ -84,7 +84,7 @@ public class ConversationJdbcDaoTest {
     }
 
     @Test
-    public void findByUserId() {
+    public void testfindByUserIdValid() {
 
         final List<Conversation> conversations = conversationDao.findByUserId(PROFESSOR_ID);
 
