@@ -1,22 +1,19 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.service.CourseService;
-import ar.edu.itba.paw.interfaces.service.EmailService;
-import ar.edu.itba.paw.interfaces.service.ProfessorService;
-import ar.edu.itba.paw.interfaces.service.SubjectService;
+import ar.edu.itba.exceptions.SameUserConversationException;
+import ar.edu.itba.exceptions.UserNotInConversationException;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Subject;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.webapp.form.ContactForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
-import com.sun.xml.internal.bind.v2.TODO;
+import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,28 +39,51 @@ public class CourseController {
     private ProfessorService professorService;
 
     @Autowired
-    private EmailService emailService;
+    @Qualifier("userServiceImpl")
+    private UserService userService;
+
+    @Autowired
+    private ConversationService conversationService;
 
     @RequestMapping("/Course")
     public ModelAndView course(
-            @ModelAttribute("contactForm") final ContactForm form,
+            @ModelAttribute("messageForm") final MessageForm form,
             @RequestParam(value="professor", required=true) final Long professorId,
             @RequestParam(value="subject", required=true) final Long subjectId
     ){
         final ModelAndView mav = new ModelAndView("course");
         mav.addObject("course", courseService.findCourseByIds(professorId, subjectId));
+        form.setProfessorId(professorId);
+        form.setSubjectId(subjectId);
         return mav;
     }
 
-    @RequestMapping(value = "/contact", method = RequestMethod.POST)
-    public ModelAndView contactProfessor(
-            @Valid @ModelAttribute("contactForm") final ContactForm form,
-            @RequestParam(value="professorEmail", required = true) final String professorEmail
-    ){
-        //TODO: deberiamos checkear que sea valido el email aca?
-        emailService.sendEmail(professorEmail, form.getMessageSubject(), form.getBody());
-        return new ModelAndView("redirect:/");
+    @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
+    public ModelAndView contact(
+            @Valid @ModelAttribute("messageForm") final MessageForm form,
+            final BindingResult errors,
+            @ModelAttribute("currentUser") final User loggedUser) throws SameUserConversationException, UserNotInConversationException {
+
+        if(errors.hasErrors()) {
+            return course(form, form.getProfessorId(), form.getSubjectId());
+        }
+
+        final User user = userService.findUserById(loggedUser.getId());
+        final Professor professor = professorService.findById(form.getProfessorId());
+        final Subject subject = subjectService.findSubjectById(form.getSubjectId());
+
+        boolean sent = conversationService.sendMessage(user, professor, subject, form.getBody());
+        if(sent) {
+            errors.addError(new FieldError("MessageSent", "extraMessage", null,
+                    false, new String[]{"MessageSent"},null, "Mensaje Enviado!"));
+            form.setBody(null);
+            return course(form, form.getProfessorId(), form.getSubjectId());
+        }
+        errors.addError(new FieldError("SendMessageError", "extraMessage", null,
+                false, new String[]{"SendMessageError"},null, "Error al enviar el mensaje."));
+        return course(form, form.getProfessorId(), form.getSubjectId());
     }
+
 
     @RequestMapping("/createCourse")
     public ModelAndView createCourse(@ModelAttribute("CourseForm") final CourseForm form,
