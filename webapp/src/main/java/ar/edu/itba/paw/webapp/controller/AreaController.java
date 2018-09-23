@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.AreaService;
+import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.models.Area;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,11 +17,15 @@ public class AreaController {
     @Qualifier("areaServiceImpl")
     private AreaService as;
 
+    @Autowired
+    private CourseService cs;
+
 
     @RequestMapping("/Area/{id}")
     public ModelAndView area(@PathVariable(value = "id") long id){
         final ModelAndView mav = new ModelAndView("area");
         mav.addObject("area", as.findAreaById(id));
+        mav.addObject("results", cs.filterByAreaId(id));
         return mav;
     }
 }

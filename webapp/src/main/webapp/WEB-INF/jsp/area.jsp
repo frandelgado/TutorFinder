@@ -8,7 +8,22 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
     <title>Tu Teoria | <c:out value="${area.name}" escapeXml="true"/></title>
 </head>
-<body>
-    <p><spring:message code="area.message" arguments="${area.name}" htmlEscape="true"/></p>
+
+<body class="staticSearchResults">
+
+    <%@ include file="navbar.jsp" %>
+
+    <div class="content">
+        <div class="filter-panel">
+        </div>
+
+        <div class="search-results">
+            <h3><spring:message code="area.message" arguments="${area.name}" htmlEscape="true"/></h3>
+            <%@ include file="courseSearch.jsp" %>
+        </div>
+    </div>
+    </body>
+
+    </html>
 </body>
 </html>

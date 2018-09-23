@@ -267,6 +267,19 @@ button {
                          "search-result-img search-result-description search-result-specs"
 }
 
+.search-area-result {
+    padding: 20px;
+    display: grid;
+    height: 100%;
+    align-content: center;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
+    grid-template-columns: 220px auto;
+    grid-template-areas: "search-result-img search-result-title"
+    "search-result-img search-result-description"
+    "search-result-img search-result-description"
+}
+
 .search-result {
     display: grid;
     border: 5px solid #F47C48;
