@@ -14,5 +14,7 @@ public interface CourseDao {
 
     List<Course> filterCoursesByName(final String name);
 
+    List<Course> filterByAreaId(final long areaId);
+
     Course create(Professor professor, Subject subject, String description, Double price);
 }

@@ -94,6 +94,16 @@ public class CourseJdbcDao implements CourseDao {
     }
 
     @Override
+    public List<Course> filterByAreaId(final long areaId) {
+        final List<Course> courses = jdbcTemplate.query(
+                COURSES_SELECT_FROM + "WHERE subjects.area_id = ? AND professors.user_id = users.user_id" +
+                        " AND areas.area_id = subjects.area_id AND users.user_id = courses.user_id" +
+                        " AND courses.subject_id = subjects.subject_id"
+                , ROW_MAPPER, areaId);
+        return courses;
+    }
+
+    @Override
     public Course create(final Professor professor, final Subject subject, final String description,
                          final Double price) {
         final Map<String, Object> args = new HashMap<>();
