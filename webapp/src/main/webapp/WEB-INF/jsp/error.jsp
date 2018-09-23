@@ -10,6 +10,6 @@
 </head>
 
 <body>
-    <h1><spring:message code="error.message" arguments="${exception}, ${url}"/></h1>
+    <p><spring:message code="error.message" arguments="${exception}, ${url}"/></p>
 </body>
 </html>

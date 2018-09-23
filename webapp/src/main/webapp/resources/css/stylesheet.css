@@ -501,10 +501,7 @@ button {
 }
 
 .error-text {
-    position: absolute;
-    top: 100%;
     color: red;
-    font-size: 12px;
 }
 
 .button-2 {

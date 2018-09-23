@@ -80,7 +80,7 @@
                         <form:option value="6"><spring:message code ="day.saturday"/></form:option>
                         <form:option value="7"><spring:message code ="day.sunday"/></form:option>
                     </form:select>
-                    <form:errors cssClass="formError" path="day" element="p"/>
+                    <form:errors cssClass="error-text" path="day" element="p"/>
                 </div>
                 <div>
                     <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
@@ -90,7 +90,7 @@
                             <form:option value="${hour}">${hour}:00</form:option>
                         </c:forEach>
                     </form:select>
-                    <form:errors cssClass="formError" path="startHour" element="p"/>
+                    <form:errors cssClass="error-text" path="startHour" element="p"/>
                 </div>
                 <div>
                     <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
@@ -100,7 +100,7 @@
                             <form:option value="${hour}">${hour}:00</form:option>
                         </c:forEach>
                     </form:select>
-                    <form:errors cssClass="formError" path="endHour" element="p"/>
+                    <form:errors cssClass="error-text" path="endHour" element="p"/>
                 </div>
                 <div class="button-container">
                     <input class="button-2" type="submit" value="<spring:message code="addTimeslot"/>"/>

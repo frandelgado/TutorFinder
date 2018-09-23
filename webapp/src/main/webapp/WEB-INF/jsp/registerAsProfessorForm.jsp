@@ -27,7 +27,7 @@
         <div>
             <form:label cssClass="label" path="description"><spring:message code="register.description"/></form:label>
             <form:textarea cssClass="input-request" type="text" path="description"/>
-            <form:errors cssClass="formError" path="description" element="p"/>
+            <form:errors cssClass="error-text" path="description" element="p"/>
         </div>
 
         <div class="button-container">

@@ -34,17 +34,17 @@
                     <form:option value="${subject.id}">${subject.name}</form:option>
                 </c:forEach>
             </form:select>
-            <form:errors cssClass="formError" path="subjectId" element="p"/>
+            <form:errors cssClass="error-text" path="subjectId" element="p"/>
         </div>
         <div>
             <form:label cssClass="label" path="description"><spring:message code="description"/></form:label>
             <form:textarea cssClass="input-request" type="text" path="description"/>
-            <form:errors cssClass="formError" path="description" element="p"/>
+            <form:errors cssClass="error-text" path="description" element="p"/>
         </div>
         <div>
             <form:label cssClass="label" path="price"><spring:message code="course.price"/></form:label>
             <form:input cssClass="input-request" type="number" step="0.01" path="price"/>
-            <form:errors cssClass="formError" path="price" element="p"/>
+            <form:errors cssClass="error-text" path="price" element="p"/>
         </div>
         <div class="button-container">
             <input class="button-2" type="submit" value="<spring:message code="create"/>"/>
