@@ -33,6 +33,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<Course> filterByAreaId(final long areaId) {
+        return courseDao.filterByAreaId(areaId);
+    }
+
+    @Override
     public Course create(Professor professor, Subject subject, String description, Double price) {
         return courseDao.create(professor, subject, description, price);
     }

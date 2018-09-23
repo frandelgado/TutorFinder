@@ -13,5 +13,7 @@ public interface CourseService {
 
     List<Course> filterCoursesByName(String name);
 
+    List<Course> filterByAreaId(final long areaId);
+
     Course create(Professor professor, Subject subject, String description, Double price);
 }
