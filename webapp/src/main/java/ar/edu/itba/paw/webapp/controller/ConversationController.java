@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.exceptions.NonexistentConversationException;
-import ar.edu.itba.exceptions.SameUserConversationException;
-import ar.edu.itba.exceptions.UserNotInConversationException;
+import ar.edu.itba.paw.exceptions.NonexistentConversationException;
+import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;

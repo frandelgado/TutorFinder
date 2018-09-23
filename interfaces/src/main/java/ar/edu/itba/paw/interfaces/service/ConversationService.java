@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.exceptions.NonexistentConversationException;
-import ar.edu.itba.exceptions.SameUserConversationException;
-import ar.edu.itba.exceptions.UserNotInConversationException;
+import ar.edu.itba.paw.exceptions.NonexistentConversationException;
+import ar.edu.itba.paw.exceptions.SameUserConversationException;
+import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.models.Conversation;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Subject;

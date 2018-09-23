@@ -1,4 +1,4 @@
-package ar.edu.itba.exceptions;
+package ar.edu.itba.paw.exceptions;
 
 public class UserNotInConversationException extends Exception {
     public UserNotInConversationException() {
