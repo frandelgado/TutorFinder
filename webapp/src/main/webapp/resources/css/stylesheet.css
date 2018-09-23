@@ -598,6 +598,7 @@ button {
 
 .chat {
     padding: 20px;
+    margin-bottom: 20px;
     border: solid 1px grey;
     position: relative;
     background-image: linear-gradient(#cccccc, white);

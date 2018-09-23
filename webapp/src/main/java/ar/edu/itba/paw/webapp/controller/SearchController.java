@@ -25,7 +25,6 @@ public class SearchController {
     @Qualifier("areaServiceImpl")
     private AreaService as;
 
-    //TODO: Search with dropdown, for now just searches areas
     @RequestMapping("/searchResults")
     public ModelAndView search(@RequestParam(value = "search") String name,
                                @RequestParam(value = "type", defaultValue = "course") String type){
@@ -44,7 +43,7 @@ public class SearchController {
             default:
                 throw new RuntimeException();
         }
-        mav.addObject("search", name);
+        mav.addObject("search", name.isEmpty()? " ": name);
         mav.addObject("type", type);
         return mav;
     }

@@ -21,6 +21,9 @@
         <p><spring:message code="conversations.inbox"/></p>
         <hr>
     </div>
+    <c:if test="${conversations.size() == 0}" >
+        <h1><spring:message code="no.conversations"/></h1>
+    </c:if>
     <c:forEach var="conversation" items="${conversations}">
         <div class="chat">
             <a class="conversation-link" href = "<c:url value="/Conversation?id=${conversation.id}" />"/>
