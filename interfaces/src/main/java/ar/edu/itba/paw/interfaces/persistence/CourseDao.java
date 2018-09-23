@@ -16,7 +16,7 @@ public interface CourseDao {
     List<Course> filterCoursesByName(final String name);
 
     List<Course> filterByAreaId(final long areaId);
-    
+
     List<Course> filterCoursesByTime(Integer day, Integer startHour, Integer endHour);
 
     Course create(Professor professor, Subject subject, String description, Double price);

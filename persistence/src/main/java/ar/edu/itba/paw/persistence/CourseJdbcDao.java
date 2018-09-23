@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
-import ar.edu.itba.paw.models.Area;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,6 +26,8 @@ public class CourseJdbcDao implements CourseDao {
             "users.name, users.lastname, users.password, users.email, subjects.description," +
             "subjects.name, areas.name, areas.description, areas.area_id " +
             "FROM courses, professors, users, subjects, areas ";
+
+    private static final String COURSES_SELECT_FROM_TIMESLOT = COURSES_SELECT_FROM+", schedules";
 
     private final static RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
             new Professor(
@@ -100,6 +99,16 @@ public class CourseJdbcDao implements CourseDao {
                         " AND areas.area_id = subjects.area_id AND users.user_id = courses.user_id" +
                         " AND courses.subject_id = subjects.subject_id"
                 , ROW_MAPPER, areaId);
+        return courses;
+    }
+
+    @Override
+    public List<Course> filterCoursesByTime(Integer day, Integer startHour, Integer endHour) {
+        final List<Course> courses = jdbcTemplate.query(
+                COURSES_SELECT_FROM_TIMESLOT + "WHERE courses.user_id = users.user_id AND" +
+                        " courses.subject_id = subjects.subject_id AND professors.user_id = users.user_id " +
+                        "AND areas.area_id = subjects.area_id AND schedules.day = ? AND schedules.hour >= ? AND schedules.hour < ?",
+                ROW_MAPPER, new Object[]{day, startHour, endHour});
         return courses;
     }
 
