@@ -20,7 +20,14 @@
 
     <div class="conversation-messages">
         <c:forEach var="message" items="${conversation.messages}">
-            <div class="message">
+            <c:choose>
+                <c:when test="${message.sender.id == currentUser.id}">
+                    <div class="message own">
+                </c:when>
+                <c:otherwise>
+                    <div class="message">
+                </c:otherwise>
+            </c:choose>
                 <h5 class="message-text"><c:out value="${message.sender.name}: ${message.text}" /></h5>
                 <h6 class="message-time"><c:out value="A las: ${message.created.toDateTime()}" /></h6>
             </div>
