@@ -29,7 +29,9 @@
                 </c:otherwise>
             </c:choose>
                 <h5 class="message-text"><c:out value="${message.sender.name}: ${message.text}" /></h5>
-                <h6 class="message-time"><c:out value="A las: ${message.created.toDateTime()}" /></h6>
+                    <h6 class="conversation-last-time">
+                        <spring:message code="time.sent" arguments="${message.day},${message.month},${message.year},${message.hours},${message.minutes}"/>
+                    </h6>
             </div>
         </c:forEach>
     </div>
@@ -40,7 +42,7 @@
             <form:hidden path="conversationId" />
             <div>
                 <form:label cssClass="label" path="body"><spring:message code="contact.body"/></form:label>
-                <form:input cssClass="input-request" type="text" path="body"/>
+                <form:textarea cssClass="input-request" type="text" path="body" cols="5" rows="5"/>
                 <form:errors cssClass="error-text" path="body" element="p"/>
             </div>
             <div>
@@ -48,7 +50,7 @@
                 <form:errors cssClass="error-text" path="extraMessage" element="p"/>
             </div>
             <div class="button-container">
-                <input class="button-2" type="submit" value="<spring:message code="Contact"/>"/>
+                <input class="button-2" type="submit" value="<spring:message code="send"/>"/>
             </div>
         </form:form>
     </div>

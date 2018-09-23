@@ -53,4 +53,24 @@ public class Conversation {
     }
 
     public boolean belongs(Long id) {return (user.getId().equals(id) || professor.getId().equals(id)); }
+
+    public String getHours() {
+        return String.format("%02d", latestMessage.getHourOfDay());
+    }
+
+    public String getMinutes() {
+        return String.format("%02d", latestMessage.getMinuteOfHour());
+    }
+
+    public String getDay() {
+        return String.format("%02d", latestMessage.getDayOfMonth());
+    }
+
+    public String getMonth() {
+        return String.format("%02d", latestMessage.getMonthOfYear());
+    }
+
+    public int getYear() {
+        return latestMessage.getYear();
+    }
 }

@@ -31,4 +31,24 @@ public class Message {
     public LocalDateTime getCreated() {
         return created;
     }
+
+    public String getHours() {
+        return String.format("%02d", created.getHourOfDay());
+    }
+
+    public String getMinutes() {
+        return String.format("%02d", created.getMinuteOfHour());
+    }
+
+    public String getDay() {
+        return String.format("%02d", created.getDayOfMonth());
+    }
+
+    public String getMonth() {
+        return String.format("%02d", created.getMonthOfYear());
+    }
+
+    public int getYear() {
+        return created.getYear();
+    }
 }

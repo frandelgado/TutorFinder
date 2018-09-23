@@ -31,7 +31,9 @@
             <h2 class="conversation-participants">
                 <c:out value="${conversation.professor.name} - ${conversation.user.name}" />
             </h2>
-            <h6 class="conversation-last-time"><c:out value="${conversation.latestMessage.toDateTime()}" /></h6>
+            <h6 class="conversation-last-time">
+                <spring:message code="time" arguments="${conversation.day},${conversation.month},${conversation.year},${conversation.hours},${conversation.minutes}"/>
+            </h6>
         </div>
     </c:forEach>
 </div>

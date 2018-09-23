@@ -528,6 +528,14 @@ button {
     justify-content: center;
 }
 
+.conversation .button-container {
+    margin: 0px;
+}
+
+.conversation .button-2 {
+    margin: 0px;
+}
+
 .schedule {
     grid-area: schedule;
     display: grid;
@@ -611,6 +619,12 @@ button {
     position: absolute;
     width: 100%;
     height: 100%;
+}
+
+.conversation-last-time {
+    align-self: end;
+    margin-bottom: 0px;
+    padding: 5px;
 }
 
 .conversation-messages {
