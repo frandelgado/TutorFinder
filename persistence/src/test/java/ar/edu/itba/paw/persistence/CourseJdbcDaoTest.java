@@ -21,6 +21,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,10 +30,14 @@ import static org.mockito.Mockito.when;
 @Sql("classpath:schema.sql")
 public class CourseJdbcDaoTest {
 
-    private static final String DESCRIPTION = "En este curso estudiaremos el algebra de forma dinamica";
-    private static final Double PRICE = 45.5;
-    private static final Long SUBJECT_ID = 1l;
-    private static final Long PROFESSOR_ID = 2l;
+    private static final String DESCRIPTION = "Curso de algebra";
+    private static final Double PRICE = 240.0;
+    private static final Long SUBJECT_ID = 1L;
+    private static final Long PROFESSOR_ID = 5L;
+    private static final Long AREA_ID = 1L;
+    private static final Long INVALID_ID = 666L;
+    private static final String INVALID_NAME = "InvalidTestName";
+    private static final String SUBJECT_NAME = "Alge";
 
     @Autowired
     private DataSource dataSource;
@@ -45,12 +50,11 @@ public class CourseJdbcDaoTest {
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
-
     }
 
     @Test
     public void testCreateValid() throws CourseAlreadyExistsException {
-
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "courses");
         Professor mockProfessor = mock(Professor.class);
         Subject mockSubject = mock(Subject.class);
         when(mockProfessor.getId()).thenReturn(PROFESSOR_ID);
@@ -62,6 +66,103 @@ public class CourseJdbcDaoTest {
                 "user_id = " + PROFESSOR_ID + " AND subject_id = " + SUBJECT_ID));
 
     }
+
+    @Test(expected = CourseAlreadyExistsException.class)
+    public void testCreateInvalid() throws CourseAlreadyExistsException {
+        Professor mockProfessor = mock(Professor.class);
+        Subject mockSubject = mock(Subject.class);
+        when(mockProfessor.getId()).thenReturn(PROFESSOR_ID);
+        when(mockSubject.getId()).thenReturn(SUBJECT_ID);
+        final Course course = courseDao.create(mockProfessor, mockSubject, DESCRIPTION, PRICE);
+
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "courses",
+                "user_id = " + PROFESSOR_ID + " AND subject_id = " + SUBJECT_ID));
+
+    }
+
+    @Test
+    public void testFindByIdsValid() {
+        final Course course = courseDao.findByIds(PROFESSOR_ID, SUBJECT_ID).orElse(null);
+        assertNotNull(course);
+
+        assertEquals(PROFESSOR_ID, course.getProfessor().getId());
+        assertEquals(SUBJECT_ID, course.getSubject().getId());
+        assertEquals(DESCRIPTION, course.getDescription());
+        assertEquals(PRICE, course.getPrice());
+    }
+
+    @Test
+    public void testFindByIdsInvalid() {
+        final Course course = courseDao.findByIds(INVALID_ID, INVALID_ID).orElse(null);
+        assertNull(course);
+    }
+
+    @Test
+    public void testFindByProfessorIdValid() {
+        final List<Course> courses = courseDao.findByProfessorId(PROFESSOR_ID);
+        assertNotNull(courses);
+        assertEquals(1, courses.size());
+
+        final Course course = courses.get(0);
+        assertNotNull(course);
+
+        assertEquals(PROFESSOR_ID, course.getProfessor().getId());
+        assertEquals(SUBJECT_ID, course.getSubject().getId());
+        assertEquals(DESCRIPTION, course.getDescription());
+        assertEquals(PRICE, course.getPrice());
+    }
+
+    @Test
+    public void testFindByProfessorIdInvalid() {
+        final List<Course> courses = courseDao.findByProfessorId(INVALID_ID);
+        assertNotNull(courses);
+        assertEquals(0, courses.size());
+    }
+
+    @Test
+    public void testFilterCoursesByNameValid() {
+        final List<Course> courses = courseDao.filterCoursesByName(SUBJECT_NAME);
+        assertNotNull(courses);
+        assertEquals(1, courses.size());
+
+        final Course course = courses.get(0);
+        assertNotNull(course);
+
+        assertEquals(PROFESSOR_ID, course.getProfessor().getId());
+        assertEquals(SUBJECT_ID, course.getSubject().getId());
+        assertEquals(DESCRIPTION, course.getDescription());
+        assertEquals(PRICE, course.getPrice());
+    }
+
+    @Test
+    public void testFilterCoursesByNameInvalid() {
+        final List<Course> courses = courseDao.filterCoursesByName(INVALID_NAME);
+        assertNotNull(courses);
+        assertEquals(0, courses.size());
+    }
+
+    @Test
+    public void testFilterByAreaIdValid() {
+        final List<Course> courses = courseDao.filterByAreaId(AREA_ID);
+        assertNotNull(courses);
+        assertEquals(1, courses.size());
+
+        final Course course = courses.get(0);
+        assertNotNull(course);
+
+        assertEquals(PROFESSOR_ID, course.getProfessor().getId());
+        assertEquals(SUBJECT_ID, course.getSubject().getId());
+        assertEquals(DESCRIPTION, course.getDescription());
+        assertEquals(PRICE, course.getPrice());
+    }
+
+    @Test
+    public void testFilterByAreaIdInvalid() {
+        final List<Course> courses = courseDao.filterByAreaId(INVALID_ID);
+        assertNotNull(courses);
+        assertEquals(0, courses.size());
+    }
+
 
     @Test
     public void testFilterByTimeAndProfessor(){
@@ -79,6 +180,5 @@ public class CourseJdbcDaoTest {
     public void tearDown(){
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "courses");
     }
 }
