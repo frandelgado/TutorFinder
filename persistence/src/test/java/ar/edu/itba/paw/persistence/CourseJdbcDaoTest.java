@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Subject;
@@ -48,7 +49,7 @@ public class CourseJdbcDaoTest {
     }
 
     @Test
-    public void testCreateValid() {
+    public void testCreateValid() throws CourseAlreadyExistsException {
 
         Professor mockProfessor = mock(Professor.class);
         Subject mockSubject = mock(Subject.class);

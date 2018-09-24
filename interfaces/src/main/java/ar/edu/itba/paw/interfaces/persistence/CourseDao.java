@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.persistence;
 
+import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Subject;
@@ -19,5 +20,5 @@ public interface CourseDao {
 
     List<Course> filterCoursesByTimeAndProfessor(int day, int startHour, int endHour, long professor_id);
 
-    Course create(Professor professor, Subject subject, String description, Double price);
+    Course create(Professor professor, Subject subject, String description, Double price) throws CourseAlreadyExistsException;
 }

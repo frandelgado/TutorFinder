@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.models.Course;
@@ -45,8 +46,12 @@ public class CourseServiceImpl implements CourseService {
 
         if(description.length() < 50 || description.length() > 300)
             return null;
-        //TODO: CHECK EXCEPTION FOR DUPLICATE KEY OR FOREIGN KEY IN DAO
-        return courseDao.create(professor, subject, description, price);
+        //TODO: THROW EXCEPTION UPWARDS AND HAVE CONTROLLER DISPLAY ERROR
+        try {
+            return courseDao.create(professor, subject, description, price);
+        } catch (CourseAlreadyExistsException e) {
+            return null;
+        }
     }
 
 
