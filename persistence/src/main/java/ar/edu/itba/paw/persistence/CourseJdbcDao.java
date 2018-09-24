@@ -84,9 +84,7 @@ public class CourseJdbcDao implements CourseDao {
             "users.name, users.lastname, users.password, users.email, subjects.description," +
             "subjects.name, areas.name, areas.description, areas.area_id " +
             "FROM courses, professors, users, subjects, areas ";
-
-    private static final String COURSES_SELECT_FROM_TIMESLOT = COURSES_SELECT_FROM+", schedules ";
-
+    
     private final static RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
             new Professor(
                     rs.getLong(1),
