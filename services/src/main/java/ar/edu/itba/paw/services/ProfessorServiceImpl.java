@@ -27,21 +27,25 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Professor findByUsername(final String username) {
+        if(username == null || username.isEmpty()) {
+            return null;
+        }
         return professorDao.findByUsername(username).orElse(null);
     }
 
     @Override
-    public List<Professor> filterByFullName(String fullName) {
+    public List<Professor> filterByFullName(final String fullName) {
         return professorDao.filterByFullName(fullName);
     }
 
     @Override
-    public Professor create(final Long userId,final String description) {
+    public Professor create(final Long userId, final String description) {
         //como el usuario tiene que existir, se chequea que exista antes de crear un profesor
         //esto puede tener problemas de concurrencia >:(
         final User user = userService.findById(userId).orElseThrow(() ->
                 new ProfessorWithoutUserException("A valid user id must be provided in order to "));
-
+        //TODO: CHECK EXCEPTION FOR DUPLICATE KEY AND FOREIGN KEY IN DAO
+        //CODE ABOVE CAN BE EXECUTED INSIDE DAO CATCH FOREIGN KEY VIOLATION
         return professorDao.create(user, description);
     }
 

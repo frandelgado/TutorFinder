@@ -64,10 +64,9 @@ public class SubjectJdbcDao implements SubjectDao {
         args.put("description", description);
         args.put("area_id", area_id);
         final Number subjectId = jdbcInsert.executeAndReturnKey(args);
-        //TODO: hacer mi propia excepcion
         final Area area = jdbcTemplate.query(
                 "SELECT area_id, name, description FROM areas where area_id = ?", AREA_ROW_MAPPER, area_id
-        ).stream().findFirst().orElseThrow(RuntimeException::new);
+        ).stream().findFirst().orElse(null);
         return new Subject(subjectId.longValue(), description, name, area);
     }
 

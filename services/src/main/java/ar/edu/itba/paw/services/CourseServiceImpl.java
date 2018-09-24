@@ -16,7 +16,6 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private CourseDao courseDao;
 
-    //TODO: I dont think it is a good idea to return null if there is no user, maybe an exception?
     @Override
     public Course findCourseByIds(long professor_id, long subject_id) {
         return courseDao.findByIds(professor_id, subject_id).orElse(null);
@@ -46,7 +45,7 @@ public class CourseServiceImpl implements CourseService {
 
         if(description.length() < 50 || description.length() > 300)
             return null;
-        
+        //TODO: CHECK EXCEPTION FOR DUPLICATE KEY OR FOREIGN KEY IN DAO
         return courseDao.create(professor, subject, description, price);
     }
 

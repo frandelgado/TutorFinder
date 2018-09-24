@@ -15,10 +15,9 @@ public class SubjectServiceImpl implements SubjectService {
     @Autowired
     private SubjectDao subjectDao;
 
-    //TODO: I dont think it is a good idea to return null if there is no user, maybe an exception?
     @Override
     public Subject findSubjectById(long id) {
-        return subjectDao.findById(id).orElseThrow(RuntimeException::new);
+        return subjectDao.findById(id).orElse(null);
     }
 
     @Override

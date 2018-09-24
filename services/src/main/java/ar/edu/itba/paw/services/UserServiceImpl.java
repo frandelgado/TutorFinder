@@ -23,12 +23,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(final String username) {
+        if(username == null || username.isEmpty()) {
+            return null;
+        }
         return userDao.findByUsername(username).orElse(null);
     }
 
     @Override
     public User create(final String username, final String password, final String email,
                        final String name, final String lastName) {
+
+        if(username == null || password == null || email == null || name == null || lastName == null) {
+            return null;
+        }
 
         if(username.isEmpty() || password.isEmpty() || email.isEmpty() || name.isEmpty() || lastName.isEmpty()){
             return null;
@@ -39,7 +46,7 @@ public class UserServiceImpl implements UserService {
         if(!email.matches("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+")){
             return null;
         }
-
+        //TODO: CHECK EXCEPTION FOR DUPLICATE KEY IN DAO
         return userDao.create(username, encoder.encode(password), email, name, lastName);
     }
 }
