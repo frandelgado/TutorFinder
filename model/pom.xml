@@ -9,7 +9,6 @@
 
   <groupId>ar.edu.itba.paw</groupId>
   <artifactId>model</artifactId>
-  <!-- TODO: es la versión del parent o no? -->
   <version>1.0-SNAPSHOT</version>
 
   <name>model</name>
