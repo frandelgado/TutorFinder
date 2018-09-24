@@ -27,7 +27,7 @@ public class CourseJdbcDao implements CourseDao {
             "subjects.name, areas.name, areas.description, areas.area_id " +
             "FROM courses, professors, users, subjects, areas ";
 
-    private static final String COURSES_SELECT_FROM_TIMESLOT = COURSES_SELECT_FROM+", schedules";
+    private static final String COURSES_SELECT_FROM_TIMESLOT = COURSES_SELECT_FROM+", schedules ";
 
     private final static RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
             new Professor(
@@ -103,12 +103,12 @@ public class CourseJdbcDao implements CourseDao {
     }
 
     @Override
-    public List<Course> filterCoursesByTime(Integer day, Integer startHour, Integer endHour) {
+    public List<Course> filterCoursesByTimeAndProfessor(final int day, final int startHour, final int endHour, final long professor_id) {
         final List<Course> courses = jdbcTemplate.query(
                 COURSES_SELECT_FROM_TIMESLOT + "WHERE courses.user_id = users.user_id AND" +
                         " courses.subject_id = subjects.subject_id AND professors.user_id = users.user_id " +
-                        "AND areas.area_id = subjects.area_id AND schedules.day = ? AND schedules.hour >= ? AND schedules.hour < ?",
-                ROW_MAPPER, new Object[]{day, startHour, endHour});
+                        "AND areas.area_id = subjects.area_id AND schedules.day = ? AND schedules.hour >= ? AND schedules.hour < ? AND courses.user_id = ?",
+                ROW_MAPPER, new Object[]{day, startHour, endHour, professor_id});
         return courses;
     }
 
