@@ -16,7 +16,11 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,8 +43,6 @@ public class ScheduleJdbcDaoTest {
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "courses");
     }
     
     @Test
@@ -59,7 +61,7 @@ public class ScheduleJdbcDaoTest {
     @Test(expected = DuplicateKeyException.class)
     public void testReserveOccupied(){
         Professor mockProfessor = mock(Professor.class);
-        when(mockProfessor.getId()).thenReturn(2l);
+        when(mockProfessor.getId()).thenReturn(5l);
         Integer DAY = 2;
         Integer HOUR = 2;
 
@@ -67,10 +69,26 @@ public class ScheduleJdbcDaoTest {
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
+    @Test
+    public void testGetScheduleForProfessor() {
+        final Professor mockProfessor = mock(Professor.class);
+        when(mockProfessor.getId()).thenReturn(5L);
+        final Integer DAY = 2;
+        final Integer HOUR = 2;
+
+        List<Timeslot> reservedTimeSlots = scheduleJdbcDao.getScheduleForProfessor(mockProfessor);
+        assertNotNull(reservedTimeSlots);
+        assertEquals(1, reservedTimeSlots.size());
+        Timeslot reservedTimeSlot = reservedTimeSlots.get(0);
+
+        assertEquals(DAY, reservedTimeSlot.getDay());
+        assertEquals(HOUR, reservedTimeSlot.getHour());
+    }
+
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "schedules");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
     }
 }
