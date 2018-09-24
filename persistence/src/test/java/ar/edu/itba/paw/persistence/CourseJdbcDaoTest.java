@@ -63,7 +63,7 @@ public class CourseJdbcDaoTest {
     }
 
     @Test
-    public void testFilterByTime(){
+    public void testFilterByTimeAndProfessor(){
         List<Course> courses = courseDao.filterCoursesByTimeAndProfessor(2,2,3, 5l);
         assertEquals(1,courses.size());
     }
