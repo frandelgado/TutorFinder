@@ -117,7 +117,7 @@ public class UserController {
     }
 
 
-    public void authenticateRegistered(HttpServletRequest request, String username, String password) {
+    private void authenticateRegistered(HttpServletRequest request, String username, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
         authToken.setDetails(new WebAuthenticationDetails(request));
 
@@ -128,27 +128,18 @@ public class UserController {
 
 
     @RequestMapping(value = "/registerAsProfessor", method = RequestMethod.POST)
-    public ModelAndView createProfessor(@Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
-                               final BindingResult errors) {
+    public ModelAndView createProfessor(@ModelAttribute("currentUser") final User loggedUser,
+                                        @Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
+                                        final BindingResult errors, final HttpServletRequest request) {
         if(errors.hasErrors()) {
             return registerProfessor(form);
         }
 
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities());
-        updatedAuthorities.add(new SimpleGrantedAuthority("ROLE_PROFESSOR"));
-        Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                auth.getPrincipal(),
-                auth.getCredentials(),
-                updatedAuthorities
-        );
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
-
-        final String username = newAuth.getName();
-        final User user = us.findByUsername(username);
+        final User user = us.findUserById(loggedUser.getId());
         //TODO: DISPLAY ERROR WHEN USER NULL
         final Professor p = ps.create(user.getId(), form.getDescription());
+
+        authenticateRegistered(request, p.getUsername(), p.getPassword());
 
         final RedirectView view = new RedirectView("/" );
         view.setExposeModelAttributes(false);
