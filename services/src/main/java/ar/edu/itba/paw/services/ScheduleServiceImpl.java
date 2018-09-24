@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
-public class ScheudleServiceImpl implements ScheduleService {
+public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     ScheduleDao sd;
