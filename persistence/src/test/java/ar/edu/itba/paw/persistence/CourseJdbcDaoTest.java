@@ -16,6 +16,8 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
+import java.util.List;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -42,6 +44,7 @@ public class CourseJdbcDaoTest {
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
+
     }
 
     @Test
@@ -57,6 +60,18 @@ public class CourseJdbcDaoTest {
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "courses",
                 "user_id = " + PROFESSOR_ID + " AND subject_id = " + SUBJECT_ID));
 
+    }
+
+    @Test
+    public void testFilterByTime(){
+        List<Course> courses = courseDao.filterCoursesByTimeAndProfessor(2,2,3, 5l);
+        assertEquals(1,courses.size());
+    }
+
+    @Test
+    public void testFilterByTimeNull(){
+        List<Course> courses = courseDao.filterCoursesByTimeAndProfessor(2,2,3, 2l);
+        assertEquals(0,courses.size());
     }
 
     @After
