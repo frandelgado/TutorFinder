@@ -1,8 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -57,15 +60,34 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public Optional<User> findByEmail(final String email) {
+        final List<User> users = jdbcTemplate.query(
+                "SELECT user_id, username, name, lastname, password," +
+                        "email FROM users WHERE email = ?", ROW_MAPPER, email
+        );
+        return users.stream().findFirst();
+    }
+
+    @Override
     public User create(final String username, final String password, final String email,
-                       final String name, final String lastName) {
+                       final String name, final String lastName)
+            throws UsernameAlreadyInUseException, EmailAlreadyInUseException {
         final Map<String, Object> args = new HashMap<>();
+        final Number userId;
         args.put("username", username);
         args.put("password", password);
         args.put("email", email);
         args.put("name", name);
         args.put("lastname", lastName);
-        final Number userId = jdbcInsert.executeAndReturnKey(args);
+        try {
+            userId = jdbcInsert.executeAndReturnKey(args);
+        } catch (DuplicateKeyException e) {
+            if(findByUsername(username).isPresent())
+                throw new UsernameAlreadyInUseException();
+            if(findByEmail(email).isPresent())
+                throw new EmailAlreadyInUseException();
+            return null;
+        }
         return new User(userId.longValue(), username, name, lastName, password, email);
     }
 }

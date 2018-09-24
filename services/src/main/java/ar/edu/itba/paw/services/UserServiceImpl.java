@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.User;
@@ -46,7 +48,11 @@ public class UserServiceImpl implements UserService {
         if(!email.matches("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+")){
             return null;
         }
-        //TODO: CHECK EXCEPTION FOR DUPLICATE KEY IN DAO
-        return userDao.create(username, encoder.encode(password), email, name, lastName);
+        //TODO: THROW EXCEPTION UPWARDS TO HAVE CONTROLLER DISPLAY ERRORS
+        try {
+            return userDao.create(username, encoder.encode(password), email, name, lastName);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

@@ -147,6 +147,7 @@ public class UserController {
 
         final String username = newAuth.getName();
         final User user = us.findByUsername(username);
+        //TODO: DISPLAY ERROR WHEN USER NULL
         final Professor p = ps.create(user.getId(), form.getDescription());
 
         final RedirectView view = new RedirectView("/" );

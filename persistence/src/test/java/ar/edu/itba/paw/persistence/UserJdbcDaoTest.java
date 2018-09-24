@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.models.User;
 import org.junit.After;
 import org.junit.Before;
@@ -44,7 +46,7 @@ public class UserJdbcDaoTest {
     }
 
     @Test
-    public void testCreateValid(){
+    public void testCreateValid() throws UsernameAlreadyInUseException, EmailAlreadyInUseException {
 
         final User user = userDao.create(USERNAME, PASSWORD, EMAIL, NAME, SURNAME);
         assertNotNull(user);
