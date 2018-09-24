@@ -80,4 +80,5 @@ INSERT into conversations (conversation_id, user_id, professor_id, subject_id) v
 INSERT into conversations (conversation_id, user_id, professor_id, subject_id) values (3,4,5,1);
 INSERT into messages (conversation_id, sender_id, message, created) values (1,2,'Hola', '2018-09-21 05:08:26.793');
 INSERT into messages (conversation_id, sender_id, message, created) values (1,3,'Hola2', '2017-09-21 05:08:26.793');
-INSERT into schedules (user_id, day, hour) values (2, 2, 2);
+Insert into courses (user_id, subject_id, description, price) values (5, 1, 'Curso de algebra', 240);
+INSERT into schedules (user_id, day, hour) values (5, 2, 2);
