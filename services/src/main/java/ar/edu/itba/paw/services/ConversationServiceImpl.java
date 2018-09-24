@@ -21,6 +21,10 @@ public class ConversationServiceImpl implements ConversationService {
     @Override
     public boolean sendMessage(final User user, final Professor professor, final Subject subject, final String body)
             throws SameUserConversationException, UserNotInConversationException {
+
+        if(user == null || professor == null || subject == null || body == null || body.length() > 512)
+            return false;
+
         if(user.getId().equals(professor.getId()))
             throw new SameUserConversationException();
 
@@ -37,9 +41,12 @@ public class ConversationServiceImpl implements ConversationService {
     public boolean sendMessage(final User from, final Conversation conversation, final String body)
             throws UserNotInConversationException {
 
-        if(!conversation.belongs(from.getId())) {
+        if(from == null || !conversation.belongs(from.getId())) {
             throw new UserNotInConversationException();
         }
+
+        if(body == null || body.isEmpty())
+            return false;
 
         final Message message = conversationDao.create(from, body, conversation);
 
