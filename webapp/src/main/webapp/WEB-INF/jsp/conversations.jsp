@@ -15,7 +15,6 @@
 <%@ include file="navbar.jsp" %>
 
 <div class="content">
-    <p class="help-message"><spring:message code="conversations.help"/></p>
     <div class="inbox-message">
         <hr>
         <p><spring:message code="conversations.inbox"/></p>
@@ -23,6 +22,7 @@
     </div>
     <c:if test="${conversations.size() == 0}" >
         <h1><spring:message code="no.conversations"/></h1>
+        <p class="help-message"><spring:message code="conversations.help"/></p>
     </c:if>
     <c:forEach var="conversation" items="${conversations}">
         <div class="chat">

@@ -19,6 +19,9 @@
 
         <div class="search-results">
             <h3><spring:message code="area.message" arguments="${area.name}" htmlEscape="true"/></h3>
+            <c:if test="${results.size() == 0}">
+                <h4><spring:message code="no.results"/></h4>
+            </c:if>
             <%@ include file="courseSearch.jsp" %>
         </div>
     </div>
