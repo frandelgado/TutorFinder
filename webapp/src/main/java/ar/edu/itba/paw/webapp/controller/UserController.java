@@ -143,8 +143,14 @@ public class UserController {
         }
 
         final User user = us.findUserById(loggedUser.getId());
-        //TODO: DISPLAY ERROR WHEN USER NULL
-        final Professor p = ps.create(user.getId(), form.getDescription());
+
+        final Professor p;
+        try {
+            p = ps.create(user.getId(), form.getDescription());
+        } catch (ProfessorWithoutUserException e) {
+            //TODO: DISPLAY ERROR WHEN USER NULL, THIS IS A PLACEHOLDER
+            return new ModelAndView("error");
+        }
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
 

@@ -41,7 +41,7 @@ public class SearchController {
                 mav.addObject("results", as.filterAreasByName(name));
                 break;
             default:
-                throw new RuntimeException();
+                throw new IllegalArgumentException();
         }
         mav.addObject("search", name.isEmpty()? " ": name);
         mav.addObject("type", type);

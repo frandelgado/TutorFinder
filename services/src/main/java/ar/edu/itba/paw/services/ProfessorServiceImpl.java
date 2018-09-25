@@ -42,8 +42,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Professor create(final Long userId, final String description) {
-        //TODO: CATCH INSIDE CONTROLLER TO DISPLAY ERRORS.
+    public Professor create(final Long userId, final String description) throws ProfessorWithoutUserException {
         final User user = userService.findById(userId).orElseThrow(() ->
                 new ProfessorWithoutUserException("A valid user id must be provided in order to "));
         return professorDao.create(user, description);
