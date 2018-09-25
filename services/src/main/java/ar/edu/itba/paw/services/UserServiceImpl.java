@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
+import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
@@ -31,6 +35,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findByUsername(username).orElse(null);
     }
 
+    //TODO: Make transactional so that if the email is not sent the user is not created.
     @Override
     public User create(final String username, final String password, final String email,
                        final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
@@ -49,6 +54,11 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        return userDao.create(username, encoder.encode(password), email, name, lastName);
+        User user = userDao.create(username, encoder.encode(password), email, name, lastName);
+
+        if (user != null){
+            emailService.sendRegistrationEmail(user.getEmail());
+        }
+        return user;
     }
 }
