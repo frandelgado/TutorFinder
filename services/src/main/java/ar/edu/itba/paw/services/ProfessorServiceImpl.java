@@ -10,6 +10,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.exceptions.ProfessorWithoutUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class ProfessorServiceImpl implements ProfessorService {
         return professorDao.create(user, description);
     }
 
+    @Transactional
     @Override
     public Professor createWithUser(final Long id, final String username, final String name,
                                     final String lastname, final String password, final String email,

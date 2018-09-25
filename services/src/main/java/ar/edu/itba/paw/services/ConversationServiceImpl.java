@@ -8,6 +8,7 @@ import ar.edu.itba.paw.interfaces.service.ConversationService;
 import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ConversationServiceImpl implements ConversationService {
     @Autowired
     private ConversationDao conversationDao;
 
+    @Transactional
     @Override
     public boolean sendMessage(final User user, final Professor professor, final Subject subject, final String body)
             throws SameUserConversationException, UserNotInConversationException {
@@ -53,10 +55,12 @@ public class ConversationServiceImpl implements ConversationService {
         return message != null;
     }
 
+    @Override
     public List<Conversation> findByUserId(final Long userId) {
         return conversationDao.findByUserId(userId);
     }
 
+    @Transactional
     @Override
     public Conversation findById(final Long conversationId, final Long userId)
             throws UserNotInConversationException, NonexistentConversationException {

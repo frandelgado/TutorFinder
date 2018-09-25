@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.SubjectService;
 import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectDao.findById(id).orElse(null);
     }
 
+    @Transactional
     @Override
     public Subject create(String name, String description, Long area_id) {
         return subjectDao.create(name,description, area_id);
