@@ -22,12 +22,13 @@
         <c:forEach var="message" items="${conversation.messages}">
             <c:choose>
                 <c:when test="${message.sender.id == currentUser.id}">
-                    <div class="message own">
+                    <c:set value="message own" var="messageClass" />
                 </c:when>
                 <c:otherwise>
-                    <div class="message">
+                    <c:set value="message" var="messageClass" />
                 </c:otherwise>
             </c:choose>
+            <div class="${messageClass}">
                 <h5 class="message-text"><c:out value="${message.sender.name}: ${message.text}" escapeXml="true"/></h5>
                     <h6 class="conversation-last-time">
                         <spring:message code="time.sent" arguments="${message.day},${message.month},${message.year},${message.hours},${message.minutes}"/>

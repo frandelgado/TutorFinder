@@ -38,7 +38,7 @@
         </div>
         <div>
             <form:label cssClass="label" path="description"><spring:message code="description"/></form:label>
-            <form:textarea cssClass="input-request" type="text" path="description"/>
+            <form:textarea cssClass="input-request" type="text" path="description" rows="5" cols="5"/>
             <form:errors cssClass="error-text" path="description" element="p"/>
         </div>
         <div>

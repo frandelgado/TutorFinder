@@ -37,7 +37,7 @@
         <form:hidden path="subjectId" />
         <div>
             <form:label cssClass="label" path="body"><spring:message code="contact.body"/></form:label>
-            <form:input cssClass="input-request" type="text" path="body"/>
+            <form:textarea cssClass="input-request" type="text" path="body" rows="5" cols="5"/>
             <form:errors cssClass="error-text" path="body" element="p"/>
         </div>
         <div>
