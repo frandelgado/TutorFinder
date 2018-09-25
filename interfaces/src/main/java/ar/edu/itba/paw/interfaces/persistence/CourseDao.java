@@ -16,6 +16,10 @@ public interface CourseDao {
 
     List<Course> filterCoursesByName(final String name);
 
+    List<Course> pagedFilterCoursesByName(String name, int pageSize, int page);
+
+    Integer getAmmountOfPages(int pageSize, int page);
+
     List<Course> filterByAreaId(final long areaId);
 
     List<Course> filterCoursesByTimeAndProfessor(int day, int startHour, int endHour, long professor_id);
