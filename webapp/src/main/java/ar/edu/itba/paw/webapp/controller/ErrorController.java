@@ -39,4 +39,11 @@ public class ErrorController {
         return new ModelAndView("403");
     }
 
+    @RequestMapping("/404")
+    public ModelAndView resourceNotFound() {
+        final ModelAndView mav = new ModelAndView("error");
+        mav.addObject("errorMessageCode", "404");
+        return mav;
+    }
+
 }
