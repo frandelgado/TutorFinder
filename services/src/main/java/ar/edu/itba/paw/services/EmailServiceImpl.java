@@ -27,4 +27,16 @@ public class EmailServiceImpl implements EmailService {
         sendEmail(professor.getEmail(), subject, text);
     }
 
+    @Override
+    public void sendRegistrationEmail(String email) {
+        String REGISTRATION_SUBJECT = "Bienvenido a Tu Teoria!";
+        String REGISTRATION_BODY = "Te damos la bienvenida a Tu Teoria, encuentra tu proxima clase particular de manera rapida y sencilla.";
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject(REGISTRATION_SUBJECT);
+        message.setText(REGISTRATION_BODY);
+        emailSender.send(message);
+    }
+
 }
