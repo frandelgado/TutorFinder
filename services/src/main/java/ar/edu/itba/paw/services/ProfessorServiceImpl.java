@@ -53,14 +53,9 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public Professor createWithUser(final Long id, final String username, final String name,
                                     final String lastname, final String password, final String email,
-                                    final String description) {
+                                    final String description) throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
         final User user;
-        //TODO: THROW EXCEPTION UPWARDS AND HAVE CONTROLLER DISPLAY ERROR
-        try {
-            user = userService.create(username, password, email, name, lastname);
-        } catch (Exception e) {
-            return null;
-        }
+        user = userService.create(username, password, email, name, lastname);
 
         if(description.length() < 50 || description.length() > 300)
             return null;

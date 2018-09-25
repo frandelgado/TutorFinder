@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.InvalidTimeException;
-import ar.edu.itba.paw.exceptions.InvalidTimeRangeException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
@@ -16,8 +15,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
@@ -32,8 +29,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class UserController {
@@ -71,7 +66,19 @@ public class UserController {
             }
             return register(form);
         }
-        final User u = us.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
+        final User u;
+
+        try {
+            u = us.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
+        } catch (EmailAlreadyInUseException e) {
+            errors.addError(new FieldError("RepeatedEmail", "email", form.getEmail(),
+                    false, new String[]{"RepeatedEmail"}, null, "El correo electronico ya esta en uso"));
+            return register(form);
+        } catch (UsernameAlreadyInUseException e) {
+            errors.addError(new FieldError("RepeatedUsername", "username", form.getUsername(),
+                    false, new String[]{"RepeatedUsername"}, null, "El nombre de usuario ya esta en uso"));
+            return register(form);
+        }
 
         authenticateRegistered(request, u.getUsername(), u.getPassword());
 

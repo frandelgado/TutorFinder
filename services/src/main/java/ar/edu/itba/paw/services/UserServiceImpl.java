@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(final String username, final String password, final String email,
-                       final String name, final String lastName) {
+                       final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
 
         if(username == null || password == null || email == null || name == null || lastName == null) {
             return null;
@@ -48,11 +48,7 @@ public class UserServiceImpl implements UserService {
         if(!email.matches("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+")){
             return null;
         }
-        //TODO: THROW EXCEPTION UPWARDS TO HAVE CONTROLLER DISPLAY ERRORS
-        try {
-            return userDao.create(username, encoder.encode(password), email, name, lastName);
-        } catch (Exception e) {
-            return null;
-        }
+
+        return userDao.create(username, encoder.encode(password), email, name, lastName);
     }
 }
