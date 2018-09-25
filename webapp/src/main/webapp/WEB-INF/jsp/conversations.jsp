@@ -27,9 +27,9 @@
     <c:forEach var="conversation" items="${conversations}">
         <div class="chat">
             <a class="conversation-link" href = "<c:url value="/Conversation?id=${conversation.id}" />"/>
-            <a class="conversation-subject-name"><c:out value="${conversation.subject.name}" /></a>
+            <a class="conversation-subject-name"><c:out value="${conversation.subject.name}" escapeXml="true"/></a>
             <h2 class="conversation-participants">
-                <c:out value="${conversation.professor.name} - ${conversation.user.name}" />
+                <c:out value="${conversation.professor.name} - ${conversation.user.name}" escapeXml="true"/>
             </h2>
             <h6 class="conversation-last-time">
                 <spring:message code="time" arguments="${conversation.day},${conversation.month},${conversation.year},${conversation.hours},${conversation.minutes}"/>

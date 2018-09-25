@@ -28,7 +28,7 @@
                     <div class="message">
                 </c:otherwise>
             </c:choose>
-                <h5 class="message-text"><c:out value="${message.sender.name}: ${message.text}" /></h5>
+                <h5 class="message-text"><c:out value="${message.sender.name}: ${message.text}" escapeXml="true"/></h5>
                     <h6 class="conversation-last-time">
                         <spring:message code="time.sent" arguments="${message.day},${message.month},${message.year},${message.hours},${message.minutes}"/>
                     </h6>
