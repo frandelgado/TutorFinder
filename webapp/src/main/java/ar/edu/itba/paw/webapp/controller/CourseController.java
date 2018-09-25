@@ -113,8 +113,9 @@ public class CourseController {
         try {
             course = courseService.create(professor, subject, form.getDescription(), form.getPrice());
         } catch (CourseAlreadyExistsException e) {
-            //TODO: DISPLAY ERROR WHEN COURSE EXISTS, THIS IS A PLACEHOLDER
-            return new ModelAndView("error");
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","courseAlreadyExists");
+            return error;
         }
 
 

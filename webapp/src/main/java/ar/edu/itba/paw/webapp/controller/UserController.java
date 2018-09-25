@@ -148,8 +148,9 @@ public class UserController {
         try {
             p = ps.create(user.getId(), form.getDescription());
         } catch (ProfessorWithoutUserException e) {
-            //TODO: DISPLAY ERROR WHEN USER NULL, THIS IS A PLACEHOLDER
-            return new ModelAndView("error");
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentUser");
+            return error;
         }
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());

@@ -6,19 +6,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-
 
 @ControllerAdvice
 @Controller
 public class ErrorController {
 
     @ExceptionHandler(Exception.class)
-    public ModelAndView handleError(HttpServletRequest request, Exception exception) {
+    public ModelAndView handleError() {
 
         final ModelAndView mav = new ModelAndView("error");
-        mav.addObject("exception", exception);
-        mav.addObject("url", request.getRequestURL());
+        mav.addObject("errorMessageCode", "somethingWentWrong");
         return mav;
     }
 
