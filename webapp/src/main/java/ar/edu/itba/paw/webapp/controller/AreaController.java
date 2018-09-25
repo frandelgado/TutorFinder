@@ -24,7 +24,14 @@ public class AreaController {
     @RequestMapping("/Area/{id}")
     public ModelAndView area(@PathVariable(value = "id") long id){
         final ModelAndView mav = new ModelAndView("area");
-        mav.addObject("area", as.findAreaById(id));
+        final Area area = as.findAreaById(id);
+        if(area == null) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentArea");
+            return error;
+        }
+
+        mav.addObject("area", area);
         mav.addObject("results", cs.filterByAreaId(id));
         return mav;
     }

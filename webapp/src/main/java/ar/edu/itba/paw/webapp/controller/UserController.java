@@ -104,7 +104,13 @@ public class UserController {
 
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("courses", cs.findCourseByProfessorId(id));
-        mav.addObject("professor", ps.findById(id));
+        final Professor professor = ps.findById(id);
+        if(professor == null) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentProfessor");
+            return error;
+        }
+        mav.addObject("professor", professor);
         return mav;
     }
 

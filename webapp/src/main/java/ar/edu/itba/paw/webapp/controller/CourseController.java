@@ -54,7 +54,13 @@ public class CourseController {
             @RequestParam(value="subject", required=true) final Long subjectId
     ){
         final ModelAndView mav = new ModelAndView("course");
-        mav.addObject("course", courseService.findCourseByIds(professorId, subjectId));
+        final Course course = courseService.findCourseByIds(professorId, subjectId);
+        if(course == null) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentCourse");
+            return error;
+        }
+        mav.addObject("course", course);
         form.setProfessorId(professorId);
         form.setSubjectId(subjectId);
         return mav;
