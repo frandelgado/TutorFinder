@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.NonexistentConversationException;
+import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +19,19 @@ public class ErrorController {
         final ModelAndView mav = new ModelAndView("error");
         mav.addObject("errorMessageCode", "somethingWentWrong");
         return mav;
+    }
+
+    @ExceptionHandler({UserNotInConversationException.class, NonexistentConversationException.class})
+    public ModelAndView handleConversationExceptions(Exception e) {
+        final ModelAndView error = new ModelAndView("error");
+        final String messageCode;
+        if(e instanceof UserNotInConversationException) {
+            messageCode = "userNotInConversation";
+        } else {
+            messageCode = "nonExistentConversation";
+        }
+        error.addObject("errorMessageCode", messageCode);
+        return error;
     }
 
     @RequestMapping("/403")

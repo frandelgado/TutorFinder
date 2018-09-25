@@ -24,14 +24,6 @@ import javax.validation.Valid;
 public class ConversationController {
 
     @Autowired
-    @Qualifier("subjectServiceImpl")
-    private SubjectService subjectService;
-
-    @Autowired
-    @Qualifier("professorServiceImpl")
-    private ProfessorService professorService;
-
-    @Autowired
     @Qualifier("userServiceImpl")
     private UserService userService;
 

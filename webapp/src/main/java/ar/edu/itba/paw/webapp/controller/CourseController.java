@@ -64,7 +64,7 @@ public class CourseController {
     public ModelAndView contact(
             @Valid @ModelAttribute("messageForm") final MessageForm form,
             final BindingResult errors,
-            @ModelAttribute("currentUser") final User loggedUser) throws SameUserConversationException, UserNotInConversationException {
+            @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException {
 
         if(errors.hasErrors()) {
             return course(form, form.getProfessorId(), form.getSubjectId());
@@ -74,7 +74,15 @@ public class CourseController {
         final Professor professor = professorService.findById(form.getProfessorId());
         final Subject subject = subjectService.findSubjectById(form.getSubjectId());
 
-        boolean sent = conversationService.sendMessage(user, professor, subject, form.getBody());
+        final boolean sent;
+        try {
+            sent = conversationService.sendMessage(user, professor, subject, form.getBody());
+        } catch (SameUserConversationException e) {
+            errors.addError(new FieldError("SendMessageError", "extraMessage", null,
+                    false, new String[]{"SameUserMessageError"},null, "No puede enviarse un mensaje a si mismo"));
+            form.setBody(null);
+            return course(form, form.getProfessorId(), form.getSubjectId());
+        }
         if(sent) {
             errors.addError(new FieldError("MessageSent", "extraMessage", null,
                     false, new String[]{"MessageSent"},null, "Mensaje Enviado!"));
@@ -107,7 +115,17 @@ public class CourseController {
 
         final Subject subject = subjectService.findSubjectById(form.getSubjectId());
 
-        //TODO: Catch null
+        if(professor == null) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentUser");
+            return error;
+        }
+
+        if(subject == null) {
+            errors.addError(new FieldError("subjectDoesNotExist", "subjectId", null,
+                    false, new String[]{"subjectDoesNotExist"},null, "La materia que quiere dictar no existe"));
+            return createCourse(form, user);
+        }
         
         final Course course;
         try {
