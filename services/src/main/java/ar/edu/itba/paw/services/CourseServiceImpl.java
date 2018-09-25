@@ -38,7 +38,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course create(Professor professor, Subject subject, String description, Double price) {
+    public Course create(Professor professor, Subject subject, String description, Double price)
+            throws CourseAlreadyExistsException {
 
         if(price <= 0){
             return null;
@@ -46,12 +47,8 @@ public class CourseServiceImpl implements CourseService {
 
         if(description.length() < 50 || description.length() > 300)
             return null;
-        //TODO: THROW EXCEPTION UPWARDS AND HAVE CONTROLLER DISPLAY ERROR
-        try {
-            return courseDao.create(professor, subject, description, price);
-        } catch (CourseAlreadyExistsException e) {
-            return null;
-        }
+
+        return courseDao.create(professor, subject, description, price);
     }
 
 

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.exceptions.SameUserConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.service.*;
@@ -107,8 +108,14 @@ public class CourseController {
         final Subject subject = subjectService.findSubjectById(form.getSubjectId());
 
         //TODO: Catch null
-
-        final Course course = courseService.create(professor, subject, form.getDescription(), form.getPrice());
+        
+        final Course course;
+        try {
+            course = courseService.create(professor, subject, form.getDescription(), form.getPrice());
+        } catch (CourseAlreadyExistsException e) {
+            //TODO: DISPLAY ERROR WHEN COURSE EXISTS, THIS IS A PLACEHOLDER
+            return new ModelAndView("error");
+        }
 
 
         final RedirectView view = new RedirectView("/Course/?professor=" + course.getProfessor().getId()

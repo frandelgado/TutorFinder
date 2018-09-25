@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
+import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Subject;
@@ -15,5 +16,5 @@ public interface CourseService {
 
     List<Course> filterByAreaId(final long areaId);
 
-    Course create(Professor professor, Subject subject, String description, Double price);
+    Course create(Professor professor, Subject subject, String description, Double price) throws CourseAlreadyExistsException;
 }

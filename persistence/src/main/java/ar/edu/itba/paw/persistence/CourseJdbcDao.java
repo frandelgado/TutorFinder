@@ -184,8 +184,6 @@ public class CourseJdbcDao implements CourseDao {
             jdbcInsert.execute(args);
         } catch (DuplicateKeyException e) {
             throw new CourseAlreadyExistsException();
-        } catch (DataIntegrityViolationException e) {
-            //TODO: CALL OTHER DAOS OR IMPLEMENT HERE FOREIGN KEY VIOLATION?
         }
         return new Course(professor, subject, description, price);
     }
