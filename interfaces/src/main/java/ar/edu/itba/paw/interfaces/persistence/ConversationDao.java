@@ -13,6 +13,8 @@ public interface ConversationDao {
 
     List<Conversation> findByUserId(final Long user_id);
 
+    List<Conversation> findByUserId(final Long user_id, final int limit, final int offset);
+
     Conversation findByIds(final Long user_id, final Long professor_id, final Long subject_id);
 
     Message create(final User sender, final String text, final Conversation conversation);

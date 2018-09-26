@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
+import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.SameUserConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
@@ -15,6 +16,8 @@ import java.util.List;
 
 @Service
 public class ConversationServiceImpl implements ConversationService {
+
+    private static final int PAGE_SIZE = 5;
 
     @Autowired
     private ConversationDao conversationDao;
@@ -58,6 +61,15 @@ public class ConversationServiceImpl implements ConversationService {
     @Override
     public List<Conversation> findByUserId(final Long userId) {
         return conversationDao.findByUserId(userId);
+    }
+
+    @Override
+    public List<Conversation> findByUserId(final Long userId, final int page) throws PageOutOfBoundsException {
+        if(page < 0) {
+            throw new PageOutOfBoundsException();
+        }
+
+        return conversationDao.findByUserId(userId, PAGE_SIZE, PAGE_SIZE * (page - 1));
     }
 
     @Transactional
