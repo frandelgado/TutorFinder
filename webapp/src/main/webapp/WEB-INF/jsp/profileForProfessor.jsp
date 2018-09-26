@@ -56,15 +56,74 @@
     </form:form>
     --%>
     <div class="schedule">
-        <a class="schedule-divider"><spring:message code="schedule_divider"/></a>
-        <a class="monday"><spring:message code="day.monday"/></a>
-        <a class="tuesday"><spring:message code="day.tuesday"/></a>
-        <a class="wednesday"><spring:message code="day.wednesday"/></a>
-        <a class="thursday"><spring:message code="day.thursday"/></a>
-        <a class="friday"><spring:message code="day.friday"/></a>
-        <a class="saturday"><spring:message code="day.saturday"/></a>
-        <a class="sunday"><spring:message code="day.sunday"/></a>
-
+        <table style-="width:100%">
+            <tr>
+                <th>
+                    <a class="schedule-divider"><spring:message code="schedule_divider"/></a>
+                </th>
+                <th>
+                    <a class="monday"><spring:message code="day.monday"/></a>
+                </th>
+                <th>
+                    <a class="tuesday"><spring:message code="day.tuesday"/></a>
+                </th>
+                <th>
+                    <a class="wednesday"><spring:message code="day.wednesday"/></a>
+                </th>
+                <th>
+                    <a class="thursday"><spring:message code="day.thursday"/></a>
+                </th>
+                <th>
+                    <a class="friday"><spring:message code="day.friday"/></a>
+                </th>
+                <th>
+                    <a class="saturday"><spring:message code="day.saturday"/></a>
+                </th>
+                <th>
+                    <a class="sunday"><spring:message code="day.sunday"/></a>
+                </th>
+            </tr>
+            <c:forEach var="i" begin="1" end="24">
+                <tr>
+                    <td>${i}:00</td>
+                    <td>
+                        <c:if test="${schedule.monday.contains(i)}">
+                            <a>Tickerino</a>
+                        </c:if>
+                    </td>
+                    <td>
+                        <c:if test="${schedule.tuesday.contains(i)}">
+                            <a>Tickerino</a>
+                        </c:if>
+                    </td>
+                    <td>
+                        <c:if test="${schedule.wednesday.contains(i)}">
+                            <a>Tickerino</a>
+                        </c:if>
+                    </td>
+                    <td>
+                        <c:if test="${schedule.thursday.contains(i)}">
+                            <a>Tickerino</a>
+                        </c:if>
+                    </td>
+                    <td>
+                        <c:if test="${schedule.friday.contains(i)}">
+                            <a>Tickerino</a>
+                        </c:if>
+                    </td>
+                    <td>
+                        <c:if test="${schedule.saturday.contains(i)}">
+                            <a>Tickerino</a>
+                        </c:if>
+                    </td>
+                    <td>
+                        <c:if test="${schedule.sunday.contains(i)}">
+                            <a>Tickerino</a>
+                        </c:if>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
         <div>
             <h1>Add available time</h1>
             <c:url value="/CreateTimeSlot" var="postPath"/>
