@@ -5,11 +5,24 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
+    <link href="<c:url value="/resources/css/fonts.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/errors.css" />" rel="stylesheet">
     <title>Tu Teoria | <spring:message code="error.title"/></title>
 </head>
 
-<body>
-    <p><spring:message code="error.message" arguments="${exception}, ${url}"/></p>
-</body>
+<div class="navbar">
+    <a href="<c:url value="/" />" class="logo-box">
+        <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
+    </a>
+</div>
+
+<div class="text-wrapper">
+    <div class="title">
+        <spring:message code="oops"/>
+    </div>
+
+    <div class="subtitle">
+        <spring:message code="${errorMessageCode}"/>
+    </div>
+</div>
 </html>

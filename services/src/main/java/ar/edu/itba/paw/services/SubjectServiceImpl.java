@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.SubjectService;
 import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,12 +16,12 @@ public class SubjectServiceImpl implements SubjectService {
     @Autowired
     private SubjectDao subjectDao;
 
-    //TODO: I dont think it is a good idea to return null if there is no user, maybe an exception?
     @Override
     public Subject findSubjectById(long id) {
-        return subjectDao.findById(id).orElseThrow(RuntimeException::new);
+        return subjectDao.findById(id).orElse(null);
     }
 
+    @Transactional
     @Override
     public Subject create(String name, String description, Long area_id) {
         return subjectDao.create(name,description, area_id);

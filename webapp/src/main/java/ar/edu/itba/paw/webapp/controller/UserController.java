@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.InvalidTimeException;
-import ar.edu.itba.paw.exceptions.InvalidTimeRangeException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
@@ -16,8 +15,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
@@ -32,8 +29,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class UserController {
@@ -71,7 +66,19 @@ public class UserController {
             }
             return register(form);
         }
-        final User u = us.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
+        final User u;
+
+        try {
+            u = us.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
+        } catch (EmailAlreadyInUseException e) {
+            errors.addError(new FieldError("RepeatedEmail", "email", form.getEmail(),
+                    false, new String[]{"RepeatedEmail"}, null, "El correo electronico ya esta en uso"));
+            return register(form);
+        } catch (UsernameAlreadyInUseException e) {
+            errors.addError(new FieldError("RepeatedUsername", "username", form.getUsername(),
+                    false, new String[]{"RepeatedUsername"}, null, "El nombre de usuario ya esta en uso"));
+            return register(form);
+        }
 
         authenticateRegistered(request, u.getUsername(), u.getPassword());
 
@@ -97,7 +104,13 @@ public class UserController {
 
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("courses", cs.findCourseByProfessorId(id));
-        mav.addObject("professor", ps.findById(id));
+        final Professor professor = ps.findById(id);
+        if(professor == null) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentProfessor");
+            return error;
+        }
+        mav.addObject("professor", professor);
         return mav;
     }
 
@@ -117,7 +130,7 @@ public class UserController {
     }
 
 
-    public void authenticateRegistered(HttpServletRequest request, String username, String password) {
+    private void authenticateRegistered(HttpServletRequest request, String username, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
         authToken.setDetails(new WebAuthenticationDetails(request));
 
@@ -128,26 +141,25 @@ public class UserController {
 
 
     @RequestMapping(value = "/registerAsProfessor", method = RequestMethod.POST)
-    public ModelAndView createProfessor(@Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
-                               final BindingResult errors) {
+    public ModelAndView createProfessor(@ModelAttribute("currentUser") final User loggedUser,
+                                        @Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
+                                        final BindingResult errors, final HttpServletRequest request) {
         if(errors.hasErrors()) {
             return registerProfessor(form);
         }
 
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final User user = us.findUserById(loggedUser.getId());
 
-        List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities());
-        updatedAuthorities.add(new SimpleGrantedAuthority("ROLE_PROFESSOR"));
-        Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                auth.getPrincipal(),
-                auth.getCredentials(),
-                updatedAuthorities
-        );
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
+        final Professor p;
+        try {
+            p = ps.create(user.getId(), form.getDescription());
+        } catch (ProfessorWithoutUserException e) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentUser");
+            return error;
+        }
 
-        final String username = newAuth.getName();
-        final User user = us.findByUsername(username);
-        final Professor p = ps.create(user.getId(), form.getDescription());
+        authenticateRegistered(request, p.getUsername(), p.getPassword());
 
         final RedirectView view = new RedirectView("/" );
         view.setExposeModelAttributes(false);
@@ -175,11 +187,19 @@ public class UserController {
 
         try {
             ss.reserveTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
-        } catch (InvalidTimeException e) {
-            //TODO: alguna de las horas no tienen sentido (numeros negativos o mayores a su tope) . Redirigir.
-        } catch (InvalidTimeRangeException e) {
-            //TODO: startHour es mas grande que endHour, manejar el error
+        } catch (NonexistentProfessorException e) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentUser");
+            return error;
+        } catch (TimeslotAllocatedException e) {
+            errors.addError(new FieldError("TimeslotAllocatedError", "endHour", form.getEndHour(),
+                    false, new String[]{"TimeslotAllocatedError"}, null, "El horario ya fue seleccionado previamente"));
+            return profile(loggedUser, form);
+        } catch (InvalidTimeException | InvalidTimeRangeException e) {
+            //Already validated by form
+            return profile(loggedUser, form);
         }
+
         final RedirectView view = new RedirectView("/Profile" );
         view.setExposeModelAttributes(false);
         return new ModelAndView(view);

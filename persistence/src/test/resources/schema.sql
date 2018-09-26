@@ -68,13 +68,15 @@ PRIMARY KEY(user_id, day, hour)
 );
 
 Insert into areas (area_id, name, description) values (1, 'matematica', 'este area es dificil');
-INSERT into users (user_id, username, password, email, name, lastname) values (2, 'juanchopanza', '12345', 'juan@hotmail.com', 'juan', 'lopez' );
+INSERT into users (user_id, username, password, email, name, lastname) values (2, 'Juancho', 'dontbecruel', 'juancito@gmail.com', 'Juan', 'lopez' );
 INSERT into users (user_id, username, password, email, name, lastname) values (3, 'mesme', '12345', 'mesme@hotmail.com', 'Martin', 'Mesme' );
 INSERT into users (user_id, username, password, email, name, lastname) values (4, 'juan', '12345', 'test@hotmail.com', 'Wanch', 'Ope' );
 INSERT into users (user_id, username, password, email, name, lastname) values (5, 'mugi', '12345', 'straw@hotmail.com', 'Mugi', 'Wara' );
 INSERT into professors (user_id, description) values (2, 'Juan es un profesor dedicado');
 INSERT into professors (user_id, description) values (5, 'Kaizoku Mugiwara no Luffy');
 INSERT into subjects (subject_id, name, description, area_id) values (1, 'Algebra', 'Complicado', 1);
+INSERT into subjects (subject_id, name, description, area_id) values (2, 'Algebra Lineal', 'Autovectores', 1);
+INSERT into subjects (subject_id, name, description, area_id) values (3, 'Integrales', 'Barrow', 1);
 INSERT into conversations (conversation_id, user_id, professor_id, subject_id) values (1,3,2,1);
 INSERT into conversations (conversation_id, user_id, professor_id, subject_id) values (2,4,2,1);
 INSERT into conversations (conversation_id, user_id, professor_id, subject_id) values (3,4,5,1);

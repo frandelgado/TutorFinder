@@ -41,7 +41,9 @@ public class SearchController {
                 mav.addObject("results", as.filterAreasByName(name));
                 break;
             default:
-                throw new RuntimeException();
+                final ModelAndView error = new ModelAndView("error");
+                error.addObject("errorMessageCode","typeInvalid");
+                return error;
         }
         mav.addObject("search", name.isEmpty()? " ": name);
         mav.addObject("type", type);

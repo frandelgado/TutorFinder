@@ -5,7 +5,6 @@ public class User {
     private final String username;
     private final String name;
     private final String lastname;
-    //TODO: la pass deberia estar hasheada no en plaintext
     private final String password;
     private final String email;
 

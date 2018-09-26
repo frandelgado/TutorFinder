@@ -19,6 +19,9 @@
     <h1 class="profile-name"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
     <h3 class="profile-description"><c:out value="${professor.description}" escapeXml="true"/></h3>
     <div class="classes">
+        <c:if test="${courses.size() == 0}">
+            <h4><spring:message code="no.courses"/></h4>
+        </c:if>
         <c:forEach var="course" items="${courses}">
             <div class="class">
                 <a class="class-button" href="<c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>

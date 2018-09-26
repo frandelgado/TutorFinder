@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 public class RegisterProfessorForm {
 
     @NotNull
-    @Size(min = 1, max = 512)
+    @Size(min = 50, max = 300)
     private String description;
 
     public String getDescription() {

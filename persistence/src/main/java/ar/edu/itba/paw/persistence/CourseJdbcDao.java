@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -172,7 +174,7 @@ public class CourseJdbcDao implements CourseDao {
 
     @Override
     public Course create(final Professor professor, final Subject subject, final String description,
-                         final Double price) {
+                         final Double price) throws CourseAlreadyExistsException {
         final Map<String, Object> args = new HashMap<>();
         args.put("user_id", professor.getId());
         args.put("subject_id", subject.getId());
@@ -181,7 +183,7 @@ public class CourseJdbcDao implements CourseDao {
         try {
             jdbcInsert.execute(args);
         } catch (DuplicateKeyException e) {
-            return null;
+            throw new CourseAlreadyExistsException();
         }
         return new Course(professor, subject, description, price);
     }

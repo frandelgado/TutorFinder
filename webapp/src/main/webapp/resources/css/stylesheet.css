@@ -305,6 +305,8 @@ button {
     font-size: 18px;
     color: #686f7a;
     font-weight: 400;
+    word-break: break-all;
+    text-align: justify;
 }
 
 .search-result-specs {
@@ -346,6 +348,8 @@ button {
 
 .profile-description {
     grid-area: profile-description;
+    word-break: break-all;
+    text-align: justify;
 }
 
 .profile-picture {
@@ -429,6 +433,13 @@ button {
     grid-area: class-description;
     margin-left: 5px;
     align-self: center;
+    word-break: break-all;
+    text-align: justify;
+}
+
+.description {
+    word-break: break-all;
+    text-align: justify;
 }
 
 .add-class {
@@ -636,7 +647,8 @@ button {
 }
 
 .message {
-    max-width: fit-content;
+    width: fit-content;
+    max-width: 60%;
     max-height: fit-content;
     display: grid;
     grid-template-areas:
@@ -648,7 +660,6 @@ button {
     border: solid 1px #bdd8a6;
     border-radius: 15px;
     background-color: #D8F5C0;
-    word-break: break-all;
 }
 
 .message.own {
@@ -657,6 +668,8 @@ button {
 
 .message-text {
     grid-area: message-text;
+    word-break: break-all;
+    text-align: justify;
 }
 
 .message-time {

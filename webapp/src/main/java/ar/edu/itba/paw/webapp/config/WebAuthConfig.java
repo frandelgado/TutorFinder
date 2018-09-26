@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +15,20 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("classpath:rememberme.key")
+    private Resource rememberMeKey;
 
     @Autowired
     private PawUserDetailsService userDetailsService;
@@ -50,8 +58,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().rememberMe()
                     .rememberMeParameter("rememberme")
                     .userDetailsService(userDetailsService)
-                    //TODO: IMPORTANTE NO DEJAR ESTO, CAMBIAR CUANDO DIGA COMO
-                    .key("guybrushthreepwoodmightypirate")
+                    .key(getRememberMeKey())
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
                 .and().logout()
                     .logoutUrl("/logout")
@@ -77,6 +84,21 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    private String getRememberMeKey() {
+        final StringWriter stringWriter = new StringWriter();
+        try {
+            Reader reader = new InputStreamReader(rememberMeKey.getInputStream());
+            char[] data = new char[1024];
+            int read;
+            while ((read = reader.read(data)) != -1) {
+                stringWriter.write(data,0, read);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return stringWriter.toString();
     }
 
 }

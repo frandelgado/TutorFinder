@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exceptions.TimeslotAllocatedException;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Timeslot;
 import org.junit.After;
@@ -7,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -16,7 +16,10 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
+import java.util.List;
+
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,12 +42,10 @@ public class ScheduleJdbcDaoTest {
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "courses");
     }
     
     @Test
-    public void testReserveValid(){
+    public void testReserveValid() throws TimeslotAllocatedException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
@@ -56,10 +57,10 @@ public class ScheduleJdbcDaoTest {
         assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
-    @Test(expected = DuplicateKeyException.class)
-    public void testReserveOccupied(){
+    @Test(expected = TimeslotAllocatedException.class)
+    public void testReserveOccupied() throws TimeslotAllocatedException {
         Professor mockProfessor = mock(Professor.class);
-        when(mockProfessor.getId()).thenReturn(2l);
+        when(mockProfessor.getId()).thenReturn(5l);
         Integer DAY = 2;
         Integer HOUR = 2;
 
@@ -67,10 +68,26 @@ public class ScheduleJdbcDaoTest {
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
+    @Test
+    public void testGetScheduleForProfessor() {
+        final Professor mockProfessor = mock(Professor.class);
+        when(mockProfessor.getId()).thenReturn(5L);
+        final Integer DAY = 2;
+        final Integer HOUR = 2;
+
+        List<Timeslot> reservedTimeSlots = scheduleJdbcDao.getScheduleForProfessor(mockProfessor);
+        assertNotNull(reservedTimeSlots);
+        assertEquals(1, reservedTimeSlots.size());
+        Timeslot reservedTimeSlot = reservedTimeSlots.get(0);
+
+        assertEquals(DAY, reservedTimeSlot.getDay());
+        assertEquals(HOUR, reservedTimeSlot.getHour());
+    }
+
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "schedules");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
     }
 }

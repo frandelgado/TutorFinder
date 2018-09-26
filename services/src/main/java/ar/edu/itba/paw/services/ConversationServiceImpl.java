@@ -8,6 +8,7 @@ import ar.edu.itba.paw.interfaces.service.ConversationService;
 import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,9 +19,14 @@ public class ConversationServiceImpl implements ConversationService {
     @Autowired
     private ConversationDao conversationDao;
 
+    @Transactional
     @Override
     public boolean sendMessage(final User user, final Professor professor, final Subject subject, final String body)
             throws SameUserConversationException, UserNotInConversationException {
+
+        if(user == null || professor == null || subject == null || body == null || body.length() > 512)
+            return false;
+
         if(user.getId().equals(professor.getId()))
             throw new SameUserConversationException();
 
@@ -37,19 +43,24 @@ public class ConversationServiceImpl implements ConversationService {
     public boolean sendMessage(final User from, final Conversation conversation, final String body)
             throws UserNotInConversationException {
 
-        if(!conversation.belongs(from.getId())) {
+        if(from == null || !conversation.belongs(from.getId())) {
             throw new UserNotInConversationException();
         }
+
+        if(body == null || body.isEmpty())
+            return false;
 
         final Message message = conversationDao.create(from, body, conversation);
 
         return message != null;
     }
 
+    @Override
     public List<Conversation> findByUserId(final Long userId) {
         return conversationDao.findByUserId(userId);
     }
 
+    @Transactional
     @Override
     public Conversation findById(final Long conversationId, final Long userId)
             throws UserNotInConversationException, NonexistentConversationException {
