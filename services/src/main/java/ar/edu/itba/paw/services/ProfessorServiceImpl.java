@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
@@ -16,6 +17,8 @@ import java.util.List;
 
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
+
+    private static final int PAGE_SIZE = 5;
 
     @Autowired
     ProfessorDao professorDao;
@@ -39,6 +42,15 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public List<Professor> filterByFullName(final String fullName) {
         return professorDao.filterByFullName(fullName);
+    }
+
+    @Override
+    public List<Professor> filterByFullName(final String fullName, final int page) throws PageOutOfBoundsException {
+        if(page < 0) {
+            throw new PageOutOfBoundsException();
+        }
+
+        return professorDao.filterByFullName(fullName, PAGE_SIZE, PAGE_SIZE * (page - 1));
     }
 
     @Override
