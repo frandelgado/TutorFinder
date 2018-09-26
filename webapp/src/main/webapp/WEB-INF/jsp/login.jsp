@@ -36,8 +36,8 @@
                 <label class="label" ><input name="rememberme" type="checkbox"/><spring:message code="remember_me"/></label>
             </div>
             <div class="button-container">
-                <input class="button-2" type="submit" value="<spring:message code="login"/>" />
                 <a href="<c:url value="/register" />" class="button-2"><spring:message code="register"/></a>
+                <input class="button-2" type="submit" value="<spring:message code="login"/>" />
             </div>
             <c:if test="${param.error != null}">
                 <p class="login-error">
