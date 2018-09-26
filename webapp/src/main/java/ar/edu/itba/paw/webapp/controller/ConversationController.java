@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
+import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
@@ -31,9 +32,10 @@ public class ConversationController {
     private ConversationService conversationService;
 
     @RequestMapping("/Conversations")
-    public ModelAndView conversations(@ModelAttribute("currentUser") final User loggedUser){
+    public ModelAndView conversations(@ModelAttribute("currentUser") final User loggedUser,
+                                      @RequestParam(value="page", defaultValue="1") final int page) throws PageOutOfBoundsException {
         final ModelAndView mav = new ModelAndView("conversations");
-        mav.addObject("conversations", conversationService.findByUserId(loggedUser.getId()));
+        mav.addObject("conversations", conversationService.findByUserId(loggedUser.getId(), page));
         return mav;
     }
 

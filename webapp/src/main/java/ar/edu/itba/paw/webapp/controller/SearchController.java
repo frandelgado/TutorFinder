@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
@@ -26,19 +27,20 @@ public class SearchController {
     private AreaService as;
 
     @RequestMapping("/searchResults")
-    public ModelAndView search(@RequestParam(value = "search") String name,
-                               @RequestParam(value = "type", defaultValue = "course") String type){
+    public ModelAndView search(@RequestParam(value = "search") final String name,
+                               @RequestParam(value = "type", defaultValue = "course") final String type,
+                               @RequestParam(value = "page", defaultValue = "1") final int page) throws PageOutOfBoundsException {
         final ModelAndView mav = new ModelAndView("searchResults");
 
         switch (type) {
             case "professor":
-                mav.addObject("results", ps.filterByFullName(name));
+                mav.addObject("results", ps.filterByFullName(name, page));
                 break;
             case "course":
-                mav.addObject("results", cs.filterCoursesByName(name));
+                mav.addObject("results", cs.filterCoursesByName(name, page));
                 break;
             case "area":
-                mav.addObject("results", as.filterAreasByName(name));
+                mav.addObject("results", as.filterAreasByName(name, page));
                 break;
             default:
                 final ModelAndView error = new ModelAndView("error");
