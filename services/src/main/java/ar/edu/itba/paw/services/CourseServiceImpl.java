@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
+import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.models.Course;
@@ -14,6 +15,8 @@ import java.util.List;
 @Service
 public class CourseServiceImpl implements CourseService {
 
+    private static final int PAGE_SIZE = 5;
+
     @Autowired
     private CourseDao courseDao;
 
@@ -23,7 +26,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> findCourseByProfessorId(long professor_id) {
+    public List<Course> findCourseByProfessorId(final long professor_id) {
         return courseDao.findByProfessorId(professor_id);
     }
 
@@ -35,6 +38,33 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> filterByAreaId(final long areaId) {
         return courseDao.filterByAreaId(areaId);
+    }
+
+    @Override
+    public List<Course> findCourseByProfessorId(long professor_id, final int page) throws PageOutOfBoundsException {
+        if(page < 0) {
+            throw new PageOutOfBoundsException();
+        }
+
+        return courseDao.findByProfessorId(professor_id, PAGE_SIZE, PAGE_SIZE * (page - 1));
+    }
+
+    @Override
+    public List<Course> filterCoursesByName(final String name, final int page) throws PageOutOfBoundsException {
+        if(page < 0) {
+            throw new PageOutOfBoundsException();
+        }
+
+        return courseDao.filterCoursesByName(name, PAGE_SIZE, PAGE_SIZE * (page - 1));
+    }
+
+    @Override
+    public List<Course> filterByAreaId(final long areaId, final int page) throws PageOutOfBoundsException {
+        if(page < 0) {
+            throw new PageOutOfBoundsException();
+        }
+
+        return courseDao.filterByAreaId(areaId, PAGE_SIZE, PAGE_SIZE * (page - 1));
     }
 
     @Override
