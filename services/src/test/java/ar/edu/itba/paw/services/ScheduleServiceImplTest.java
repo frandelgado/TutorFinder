@@ -2,8 +2,9 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.InvalidTimeException;
 import ar.edu.itba.paw.exceptions.InvalidTimeRangeException;
+import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
+import ar.edu.itba.paw.exceptions.TimeslotAllocatedException;
 import ar.edu.itba.paw.interfaces.persistence.ScheduleDao;
-import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.models.Professor;
@@ -14,9 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -43,7 +42,7 @@ public class ScheduleServiceImplTest {
     Long PROFESSOR_ID = 2l;
 
     @Before
-    public void setUp(){
+    public void setUp() throws TimeslotAllocatedException {
         Professor professor = mock(Professor.class);
         when(professor.getId()).thenReturn(2l);
         when(scheduleDao.reserveTimeSlot(professor,1, 12)).thenReturn( new Timeslot(1,12));
@@ -61,7 +60,7 @@ public class ScheduleServiceImplTest {
     }
 
     @Test
-    public void testValidRange() throws InvalidTimeRangeException, InvalidTimeException {
+    public void testValidRange() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
         Integer DAY = 1;
         Integer START_HOUR = 14;
         Integer END_HOUR = 16;
@@ -70,7 +69,7 @@ public class ScheduleServiceImplTest {
     }
 
     @Test
-    public void testUnitaryRange() throws InvalidTimeRangeException, InvalidTimeException {
+    public void testUnitaryRange() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
         Integer DAY = 1;
         Integer START_HOUR = 14;
         Integer END_HOUR = 15;
@@ -86,7 +85,7 @@ public class ScheduleServiceImplTest {
     }
 
     @Test(expected = InvalidTimeRangeException.class)
-    public void testInvalidRange() throws InvalidTimeRangeException, InvalidTimeException {
+    public void testInvalidRange() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
         Integer DAY = 1;
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;
@@ -95,7 +94,7 @@ public class ScheduleServiceImplTest {
     }
 
     @Test(expected = InvalidTimeException.class)
-    public void testInvalidHourUpper() throws InvalidTimeRangeException, InvalidTimeException {
+    public void testInvalidHourUpper() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
         Integer DAY = 1;
         Integer START_HOUR = -3;
         Integer END_HOUR = 12;
@@ -104,7 +103,7 @@ public class ScheduleServiceImplTest {
     }
 
     @Test(expected = InvalidTimeException.class)
-    public void testInvalidHourLower() throws InvalidTimeRangeException, InvalidTimeException {
+    public void testInvalidHourLower() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
         Integer DAY = 1;
         Integer START_HOUR = 14;
         Integer END_HOUR = 27;
@@ -114,7 +113,7 @@ public class ScheduleServiceImplTest {
 
 
     @Test(expected = InvalidTimeException.class)
-    public void testInvalidDayUpper() throws InvalidTimeRangeException, InvalidTimeException {
+    public void testInvalidDayUpper() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
         Integer DAY = 8;
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;
@@ -123,7 +122,7 @@ public class ScheduleServiceImplTest {
     }
 
     @Test(expected = InvalidTimeException.class)
-    public void testInvalidDayLower() throws InvalidTimeRangeException, InvalidTimeException {
+    public void testInvalidDayLower() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
         Integer DAY = -4;
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;

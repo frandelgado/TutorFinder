@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exceptions.TimeslotAllocatedException;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Timeslot;
 import org.junit.After;
@@ -7,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -17,7 +17,6 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import javax.sql.DataSource;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
@@ -46,7 +45,7 @@ public class ScheduleJdbcDaoTest {
     }
     
     @Test
-    public void testReserveValid(){
+    public void testReserveValid() throws TimeslotAllocatedException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
@@ -58,8 +57,8 @@ public class ScheduleJdbcDaoTest {
         assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
-    @Test(expected = DuplicateKeyException.class)
-    public void testReserveOccupied(){
+    @Test(expected = TimeslotAllocatedException.class)
+    public void testReserveOccupied() throws TimeslotAllocatedException {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(5l);
         Integer DAY = 2;

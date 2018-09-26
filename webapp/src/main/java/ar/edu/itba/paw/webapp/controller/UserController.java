@@ -187,11 +187,19 @@ public class UserController {
 
         try {
             ss.reserveTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
-        } catch (InvalidTimeException e) {
-            //TODO: alguna de las horas no tienen sentido (numeros negativos o mayores a su tope) . Redirigir.
-        } catch (InvalidTimeRangeException e) {
-            //TODO: startHour es mas grande que endHour, manejar el error
+        } catch (NonexistentProfessorException e) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentUser");
+            return error;
+        } catch (TimeslotAllocatedException e) {
+            errors.addError(new FieldError("TimeslotAllocatedError", "endHour", form.getEndHour(),
+                    false, new String[]{"TimeslotAllocatedError"}, null, "El horario ya fue seleccionado previamente"));
+            return profile(loggedUser, form);
+        } catch (InvalidTimeException | InvalidTimeRangeException e) {
+            //Already validated by form
+            return profile(loggedUser, form);
         }
+
         final RedirectView view = new RedirectView("/Profile" );
         view.setExposeModelAttributes(false);
         return new ModelAndView(view);

@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.exceptions.TimeslotAllocatedException;
 import ar.edu.itba.paw.interfaces.persistence.ScheduleDao;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Timeslot;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -31,12 +33,16 @@ public class ScheduleJdbcDao implements ScheduleDao {
     }
 
     @Override
-    public Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) {
+    public Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) throws TimeslotAllocatedException {
         final Map<String, Object> args = new HashMap<>();
         args.put("user_id", professor.getId());
         args.put("day", day);
         args.put("hour", hour);
-        jdbcInsert.execute(args);
+        try {
+            jdbcInsert.execute(args);
+        } catch (DuplicateKeyException e) {
+            throw new TimeslotAllocatedException();
+        }
         return new Timeslot(day, hour);
 
     }
