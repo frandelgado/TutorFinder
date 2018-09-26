@@ -8,6 +8,7 @@ import ar.edu.itba.paw.interfaces.persistence.ScheduleDao;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.Timeslot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,43 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<Timeslot> getScheduleForProfessor(Professor professor) {
-        return sd.getScheduleForProfessor(professor);
+    public Schedule getScheduleForProfessor(Professor professor) {
+
+        List<Integer> monday = new ArrayList<>();
+        List<Integer> tuesday = new ArrayList<>();;
+        List<Integer> wednesday = new ArrayList<>();;
+        List<Integer> thursday = new ArrayList<>();;
+        List<Integer> friday = new ArrayList<>();;
+        List<Integer> saturday = new ArrayList<>();;
+        List<Integer> sunday = new ArrayList<>();;
+
+        List<Timeslot> timeslots = sd.getScheduleForProfessor(professor);
+        for (Timeslot t: timeslots) {
+            switch (t.getDay()){
+                case 1:
+                    monday.add(t.getHour());
+                    break;
+                case 2:
+                    tuesday.add(t.getHour());
+                    break;
+                case 3:
+                    wednesday.add(t.getHour());
+                    break;
+                case 4:
+                    thursday.add(t.getHour());
+                    break;
+                case 5:
+                    friday.add(t.getHour());
+                    break;
+                case 6:
+                    saturday.add(t.getHour());
+                    break;
+                case 7:
+                    sunday.add(t.getHour());
+                    break;
+            }
+        }
+
+        return new Schedule(monday,tuesday, wednesday, thursday, friday, saturday, sunday);
     }
 }
