@@ -11,4 +11,6 @@ public interface AreaDao {
     Area create(final String name, final String description);
 
     List<Area> filterAreasByName(final String name);
+
+    List<Area> filterAreasByName(final String name, final int limit, final int offset);
 }

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 
+import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.persistence.AreaDao;
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.models.Area;
@@ -12,6 +13,7 @@ import java.util.List;
 @Service
 public class AreaServiceImpl implements AreaService {
 
+    private static final int PAGE_SIZE = 5;
 
     @Autowired
     private AreaDao areaDao;
@@ -29,6 +31,15 @@ public class AreaServiceImpl implements AreaService {
     @Override
     public List<Area> filterAreasByName(final String name){
         return areaDao.filterAreasByName(name);
+    }
+
+    @Override
+    public List<Area> filterAreasByName(final String name, final int page) throws PageOutOfBoundsException {
+        if(page < 0) {
+            throw new PageOutOfBoundsException();
+        }
+
+        return areaDao.filterAreasByName(name, PAGE_SIZE, PAGE_SIZE * (page - 1));
     }
 
 }
