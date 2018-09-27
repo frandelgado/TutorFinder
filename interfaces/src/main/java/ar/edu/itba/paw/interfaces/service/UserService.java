@@ -9,6 +9,10 @@ public interface UserService {
 
     User findByUsername(final String username);
 
+    User findByEmail(final String email);
+
     User create(final String username, final String password,
                 final String email, final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException;
+
+    boolean changePassword(final Long userId, String password);
 }

@@ -37,6 +37,14 @@ public class UserServiceImpl implements UserService {
 
     //TODO: Make transactional so that if the email is not sent the user is not created.
     @Override
+    public User findByEmail(final String email) {
+        if(email == null || email.isEmpty()) {
+            return null;
+        }
+        return userDao.findByEmail(email).orElse(null);
+    }
+
+    @Override
     public User create(final String username, final String password, final String email,
                        final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
 
@@ -60,5 +68,12 @@ public class UserServiceImpl implements UserService {
             emailService.sendRegistrationEmail(user.getEmail());
         }
         return user;
+    }
+
+    @Override
+    public boolean changePassword(Long userId, String newPassword) {
+        if(userId == null || newPassword == null)
+            return false;
+        return userDao.changePasswordById(userId, encoder.encode(newPassword));
     }
 }
