@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,6 +33,8 @@ public class AreaJdbcDaoTest {
     private static final String INVALID_NAME = "InvalidTestName";
     private static final Long ID = 1L;
     private static final Long INVALID_ID = 666L;
+    private static final Integer LIMIT = 10;
+    private static final Integer OFFSET = 0;
 
     @Autowired
     private DataSource ds;
@@ -79,7 +82,7 @@ public class AreaJdbcDaoTest {
 
     @Test
     public void filterAreasByNameValid() {
-        final List<Area> areas = areaDao.filterAreasByName(NAME);
+        final List<Area> areas = areaDao.filterAreasByName(NAME, LIMIT, OFFSET);
         assertNotNull(areas);
         assertEquals(1, areas.size());
         final Area area = areas.get(0);
@@ -91,7 +94,7 @@ public class AreaJdbcDaoTest {
 
     @Test
     public void filterAreasByNameInvalid() {
-        final List<Area> areas = areaDao.filterAreasByName(INVALID_NAME);
+        final List<Area> areas = areaDao.filterAreasByName(INVALID_NAME, LIMIT, OFFSET);
         assertNotNull(areas);
         assertEquals(0, areas.size());
     }

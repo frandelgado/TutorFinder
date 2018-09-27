@@ -21,10 +21,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -96,7 +93,8 @@ public class UserController {
     @RequestMapping("/Professor/{id}")
     public ModelAndView professorProfile(@PathVariable(value = "id") long id,
                                          @ModelAttribute("currentUser") final User loggedUser,
-                                         @ModelAttribute("currentUserIsProfessor") final boolean isProfessor) {
+                                         @ModelAttribute("currentUserIsProfessor") final boolean isProfessor,
+                                         @RequestParam(value = "page", defaultValue = "1") final int page) throws PageOutOfBoundsException {
         if(loggedUser != null && loggedUser.getId() == id && isProfessor) {
             final RedirectView view = new RedirectView("/Profile");
             view.setExposeModelAttributes(false);
@@ -104,7 +102,8 @@ public class UserController {
         }
 
         final ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("courses", cs.findCourseByProfessorId(id));
+        mav.addObject("courses", cs.findCourseByProfessorId(id, page));
+        mav.addObject("page", page);
         final Professor professor = ps.findById(id);
         if(professor == null) {
             final ModelAndView error = new ModelAndView("error");
@@ -118,19 +117,19 @@ public class UserController {
     @RequestMapping("/Profile")
     public ModelAndView profile(
             @ModelAttribute("currentUser") final User loggedUser,
-            @ModelAttribute("ScheduleForm") final ScheduleForm scheduleForm
-    ) {
+            @ModelAttribute("ScheduleForm") final ScheduleForm scheduleForm,
+            @RequestParam(value = "page", defaultValue = "1") final int page
+    ) throws PageOutOfBoundsException {
         final Professor professor = ps.findById(loggedUser.getId());
 
         final ModelAndView mav = new ModelAndView("profileForProfessor");
 
-
         Schedule schedule = ss.getScheduleForProfessor(professor);
 
-        mav.addObject("courses", cs.findCourseByProfessorId(professor.getId()));
+        mav.addObject("courses", cs.findCourseByProfessorId(professor.getId(), page));
         mav.addObject("professor", professor);
         mav.addObject("schedule", schedule);
-
+        mav.addObject("page", page);
         return mav;
     }
 
@@ -181,13 +180,13 @@ public class UserController {
             @ModelAttribute("currentUser") final User loggedUser,
             @Valid @ModelAttribute("ScheduleForm") final ScheduleForm form,
             final BindingResult errors
-    ){
+    ) throws PageOutOfBoundsException {
         if(errors.hasErrors() || !form.validForm()) {
             if(!form.validForm()) {
                 errors.addError(new FieldError("profile.add_schedule.timeError", "endHour", form.getEndHour(),
                 false, new String[]{"profile.add_schedule.timeError"}, null, "El horario de comienzo debe ser menor al de finalización"));
             }
-            return profile(loggedUser, form);
+            return profile(loggedUser, form, 1);
         }
 
         try {
@@ -199,10 +198,10 @@ public class UserController {
         } catch (TimeslotAllocatedException e) {
             errors.addError(new FieldError("TimeslotAllocatedError", "endHour", form.getEndHour(),
                     false, new String[]{"TimeslotAllocatedError"}, null, "El horario ya fue seleccionado previamente"));
-            return profile(loggedUser, form);
+            return profile(loggedUser, form, 1);
         } catch (InvalidTimeException | InvalidTimeRangeException e) {
             //Already validated by form
-            return profile(loggedUser, form);
+            return profile(loggedUser, form, 1);
         }
 
         final RedirectView view = new RedirectView("/Profile" );

@@ -111,6 +111,7 @@ public class ConversationJdbcDao implements ConversationDao {
         return new Message(id.longValue(), sender, text, currentTime);
     }
 
+    //TODO: MESSAGE PAGING
     @Override
     public Conversation findById(final Long conversation_id) {
        final Conversation conversation = jdbcTemplate.query(
@@ -127,13 +128,14 @@ public class ConversationJdbcDao implements ConversationDao {
     }
 
     @Override
-    public List<Conversation> findByUserId(final Long user_id) {
+    public List<Conversation> findByUserId(final Long user_id, final int limit, final int offset) {
         final List<Conversation> conversations = jdbcTemplate.query(
                 CONVERSATION_SELECT_FROM + "WHERE (conversations.user_id = ? OR " +
                         "conversations.professor_id = ?) AND conversations.user_id = u.user_id" +
                         " AND conversations.professor_id = p.user_id AND areas.area_id = subjects.area_id" +
-                        " AND conversations.subject_id = subjects.subject_id AND p.user_id = professors.user_id"
-                , CONVERSATION_ROW_MAPPER, user_id, user_id);
+                        " AND conversations.subject_id = subjects.subject_id AND p.user_id = professors.user_id" +
+                        " ORDER BY conversations.conversation_id LIMIT ? OFFSET ?"
+                , CONVERSATION_ROW_MAPPER, user_id, user_id, limit, offset);
 
         return conversations;
     }

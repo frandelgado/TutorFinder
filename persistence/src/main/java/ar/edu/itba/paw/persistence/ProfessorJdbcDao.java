@@ -70,13 +70,14 @@ public class ProfessorJdbcDao implements ProfessorDao {
     }
 
     @Override
-    public List<Professor> filterByFullName(String fullName) {
+    public List<Professor> filterByFullName(final String fullName, final int limit, final int offset) {
         final String search = "%" + fullName + "%";
         final List<Professor> professors = jdbcTemplate.query(
                 "SELECT users.user_id, username, name, lastname, password, email, " +
                         "description FROM professors, users WHERE " +
                         "UPPER (concat(name, ' ', lastname)) LIKE UPPER(?) " +
-                        "AND users.user_id = professors.user_id", ROW_MAPPER, search
+                        "AND users.user_id = professors.user_id ORDER BY professors.user_id LIMIT ? OFFSET ?",
+                ROW_MAPPER, search, limit, offset
         );
         return professors;
     }

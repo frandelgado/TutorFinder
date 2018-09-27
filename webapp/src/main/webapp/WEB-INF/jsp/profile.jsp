@@ -20,16 +20,28 @@
     <h1 class="profile-name"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
     <h3 class="profile-description"><c:out value="${professor.description}" escapeXml="true"/></h3>
     <div class="classes">
-        <c:if test="${courses.size() == 0}">
+        <c:if test="${courses.results.size() == 0}">
             <h4><spring:message code="no.courses"/></h4>
         </c:if>
-        <c:forEach var="course" items="${courses}">
+        <c:forEach var="course" items="${courses.results}">
             <div class="class">
                 <a class="class-button" href="<c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
                 <div class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></div>
                 <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
             </div>
         </c:forEach>
+
+        <div class="paged-result-buttons">
+            <c:url value="/Professor/${professor.id}?page=${page - 1}" var="previous"/>
+            <c:url value="/Professor/${professor.id}?page=${page + 1}" var="next"/>
+
+            <c:if test="${page > 1}">
+                <a href="${previous}" class="previous round">&#8249;</a>
+            </c:if>
+            <c:if test="${courses.hasNext}">
+                <a href="${next}" class="next round">&#8250;</a>
+            </c:if>
+        </div>
     </div>
 </div>
 <div class="footer">

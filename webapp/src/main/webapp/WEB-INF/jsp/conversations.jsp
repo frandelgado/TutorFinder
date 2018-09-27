@@ -22,11 +22,11 @@
         <p><spring:message code="conversations.inbox"/></p>
         <hr>
     </div>
-    <c:if test="${conversations.size() == 0}" >
+    <c:if test="${conversations.results.size() == 0}" >
         <h1><spring:message code="no.conversations"/></h1>
         <p class="help-message"><spring:message code="conversations.help"/></p>
     </c:if>
-    <c:forEach var="conversation" items="${conversations}">
+    <c:forEach var="conversation" items="${conversations.results}">
         <div class="chat">
             <a class="conversation-link" href = "<c:url value="/Conversation?id=${conversation.id}" />"/>
             <a class="conversation-subject-name"><c:out value="${conversation.subject.name}" escapeXml="true"/></a>
@@ -38,6 +38,17 @@
             </h6>
         </div>
     </c:forEach>
+    <div class="paged-result-buttons">
+        <c:url value="/Conversations?page=${page - 1}" var="previous"/>
+        <c:url value="/Conversations?page=${page + 1}" var="next"/>
+
+        <c:if test="${page > 1}">
+            <a href="${previous}" class="previous round">&#8249;</a>
+        </c:if>
+        <c:if test="${conversations.hasNext}">
+            <a href="${next}" class="next round">&#8250;</a>
+        </c:if>
+    </div>
 </div>
 </body>
 

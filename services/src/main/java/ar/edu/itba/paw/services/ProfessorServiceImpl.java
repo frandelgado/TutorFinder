@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
+import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.exceptions.ProfessorWithoutUserException;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
+
+    private static final int PAGE_SIZE = 5;
 
     @Autowired
     ProfessorDao professorDao;
@@ -36,9 +40,28 @@ public class ProfessorServiceImpl implements ProfessorService {
         return professorDao.findByUsername(username).orElse(null);
     }
 
-    @Override
-    public List<Professor> filterByFullName(final String fullName) {
-        return professorDao.filterByFullName(fullName);
+        @Override
+    public PagedResults<Professor> filterByFullName(final String fullName, final int page)
+            throws PageOutOfBoundsException {
+        if(page <= 0) {
+            throw new PageOutOfBoundsException();
+        }
+
+        final List<Professor> professors = professorDao.filterByFullName(fullName, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
+        final PagedResults<Professor> results;
+        final int size = professors.size();
+
+        if(size == 0 && page > 1) {
+            throw new PageOutOfBoundsException();
+        }
+
+        if(size > PAGE_SIZE) {
+            professors.remove(PAGE_SIZE);
+            results = new PagedResults<>(professors, true);
+        } else {
+            results = new PagedResults<>(professors, false);
+        }
+        return results;
     }
 
     @Override

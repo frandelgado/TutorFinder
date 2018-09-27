@@ -37,6 +37,8 @@ public class ConversationJdbcDaoTest {
     private static final Long CONVERSATION_ID = 1L;
     private static final Long INVALID_ID = 666L;
     private static final int CONVERSATION_NUMBER = 2;
+    private static final Integer LIMIT = 10;
+    private static final Integer OFFSET = 0;
 
     @Autowired
     private DataSource dataSource;
@@ -114,7 +116,7 @@ public class ConversationJdbcDaoTest {
     @Test
     public void testFindByUserIdValid() {
 
-        final List<Conversation> conversations = conversationDao.findByUserId(PROFESSOR_ID);
+        final List<Conversation> conversations = conversationDao.findByUserId(PROFESSOR_ID, LIMIT, OFFSET);
 
         assertNotNull(conversations);
         assertEquals(CONVERSATION_NUMBER, conversations.size());
@@ -124,7 +126,7 @@ public class ConversationJdbcDaoTest {
 
     @Test
     public void testFindByUserIdInvalid() {
-        final List<Conversation> conversations = conversationDao.findByUserId(INVALID_ID);
+        final List<Conversation> conversations = conversationDao.findByUserId(INVALID_ID, LIMIT, OFFSET);
         assertNotNull(conversations);
         assertEquals(0, conversations.size());
     }

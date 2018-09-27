@@ -24,7 +24,7 @@
 
 <div class="content">
     <div class="button-container">
-        <h2 class="label"><spring:message code="course.create"></spring:message></h2>
+        <h2 class="label"><spring:message code="course.create" /></h2>
     </div>
     <c:url value="/createCourse" var="postPath"/>
     <form:form cssClass="form" modelAttribute="CourseForm" action="${postPath}" method="post">

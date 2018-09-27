@@ -38,6 +38,8 @@ public class CourseJdbcDaoTest {
     private static final Long INVALID_ID = 666L;
     private static final String INVALID_NAME = "InvalidTestName";
     private static final String SUBJECT_NAME = "Alge";
+    private static final Integer LIMIT = 10;
+    private static final Integer OFFSET = 0;
 
     @Autowired
     private DataSource dataSource;
@@ -99,7 +101,7 @@ public class CourseJdbcDaoTest {
 
     @Test
     public void testFindByProfessorIdValid() {
-        final List<Course> courses = courseDao.findByProfessorId(PROFESSOR_ID);
+        final List<Course> courses = courseDao.findByProfessorId(PROFESSOR_ID, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(1, courses.size());
 
@@ -114,14 +116,14 @@ public class CourseJdbcDaoTest {
 
     @Test
     public void testFindByProfessorIdInvalid() {
-        final List<Course> courses = courseDao.findByProfessorId(INVALID_ID);
+        final List<Course> courses = courseDao.findByProfessorId(INVALID_ID, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(0, courses.size());
     }
 
     @Test
     public void testFilterCoursesByNameValid() {
-        final List<Course> courses = courseDao.filterCoursesByName(SUBJECT_NAME);
+        final List<Course> courses = courseDao.filterCoursesByName(SUBJECT_NAME, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(1, courses.size());
 
@@ -136,14 +138,14 @@ public class CourseJdbcDaoTest {
 
     @Test
     public void testFilterCoursesByNameInvalid() {
-        final List<Course> courses = courseDao.filterCoursesByName(INVALID_NAME);
+        final List<Course> courses = courseDao.filterCoursesByName(INVALID_NAME, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(0, courses.size());
     }
 
     @Test
     public void testFilterByAreaIdValid() {
-        final List<Course> courses = courseDao.filterByAreaId(AREA_ID);
+        final List<Course> courses = courseDao.filterByAreaId(AREA_ID, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(1, courses.size());
 
@@ -158,7 +160,7 @@ public class CourseJdbcDaoTest {
 
     @Test
     public void testFilterByAreaIdInvalid() {
-        final List<Course> courses = courseDao.filterByAreaId(INVALID_ID);
+        final List<Course> courses = courseDao.filterByAreaId(INVALID_ID, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(0, courses.size());
     }

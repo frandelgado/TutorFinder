@@ -129,34 +129,37 @@ public class CourseJdbcDao implements CourseDao {
     }
 
     @Override
-    public List<Course> findByProfessorId(long professor_id) {
+    public List<Course> findByProfessorId(final long professor_id, final int limit, final int offset) {
         final List<Course> courses = jdbcTemplate.query(
                 COURSES_SELECT_FROM + "WHERE courses.user_id = ? AND professors.user_id = users.user_id" +
                         " AND areas.area_id = subjects.area_id AND users.user_id = courses.user_id " +
-                        "AND courses.subject_id = subjects.subject_id", ROW_MAPPER, professor_id
+                        "AND courses.subject_id = subjects.subject_id ORDER BY subjects.subject_id " +
+                        " LIMIT ? OFFSET ?", ROW_MAPPER, professor_id, limit, offset
         );
         return courses;
     }
 
     @Override
-    public List<Course> filterCoursesByName(final String name) {
+    public List<Course> filterCoursesByName(final String name, final int limit, final int offset) {
         final String search = "%" + name + "%";
         final List<Course> courses = jdbcTemplate.query(
                 COURSES_SELECT_FROM + "WHERE courses.user_id = users.user_id AND" +
                         " courses.subject_id = subjects.subject_id AND professors.user_id = users.user_id " +
-                        "AND areas.area_id = subjects.area_id AND UPPER(subjects.name) LIKE UPPER(?)"
-                , ROW_MAPPER, search
+                        "AND areas.area_id = subjects.area_id AND UPPER(subjects.name) LIKE UPPER(?)" +
+                        " ORDER BY courses.user_id, courses.subject_id LIMIT ? OFFSET ?"
+                , ROW_MAPPER, search, limit, offset
         );
         return courses;
     }
 
     @Override
-    public List<Course> filterByAreaId(final long areaId) {
+    public List<Course> filterByAreaId(final long areaId, final int limit, final int offset) {
         final List<Course> courses = jdbcTemplate.query(
                 COURSES_SELECT_FROM + "WHERE subjects.area_id = ? AND professors.user_id = users.user_id" +
                         " AND areas.area_id = subjects.area_id AND users.user_id = courses.user_id" +
-                        " AND courses.subject_id = subjects.subject_id"
-                , ROW_MAPPER, areaId);
+                        " AND courses.subject_id = subjects.subject_id " +
+                        " ORDER BY courses.user_id, courses.subject_id LIMIT ? OFFSET ?"
+                , ROW_MAPPER, areaId, limit, offset);
         return courses;
     }
 

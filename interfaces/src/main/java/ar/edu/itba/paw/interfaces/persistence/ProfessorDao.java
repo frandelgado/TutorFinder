@@ -14,5 +14,5 @@ public interface ProfessorDao {
 
     Optional<Professor> findByUsername(final String username);
 
-    List<Professor> filterByFullName(String fullName);
+    List<Professor> filterByFullName(final String fullName, final int limit, final int offset);
 }

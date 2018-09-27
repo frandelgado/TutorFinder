@@ -32,7 +32,6 @@
     <div class="button-container">
         <h2 class="label"><spring:message code="course.contact"/></h2>
     </div>
-    </p>
     <c:url value="/sendMessage" var="postPath"/>
     <form:form cssClass="form" modelAttribute="messageForm" action="${postPath}" method="post">
         <form:hidden path="professorId" />

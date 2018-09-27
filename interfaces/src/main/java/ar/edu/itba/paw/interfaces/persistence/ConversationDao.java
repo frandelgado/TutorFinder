@@ -3,7 +3,6 @@ package ar.edu.itba.paw.interfaces.persistence;
 import ar.edu.itba.paw.models.*;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ConversationDao {
 
@@ -11,7 +10,7 @@ public interface ConversationDao {
 
     Conversation findById(final Long conversation_id);
 
-    List<Conversation> findByUserId(final Long user_id);
+    List<Conversation> findByUserId(final Long user_id, final int limit, final int offset);
 
     Conversation findByIds(final Long user_id, final Long professor_id, final Long subject_id);
 
