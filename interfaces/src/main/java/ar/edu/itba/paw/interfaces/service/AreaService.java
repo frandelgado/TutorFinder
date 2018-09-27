@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.models.Area;
+import ar.edu.itba.paw.models.PagedResults;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ public interface AreaService {
 
     List<Area> filterAreasByName(final String name);
 
-    List<Area> filterAreasByName(final String name, final int page) throws PageOutOfBoundsException;
+    PagedResults<Area> filterAreasByName(final String name, final int page) throws PageOutOfBoundsException;
 }

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.persistence.AreaDao;
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.models.Area;
+import ar.edu.itba.paw.models.PagedResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,12 +35,22 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public List<Area> filterAreasByName(final String name, final int page) throws PageOutOfBoundsException {
-        if(page < 0) {
+    public PagedResults<Area> filterAreasByName(final String name, final int page) throws PageOutOfBoundsException {
+        if(page <= 0) {
             throw new PageOutOfBoundsException();
         }
 
-        return areaDao.filterAreasByName(name, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final List<Area> areas = areaDao.filterAreasByName(name, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
+        final PagedResults<Area> results;
+
+        if(areas.size() > PAGE_SIZE) {
+            areas.remove(PAGE_SIZE);
+            results = new PagedResults<>(areas, true);
+        } else {
+            results = new PagedResults<>(areas, false);
+        }
+        return results;
+
     }
 
 }

@@ -32,8 +32,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Timeslot> reserveTimeSlot(Long professor_id, Integer day, Integer startTime, Integer endTime)
             throws InvalidTimeException, InvalidTimeRangeException, TimeslotAllocatedException, NonexistentProfessorException {
 
-        List<Timeslot> reservedTimeslots = new LinkedList<>();
-
         if(startTime >= endTime)
             throw new InvalidTimeRangeException();
         if(startTime > 24 || startTime < 0 || endTime > 24 || endTime < 0)
