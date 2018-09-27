@@ -32,7 +32,7 @@
                 <c:if test="${page > 1}">
                     <a href="${previous}" class="previous round">&#8249;</a>
                 </c:if>
-                <c:if test="${results.hasNext}">
+                <c:if test="${pagedResults.hasNext}">
                     <a href="${next}" class="next round">&#8250;</a>
                 </c:if>
             </div>
