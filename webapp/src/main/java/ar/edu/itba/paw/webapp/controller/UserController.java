@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
-import ar.edu.itba.paw.interfaces.service.CourseService;
-import ar.edu.itba.paw.interfaces.service.ProfessorService;
-import ar.edu.itba.paw.interfaces.service.ScheduleService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
+import ar.edu.itba.paw.models.PasswordResetToken;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.webapp.form.RegisterForm;
-import ar.edu.itba.paw.webapp.form.RegisterProfessorForm;
-import ar.edu.itba.paw.webapp.form.ScheduleForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,6 +44,9 @@ public class UserController {
 
     @Autowired
     private ScheduleService ss;
+
+    @Autowired
+    private PasswordResetService passwordResetService;
 
     @RequestMapping("/register")
     public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
@@ -208,4 +207,90 @@ public class UserController {
         view.setExposeModelAttributes(false);
         return new ModelAndView(view);
     }
+
+    @RequestMapping(value = "/forgotPassword")
+    public ModelAndView forgotPassword(@ModelAttribute("resetPasswordForm") final ResetPasswordRequestForm form) {
+        return new ModelAndView("forgotPassword");
+    }
+
+    @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
+    public ModelAndView forgotPassword(@Valid @ModelAttribute("resetPasswordForm") final ResetPasswordRequestForm form,
+                                       final BindingResult errors) {
+        if(errors.hasErrors()) {
+            return forgotPassword(form);
+        }
+
+        final boolean created = passwordResetService.createToken(form.getEmail());
+
+        if(!created) {
+            errors.addError(new FieldError("forgotPasswordError", "email", form.getEmail(),
+                    false, new String[]{"forgotPasswordError"}, null, "El correo electronico no se encuentra registrado"));
+            return forgotPassword(form);
+        }
+        errors.addError(new FieldError("forgotPasswordSuccess", "successMessage", null,
+                false, new String[]{"forgotPasswordSuccess"}, null,
+                "Se envió un correo electronico a su cuenta, siga los pasos para restaurar su contraseña"));
+        form.setEmail("");
+        return forgotPassword(form);
+    }
+
+    @RequestMapping("/resetPassword")
+    public ModelAndView resetPassword(@ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
+                                      @RequestParam(value="token", required=true) final String token) {
+
+        if(token.isEmpty()) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","invalidToken");
+            return error;
+        }
+
+        final PasswordResetToken passwordResetToken = passwordResetService.findByToken(token);
+
+        if(passwordResetToken == null) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","invalidToken");
+            return error;
+        }
+
+        return new ModelAndView("resetPassword");
+    }
+
+
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public ModelAndView resetPassword(@ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
+                                      final BindingResult errors,
+                                      @RequestParam(value="token", required=true) final String token,
+                                      HttpServletRequest request) {
+        if(errors.hasErrors() || !form.checkRepeatPassword()) {
+            if(!form.checkRepeatPassword()) {
+                errors.addError(new FieldError("RepeatPasswordError", "repeatPassword", form.getRepeatPassword(),
+                        false, new String[]{"RepeatPassword"}, null, "Las contraseñas deben coincidir"));
+            }
+            return resetPassword(form, token);
+        }
+
+        final PasswordResetToken passwordResetToken = passwordResetService.findByToken(token);
+
+        final boolean changed;
+        try {
+            changed = passwordResetService.changePassword(passwordResetToken, form.getPassword());
+        } catch (InvalidTokenException e) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","invalidToken");
+            return error;
+        }
+
+        if(!changed) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","changePasswordError");
+            return error;
+        }
+
+        authenticateRegistered(request, passwordResetToken.getUser().getUsername(), form.getPassword());
+        final RedirectView view = new RedirectView("/" );
+        view.setExposeModelAttributes(false);
+        return new ModelAndView(view);
+    }
+
+
 }
