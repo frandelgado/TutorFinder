@@ -40,6 +40,9 @@
                 <a href="<c:url value="/register" />" class="button-2"><spring:message code="register"/></a>
                 <input class="button-2" type="submit" value="<spring:message code="login"/>" />
             </div>
+            <div class="forgot-password-link">
+                <a href="<c:url value="/forgotPassword" />"><spring:message code="forgotPassword"/></a>
+            </div>
             <c:if test="${param.error != null}">
                 <p class="login-error">
                     <spring:message code="login.error"/>

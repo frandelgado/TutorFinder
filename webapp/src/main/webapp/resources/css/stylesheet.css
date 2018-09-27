@@ -550,6 +550,11 @@ button {
     justify-content: center;
 }
 
+.forgot-password-link {
+    display: flex;
+    justify-content: center;
+}
+
 .conversation .button-container {
     margin: 0px;
 }
