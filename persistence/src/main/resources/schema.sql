@@ -66,3 +66,11 @@ hour INTEGER NOT NULL,
 FOREIGN KEY(user_id) REFERENCES professors(user_id) ON DELETE CASCADE,
 PRIMARY KEY(user_id, day, hour)
 );
+
+CREATE TABLE IF NOT EXISTS reset_password_tokens (
+id BIGSERIAL PRIMARY KEY,
+user_id BIGINT NOT NULL,
+token CHAR(36) NOT NULL,
+expires TIMESTAMP NOT NULL,
+FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
