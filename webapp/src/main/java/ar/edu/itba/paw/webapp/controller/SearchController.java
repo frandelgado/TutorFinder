@@ -35,13 +35,13 @@ public class SearchController {
 
         switch (type) {
             case "professor":
-                mav.addObject("results", ps.filterByFullName(name, page));
+                mav.addObject("pagedResults", ps.filterByFullName(name, page));
                 break;
             case "course":
-                mav.addObject("results", cs.filterCoursesByName(name, page));
+                mav.addObject("pagedResults", cs.filterCoursesByName(name, page));
                 break;
             case "area":
-                mav.addObject("results", as.filterAreasByName(name, page));
+                mav.addObject("pagedResults", as.filterAreasByName(name, page));
                 break;
             default:
                 final ModelAndView error = new ModelAndView("error");

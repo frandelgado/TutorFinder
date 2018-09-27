@@ -1,4 +1,4 @@
-<c:forEach var="result" items="${results.results}">
+<c:forEach var="result" items="${pagedResults.results}">
         <div class="search-course-result">
             <a class="search-result-img"><img src="<c:url value="https://static.thenounproject.com/png/337699-200.png" />"/></a>
             <a class="search-result-title" href="<c:url value="/Course/?professor=${result.professor.id}&subject=${result.subject.id}" />">

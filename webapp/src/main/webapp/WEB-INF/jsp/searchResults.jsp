@@ -34,7 +34,7 @@
     <div class="search-results">
         <h3 class="search-data"><spring:message code="search.message" arguments="${search}" htmlEscape="true"/></h3>
         <c:choose>
-            <c:when test="${results.results.size() == 0}">
+            <c:when test="${pagedResults.results.size() == 0}">
                 <h1><spring:message code="no.results"/></h1>
             </c:when>
             <c:when test="${type == 'professor'}">
