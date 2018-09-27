@@ -50,7 +50,13 @@ public class CourseServiceImpl implements CourseService {
         final List<Course> courses = courseDao.findByProfessorId(professor_id, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
         final PagedResults<Course> results;
 
-        if(courses.size() > PAGE_SIZE) {
+        final int size = courses.size();
+
+        if(size == 0 && page > 1) {
+            throw new PageOutOfBoundsException();
+        }
+
+        if(size > PAGE_SIZE) {
             courses.remove(PAGE_SIZE);
             results = new PagedResults<>(courses, true);
         } else {
@@ -67,8 +73,13 @@ public class CourseServiceImpl implements CourseService {
 
         final List<Course> courses = courseDao.filterCoursesByName(name, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
         final PagedResults<Course> results;
+        final int size = courses.size();
 
-        if(courses.size() > PAGE_SIZE) {
+        if(size == 0 && page > 1) {
+            throw new PageOutOfBoundsException();
+        }
+
+        if(size > PAGE_SIZE) {
             courses.remove(PAGE_SIZE);
             results = new PagedResults<>(courses, true);
         } else {
@@ -85,8 +96,13 @@ public class CourseServiceImpl implements CourseService {
 
         final List<Course> courses = courseDao.filterByAreaId(areaId, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
         final PagedResults<Course> results;
+        final int size = courses.size();
 
-        if(courses.size() > PAGE_SIZE) {
+        if(size == 0 && page > 1) {
+            throw new PageOutOfBoundsException();
+        }
+
+        if(size > PAGE_SIZE) {
             courses.remove(PAGE_SIZE);
             results = new PagedResults<>(courses, true);
         } else {

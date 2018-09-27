@@ -71,8 +71,13 @@ public class ConversationServiceImpl implements ConversationService {
 
         final List<Conversation> conversations = conversationDao.findByUserId(userId, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
         final PagedResults<Conversation> results;
+        final int size = conversations.size();
 
-        if(conversations.size() > PAGE_SIZE) {
+        if(size == 0 && page > 1) {
+            throw new PageOutOfBoundsException();
+        }
+
+        if(size > PAGE_SIZE) {
             conversations.remove(PAGE_SIZE);
             results = new PagedResults<>(conversations, true);
         } else {

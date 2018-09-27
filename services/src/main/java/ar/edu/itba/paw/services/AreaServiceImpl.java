@@ -42,8 +42,13 @@ public class AreaServiceImpl implements AreaService {
 
         final List<Area> areas = areaDao.filterAreasByName(name, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
         final PagedResults<Area> results;
+        final int size = areas.size();
 
-        if(areas.size() > PAGE_SIZE) {
+        if(size == 0 && page > 1) {
+            throw new PageOutOfBoundsException();
+        }
+
+        if(size > PAGE_SIZE) {
             areas.remove(PAGE_SIZE);
             results = new PagedResults<>(areas, true);
         } else {

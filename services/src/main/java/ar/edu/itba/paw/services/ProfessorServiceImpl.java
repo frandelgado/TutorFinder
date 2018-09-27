@@ -54,8 +54,13 @@ public class ProfessorServiceImpl implements ProfessorService {
 
         final List<Professor> professors = professorDao.filterByFullName(fullName, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
         final PagedResults<Professor> results;
+        final int size = professors.size();
 
-        if(professors.size() > PAGE_SIZE) {
+        if(size == 0 && page > 1) {
+            throw new PageOutOfBoundsException();
+        }
+
+        if(size > PAGE_SIZE) {
             professors.remove(PAGE_SIZE);
             results = new PagedResults<>(professors, true);
         } else {
