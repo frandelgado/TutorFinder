@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.persistence.PaswordResetTokenDao;
+import ar.edu.itba.paw.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.paw.models.PasswordResetToken;
 import ar.edu.itba.paw.models.User;
 import org.joda.time.LocalDateTime;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class PasswordResetTokenJdbcDao implements PaswordResetTokenDao {
+public class PasswordResetTokenJdbcDao implements PasswordResetTokenDao {
 
     private JdbcTemplate jdbcTemplate;
 
@@ -51,7 +51,7 @@ public class PasswordResetTokenJdbcDao implements PaswordResetTokenDao {
         final List<PasswordResetToken> tokens = jdbcTemplate.query(
                 "SELECT id, user_id, username, name, lastname, password," +
                         " email, token, expires FROM reset_password_tokens NATURAL JOIN users " +
-                        " WHERE token = ?", ROW_MAPPER, token
+                        " WHERE token = ? AND expires >= NOW()", ROW_MAPPER, token
         );
         return tokens.stream().findFirst().orElse(null);
     }
@@ -69,5 +69,15 @@ public class PasswordResetTokenJdbcDao implements PaswordResetTokenDao {
             return null;
         }
         return new PasswordResetToken(id.longValue(), null, token, expires);
+    }
+
+    @Override
+    public void purgeExpiredTokens() {
+        jdbcTemplate.update("DELETE FROM reset_password_tokens WHERE expires < NOW()");
+    }
+
+    @Override
+    public void deleteUsedToken(String token) {
+        jdbcTemplate.update("DELETE FROM reset_password_tokens WHERE token = ?", token);
     }
 }
