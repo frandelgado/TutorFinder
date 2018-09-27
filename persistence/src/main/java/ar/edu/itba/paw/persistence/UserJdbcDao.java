@@ -60,6 +60,13 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public boolean changePasswordById(Long userId, String newPassword) {
+        final int updated = jdbcTemplate.update("UPDATE users SET password = ? WHERE user_id = ?",
+                newPassword, userId);
+        return updated != 0;
+    }
+
+    @Override
     public Optional<User> findByEmail(final String email) {
         final List<User> users = jdbcTemplate.query(
                 "SELECT user_id, username, name, lastname, password," +
