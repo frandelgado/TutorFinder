@@ -64,12 +64,21 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public List<Conversation> findByUserId(final Long userId, final int page) throws PageOutOfBoundsException {
-        if(page < 0) {
+    public PagedResults<Conversation> findByUserId(final Long userId, final int page) throws PageOutOfBoundsException {
+        if(page <= 0) {
             throw new PageOutOfBoundsException();
         }
 
-        return conversationDao.findByUserId(userId, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final List<Conversation> conversations = conversationDao.findByUserId(userId, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
+        final PagedResults<Conversation> results;
+
+        if(conversations.size() > PAGE_SIZE) {
+            conversations.remove(PAGE_SIZE);
+            results = new PagedResults<>(conversations, true);
+        } else {
+            results = new PagedResults<>(conversations, false);
+        }
+        return results;
     }
 
     @Transactional

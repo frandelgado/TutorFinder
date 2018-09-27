@@ -36,6 +36,7 @@ public class ConversationController {
                                       @RequestParam(value="page", defaultValue="1") final int page) throws PageOutOfBoundsException {
         final ModelAndView mav = new ModelAndView("conversations");
         mav.addObject("conversations", conversationService.findByUserId(loggedUser.getId(), page));
+        mav.addObject("page", page);
         return mav;
     }
 
