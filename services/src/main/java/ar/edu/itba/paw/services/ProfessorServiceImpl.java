@@ -6,6 +6,7 @@ import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
+import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.exceptions.ProfessorWithoutUserException;
@@ -45,12 +46,22 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public List<Professor> filterByFullName(final String fullName, final int page) throws PageOutOfBoundsException {
-        if(page < 0) {
+    public PagedResults<Professor> filterByFullName(final String fullName, final int page)
+            throws PageOutOfBoundsException {
+        if(page <= 0) {
             throw new PageOutOfBoundsException();
         }
 
-        return professorDao.filterByFullName(fullName, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final List<Professor> professors = professorDao.filterByFullName(fullName, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
+        final PagedResults<Professor> results;
+
+        if(professors.size() > PAGE_SIZE) {
+            professors.remove(PAGE_SIZE);
+            results = new PagedResults<>(professors, true);
+        } else {
+            results = new PagedResults<>(professors, false);
+        }
+        return results;
     }
 
     @Override
