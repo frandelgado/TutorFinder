@@ -33,82 +33,56 @@
             </div>
         </c:forEach>
     </div>
-    <%-- FORM INCOMPLETO --%>
-    <%--<form:form cssClass="form" modelAttribute="newScheduleForm" action="${}" method="post">
-        <div>
-            <form:label cssClass="label" path="add_day"><spring:message code="profile.add_day"/></form:label>
-            <form:input cssClass="input-request" type="text" path="add_day"/>
-            <form:errors cssClass="formError" path="add_day" element="p"/>
-        </div>
-        <div>
-            <form:label cssClass="label" path="add_time"><spring:message code="profile.add_time"/></form:label>
-            <form:input cssClass="input-request" type="number" step="15" path="add_time"/>
-            <form:errors cssClass="formError" path="add_time" element="p"/>
-        </div>
-        <div>
-            <form:label cssClass="label" path="add_duration"><spring:message code="profile.add_duration"/></form:label>
-            <form:input cssClass="input-request" type="number" step="1" path="add_duration"/>
-            <form:errors cssClass="formError" path="add_duration" element="p"/>
-        </div>
-        <div class="button-container">
-            <input class="button-2" type="submit" value="<spring:message code="profile.add_schedule"/>"/>
-        </div>
-    </form:form>
-    --%>
-    <div class="schedule">
-        <a class="schedule-divider"><spring:message code="schedule_divider"/></a>
-        <a class="monday"><spring:message code="day.monday"/></a>
-        <a class="tuesday"><spring:message code="day.tuesday"/></a>
-        <a class="wednesday"><spring:message code="day.wednesday"/></a>
-        <a class="thursday"><spring:message code="day.thursday"/></a>
-        <a class="friday"><spring:message code="day.friday"/></a>
-        <a class="saturday"><spring:message code="day.saturday"/></a>
-        <a class="sunday"><spring:message code="day.sunday"/></a>
 
-        <div>
-            <h1>Add available time</h1>
-            <c:url value="/CreateTimeSlot" var="postPath"/>
-            <form:form cssClass="form" modelAttribute="ScheduleForm" action="${postPath}" method="post">
-                <div>
-                    <form:label cssClass="label" path="day"><spring:message code="schedule.form.day"/></form:label>
-                    <form:select cssClass="select-subject" path="day">
-                        <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
-                        <form:option value="1"><spring:message code ="day.monday"/></form:option>
-                        <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
-                        <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
-                        <form:option value="4"><spring:message code ="day.thursday"/></form:option>
-                        <form:option value="5"><spring:message code ="day.friday"/></form:option>
-                        <form:option value="6"><spring:message code ="day.saturday"/></form:option>
-                        <form:option value="7"><spring:message code ="day.sunday"/></form:option>
-                    </form:select>
-                    <form:errors cssClass="error-text" path="day" element="p"/>
-                </div>
-                <div>
-                    <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
-                    <form:select cssClass="select-subject" path="startHour">
-                        <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
-                        <c:forEach var="hour" begin="0" end="23" >
-                            <form:option value="${hour}">${hour}:00</form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors cssClass="error-text" path="startHour" element="p"/>
-                </div>
-                <div>
-                    <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
-                    <form:select cssClass="select-subject" path="endHour">
-                        <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
-                        <c:forEach var="hour" begin="1" end="24" >
-                            <form:option value="${hour}">${hour}:00</form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors cssClass="error-text" path="endHour" element="p"/>
-                </div>
-                <div class="button-container">
-                    <input class="button-2" type="submit" value="<spring:message code="addTimeslot"/>"/>
-                </div>
-            </form:form>
-        </div>
+
+
+    <div class = "addTime">
+        <h1><spring:message code="addTimeslot"/></h1>
+        <c:url value="/CreateTimeSlot" var="postPath"/>
+        <form:form cssClass="form" modelAttribute="ScheduleForm" action="${postPath}" method="post">
+            <div>
+                <form:label cssClass="label" path="day"><spring:message code="schedule.form.day"/></form:label>
+                <form:select cssClass="select-subject" path="day">
+                    <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
+                    <form:option value="1"><spring:message code ="day.monday"/></form:option>
+                    <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
+                    <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
+                    <form:option value="4"><spring:message code ="day.thursday"/></form:option>
+                    <form:option value="5"><spring:message code ="day.friday"/></form:option>
+                    <form:option value="6"><spring:message code ="day.saturday"/></form:option>
+                    <form:option value="7"><spring:message code ="day.sunday"/></form:option>
+                </form:select>
+                <form:errors cssClass="error-text" path="day" element="p"/>
+            </div>
+            <div>
+                <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
+                <form:select cssClass="select-subject" path="startHour">
+                    <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
+                    <c:forEach var="hour" begin="0" end="23" >
+                        <form:option value="${hour}">${hour}:00</form:option>
+                    </c:forEach>
+                </form:select>
+                <form:errors cssClass="error-text" path="startHour" element="p"/>
+            </div>
+            <div>
+                <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
+                <form:select cssClass="select-subject" path="endHour">
+                    <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
+                    <c:forEach var="hour" begin="1" end="24" >
+                        <form:option value="${hour}">${hour}:00</form:option>
+                    </c:forEach>
+                </form:select>
+                <form:errors cssClass="error-text" path="endHour" element="p"/>
+            </div>
+            <div class="button-container">
+                <input class="button-2" type="submit" value="<spring:message code="addTimeslot"/>"/>
+            </div>
+        </form:form>
     </div>
+
+    <%@ include file="schedule.jsp"%>
+
+</div>
 </div>
 <div class="footer">
 </div>

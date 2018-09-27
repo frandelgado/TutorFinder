@@ -50,6 +50,8 @@
             <input class="button-2" type="submit" value="<spring:message code="Contact"/>"/>
         </div>
     </form:form>
+
+    <%@ include file="schedule.jsp"%>
 </div>
 <div class="footer">
 </div>

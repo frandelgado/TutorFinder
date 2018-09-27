@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.RegisterForm;
 import ar.edu.itba.paw.webapp.form.RegisterProfessorForm;
@@ -123,8 +124,12 @@ public class UserController {
 
         final ModelAndView mav = new ModelAndView("profileForProfessor");
 
+
+        Schedule schedule = ss.getScheduleForProfessor(professor);
+
         mav.addObject("courses", cs.findCourseByProfessorId(professor.getId()));
         mav.addObject("professor", professor);
+        mav.addObject("schedule", schedule);
 
         return mav;
     }

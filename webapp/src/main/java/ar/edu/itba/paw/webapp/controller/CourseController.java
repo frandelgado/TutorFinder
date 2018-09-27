@@ -4,10 +4,7 @@ import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.exceptions.SameUserConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.Subject;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +44,9 @@ public class CourseController {
     @Autowired
     private ConversationService conversationService;
 
+    @Autowired
+    private ScheduleService scheduleService;
+
     @RequestMapping("/Course")
     public ModelAndView course(
             @ModelAttribute("messageForm") final MessageForm form,
@@ -61,6 +61,11 @@ public class CourseController {
             return error;
         }
         mav.addObject("course", course);
+
+        final Professor professor = professorService.findById(professorId);
+
+        Schedule schedule = scheduleService.getScheduleForProfessor(professor);
+        mav.addObject("schedule", schedule);
         form.setProfessorId(professorId);
         form.setSubjectId(subjectId);
         return mav;
