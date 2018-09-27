@@ -27,21 +27,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> findCourseByProfessorId(final long professor_id) {
-        return courseDao.findByProfessorId(professor_id);
-    }
-
-    @Override
-    public List<Course> filterCoursesByName(final String name){
-        return courseDao.filterCoursesByName(name);
-    }
-
-    @Override
-    public List<Course> filterByAreaId(final long areaId) {
-        return courseDao.filterByAreaId(areaId);
-    }
-
-    @Override
     public PagedResults<Course> findCourseByProfessorId(long professor_id, final int page) throws PageOutOfBoundsException {
         if(page <= 0) {
             throw new PageOutOfBoundsException();

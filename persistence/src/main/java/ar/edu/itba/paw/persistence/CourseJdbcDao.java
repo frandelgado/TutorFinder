@@ -129,38 +129,6 @@ public class CourseJdbcDao implements CourseDao {
     }
 
     @Override
-    public List<Course> findByProfessorId(final long professor_id) {
-        final List<Course> courses = jdbcTemplate.query(
-                COURSES_SELECT_FROM + "WHERE courses.user_id = ? AND professors.user_id = users.user_id" +
-                        " AND areas.area_id = subjects.area_id AND users.user_id = courses.user_id " +
-                        "AND courses.subject_id = subjects.subject_id", ROW_MAPPER, professor_id
-        );
-        return courses;
-    }
-
-    @Override
-    public List<Course> filterCoursesByName(final String name) {
-        final String search = "%" + name + "%";
-        final List<Course> courses = jdbcTemplate.query(
-                COURSES_SELECT_FROM + "WHERE courses.user_id = users.user_id AND" +
-                        " courses.subject_id = subjects.subject_id AND professors.user_id = users.user_id " +
-                        "AND areas.area_id = subjects.area_id AND UPPER(subjects.name) LIKE UPPER(?)"
-                , ROW_MAPPER, search
-        );
-        return courses;
-    }
-
-    @Override
-    public List<Course> filterByAreaId(final long areaId) {
-        final List<Course> courses = jdbcTemplate.query(
-                COURSES_SELECT_FROM + "WHERE subjects.area_id = ? AND professors.user_id = users.user_id" +
-                        " AND areas.area_id = subjects.area_id AND users.user_id = courses.user_id" +
-                        " AND courses.subject_id = subjects.subject_id"
-                , ROW_MAPPER, areaId);
-        return courses;
-    }
-
-    @Override
     public List<Course> findByProfessorId(final long professor_id, final int limit, final int offset) {
         final List<Course> courses = jdbcTemplate.query(
                 COURSES_SELECT_FROM + "WHERE courses.user_id = ? AND professors.user_id = users.user_id" +

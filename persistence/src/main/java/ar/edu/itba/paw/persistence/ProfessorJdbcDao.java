@@ -70,18 +70,6 @@ public class ProfessorJdbcDao implements ProfessorDao {
     }
 
     @Override
-    public List<Professor> filterByFullName(final String fullName) {
-        final String search = "%" + fullName + "%";
-        final List<Professor> professors = jdbcTemplate.query(
-                "SELECT users.user_id, username, name, lastname, password, email, " +
-                        "description FROM professors, users WHERE " +
-                        "UPPER (concat(name, ' ', lastname)) LIKE UPPER(?) " +
-                        "AND users.user_id = professors.user_id", ROW_MAPPER, search
-        );
-        return professors;
-    }
-
-    @Override
     public List<Professor> filterByFullName(final String fullName, final int limit, final int offset) {
         final String search = "%" + fullName + "%";
         final List<Professor> professors = jdbcTemplate.query(

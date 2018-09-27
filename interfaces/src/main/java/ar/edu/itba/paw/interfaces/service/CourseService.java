@@ -12,12 +12,6 @@ import java.util.List;
 public interface CourseService {
     Course findCourseByIds(final long professor_id, final long subject_id);
 
-    List<Course> findCourseByProfessorId(final long professor_id);
-
-    List<Course> filterCoursesByName(final String name);
-
-    List<Course> filterByAreaId(final long areaId);
-
     PagedResults<Course> findCourseByProfessorId(final long professor_id, final int page) throws PageOutOfBoundsException;
 
     PagedResults<Course> filterCoursesByName(String name, final int page) throws PageOutOfBoundsException;

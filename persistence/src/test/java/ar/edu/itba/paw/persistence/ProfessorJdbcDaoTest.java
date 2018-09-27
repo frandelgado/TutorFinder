@@ -47,6 +47,8 @@ public class ProfessorJdbcDaoTest {
     private static final Long INVALID_ID = 666L;
     private static final String INVALID_USERNAME = "InvalidTestUsername";
     private static final String INVALID_FULL_NAME = "InvalidTestFullName";
+    private static final Integer LIMIT = 10;
+    private static final Integer OFFSET = 0;
 
     @Before
     public void setUp(){
@@ -115,7 +117,7 @@ public class ProfessorJdbcDaoTest {
 
     @Test
     public void testFilterByFullNameValid() {
-        final List<Professor> professors = professorJdbcDao.filterByFullName(NAME + " " + SURNAME);
+        final List<Professor> professors = professorJdbcDao.filterByFullName(NAME + " " + SURNAME, LIMIT, OFFSET);
         assertNotNull(professors);
         assertEquals(1,professors.size());
         final Professor professor = professors.get(0);
@@ -131,7 +133,7 @@ public class ProfessorJdbcDaoTest {
 
     @Test
     public void testFilterByFullNameInvalid() {
-        final List<Professor> professors = professorJdbcDao.filterByFullName(INVALID_FULL_NAME);
+        final List<Professor> professors = professorJdbcDao.filterByFullName(INVALID_FULL_NAME, LIMIT, OFFSET);
         assertNotNull(professors);
         assertEquals(0,professors.size());
     }

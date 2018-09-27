@@ -29,10 +29,6 @@ public class AreaServiceImpl implements AreaService {
         return areaDao.create(name,description);
     }
 
-    @Override
-    public List<Area> filterAreasByName(final String name){
-        return areaDao.filterAreasByName(name);
-    }
 
     @Override
     public PagedResults<Area> filterAreasByName(final String name, final int page) throws PageOutOfBoundsException {

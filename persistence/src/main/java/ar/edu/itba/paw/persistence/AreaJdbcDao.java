@@ -51,16 +51,6 @@ public class AreaJdbcDao implements AreaDao {
     }
 
     @Override
-    public List<Area> filterAreasByName(final String name) {
-        final String search = "%" + name + "%";
-        final List<Area> list = jdbcTemplate.query(
-                "SELECT area_id, description, name FROM areas WHERE UPPER(name) LIKE UPPER(?)",
-                ROW_MAPPER, search
-        );
-        return list;
-    }
-
-    @Override
     public List<Area> filterAreasByName(final String name, final int limit, final int offset) {
         final String search = "%" + name + "%";
         final List<Area> list = jdbcTemplate.query(

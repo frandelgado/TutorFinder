@@ -40,12 +40,7 @@ public class ProfessorServiceImpl implements ProfessorService {
         return professorDao.findByUsername(username).orElse(null);
     }
 
-    @Override
-    public List<Professor> filterByFullName(final String fullName) {
-        return professorDao.filterByFullName(fullName);
-    }
-
-    @Override
+        @Override
     public PagedResults<Professor> filterByFullName(final String fullName, final int page)
             throws PageOutOfBoundsException {
         if(page <= 0) {

@@ -11,7 +11,5 @@ public interface AreaService {
 
     Area create(final String name, final String description);
 
-    List<Area> filterAreasByName(final String name);
-
     PagedResults<Area> filterAreasByName(final String name, final int page) throws PageOutOfBoundsException;
 }

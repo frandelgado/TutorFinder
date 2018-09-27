@@ -58,10 +58,6 @@ public class ConversationServiceImpl implements ConversationService {
         return message != null;
     }
 
-    @Override
-    public List<Conversation> findByUserId(final Long userId) {
-        return conversationDao.findByUserId(userId);
-    }
 
     @Override
     public PagedResults<Conversation> findByUserId(final Long userId, final int page) throws PageOutOfBoundsException {
