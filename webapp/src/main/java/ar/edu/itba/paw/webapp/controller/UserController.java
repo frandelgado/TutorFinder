@@ -103,6 +103,7 @@ public class UserController {
 
         final ModelAndView mav = new ModelAndView("profile");
         mav.addObject("courses", cs.findCourseByProfessorId(id, page));
+        mav.addObject("page", page);
         final Professor professor = ps.findById(id);
         if(professor == null) {
             final ModelAndView error = new ModelAndView("error");
@@ -128,7 +129,7 @@ public class UserController {
         mav.addObject("courses", cs.findCourseByProfessorId(professor.getId(), page));
         mav.addObject("professor", professor);
         mav.addObject("schedule", schedule);
-
+        mav.addObject("page", page);
         return mav;
     }
 

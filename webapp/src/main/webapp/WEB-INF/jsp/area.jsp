@@ -20,10 +20,22 @@
 
         <div class="search-results">
             <h3><spring:message code="area.message" arguments="${area.name}" htmlEscape="true"/></h3>
-            <c:if test="${results.size() == 0}">
+            <c:if test="${results.results.size() == 0}">
                 <h4><spring:message code="no.results"/></h4>
             </c:if>
             <%@ include file="courseSearch.jsp" %>
+
+            <div class="paged-result-buttons">
+                <c:url value="/Area/${area.id}?page=${page - 1}" var="previous"/>
+                <c:url value="/Area/${area.id}?page=${page + 1}" var="next"/>
+
+                <c:if test="${page > 1}">
+                    <a href="${previous}" class="previous round">&#8249;</a>
+                </c:if>
+                <c:if test="${results.hasNext}">
+                    <a href="${next}" class="next round">&#8250;</a>
+                </c:if>
+            </div>
         </div>
     </div>
     </body>

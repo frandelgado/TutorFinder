@@ -36,6 +36,7 @@ public class AreaController {
 
         mav.addObject("area", area);
         mav.addObject("results", cs.filterByAreaId(id, page));
+        mav.addObject("page", page);
         return mav;
     }
 }

@@ -34,7 +34,7 @@
     <div class="search-results">
         <h3 class="search-data"><spring:message code="search.message" arguments="${search}" htmlEscape="true"/></h3>
         <c:choose>
-            <c:when test="${results.size() == 0}">
+            <c:when test="${results.results.size() == 0}">
                 <h1><spring:message code="no.results"/></h1>
             </c:when>
             <c:when test="${type == 'professor'}">
@@ -47,6 +47,19 @@
                 <%@ include file="areaSearch.jsp" %>
             </c:when>
         </c:choose>
+
+        <div class="paged-result-buttons">
+            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page - 1}" var="previous"/>
+            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page + 1}" var="next"/>
+
+            <c:if test="${page > 1}">
+                <a href="${previous}" class="previous round">&#8249;</a>
+            </c:if>
+            <c:if test="${results.hasNext}">
+                <a href="${next}" class="next round">&#8250;</a>
+            </c:if>
+        </div>
+
     </div>
 </div>
 </body>
