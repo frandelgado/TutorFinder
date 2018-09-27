@@ -31,6 +31,7 @@ public class SearchController {
                                @RequestParam(value = "type", defaultValue = "course") final String type,
                                @RequestParam(value = "page", defaultValue = "1") final int page) throws PageOutOfBoundsException {
         final ModelAndView mav = new ModelAndView("searchResults");
+        mav.addObject("page", page);
 
         switch (type) {
             case "professor":
