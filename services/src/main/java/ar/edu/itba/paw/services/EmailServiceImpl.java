@@ -96,8 +96,7 @@ public class EmailServiceImpl implements EmailService {
         final String SUBJECT = "Se han contactado con vos!";
 
         final MimeMessage message = prepareMail(SUBJECT, to.getEmail(), doc.html());
-
-        final boolean prepared = prepareMail(SUBJECT, to.getEmail(), helper, doc.html());
+        
         if(message == null)
             throw new RuntimeException();
 
