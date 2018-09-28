@@ -72,7 +72,8 @@ public class FilterBuilder {
     }
 
     public FilterBuilder filterByPrice(final double minPrice, final double maxPrice){
-
+        this.params.add(minPrice);
+        this.params.add(maxPrice);
         return new FilterBuilder(this.SELECT, this.FROM, this.WHERE + "AND courses.price >= ? AND courses.price <= ?) ",
                 this.TIME_FILTERS, this.params, this.timeslotParams);
     }
