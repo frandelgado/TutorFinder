@@ -25,7 +25,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     ProfessorDao professorDao;
 
     @Autowired
-    UserDao userService;
+    UserDao userDao;
 
     @Override
     public Professor findById(final Long id) {
@@ -66,7 +66,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Professor create(final Long userId, final String description) throws ProfessorWithoutUserException {
-        final User user = userService.findById(userId).orElseThrow(() ->
+        final User user = userDao.findById(userId).orElseThrow(() ->
                 new ProfessorWithoutUserException("A valid user id must be provided in order to "));
         return professorDao.create(user, description);
     }
@@ -77,7 +77,7 @@ public class ProfessorServiceImpl implements ProfessorService {
                                     final String lastname, final String password, final String email,
                                     final String description) throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
         final User user;
-        user = userService.create(username, password, email, name, lastname);
+        user = userDao.create(username, password, email, name, lastname);
 
         if(description.length() < 50 || description.length() > 300)
             return null;

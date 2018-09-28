@@ -22,7 +22,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,24 +38,20 @@ public class ScheduleServiceImplTest {
     @Mock
     private ProfessorService ps;
 
-    Long PROFESSOR_ID = 2l;
+    private static final Long PROFESSOR_ID = 2l;
 
     @Before
     public void setUp() throws TimeslotAllocatedException {
-        Professor professor = mock(Professor.class);
-        when(professor.getId()).thenReturn(2l);
+        MockitoAnnotations.initMocks(this);
+        final Professor professor = new Professor(2L, "username","Carlos","Ramos",
+                "password","carlitos@gmail.com","test description");
         when(scheduleDao.reserveTimeSlot(professor,1, 12)).thenReturn( new Timeslot(1,12));
         when(scheduleDao.reserveTimeSlot(professor,1, 14)).thenReturn( new Timeslot(1,14));
         when(scheduleDao.reserveTimeSlot(professor,1, 15)).thenReturn( new Timeslot(1,15));
         when(scheduleDao.reserveTimeSlot(professor,1, 16)).thenReturn( new Timeslot(1,16));
         when(scheduleDao.reserveTimeSlot(professor,1, -3)).thenReturn( new Timeslot(1,-3));
         when(scheduleDao.reserveTimeSlot(professor,1, 27)).thenReturn( new Timeslot(1,27));
-        when(ps.findById(2l)).thenReturn(
-                new Professor(2l, "username", "Carlos", "Ramos", "pasword",
-                        "carlitos@gmail.com", "test description"
-                )
-        );
-        MockitoAnnotations.initMocks(this);
+        when(ps.findById(2L)).thenReturn(professor);
     }
 
     @Test
@@ -112,7 +107,7 @@ public class ScheduleServiceImplTest {
     }
 
 
-    @Test(expected = InvalidTimeException.class)
+    @Test(expected = InvalidTimeRangeException.class)
     public void testInvalidDayUpper() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
         Integer DAY = 8;
         Integer START_HOUR = 14;
@@ -121,7 +116,7 @@ public class ScheduleServiceImplTest {
         List<Timeslot> timeslots = scheduleService.reserveTimeSlot(PROFESSOR_ID, DAY, START_HOUR, END_HOUR);
     }
 
-    @Test(expected = InvalidTimeException.class)
+    @Test(expected = InvalidTimeRangeException.class)
     public void testInvalidDayLower() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
         Integer DAY = -4;
         Integer START_HOUR = 14;
