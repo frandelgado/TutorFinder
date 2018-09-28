@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.InvalidTokenException;
 import ar.edu.itba.paw.interfaces.persistence.PasswordResetTokenDao;
+import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.PasswordResetService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PasswordResetToken;
@@ -25,6 +26,9 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     @Autowired
     private PasswordResetTokenDao passwordResetTokenDao;
 
+    @Autowired
+    private EmailService emailService;
+
     @Transactional
     @Override
     public boolean createToken(final String email) {
@@ -38,7 +42,9 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         final PasswordResetToken passwordResetToken = passwordResetTokenDao.create(user.getId(),
                 token, LocalDateTime.now().plusDays(EXPIRATION));
 
-        //TODO: SEND MAIL
+        if(passwordResetToken != null) {
+            emailService.sendRestorePasswordEmail(user, passwordResetToken.getToken());
+        }
 
         return true;
     }
