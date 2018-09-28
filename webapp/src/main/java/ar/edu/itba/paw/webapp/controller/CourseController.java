@@ -1,10 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
-import ar.edu.itba.paw.exceptions.SameUserConversationException;
-import ar.edu.itba.paw.exceptions.UserNotInConversationException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.Schedule;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +34,6 @@ public class CourseController {
     private SubjectService subjectService;
 
     @Autowired
-    @Qualifier("professorServiceImpl")
-    private ProfessorService professorService;
-
-    @Autowired
-    @Qualifier("userServiceImpl")
-    private UserService userService;
-
-    @Autowired
     private ConversationService conversationService;
 
     @Autowired
@@ -62,9 +54,7 @@ public class CourseController {
         }
         mav.addObject("course", course);
 
-        final Professor professor = professorService.findById(professorId);
-
-        Schedule schedule = scheduleService.getScheduleForProfessor(professor);
+        final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
         mav.addObject("schedule", schedule);
         form.setProfessorId(professorId);
         form.setSubjectId(subjectId);
@@ -75,19 +65,16 @@ public class CourseController {
     public ModelAndView contact(
             @Valid @ModelAttribute("messageForm") final MessageForm form,
             final BindingResult errors,
-            @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException {
+            @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException, NonexistentConversationException {
 
         if(errors.hasErrors()) {
             return course(form, form.getProfessorId(), form.getSubjectId());
         }
 
-        final User user = userService.findUserById(loggedUser.getId());
-        final Professor professor = professorService.findById(form.getProfessorId());
-        final Subject subject = subjectService.findSubjectById(form.getSubjectId());
-
         final boolean sent;
         try {
-            sent = conversationService.sendMessage(user, professor, subject, form.getBody());
+            sent = conversationService.sendMessage(loggedUser.getId(), form.getProfessorId(),
+                    form.getSubjectId(), form.getBody());
         } catch (SameUserConversationException e) {
             errors.addError(new FieldError("SendMessageError", "extraMessage", null,
                     false, new String[]{"SameUserMessageError"},null, "No puede enviarse un mensaje a si mismo"));
@@ -98,10 +85,10 @@ public class CourseController {
             errors.addError(new FieldError("MessageSent", "extraMessage", null,
                     false, new String[]{"MessageSent"},null, "Mensaje Enviado!"));
             form.setBody(null);
-            return course(form, form.getProfessorId(), form.getSubjectId());
+        } else {
+            errors.addError(new FieldError("SendMessageError", "extraMessage", null,
+                    false, new String[]{"SendMessageError"}, null, "Error al enviar el mensaje."));
         }
-        errors.addError(new FieldError("SendMessageError", "extraMessage", null,
-                false, new String[]{"SendMessageError"},null, "Error al enviar el mensaje."));
         return course(form, form.getProfessorId(), form.getSubjectId());
     }
 
@@ -122,31 +109,22 @@ public class CourseController {
             return createCourse(form, user);
         }
 
-        final Professor professor = professorService.findById(user.getId());
-
-        final Subject subject = subjectService.findSubjectById(form.getSubjectId());
-
-        if(professor == null) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","nonExistentUser");
-            return error;
-        }
-
-        if(subject == null) {
-            errors.addError(new FieldError("subjectDoesNotExist", "subjectId", null,
-                    false, new String[]{"subjectDoesNotExist"},null, "La materia que quiere dictar no existe"));
-            return createCourse(form, user);
-        }
-        
         final Course course;
         try {
-            course = courseService.create(professor, subject, form.getDescription(), form.getPrice());
+            course = courseService.create(user.getId(), form.getSubjectId(), form.getDescription(), form.getPrice());
         } catch (CourseAlreadyExistsException e) {
             final ModelAndView error = new ModelAndView("error");
             error.addObject("errorMessageCode","courseAlreadyExists");
             return error;
+        } catch (NonexistentProfessorException e) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentUser");
+            return error;
+        } catch (NonexistentSubjectException e) {
+            errors.addError(new FieldError("subjectDoesNotExist", "subjectId", null,
+                    false, new String[]{"subjectDoesNotExist"},null, "La materia que quiere dictar no existe"));
+            return createCourse(form, user);
         }
-
 
         final RedirectView view = new RedirectView("/Course/?professor=" + course.getProfessor().getId()
                 + "&subject=" + course.getSubject().getId());

@@ -4,7 +4,6 @@ import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
-import ar.edu.itba.paw.models.FilterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -27,6 +26,7 @@ public class SearchController {
     @Qualifier("areaServiceImpl")
     private AreaService as;
 
+    //TODO: MAYBE HAVING A SEARCH SERVICE WOULD BE A GOOD IDEA
     @RequestMapping("/searchResults")
     public ModelAndView search(@RequestParam(value = "search") final String name,
                                @RequestParam(value = "type", defaultValue = "course") final String type,

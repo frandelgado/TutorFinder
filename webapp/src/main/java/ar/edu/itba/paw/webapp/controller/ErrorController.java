@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.NonexistentConversationException;
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
-import ar.edu.itba.paw.exceptions.UserNotInConversationException;
+import ar.edu.itba.paw.exceptions.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,6 +37,13 @@ public class ErrorController {
     public ModelAndView handlePageOutOfBounds(PageOutOfBoundsException e) {
         final ModelAndView error = new ModelAndView("error");
         error.addObject("errorMessageCode", "pageOutOfBounds");
+        return error;
+    }
+
+    @ExceptionHandler({NonexistentProfessorException.class, ProfessorWithoutUserException.class})
+    public ModelAndView handleNonexistentUser() {
+        final ModelAndView error = new ModelAndView("error");
+        error.addObject("errorMessageCode","nonExistentUser");
         return error;
     }
 

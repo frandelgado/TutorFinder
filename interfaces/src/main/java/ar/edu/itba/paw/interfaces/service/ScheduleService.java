@@ -14,5 +14,5 @@ public interface ScheduleService {
 
     List<Timeslot> reserveTimeSlot(Long professor_id, Integer day, Integer startTime, Integer endTime) throws InvalidTimeException, InvalidTimeRangeException, TimeslotAllocatedException, NonexistentProfessorException;
 
-    Schedule getScheduleForProfessor(Professor professor);
+    Schedule getScheduleForProfessor(Long professorId);
 }

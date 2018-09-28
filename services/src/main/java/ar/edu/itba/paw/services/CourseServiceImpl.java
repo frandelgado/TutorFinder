@@ -1,9 +1,13 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
+import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
+import ar.edu.itba.paw.exceptions.NonexistentSubjectException;
 import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.CourseService;
+import ar.edu.itba.paw.interfaces.service.ProfessorService;
+import ar.edu.itba.paw.interfaces.service.SubjectService;
 import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CourseDao courseDao;
+
+    @Autowired
+    private ProfessorService professorService;
+
+    @Autowired
+    private SubjectService subjectService;
 
     @Override
     public Course findCourseByIds(long professor_id, long subject_id) {
@@ -95,7 +105,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page) throws PageOutOfBoundsException {
+    public PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour,
+                                              final Double minPrice, final Double maxPrice, final String searchText,
+                                              final int page) throws PageOutOfBoundsException {
         if(page <= 0){
             throw new PageOutOfBoundsException();
         }
@@ -125,8 +137,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course create(Professor professor, Subject subject, String description, Double price)
-            throws CourseAlreadyExistsException {
+    public Course create(final Long professorId, final Long subjectId, final String description, final Double price)
+            throws CourseAlreadyExistsException, NonexistentProfessorException, NonexistentSubjectException {
 
         if(price <= 0){
             return null;
@@ -134,6 +146,16 @@ public class CourseServiceImpl implements CourseService {
 
         if(description.length() < 50 || description.length() > 300)
             return null;
+
+        final Professor professor = professorService.findById(professorId);
+        if(professor == null) {
+            throw new NonexistentProfessorException();
+        }
+
+        final Subject subject = subjectService.findSubjectById(subjectId);
+        if(subject == null) {
+            throw new NonexistentSubjectException();
+        }
 
         return courseDao.create(professor, subject, description, price);
     }

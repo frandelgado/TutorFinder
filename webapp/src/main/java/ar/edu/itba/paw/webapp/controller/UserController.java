@@ -113,17 +113,21 @@ public class UserController {
         return mav;
     }
 
+    //TODO: CHECK
     @RequestMapping("/Profile")
     public ModelAndView profile(
             @ModelAttribute("currentUser") final User loggedUser,
             @ModelAttribute("ScheduleForm") final ScheduleForm scheduleForm,
             @RequestParam(value = "page", defaultValue = "1") final int page
-    ) throws PageOutOfBoundsException {
+    ) throws PageOutOfBoundsException, NonexistentProfessorException {
         final Professor professor = ps.findById(loggedUser.getId());
+        if(professor == null) {
+            throw new NonexistentProfessorException();
+        }
 
         final ModelAndView mav = new ModelAndView("profileForProfessor");
 
-        Schedule schedule = ss.getScheduleForProfessor(professor);
+        final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
 
         mav.addObject("courses", cs.findCourseByProfessorId(professor.getId(), page));
         mav.addObject("professor", professor);
@@ -131,8 +135,7 @@ public class UserController {
         mav.addObject("page", page);
         return mav;
     }
-
-
+    
     private void authenticateRegistered(HttpServletRequest request, String username, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
         authToken.setDetails(new WebAuthenticationDetails(request));
@@ -146,21 +149,12 @@ public class UserController {
     @RequestMapping(value = "/registerAsProfessor", method = RequestMethod.POST)
     public ModelAndView createProfessor(@ModelAttribute("currentUser") final User loggedUser,
                                         @Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
-                                        final BindingResult errors, final HttpServletRequest request) {
+                                        final BindingResult errors, final HttpServletRequest request) throws ProfessorWithoutUserException {
         if(errors.hasErrors()) {
             return registerProfessor(form);
         }
 
-        final User user = us.findUserById(loggedUser.getId());
-
-        final Professor p;
-        try {
-            p = ps.create(user.getId(), form.getDescription());
-        } catch (ProfessorWithoutUserException e) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","nonExistentUser");
-            return error;
-        }
+        final Professor p = ps.create(loggedUser.getId(), form.getDescription());
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
 
@@ -179,7 +173,7 @@ public class UserController {
             @ModelAttribute("currentUser") final User loggedUser,
             @Valid @ModelAttribute("ScheduleForm") final ScheduleForm form,
             final BindingResult errors
-    ) throws PageOutOfBoundsException {
+    ) throws PageOutOfBoundsException, NonexistentProfessorException {
         if(errors.hasErrors() || !form.validForm()) {
             if(!form.validForm()) {
                 errors.addError(new FieldError("profile.add_schedule.timeError", "endHour", form.getEndHour(),
@@ -269,24 +263,22 @@ public class UserController {
             return resetPassword(form, token);
         }
 
-        final PasswordResetToken passwordResetToken = passwordResetService.findByToken(token);
-
-        final boolean changed;
+        final User changedUser;
         try {
-            changed = passwordResetService.changePassword(passwordResetToken, form.getPassword());
+            changedUser = passwordResetService.changePassword(token, form.getPassword());
         } catch (InvalidTokenException e) {
             final ModelAndView error = new ModelAndView("error");
             error.addObject("errorMessageCode","invalidToken");
             return error;
         }
 
-        if(!changed) {
+        if(changedUser == null) {
             final ModelAndView error = new ModelAndView("error");
             error.addObject("errorMessageCode","changePasswordError");
             return error;
         }
 
-        authenticateRegistered(request, passwordResetToken.getUser().getUsername(), form.getPassword());
+        authenticateRegistered(request, changedUser.getUsername(), form.getPassword());
         final RedirectView view = new RedirectView("/" );
         view.setExposeModelAttributes(false);
         return new ModelAndView(view);

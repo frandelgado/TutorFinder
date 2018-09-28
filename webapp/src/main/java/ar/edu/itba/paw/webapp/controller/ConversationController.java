@@ -3,11 +3,10 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
 import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
-import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.interfaces.service.ConversationService;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -23,10 +22,6 @@ import javax.validation.Valid;
 
 @Controller
 public class ConversationController {
-
-    @Autowired
-    @Qualifier("userServiceImpl")
-    private UserService userService;
 
     @Autowired
     private ConversationService conversationService;
@@ -62,10 +57,7 @@ public class ConversationController {
             return conversation(form.getConversationId(), form, loggedUser);
         }
 
-        final User user = userService.findUserById(loggedUser.getId());
-        final Conversation conversation = conversationService.findById(form.getConversationId(), loggedUser.getId());
-
-        boolean sent = conversationService.sendMessage(user, conversation, form.getBody());
+        final boolean sent = conversationService.sendMessage(loggedUser.getId(), form.getConversationId(), form.getBody());
         if(sent) {
             final RedirectView view = new RedirectView("/Conversation?id=" + form.getConversationId());
             view.setExposeModelAttributes(false);

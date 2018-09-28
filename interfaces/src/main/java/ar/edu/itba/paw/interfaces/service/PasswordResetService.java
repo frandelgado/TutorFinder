@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.exceptions.InvalidTokenException;
 import ar.edu.itba.paw.models.PasswordResetToken;
+import ar.edu.itba.paw.models.User;
 
 public interface PasswordResetService {
 
@@ -13,5 +14,5 @@ public interface PasswordResetService {
 
     void deleteUsedToken(final String token);
 
-    boolean changePassword(PasswordResetToken token, String password) throws InvalidTokenException;
+    User changePassword(String token, String password) throws InvalidTokenException;
 }
