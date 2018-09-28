@@ -69,12 +69,9 @@ public class EmailServiceImpl implements EmailService {
         username.text("Username: " + user.getUsername());
         String REGISTRATION_SUBJECT = "Bienvenido a Tu Teoria!";
 
-        final MimeMessage message = emailSender.createMimeMessage();
-        final MimeMessageHelper helper = new MimeMessageHelper(message);
+        final MimeMessage message = prepareMail(REGISTRATION_SUBJECT, user.getEmail(), doc.html());
 
-        final boolean prepared = prepareMail(REGISTRATION_SUBJECT, user.getEmail(), helper, doc.html());
-
-        if(!prepared)
+        if(message == null)
             throw new RuntimeException();
 
         emailSender.send(message);
@@ -98,25 +95,27 @@ public class EmailServiceImpl implements EmailService {
         a.attr("href", "http://localhost:8080/Conversation?id=" + conversation.getId());
         final String SUBJECT = "Se han contactado con vos!";
 
-        final MimeMessage message = emailSender.createMimeMessage();
-        final MimeMessageHelper helper = new MimeMessageHelper(message);
+        final MimeMessage message = prepareMail(SUBJECT, to.getEmail(), doc.html());
 
         final boolean prepared = prepareMail(SUBJECT, to.getEmail(), helper, doc.html());
-        if(!prepared)
+        if(message == null)
             throw new RuntimeException();
 
         emailSender.send(message);
     }
 
-    private boolean prepareMail(final String subject, final String to, final MimeMessageHelper helper, final String html) {
+    private MimeMessage prepareMail(final String subject, final String to, final String html) {
+        final MimeMessage message;
         try {
+            message = emailSender.createMimeMessage();
+            final MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(html, true);
         } catch (MessagingException e) {
-            return false;
+            return null;
         }
-        return true;
+        return message;
     }
 
 }
