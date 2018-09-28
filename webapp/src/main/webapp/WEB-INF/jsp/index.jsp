@@ -43,7 +43,9 @@
     </div>
 </div>
 
+
 <div class="content">
+    <%@ include file="statusMessages.jsp"%>
     <div class="search-box">
         <img alt="Tu Teoria" class="search-logo" src="<c:url value="/resources/images/logo.png" />" />
         <div>
