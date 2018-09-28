@@ -2,10 +2,7 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.PagedResults;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.*;
 
 import java.util.List;
 
@@ -19,4 +16,6 @@ public interface CourseService {
     PagedResults<Course> filterByAreaId(final long areaId, final int page) throws PageOutOfBoundsException;
 
     Course create(Professor professor, Subject subject, String description, Double price) throws CourseAlreadyExistsException;
+
+    public PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page) throws PageOutOfBoundsException;
 }

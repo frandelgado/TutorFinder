@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +38,9 @@ public class CourseJdbcDaoTest {
     private static final String SUBJECT_NAME = "Alge";
     private static final Integer LIMIT = 10;
     private static final Integer OFFSET = 0;
+    private static final Integer DAY = 2;
+    private static final Integer STARTHOUR = 2;
+    private static final Integer ENDHOUR = 3;
 
     @Autowired
     private DataSource dataSource;
@@ -123,7 +124,8 @@ public class CourseJdbcDaoTest {
 
     @Test
     public void testFilterCoursesByNameValid() {
-        final List<Course> courses = courseDao.filterCoursesByName(SUBJECT_NAME, LIMIT, OFFSET);
+        FilterBuilder filterBuilder = new FilterBuilder();
+        final List<Course> courses = courseDao.filter(filterBuilder.filterByName(SUBJECT_NAME).getFilter(), LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(1, courses.size());
 
@@ -141,6 +143,39 @@ public class CourseJdbcDaoTest {
         final List<Course> courses = courseDao.filterCoursesByName(INVALID_NAME, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(0, courses.size());
+    }
+
+    @Test
+    public void testFilterByTimeslotValid(){
+        FilterBuilder filterBuilder = new FilterBuilder();
+        final List<Course> courses = courseDao.filter(filterBuilder.filterByTimeslot(DAY, STARTHOUR, ENDHOUR).getFilter(), LIMIT, OFFSET);
+        assertNotNull(courses);
+        assertEquals(1, courses.size());
+
+        final Course course = courses.get(0);
+        assertNotNull(course);
+
+        assertEquals(PROFESSOR_ID, course.getProfessor().getId());
+        assertEquals(SUBJECT_ID, course.getSubject().getId());
+        assertEquals(DESCRIPTION, course.getDescription());
+        assertEquals(PRICE, course.getPrice());
+    }
+
+
+    @Test
+    public void testFilerByPriceValid(){
+        FilterBuilder filterBuilder = new FilterBuilder();
+        final List<Course> courses = courseDao.filter(filterBuilder.filterByPrice(PRICE,PRICE).getFilter(), LIMIT, OFFSET);
+        assertNotNull(courses);
+        assertEquals(1, courses.size());
+
+        final Course course = courses.get(0);
+        assertNotNull(course);
+
+        assertEquals(PROFESSOR_ID, course.getProfessor().getId());
+        assertEquals(SUBJECT_ID, course.getSubject().getId());
+        assertEquals(DESCRIPTION, course.getDescription());
+        assertEquals(PRICE, course.getPrice());
     }
 
     @Test
@@ -163,19 +198,6 @@ public class CourseJdbcDaoTest {
         final List<Course> courses = courseDao.filterByAreaId(INVALID_ID, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(0, courses.size());
-    }
-
-
-    @Test
-    public void testFilterByTimeAndProfessor(){
-        List<Course> courses = courseDao.filterCoursesByTimeAndProfessor(2,2,3, 5l);
-        assertEquals(1,courses.size());
-    }
-
-    @Test
-    public void testFilterByTimeNull(){
-        List<Course> courses = courseDao.filterCoursesByTimeAndProfessor(2,2,3, 2l);
-        assertEquals(0,courses.size());
     }
 
     @After
