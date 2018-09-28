@@ -113,6 +113,7 @@ public class UserController {
         return mav;
     }
 
+    //TODO: CHECK
     @RequestMapping("/Profile")
     public ModelAndView profile(
             @ModelAttribute("currentUser") final User loggedUser,
@@ -123,7 +124,7 @@ public class UserController {
 
         final ModelAndView mav = new ModelAndView("profileForProfessor");
 
-        Schedule schedule = ss.getScheduleForProfessor(professor);
+        final Schedule schedule = ss.getScheduleForProfessor(professor);
 
         mav.addObject("courses", cs.findCourseByProfessorId(professor.getId(), page));
         mav.addObject("professor", professor);
@@ -132,7 +133,7 @@ public class UserController {
         return mav;
     }
 
-
+    //TODO: MAYBE MOVE TO A SERVICE?
     private void authenticateRegistered(HttpServletRequest request, String username, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
         authToken.setDetails(new WebAuthenticationDetails(request));
@@ -151,11 +152,9 @@ public class UserController {
             return registerProfessor(form);
         }
 
-        final User user = us.findUserById(loggedUser.getId());
-
         final Professor p;
         try {
-            p = ps.create(user.getId(), form.getDescription());
+            p = ps.create(loggedUser.getId(), form.getDescription());
         } catch (ProfessorWithoutUserException e) {
             final ModelAndView error = new ModelAndView("error");
             error.addObject("errorMessageCode","nonExistentUser");

@@ -1,10 +1,11 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
+import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
+import ar.edu.itba.paw.exceptions.NonexistentSubjectException;
 import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
-import ar.edu.itba.paw.models.*;
-
-import java.util.List;
+import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.PagedResults;
 
 public interface CourseService {
     Course findCourseByIds(final long professor_id, final long subject_id);
@@ -15,7 +16,8 @@ public interface CourseService {
 
     PagedResults<Course> filterByAreaId(final long areaId, final int page) throws PageOutOfBoundsException;
 
-    Course create(Professor professor, Subject subject, String description, Double price) throws CourseAlreadyExistsException;
+    Course create(final Long professorId, final Long subjectId, final String description, final Double price)
+            throws CourseAlreadyExistsException, NonexistentProfessorException, NonexistentSubjectException;
 
-    public PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page) throws PageOutOfBoundsException;
+    PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page) throws PageOutOfBoundsException;
 }

@@ -116,31 +116,22 @@ public class CourseController {
             return createCourse(form, user);
         }
 
-        final Professor professor = professorService.findById(user.getId());
-
-        final Subject subject = subjectService.findSubjectById(form.getSubjectId());
-
-        if(professor == null) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","nonExistentUser");
-            return error;
-        }
-
-        if(subject == null) {
-            errors.addError(new FieldError("subjectDoesNotExist", "subjectId", null,
-                    false, new String[]{"subjectDoesNotExist"},null, "La materia que quiere dictar no existe"));
-            return createCourse(form, user);
-        }
-        
         final Course course;
         try {
-            course = courseService.create(professor, subject, form.getDescription(), form.getPrice());
+            course = courseService.create(user.getId(), form.getSubjectId(), form.getDescription(), form.getPrice());
         } catch (CourseAlreadyExistsException e) {
             final ModelAndView error = new ModelAndView("error");
             error.addObject("errorMessageCode","courseAlreadyExists");
             return error;
+        } catch (NonexistentProfessorException e) {
+            final ModelAndView error = new ModelAndView("error");
+            error.addObject("errorMessageCode","nonExistentUser");
+            return error;
+        } catch (NonexistentSubjectException e) {
+            errors.addError(new FieldError("subjectDoesNotExist", "subjectId", null,
+                    false, new String[]{"subjectDoesNotExist"},null, "La materia que quiere dictar no existe"));
+            return createCourse(form, user);
         }
-
 
         final RedirectView view = new RedirectView("/Course/?professor=" + course.getProfessor().getId()
                 + "&subject=" + course.getSubject().getId());
