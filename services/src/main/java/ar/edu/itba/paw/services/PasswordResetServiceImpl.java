@@ -27,7 +27,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
     @Transactional
     @Override
-    public boolean createToken(String email) {
+    public boolean createToken(final String email) {
 
         final User user = userService.findByEmail(email);
         if(user == null) {
@@ -60,23 +60,28 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     }
 
     @Override
-    public void deleteUsedToken(String token) {
+    public void deleteUsedToken(final String token) {
         if(token != null && !token.isEmpty())
             passwordResetTokenDao.deleteUsedToken(token);
     }
 
     @Transactional
     @Override
-    public boolean changePassword(PasswordResetToken token, String password) throws InvalidTokenException {
+    public User changePassword(final String token, final String password) throws InvalidTokenException {
 
-        if(token == null) {
+        final PasswordResetToken passwordResetToken = findByToken(token);
+
+        if(passwordResetToken == null) {
             throw new InvalidTokenException();
         }
 
-        final User user = token.getUser();
+        final User user = passwordResetToken.getUser();
         final boolean changed = userService.changePassword(user.getId(), password);
-        deleteUsedToken(token.getToken());
-        return changed;
+        if(changed) {
+            deleteUsedToken(passwordResetToken.getToken());
+            return user;
+        }
+        return null;
     }
 
 }

@@ -269,24 +269,22 @@ public class UserController {
             return resetPassword(form, token);
         }
 
-        final PasswordResetToken passwordResetToken = passwordResetService.findByToken(token);
-
-        final boolean changed;
+        final User changedUser;
         try {
-            changed = passwordResetService.changePassword(passwordResetToken, form.getPassword());
+            changedUser = passwordResetService.changePassword(token, form.getPassword());
         } catch (InvalidTokenException e) {
             final ModelAndView error = new ModelAndView("error");
             error.addObject("errorMessageCode","invalidToken");
             return error;
         }
 
-        if(!changed) {
+        if(changedUser == null) {
             final ModelAndView error = new ModelAndView("error");
             error.addObject("errorMessageCode","changePasswordError");
             return error;
         }
 
-        authenticateRegistered(request, passwordResetToken.getUser().getUsername(), form.getPassword());
+        authenticateRegistered(request, changedUser.getUsername(), form.getPassword());
         final RedirectView view = new RedirectView("/" );
         view.setExposeModelAttributes(false);
         return new ModelAndView(view);
