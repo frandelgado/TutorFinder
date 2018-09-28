@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.CourseForm;
@@ -33,10 +32,6 @@ public class CourseController {
     @Autowired
     @Qualifier("subjectServiceImpl")
     private SubjectService subjectService;
-
-    @Autowired
-    @Qualifier("professorServiceImpl")
-    private ProfessorService professorService;
 
     @Autowired
     private ConversationService conversationService;

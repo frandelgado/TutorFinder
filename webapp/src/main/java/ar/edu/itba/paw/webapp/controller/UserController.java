@@ -135,8 +135,7 @@ public class UserController {
         mav.addObject("page", page);
         return mav;
     }
-
-    //TODO: MAYBE MOVE TO A SERVICE?
+    
     private void authenticateRegistered(HttpServletRequest request, String username, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
         authToken.setDetails(new WebAuthenticationDetails(request));
