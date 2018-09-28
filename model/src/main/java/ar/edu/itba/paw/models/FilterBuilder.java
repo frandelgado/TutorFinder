@@ -6,7 +6,7 @@ import java.util.List;
 public class FilterBuilder {
 
 
-    private static final String BASE_SELECT = "SELECT courses.user_id, courses.subject_id," +
+    private static final String BASE_SELECT = "SELECT DISTINCT courses.user_id, courses.subject_id," +
             "courses.description, price, professors.description, users.username," +
             "users.name, users.lastname, users.password, users.email, subjects.description," +
             "subjects.name, areas.name, areas.description, areas.area_id ";
