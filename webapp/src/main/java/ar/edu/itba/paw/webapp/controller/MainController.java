@@ -27,7 +27,7 @@ public class MainController {
     }
 
     @RequestMapping("favicon.ico")
-    String favicon() {
+    public String favicon() {
         return "forward:/resources/images/favicon.ico";
     }
 

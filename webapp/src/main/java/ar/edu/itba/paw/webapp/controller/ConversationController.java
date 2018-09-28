@@ -57,7 +57,7 @@ public class ConversationController {
             return conversation(form.getConversationId(), form, loggedUser);
         }
 
-        boolean sent = conversationService.sendMessage(loggedUser.getId(), form.getConversationId(), form.getBody());
+        final boolean sent = conversationService.sendMessage(loggedUser.getId(), form.getConversationId(), form.getBody());
         if(sent) {
             final RedirectView view = new RedirectView("/Conversation?id=" + form.getConversationId());
             view.setExposeModelAttributes(false);

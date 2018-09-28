@@ -44,7 +44,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     }
 
     @Override
-    @Scheduled(fixedRate = 24*60*60*1000)
+    @Scheduled(fixedRate = 24*60*60*1000) //24 Hours
     public void purgeExpired() {
         passwordResetTokenDao.purgeExpiredTokens();
     }

@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
         return userDao.findByUsername(username).orElse(null);
     }
 
-    //TODO: Make transactional so that if the email is not sent the user is not created.
     @Override
     public User findByEmail(final String email) {
         if(email == null || email.isEmpty()) {

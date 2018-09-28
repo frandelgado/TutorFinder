@@ -63,6 +63,9 @@ public class ConversationServiceImpl implements ConversationService {
             throws UserNotInConversationException, NonexistentConversationException {
 
         final User from = userService.findUserById(userId);
+        if(from == null) {
+            return false;
+        }
         final Conversation conversation = findById(conversationId, from.getId());
 
         if(from == null || !conversation.belongs(from.getId())) {

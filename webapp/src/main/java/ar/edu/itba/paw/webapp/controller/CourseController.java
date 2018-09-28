@@ -92,10 +92,10 @@ public class CourseController {
             errors.addError(new FieldError("MessageSent", "extraMessage", null,
                     false, new String[]{"MessageSent"},null, "Mensaje Enviado!"));
             form.setBody(null);
-            return course(form, form.getProfessorId(), form.getSubjectId());
+        } else {
+            errors.addError(new FieldError("SendMessageError", "extraMessage", null,
+                    false, new String[]{"SendMessageError"}, null, "Error al enviar el mensaje."));
         }
-        errors.addError(new FieldError("SendMessageError", "extraMessage", null,
-                false, new String[]{"SendMessageError"},null, "Error al enviar el mensaje."));
         return course(form, form.getProfessorId(), form.getSubjectId());
     }
 

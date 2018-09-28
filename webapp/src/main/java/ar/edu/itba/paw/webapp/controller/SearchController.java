@@ -27,6 +27,7 @@ public class SearchController {
     @Qualifier("areaServiceImpl")
     private AreaService as;
 
+    //TODO: MAYBE HAVING A SEARCH SERVICE WOULD BE A GOOD IDEA
     @RequestMapping("/searchResults")
     public ModelAndView search(@RequestParam(value = "search") final String name,
                                @RequestParam(value = "type", defaultValue = "course") final String type,
