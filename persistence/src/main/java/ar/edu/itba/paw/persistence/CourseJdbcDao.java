@@ -85,7 +85,7 @@ public class CourseJdbcDao implements CourseDao {
             "courses.description, price, professors.description, users.username," +
             "users.name, users.lastname, users.password, users.email, subjects.description," +
             "subjects.name, areas.name, areas.description, areas.area_id " +
-            "FROM courses, professors, users, subjects, areas, schedules ";
+            "FROM courses, professors, users, subjects, areas ";
     
     private final static RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
             new Professor(
