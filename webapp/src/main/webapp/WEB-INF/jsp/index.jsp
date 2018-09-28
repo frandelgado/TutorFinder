@@ -14,7 +14,34 @@
 
 <body class="staticHome">
 
-<%@ include file="navbar.jsp" %>
+<div class="navbar">
+    <a href="<c:url value="/" />" class="logo-box">
+        <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
+    </a>
+
+    <div class="search-bar"/>
+    
+    <div class="navbar-buttons">
+        <c:choose>
+            <c:when test="${currentUser != null}">
+                <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
+                <c:choose>
+                    <c:when test="${currentUserIsProfessor == true}">
+                        <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="<c:url value="/registerAsProfessor" />" class="navbar-button"><spring:message code="register.professor"/></a>
+                    </c:otherwise>
+                </c:choose>
+                <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
+            </c:when>
+            <c:otherwise>
+                <a href="<c:url value="/register" />" class="navbar-button"><spring:message code="register"/></a>
+                <a href="<c:url value="/login" />" class="navbar-button"><spring:message code="login"/></a>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</div>
 
 <div class="content">
     <div class="search-box">
