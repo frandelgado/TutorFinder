@@ -24,12 +24,10 @@ public class MainController {
 
     @RequestMapping("/")
     public ModelAndView index(
-            @RequestParam(value = "SUCCESS_MESSAGE", required = false) final String success_message,
-            @RequestParam(value = "ERROR_MESSAGE", required = false) final String errror_message
+            @ModelAttribute(value = "SUCCESS_MESSAGE") final String success_message,
+            @ModelAttribute(value = "ERROR_MESSAGE") final String error_message
     ){
         ModelAndView mav = new ModelAndView("index");
-        mav.addObject("SUCCESS_MESSAGE", success_message);
-        mav.addObject("ERROR_MESSAGE", errror_message);
         return mav;
     }
 

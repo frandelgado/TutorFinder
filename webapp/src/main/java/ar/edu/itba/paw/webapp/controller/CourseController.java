@@ -45,8 +45,8 @@ public class CourseController {
             @ModelAttribute("messageForm") final MessageForm form,
             @RequestParam(value="professor", required=true) final Long professorId,
             @RequestParam(value="subject", required=true) final Long subjectId,
-            @RequestParam(value = "SUCCESS_MESSAGE", required = false) final String success_message,
-            @RequestParam(value = "ERROR_MESSAGE", required = false) final String errror_message
+            @ModelAttribute(value = "SUCCESS_MESSAGE") final String success_message,
+            @ModelAttribute(value = "ERROR_MESSAGE") final String error_message
     ){
         final ModelAndView mav = new ModelAndView("course");
         final Course course = courseService.findCourseByIds(professorId, subjectId);
@@ -56,8 +56,6 @@ public class CourseController {
             return error;
         }
         mav.addObject("course", course);
-        mav.addObject("SUCCESS_MESSAGE", success_message);
-        mav.addObject("ERROR_MESSAGE", errror_message);
 
         final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
         mav.addObject("schedule", schedule);
@@ -90,6 +88,7 @@ public class CourseController {
             errors.addError(new FieldError("MessageSent", "extraMessage", null,
                     false, new String[]{"MessageSent"},null, "Mensaje Enviado!"));
             form.setBody(null);
+            final RedirectView redirectView = new RedirectView("/Course");
         } else {
             errors.addError(new FieldError("SendMessageError", "extraMessage", null,
                     false, new String[]{"SendMessageError"}, null, "Error al enviar el mensaje."));
