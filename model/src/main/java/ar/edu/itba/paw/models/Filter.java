@@ -5,18 +5,18 @@ import java.util.List;
 public class Filter {
 
     final String query;
-    final List<Object> qeryParams;
+    final List<Object> queryParams;
 
-    public Filter(String query, List<Object> qeryParams) {
+    public Filter(String query, List<Object> queryParams) {
         this.query = query;
-        this.qeryParams = qeryParams;
+        this.queryParams = queryParams;
     }
 
     public String getQuery() {
         return query;
     }
 
-    public List<Object> getQeryParams() {
-        return qeryParams;
+    public List<Object> getQueryParams() {
+        return queryParams;
     }
 }

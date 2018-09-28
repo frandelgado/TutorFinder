@@ -177,7 +177,7 @@ public class CourseJdbcDao implements CourseDao {
 
     @Override
     public List<Course> filter(Filter filter, int limit, int offset) {
-        List<Object> params = filter.getQeryParams();
+        List<Object> params = filter.getQueryParams();
         params.add(limit);
         params.add(offset);
         final List<Course> courses = jdbcTemplate.query(
