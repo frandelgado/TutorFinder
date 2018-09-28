@@ -17,9 +17,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -31,6 +29,7 @@ public class UserJdbcDaoTest {
     private static final String USERNAME = "Juancho";
     private static final String EMAIL = "juancito@gmail.com";
     private static final String PASSWORD = "dontbecruel";
+    private static final String NEW_PASSWORD = "becruel";
     private static final Long ID = 2L;
     private static final Long INVALID_ID = 666L;
     private static final String INVALID_USERNAME = "InvalidTestUsername";
@@ -131,11 +130,22 @@ public class UserJdbcDaoTest {
         assertNull(user);
     }
 
+    @Test
+    public void testChangePasswordByIdValid() {
+        final boolean changed = userDao.changePasswordById(ID, NEW_PASSWORD);
+        assertTrue(changed);
+    }
+
+    @Test
+    public void testChangePasswordByIdInvalid() {
+        final boolean changed = userDao.changePasswordById(INVALID_ID, NEW_PASSWORD);
+        assertFalse(changed);
+    }
+
     @After
     public void tearDown(){
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
     }
-
 
 }

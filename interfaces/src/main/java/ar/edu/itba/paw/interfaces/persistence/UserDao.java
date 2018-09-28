@@ -17,4 +17,6 @@ public interface UserDao {
             throws UsernameAlreadyInUseException, EmailAlreadyInUseException;
 
     Optional<User> findByUsername(final String username);
+
+    boolean changePasswordById(final Long userId, final String newPassword);
 }

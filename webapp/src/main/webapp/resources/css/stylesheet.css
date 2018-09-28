@@ -522,6 +522,10 @@ button {
     color: red;
 }
 
+.success-text {
+    color: limegreen;
+}
+
 .button-2 {
     cursor: pointer;
     text-transform: uppercase;
@@ -543,6 +547,11 @@ button {
 .button-container {
     display: flex;
     align-content: center;
+    justify-content: center;
+}
+
+.forgot-password-link {
+    display: flex;
     justify-content: center;
 }
 

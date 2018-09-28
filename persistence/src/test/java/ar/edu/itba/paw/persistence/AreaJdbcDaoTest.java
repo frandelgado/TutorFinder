@@ -40,7 +40,7 @@ public class AreaJdbcDaoTest {
     private DataSource ds;
 
     @Autowired
-    private AreaDao areaDao;
+    private AreaJdbcDao areaDao;
 
     private JdbcTemplate jdbcTemplate;
 
