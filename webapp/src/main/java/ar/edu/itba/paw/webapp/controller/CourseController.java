@@ -1,10 +1,11 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
-import ar.edu.itba.paw.exceptions.SameUserConversationException;
-import ar.edu.itba.paw.exceptions.UserNotInConversationException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.Schedule;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,6 @@ public class CourseController {
     @Autowired
     @Qualifier("professorServiceImpl")
     private ProfessorService professorService;
-
-    @Autowired
-    @Qualifier("userServiceImpl")
-    private UserService userService;
 
     @Autowired
     private ConversationService conversationService;
@@ -75,19 +72,16 @@ public class CourseController {
     public ModelAndView contact(
             @Valid @ModelAttribute("messageForm") final MessageForm form,
             final BindingResult errors,
-            @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException {
+            @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException, NonexistentConversationException {
 
         if(errors.hasErrors()) {
             return course(form, form.getProfessorId(), form.getSubjectId());
         }
 
-        final User user = userService.findUserById(loggedUser.getId());
-        final Professor professor = professorService.findById(form.getProfessorId());
-        final Subject subject = subjectService.findSubjectById(form.getSubjectId());
-
         final boolean sent;
         try {
-            sent = conversationService.sendMessage(user, professor, subject, form.getBody());
+            sent = conversationService.sendMessage(loggedUser.getId(), form.getProfessorId(),
+                    form.getSubjectId(), form.getBody());
         } catch (SameUserConversationException e) {
             errors.addError(new FieldError("SendMessageError", "extraMessage", null,
                     false, new String[]{"SameUserMessageError"},null, "No puede enviarse un mensaje a si mismo"));

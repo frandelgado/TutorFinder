@@ -4,16 +4,16 @@ import ar.edu.itba.paw.exceptions.NonexistentConversationException;
 import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.SameUserConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.Conversation;
+import ar.edu.itba.paw.models.PagedResults;
 
-import java.util.List;
 
 public interface ConversationService {
 
-    boolean sendMessage(final User user, final Professor professor, final Subject subject, final String body)
-            throws SameUserConversationException, UserNotInConversationException;
+    boolean sendMessage(final Long userId, final Long professorId, final Long subjectId, final String body)
+            throws SameUserConversationException, UserNotInConversationException, NonexistentConversationException;
 
-    boolean sendMessage(final User from, final Conversation conversation, final String body) throws UserNotInConversationException;
+    boolean sendMessage(final Long userId, final Long conversationId, final String body) throws UserNotInConversationException, NonexistentConversationException;
 
     PagedResults<Conversation> findByUserId(final Long userId, final int page) throws PageOutOfBoundsException;
 

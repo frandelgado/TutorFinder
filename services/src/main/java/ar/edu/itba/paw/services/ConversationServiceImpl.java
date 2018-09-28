@@ -6,6 +6,9 @@ import ar.edu.itba.paw.exceptions.SameUserConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
 import ar.edu.itba.paw.interfaces.service.ConversationService;
+import ar.edu.itba.paw.interfaces.service.ProfessorService;
+import ar.edu.itba.paw.interfaces.service.SubjectService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,10 +25,23 @@ public class ConversationServiceImpl implements ConversationService {
     @Autowired
     private ConversationDao conversationDao;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ProfessorService professorService;
+
+    @Autowired
+    private SubjectService subjectService;
+
     @Transactional
     @Override
-    public boolean sendMessage(final User user, final Professor professor, final Subject subject, final String body)
-            throws SameUserConversationException, UserNotInConversationException {
+    public boolean sendMessage(final Long userId, final Long professorId, final Long subjectId, final String body)
+            throws SameUserConversationException, UserNotInConversationException, NonexistentConversationException {
+
+        final User user = userService.findUserById(userId);
+        final Professor professor = professorService.findById(professorId);
+        final Subject subject = subjectService.findSubjectById(subjectId);
 
         if(user == null || professor == null || subject == null || body == null || body.length() > 512)
             return false;
@@ -37,14 +53,17 @@ public class ConversationServiceImpl implements ConversationService {
 
         if(conversation == null) {
             final Conversation conversationCreated = conversationDao.create(user, professor, subject);
-            return sendMessage(user, conversationCreated, body);
+            return sendMessage(user.getId(), conversationCreated.getId(), body);
         } else
-            return sendMessage(user, conversation, body);
+            return sendMessage(user.getId(), conversation.getId(), body);
     }
 
     @Override
-    public boolean sendMessage(final User from, final Conversation conversation, final String body)
-            throws UserNotInConversationException {
+    public boolean sendMessage(final Long userId, final Long conversationId, final String body)
+            throws UserNotInConversationException, NonexistentConversationException {
+
+        final User from = userService.findUserById(userId);
+        final Conversation conversation = findById(conversationId, from.getId());
 
         if(from == null || !conversation.belongs(from.getId())) {
             throw new UserNotInConversationException();
