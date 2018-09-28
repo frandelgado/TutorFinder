@@ -19,8 +19,8 @@
         <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
     </a>
 
-    <div class="search-bar"/>
-    
+    <div class="search-bar"></div>>
+
     <div class="navbar-buttons">
         <c:choose>
             <c:when test="${currentUser != null}">
