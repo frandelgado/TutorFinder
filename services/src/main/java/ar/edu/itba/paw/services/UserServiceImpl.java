@@ -9,6 +9,7 @@ import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
         User user = userDao.create(username, encoder.encode(password), email, name, lastName);
 
         if (user != null){
-            emailService.sendRegistrationEmail(user.getEmail());
+            emailService.sendRegistrationEmail(user);
         }
         return user;
     }

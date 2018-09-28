@@ -28,6 +28,9 @@ public class EmailServiceImpl implements EmailService {
     @Value("classpath:ConversationMail.html")
     private Resource contactMail;
 
+    @Value("classpath:RestorePassword.html")
+    private Resource restorePassword;
+
     @Autowired
     private JavaMailSender emailSender;
 
@@ -45,27 +48,45 @@ public class EmailServiceImpl implements EmailService {
         sendEmail(professor.getEmail(), subject, text);
     }
 
-    @Override
-    public void sendRegistrationEmail(String email) {
-        String REGISTRATION_SUBJECT = "Bienvenido a Tu Teoria!";
-        String REGISTRATION_BODY = "Te damos la bienvenida a Tu Teoria, encuentra tu proxima clase particular de manera rapida y sencilla.";
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject(REGISTRATION_SUBJECT);
-        message.setText(REGISTRATION_BODY);
+    @Override
+    public void sendRestorePasswordEmail(final User user, final String token) {
+        final Document doc;
+        try {
+            doc = Jsoup.parse(restorePassword.getInputStream(), "UTF-8", "");
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+        final Element mail = doc.select("td.mail").first();
+        final Element logo = doc.select("img.logo-img").first();
+        logo.attr("src", "http://localhost:8080/resources/images/logo.png");
+        final Element a = doc.select("a.link").first();
+        a.attr("href", "http://localhost:8080/resetPassword?token=" + token);
+        mail.text("Email: " + user.getEmail());
+        String SUBJECT = "Restaura tu contraseña";
+
+        final MimeMessage message = prepareMail(SUBJECT, user.getEmail(), doc.html());
+
+        if(message == null)
+            throw new RuntimeException();
+
         emailSender.send(message);
     }
 
+
     @Override
-    public void sendRegistrationEmail(User user) {
+    public void sendRegistrationEmail(final User user) {
         final Document doc;
         try {
             doc = Jsoup.parse(registrationMail.getInputStream(), "UTF-8", "");
         } catch (IOException e) {
             throw new RuntimeException();
         }
-        Element username = doc.select("td.username").first();
+        final Element username = doc.select("td.username").first();
+        final Element logo = doc.select("img.logo-img").first();
+        logo.attr("src", "http://localhost:8080/resources/images/logo.png");
+        final Element a = doc.select("a.link").first();
+        a.attr("href", "http://localhost:8080");
         username.text("Username: " + user.getUsername());
         String REGISTRATION_SUBJECT = "Bienvenido a Tu Teoria!";
 
@@ -78,7 +99,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendContactEmail(User from, User to, Conversation conversation) {
+    public void sendContactEmail(final User from, final User to, final Conversation conversation) {
         final Document doc;
         try {
             doc = Jsoup.parse(contactMail.getInputStream(), "UTF-8", "");
@@ -91,12 +112,14 @@ public class EmailServiceImpl implements EmailService {
         element.text("Apellido: " + from.getLastname());
         element = doc.select("td.subject").first();
         element.text("Materia: " + conversation.getSubject().getName());
-        Element a = doc.select("a.conversation-button").first();
+        final Element a = doc.select("a.conversation-button").first();
         a.attr("href", "http://localhost:8080/Conversation?id=" + conversation.getId());
+        final Element logo = doc.select("img.logo-img").first();
+        logo.attr("src", "http://localhost:8080/resources/images/logo.png");
         final String SUBJECT = "Se han contactado con vos!";
 
         final MimeMessage message = prepareMail(SUBJECT, to.getEmail(), doc.html());
-        
+
         if(message == null)
             throw new RuntimeException();
 

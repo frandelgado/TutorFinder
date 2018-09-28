@@ -10,7 +10,7 @@ public interface EmailService {
 
     public void sendMailToProfessor(Professor professor, String subject, String text);
 
-    void sendRegistrationEmail(String email);
+    void sendRestorePasswordEmail(User user, String token);
 
     void sendRegistrationEmail(User user);
 
