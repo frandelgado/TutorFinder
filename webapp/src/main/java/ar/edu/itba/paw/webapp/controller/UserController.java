@@ -119,12 +119,15 @@ public class UserController {
             @ModelAttribute("currentUser") final User loggedUser,
             @ModelAttribute("ScheduleForm") final ScheduleForm scheduleForm,
             @RequestParam(value = "page", defaultValue = "1") final int page
-    ) throws PageOutOfBoundsException {
+    ) throws PageOutOfBoundsException, NonexistentProfessorException {
         final Professor professor = ps.findById(loggedUser.getId());
+        if(professor == null) {
+            throw new NonexistentProfessorException();
+        }
 
         final ModelAndView mav = new ModelAndView("profileForProfessor");
 
-        final Schedule schedule = ss.getScheduleForProfessor(professor);
+        final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
 
         mav.addObject("courses", cs.findCourseByProfessorId(professor.getId(), page));
         mav.addObject("professor", professor);
@@ -147,19 +150,12 @@ public class UserController {
     @RequestMapping(value = "/registerAsProfessor", method = RequestMethod.POST)
     public ModelAndView createProfessor(@ModelAttribute("currentUser") final User loggedUser,
                                         @Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
-                                        final BindingResult errors, final HttpServletRequest request) {
+                                        final BindingResult errors, final HttpServletRequest request) throws ProfessorWithoutUserException {
         if(errors.hasErrors()) {
             return registerProfessor(form);
         }
 
-        final Professor p;
-        try {
-            p = ps.create(loggedUser.getId(), form.getDescription());
-        } catch (ProfessorWithoutUserException e) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","nonExistentUser");
-            return error;
-        }
+        final Professor p = ps.create(loggedUser.getId(), form.getDescription());
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
 
@@ -178,7 +174,7 @@ public class UserController {
             @ModelAttribute("currentUser") final User loggedUser,
             @Valid @ModelAttribute("ScheduleForm") final ScheduleForm form,
             final BindingResult errors
-    ) throws PageOutOfBoundsException {
+    ) throws PageOutOfBoundsException, NonexistentProfessorException {
         if(errors.hasErrors() || !form.validForm()) {
             if(!form.validForm()) {
                 errors.addError(new FieldError("profile.add_schedule.timeError", "endHour", form.getEndHour(),

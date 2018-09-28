@@ -59,9 +59,7 @@ public class CourseController {
         }
         mav.addObject("course", course);
 
-        final Professor professor = professorService.findById(professorId);
-
-        Schedule schedule = scheduleService.getScheduleForProfessor(professor);
+        final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
         mav.addObject("schedule", schedule);
         form.setProfessorId(professorId);
         form.setSubjectId(subjectId);

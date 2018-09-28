@@ -15,21 +15,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
-    ScheduleDao sd;
+    private ScheduleDao sd;
 
     @Autowired
-    ProfessorService ps;
+    private ProfessorService ps;
 
     @Transactional
     @Override
-    public List<Timeslot> reserveTimeSlot(Long professor_id, Integer day, Integer startTime, Integer endTime)
+    public List<Timeslot> reserveTimeSlot(final Long professor_id, final Integer day, final Integer startTime, final Integer endTime)
             throws InvalidTimeException, InvalidTimeRangeException, TimeslotAllocatedException, NonexistentProfessorException {
 
         if(startTime >= endTime)
@@ -52,7 +51,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule getScheduleForProfessor(Professor professor) {
+    public Schedule getScheduleForProfessor(final Long professorId) {
+
+        final Professor professor = ps.findById(professorId);
 
         List<Integer> monday = new ArrayList<>();
         List<Integer> tuesday = new ArrayList<>();
