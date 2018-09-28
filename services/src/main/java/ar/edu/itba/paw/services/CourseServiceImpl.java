@@ -4,10 +4,7 @@ import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.CourseService;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.PagedResults;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,6 +95,28 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public PagedResults<Course> filterCourses(Filter filter, final int page) throws PageOutOfBoundsException {
+        if(page <= 0){
+            throw new PageOutOfBoundsException();
+        }
+
+        final List<Course> courses = courseDao.filter(filter, PAGE_SIZE+1, PAGE_SIZE * (page -1));
+        final PagedResults<Course> results;
+        final int size = courses.size();
+        if(size == 0 && page > 1){
+            throw new PageOutOfBoundsException();
+        }
+        if(size > PAGE_SIZE) {
+            courses.remove(PAGE_SIZE);
+            results = new PagedResults<>(courses, true);
+        } else {
+            results = new PagedResults<>(courses, false);
+        }
+
+        return results;
+    }
+
+    @Override
     public Course create(Professor professor, Subject subject, String description, Double price)
             throws CourseAlreadyExistsException {
 
@@ -110,6 +129,4 @@ public class CourseServiceImpl implements CourseService {
 
         return courseDao.create(professor, subject, description, price);
     }
-
-
 }

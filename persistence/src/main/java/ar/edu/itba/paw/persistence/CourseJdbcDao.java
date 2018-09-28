@@ -85,7 +85,7 @@ public class CourseJdbcDao implements CourseDao {
             "courses.description, price, professors.description, users.username," +
             "users.name, users.lastname, users.password, users.email, subjects.description," +
             "subjects.name, areas.name, areas.description, areas.area_id " +
-            "FROM courses, professors, users, subjects, areas ";
+            "FROM courses, professors, users, subjects, areas, schedules ";
     
     private final static RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
             new Professor(
@@ -173,6 +173,19 @@ public class CourseJdbcDao implements CourseDao {
                 .filterByProfessor(professor_id)
                 .execute();
 
+    }
+
+    @Override
+    public List<Course> filter(Filter filter, int limit, int offset) {
+        List<Object> params = filter.getQeryParams();
+        params.add(limit);
+        params.add(offset);
+        final List<Course> courses = jdbcTemplate.query(
+                filter.getQuery() + "ORDER BY courses.user_id, courses.subject_id LIMIT ? OFFSET ?",
+                ROW_MAPPER, params.toArray()
+        );
+
+        return  courses;
     }
 
     @Override
