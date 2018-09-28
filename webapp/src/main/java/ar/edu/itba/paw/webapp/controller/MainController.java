@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
@@ -22,8 +23,14 @@ public class MainController {
     private UserService us;
 
     @RequestMapping("/")
-    public ModelAndView helloWorld(){
-        return new ModelAndView("index");
+    public ModelAndView index(
+            @RequestParam(value = "SUCCESS_MESSAGE", required = false) final String success_message,
+            @RequestParam(value = "ERROR_MESSAGE", required = false) final String errror_message
+    ){
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("SUCCESS_MESSAGE", success_message);
+        mav.addObject("ERROR_MESSAGE", errror_message);
+        return mav;
     }
 
     @RequestMapping("favicon.ico")

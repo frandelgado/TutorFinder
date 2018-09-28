@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
@@ -43,7 +44,9 @@ public class CourseController {
     public ModelAndView course(
             @ModelAttribute("messageForm") final MessageForm form,
             @RequestParam(value="professor", required=true) final Long professorId,
-            @RequestParam(value="subject", required=true) final Long subjectId
+            @RequestParam(value="subject", required=true) final Long subjectId,
+            @RequestParam(value = "SUCCESS_MESSAGE", required = false) final String success_message,
+            @RequestParam(value = "ERROR_MESSAGE", required = false) final String errror_message
     ){
         final ModelAndView mav = new ModelAndView("course");
         final Course course = courseService.findCourseByIds(professorId, subjectId);
@@ -53,6 +56,8 @@ public class CourseController {
             return error;
         }
         mav.addObject("course", course);
+        mav.addObject("SUCCESS_MESSAGE", success_message);
+        mav.addObject("ERROR_MESSAGE", errror_message);
 
         final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
         mav.addObject("schedule", schedule);
@@ -68,7 +73,7 @@ public class CourseController {
             @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException, NonexistentConversationException {
 
         if(errors.hasErrors()) {
-            return course(form, form.getProfessorId(), form.getSubjectId());
+            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
         }
 
         final boolean sent;
@@ -79,7 +84,7 @@ public class CourseController {
             errors.addError(new FieldError("SendMessageError", "extraMessage", null,
                     false, new String[]{"SameUserMessageError"},null, "No puede enviarse un mensaje a si mismo"));
             form.setBody(null);
-            return course(form, form.getProfessorId(), form.getSubjectId());
+            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
         }
         if(sent) {
             errors.addError(new FieldError("MessageSent", "extraMessage", null,
@@ -89,7 +94,7 @@ public class CourseController {
             errors.addError(new FieldError("SendMessageError", "extraMessage", null,
                     false, new String[]{"SendMessageError"}, null, "Error al enviar el mensaje."));
         }
-        return course(form, form.getProfessorId(), form.getSubjectId());
+        return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
     }
 
 
