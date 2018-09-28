@@ -200,19 +200,6 @@ public class CourseJdbcDaoTest {
         assertEquals(0, courses.size());
     }
 
-
-    @Test
-    public void testFilterByTimeAndProfessor(){
-        List<Course> courses = courseDao.filterCoursesByTimeAndProfessor(2,2,3, 5l);
-        assertEquals(1,courses.size());
-    }
-
-    @Test
-    public void testFilterByTimeNull(){
-        List<Course> courses = courseDao.filterCoursesByTimeAndProfessor(2,2,3, 2l);
-        assertEquals(0,courses.size());
-    }
-
     @After
     public void tearDown(){
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");

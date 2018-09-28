@@ -15,8 +15,6 @@ public interface CourseDao {
 
     List<Course> filterByAreaId(final long areaId, final int limit, final int offset);
 
-    List<Course> filterCoursesByTimeAndProfessor(int day, int startHour, int endHour, long professor_id);
-
     List<Course>  filter(final Filter filter, final int limit, final int offset);
 
     Course create(final Professor professor, final Subject subject, final String description, final Double price) throws CourseAlreadyExistsException;

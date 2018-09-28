@@ -17,66 +17,6 @@ import java.util.*;
 @Repository
 public class CourseJdbcDao implements CourseDao {
 
-    private class FilterQueryBuilder{
-
-        private final RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
-                new Professor(
-                        rs.getLong(1),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getString(9),
-                        rs.getString(10),
-                        rs.getString(5)
-                ),
-                new Subject(
-                        rs.getLong(2),
-                        rs.getString(11),
-                        rs.getString(12),
-                        new Area(
-                                rs.getLong(15),
-                                rs.getString(14),
-                                rs.getString(13)
-                        )
-                ),
-                rs.getString(3),
-                rs.getDouble(4)
-        );
-
-        private String SELECT = "SELECT courses.user_id, courses.subject_id," +
-                "courses.description, price, professors.description, users.username," +
-                "users.name, users.lastname, users.password, users.email, subjects.description," +
-                "subjects.name, areas.name, areas.description, areas.area_id ";
-
-
-        private String FROM = "FROM courses, professors, users, subjects, areas ";
-
-        private String WHERE = "WHERE courses.user_id = users.user_id AND" +
-                " courses.subject_id = subjects.subject_id AND professors.user_id = users.user_id " +
-                "AND areas.area_id = subjects.area_id ";
-
-        private List<Object> params = new ArrayList<>();
-
-        FilterQueryBuilder filterByProfessor(final Long professor_id){
-
-            this.WHERE = this.WHERE + "AND professors.user_id = ? ";
-            this.params.add(professor_id);
-            return this;
-        }
-
-        FilterQueryBuilder filterByTimeslot(final Integer day, final Integer startHour, final Integer endHour){
-            this.WHERE = this.WHERE + "AND schedules.day = ? AND schedules.hour >= ? AND schedules.hour < ? ";
-            this.FROM = this.FROM + ",schedules ";
-            this.params.add(day);
-            this.params.add(startHour);
-            this.params.add(endHour);
-            return this;
-        }
-
-        List<Course> execute(){
-            return jdbcTemplate.query(SELECT+FROM+WHERE, ROW_MAPPER, params.toArray());
-        }
-    }
 
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
@@ -163,17 +103,6 @@ public class CourseJdbcDao implements CourseDao {
         return courses;
     }
 
-    @Override
-    public List<Course> filterCoursesByTimeAndProfessor(final int day, final int startHour, final int endHour, final long professor_id) {
-
-        FilterQueryBuilder FilterQueryBuilder = new FilterQueryBuilder();
-
-        return FilterQueryBuilder
-                .filterByTimeslot(day, startHour, endHour)
-                .filterByProfessor(professor_id)
-                .execute();
-
-    }
 
     @Override
     public List<Course> filter(Filter filter, int limit, int offset) {

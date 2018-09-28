@@ -33,7 +33,9 @@ public class SearchController {
                                @RequestParam(value = "page", defaultValue = "1") final int page,
                                @RequestParam(value = "day", required = false)final Integer day,
                                @RequestParam(value = "startHour", required = false)final Integer startHour,
-                               @RequestParam(value = "endHour", required = false)final Integer endHour) throws PageOutOfBoundsException {
+                               @RequestParam(value = "endHour", required = false)final Integer endHour,
+                               @RequestParam(value = "minPrice", required = false)final Double minPrice,
+                               @RequestParam(value = "maxPrice", required = false) final Double maxPrice) throws PageOutOfBoundsException {
         final ModelAndView mav = new ModelAndView("searchResults");
         mav.addObject("page", page);
 
@@ -42,11 +44,7 @@ public class SearchController {
                 mav.addObject("pagedResults", ps.filterByFullName(name, page));
                 break;
             case "course":
-                FilterBuilder fb = new FilterBuilder();
-                if(day != null && endHour != null && startHour != null){
-                    fb = fb.filterByTimeslot(day, startHour, endHour);
-                }
-                mav.addObject("pagedResults", cs.filterCourses(fb.filterByName(name).getFilter(), page));
+                mav.addObject("pagedResults", cs.filterCourses(day,startHour, endHour,minPrice, maxPrice, name, page));
                 break;
             case "area":
                 mav.addObject("pagedResults", as.filterAreasByName(name, page));

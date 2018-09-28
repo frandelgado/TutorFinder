@@ -95,12 +95,20 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PagedResults<Course> filterCourses(Filter filter, final int page) throws PageOutOfBoundsException {
+    public PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page) throws PageOutOfBoundsException {
         if(page <= 0){
             throw new PageOutOfBoundsException();
         }
+        FilterBuilder fb = new FilterBuilder();
 
-        final List<Course> courses = courseDao.filter(filter, PAGE_SIZE+1, PAGE_SIZE * (page -1));
+        if(day != null && startHour != null && endHour != null)
+            fb = fb.filterByTimeslot(day,startHour,endHour);
+        if(minPrice != null && maxPrice != null)
+            fb = fb.filterByPrice(minPrice, maxPrice);
+        if(searchText != null)
+            fb = fb.filterByName(searchText);
+
+        final List<Course> courses = courseDao.filter(fb.getFilter(), PAGE_SIZE+1, PAGE_SIZE * (page -1));
         final PagedResults<Course> results;
         final int size = courses.size();
         if(size == 0 && page > 1){

@@ -17,5 +17,5 @@ public interface CourseService {
 
     Course create(Professor professor, Subject subject, String description, Double price) throws CourseAlreadyExistsException;
 
-    PagedResults<Course> filterCourses(Filter filter, int page) throws  PageOutOfBoundsException;
+    public PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page) throws PageOutOfBoundsException;
 }
