@@ -62,7 +62,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Integer> saturday = new ArrayList<>();;
         List<Integer> sunday = new ArrayList<>();;
 
-        List<Timeslot> timeslots = sd.getScheduleForProfessor(professor);
+        List<Timeslot> timeslots = sd.getTimeslotsForProfessor(professor);
         for (Timeslot t: timeslots) {
             switch (t.getDay()){
                 case 1:
