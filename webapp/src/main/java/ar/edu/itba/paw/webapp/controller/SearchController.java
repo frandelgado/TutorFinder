@@ -48,7 +48,7 @@ public class SearchController {
                 error.addObject("errorMessageCode","typeInvalid");
                 return error;
         }
-        mav.addObject("search", name.isEmpty()? " ": name);
+        mav.addObject("search", name);
         mav.addObject("type", type);
         return mav;
     }
