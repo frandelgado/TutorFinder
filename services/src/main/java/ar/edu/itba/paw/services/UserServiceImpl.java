@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findByEmail(email).orElse(null);
     }
 
+    @Transactional
     @Override
     public User create(final String username, final String password, final String email,
                        final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
