@@ -48,7 +48,7 @@ public class ScheduleJdbcDao implements ScheduleDao {
     }
 
     @Override
-    public List<Timeslot> getScheduleForProfessor(Professor professor) {
+    public List<Timeslot> getTimeslotsForProfessor(Professor professor) {
         List<Timeslot> schedule = jdbcTemplate.query("SELECT schedules.day, schedules.hour FROM schedules WHERE user_id = ?", TIMESLOT_ROW_MAPPER, professor.getId());
         return schedule;
     }

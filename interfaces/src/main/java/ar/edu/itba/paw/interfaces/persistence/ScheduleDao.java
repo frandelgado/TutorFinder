@@ -9,5 +9,5 @@ import java.util.List;
 public interface ScheduleDao {
     Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) throws TimeslotAllocatedException;
 
-    List<Timeslot> getScheduleForProfessor(Professor professor);
+    List<Timeslot> getTimeslotsForProfessor(Professor professor);
 }

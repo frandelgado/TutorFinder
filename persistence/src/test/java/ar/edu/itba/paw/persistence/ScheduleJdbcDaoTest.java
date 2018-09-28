@@ -69,13 +69,13 @@ public class ScheduleJdbcDaoTest {
     }
 
     @Test
-    public void testGetScheduleForProfessor() {
+    public void testGetTimeslotsForProfessor() {
         final Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(5L);
         final Integer DAY = 2;
         final Integer HOUR = 2;
 
-        List<Timeslot> reservedTimeSlots = scheduleJdbcDao.getScheduleForProfessor(mockProfessor);
+        List<Timeslot> reservedTimeSlots = scheduleJdbcDao.getTimeslotsForProfessor(mockProfessor);
         assertNotNull(reservedTimeSlots);
         assertEquals(1, reservedTimeSlots.size());
         Timeslot reservedTimeSlot = reservedTimeSlots.get(0);
