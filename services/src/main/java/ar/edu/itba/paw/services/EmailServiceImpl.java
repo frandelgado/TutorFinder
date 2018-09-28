@@ -72,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
         final MimeMessage message = emailSender.createMimeMessage();
         final MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        final boolean prepared = prepareMail(REGISTRATION_SUBJECT, user.getEmail(), helper, doc.text());
+        final boolean prepared = prepareMail(REGISTRATION_SUBJECT, user.getEmail(), helper, doc.html());
 
         if(!prepared)
             throw new RuntimeException();
@@ -101,7 +101,7 @@ public class EmailServiceImpl implements EmailService {
         final MimeMessage message = emailSender.createMimeMessage();
         final MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        final boolean prepared = prepareMail(SUBJECT, to.getEmail(), helper, doc.text());
+        final boolean prepared = prepareMail(SUBJECT, to.getEmail(), helper, doc.html());
         if(!prepared)
             throw new RuntimeException();
 
