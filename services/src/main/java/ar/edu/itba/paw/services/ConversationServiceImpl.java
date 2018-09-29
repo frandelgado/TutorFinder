@@ -9,6 +9,7 @@ import ar.edu.itba.paw.interfaces.service.ConversationService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.SubjectService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class ConversationServiceImpl implements ConversationService {
     @Autowired
     private SubjectService subjectService;
 
+    @Autowired
+    private EmailService emailService;
+
     @Transactional
     @Override
     public boolean sendMessage(final Long userId, final Long professorId, final Long subjectId, final String body)
@@ -57,7 +61,7 @@ public class ConversationServiceImpl implements ConversationService {
         } else
             return sendMessage(user.getId(), conversation.getId(), body);
     }
-
+    
     @Override
     public boolean sendMessage(final Long userId, final Long conversationId, final String body)
             throws UserNotInConversationException, NonexistentConversationException {
@@ -76,6 +80,13 @@ public class ConversationServiceImpl implements ConversationService {
             return false;
 
         final Message message = conversationDao.create(from, body, conversation);
+
+        final User to = conversation.getProfessor().getId().equals(from.getId())
+                ? conversation.getUser(): conversation.getProfessor();
+
+        if(message != null) {
+            emailService.sendContactEmail(from, to, conversation);
+        }
 
         return message != null;
     }
