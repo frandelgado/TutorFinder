@@ -72,7 +72,7 @@ public class ConversationServiceImpl implements ConversationService {
         }
         final Conversation conversation = findById(conversationId, from.getId());
 
-        if(from == null || !conversation.belongs(from.getId())) {
+        if(!conversation.belongs(from.getId())) {
             throw new UserNotInConversationException();
         }
 
