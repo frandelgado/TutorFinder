@@ -24,12 +24,17 @@
     <div class="button-container">
         <h2 class="label"><spring:message code="register.professor" /> </h2>
     </div>
-    <c:url value="/registerAsProfessor" var="postPath"/>
-    <form:form cssClass="form" modelAttribute="registerAsProfessorForm" action="${postPath}" method="post">
+    <c:url value="/registerAsProfessor" var="postPath" />
+    <form:form cssClass="form" modelAttribute="registerAsProfessorForm" action="${postPath}" enctype="multipart/form-data" method="post">
         <div>
             <form:label cssClass="label" path="description"><spring:message code="register.description"/></form:label>
             <form:textarea cssClass="input-request" type="text" path="description" rows="5" cols="5"/>
             <form:errors cssClass="error-text" path="description" element="p"/>
+        </div>
+        <div>
+            <form:label cssClass="label" path="picture"><spring:message code="register.picture"/></form:label>
+            <form:input cssClass="input-request" type="file" path="picture" />
+            <form:errors cssClass="error-text" path="picture" element="p"/>
         </div>
 
         <div class="button-container">
