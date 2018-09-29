@@ -38,7 +38,8 @@ public class ScheduleServiceImplTest {
     @Mock
     private ProfessorService ps;
 
-    private static final Long PROFESSOR_ID = 2l;
+    private static final Long PROFESSOR_ID = 2L;
+    private static final Long INVALID_ID = 666L;
 
     @Before
     public void setUp() throws TimeslotAllocatedException {
@@ -122,6 +123,15 @@ public class ScheduleServiceImplTest {
         Integer START_HOUR = 14;
         Integer END_HOUR = 12;
         List<Timeslot> timeslots = scheduleService.reserveTimeSlot(PROFESSOR_ID, DAY, START_HOUR, END_HOUR);
+
+    }
+
+    @Test(expected = NonexistentProfessorException.class)
+    public void testInvalidProfessor() throws InvalidTimeRangeException, InvalidTimeException, TimeslotAllocatedException, NonexistentProfessorException {
+        Integer DAY = 1;
+        Integer START_HOUR = 14;
+        Integer END_HOUR = 16;
+        List<Timeslot> timeslots = scheduleService.reserveTimeSlot(INVALID_ID, DAY, START_HOUR, END_HOUR);
 
     }
 }
