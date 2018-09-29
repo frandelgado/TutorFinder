@@ -9,6 +9,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
+    <script src="<c:url value="/resources/js/searchForm.js" />"></script>
     <title>Tu Teoria | <spring:message code="index.title"/></title>
 </head>
 
@@ -108,12 +109,12 @@
             <h1><spring:message code="search.priceHeader"/></h1>
             <div>
                 <form:label path="minPrice"><spring:message code="search.label.minPrice"/></form:label>
-                <form:input path="minPrice"/>
+                <form:input cssClass="input-request" type="number" step="0.01" path="minPrice"/>
                 <form:errors cssClass="error-text" path="minPrice" element="p"/>
             </div>
             <div>
                 <form:label path="maxPrice"><spring:message code="search.label.maxPrice"/></form:label>
-                <form:input path="maxPrice"/>
+                <form:input cssClass="input-request" type="number" step="0.01" path="maxPrice"/>
                 <form:errors cssClass="error-text" path="maxPrice" element="p"/>
             </div>
         </div>

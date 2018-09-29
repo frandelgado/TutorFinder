@@ -36,7 +36,7 @@ public class SearchController {
     //TODO: MAYBE HAVING A SEARCH SERVICE WOULD BE A GOOD IDEA
     @RequestMapping("/searchResults")
     public ModelAndView search(@RequestParam(value = "page", defaultValue = "1") final int page,
-                               @Valid @ModelAttribute("searchForm") final SearchForm form,
+                               @ModelAttribute("searchForm") final SearchForm form,
                                final BindingResult errors) throws PageOutOfBoundsException {
         if(errors.hasErrors()) {
             RedirectView redirectView = new RedirectView("/");
