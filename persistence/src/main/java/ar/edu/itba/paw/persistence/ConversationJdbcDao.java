@@ -3,6 +3,8 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
 import ar.edu.itba.paw.models.*;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,6 +19,8 @@ import java.util.Map;
 
 @Repository
 public class ConversationJdbcDao implements ConversationDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConversationJdbcDao.class);
 
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsertConversation;
@@ -97,7 +101,10 @@ public class ConversationJdbcDao implements ConversationDao {
         args.put("user_id", user.getId());
         args.put("professor_id", professor.getId());
         args.put("subject_id", subject.getId());
+        LOGGER.trace("Inserting conversation with user_id {}, professor_id {} and subject_id {}", user.getId(),
+                professor.getId(), subject.getId());
         final Number id = jdbcInsertConversation.executeAndReturnKey(args);
+
         return new Conversation(id.longValue(), user, professor, subject, null);
     }
 
@@ -109,12 +116,15 @@ public class ConversationJdbcDao implements ConversationDao {
         args.put("conversation_id", conversation.getId());
         args.put("message", text);
         args.put("created", new Timestamp(currentTime.toDateTime().getMillis()));
+        LOGGER.trace("Inserting message with sender_id {} into conversation with id {}", sender.getId(),
+                conversation.getId());
         final Number id = jdbcInsertMessage.executeAndReturnKey(args);
         return new Message(id.longValue(), sender, text, currentTime);
     }
 
     @Override
     public Conversation findById(final Long conversation_id) {
+        LOGGER.trace("Querying for conversation with id {}", conversation_id);
        final Conversation conversation = jdbcTemplate.query(
                CONVERSATION_SELECT_FROM + "WHERE conversations.conversation_id = ? " +
                        "AND conversations.user_id = u.user_id AND conversations.professor_id = p.user_id AND " +
@@ -123,6 +133,7 @@ public class ConversationJdbcDao implements ConversationDao {
                 , CONVERSATION_ROW_MAPPER, conversation_id).stream().findFirst().orElse(null);
 
        if(conversation != null) {
+           LOGGER.trace("Adding messages for conversation with id {}", conversation_id);
            conversation.addMessages(getMessagesByConversationId(conversation.getId()));
        }
        return conversation;
@@ -130,6 +141,7 @@ public class ConversationJdbcDao implements ConversationDao {
 
     @Override
     public List<Conversation> findByUserId(final Long user_id, final int limit, final int offset) {
+        LOGGER.trace("Querying for conversations belonging to a user with id {}", user_id);
         final List<Conversation> conversations = jdbcTemplate.query(
                 CONVERSATION_SELECT_FROM + "WHERE (conversations.user_id = ? OR " +
                         "conversations.professor_id = ?) AND conversations.user_id = u.user_id" +
@@ -143,6 +155,7 @@ public class ConversationJdbcDao implements ConversationDao {
 
     @Override
     public Conversation findByIds(final Long user_id, final Long professor_id, final Long subject_id) {
+        LOGGER.trace("Querying for conversation belonging to the users with id {} and {}", user_id, professor_id);
         final List<Conversation> conversations = jdbcTemplate.query(
                 CONVERSATION_SELECT_FROM + "WHERE conversations.user_id = ? AND " +
                         "conversations.professor_id = ? AND conversations.subject_id = ? AND " +
@@ -155,6 +168,7 @@ public class ConversationJdbcDao implements ConversationDao {
     }
 
     private List<Message> getMessagesByConversationId(final Long conversation_id) {
+        LOGGER.trace("Getting messages for conversation with id {}", conversation_id);
         final List<Message> messages = jdbcTemplate.query("SELECT users.user_id, users.username, " +
                         "users.name, users.lastname, users.password, users.email, messages.message_id," +
                         " messages.message, messages.created FROM users, messages " +

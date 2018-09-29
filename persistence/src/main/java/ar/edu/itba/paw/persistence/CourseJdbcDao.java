@@ -3,6 +3,8 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.models.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +18,7 @@ import java.util.*;
 @Repository
 public class CourseJdbcDao implements CourseDao {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(CourseJdbcDao.class);
 
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
@@ -61,6 +64,7 @@ public class CourseJdbcDao implements CourseDao {
 
     @Override
     public Optional<Course> findByIds(final long professor_id, final long subject_id) {
+        LOGGER.trace("Querying for course with professor_id {} and subject_id {}", professor_id, subject_id);
         final List<Course> list = jdbcTemplate.query(
                 COURSES_SELECT_FROM + "WHERE courses.user_id = ? AND courses.subject_id = ? " +
                         "AND professors.user_id = users.user_id AND areas.area_id = subjects.area_id " +
@@ -71,6 +75,7 @@ public class CourseJdbcDao implements CourseDao {
 
     @Override
     public List<Course> findByProfessorId(final long professor_id, final int limit, final int offset) {
+        LOGGER.trace("Querying for courses belonging to a professor with id {}", professor_id);
         final List<Course> courses = jdbcTemplate.query(
                 COURSES_SELECT_FROM + "WHERE courses.user_id = ? AND professors.user_id = users.user_id" +
                         " AND areas.area_id = subjects.area_id AND users.user_id = courses.user_id " +
@@ -82,6 +87,7 @@ public class CourseJdbcDao implements CourseDao {
 
     @Override
     public List<Course> filterByAreaId(final long areaId, final int limit, final int offset) {
+        LOGGER.trace("Querying for courses from area with id {}", areaId);
         final List<Course> courses = jdbcTemplate.query(
                 COURSES_SELECT_FROM + "WHERE subjects.area_id = ? AND professors.user_id = users.user_id" +
                         " AND areas.area_id = subjects.area_id AND users.user_id = courses.user_id" +
@@ -113,9 +119,11 @@ public class CourseJdbcDao implements CourseDao {
         args.put("subject_id", subject.getId());
         args.put("description", description);
         args.put("price", price);
+        LOGGER.trace("Inserting course with user_id {} and subject_id {}", professor.getId(), subject.getId());
         try {
             jdbcInsert.execute(args);
         } catch (DuplicateKeyException e) {
+            LOGGER.error("Course with user_id {} and subject_id {} already exists", professor.getId(), subject.getId());
             throw new CourseAlreadyExistsException();
         }
         return new Course(professor, subject, description, price);

@@ -4,6 +4,8 @@ import ar.edu.itba.paw.exceptions.TimeslotAllocatedException;
 import ar.edu.itba.paw.interfaces.persistence.ScheduleDao;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Timeslot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +20,8 @@ import java.util.Map;
 
 @Repository
 public class ScheduleJdbcDao implements ScheduleDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleJdbcDao.class);
 
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
@@ -39,8 +43,12 @@ public class ScheduleJdbcDao implements ScheduleDao {
         args.put("day", day);
         args.put("hour", hour);
         try {
+            LOGGER.trace("Inserting timeslot for professor with id {}, day {} at hour {}", professor.getId(),
+                    day, hour);
             jdbcInsert.execute(args);
         } catch (DuplicateKeyException e) {
+            LOGGER.error("Timeslot for professor with id {} at day {}, hour {} already exists", professor.getId(),
+                    day, hour );
             throw new TimeslotAllocatedException();
         }
         return new Timeslot(day, hour);
@@ -49,6 +57,7 @@ public class ScheduleJdbcDao implements ScheduleDao {
 
     @Override
     public List<Timeslot> getTimeslotsForProfessor(Professor professor) {
+        LOGGER.trace("Querying for timeslots from professor with id {}", professor.getId());
         List<Timeslot> schedule = jdbcTemplate.query("SELECT schedules.day, schedules.hour FROM schedules WHERE user_id = ?", TIMESLOT_ROW_MAPPER, professor.getId());
         return schedule;
     }

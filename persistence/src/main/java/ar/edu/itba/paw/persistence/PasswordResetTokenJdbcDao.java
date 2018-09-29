@@ -4,6 +4,8 @@ import ar.edu.itba.paw.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.paw.models.PasswordResetToken;
 import ar.edu.itba.paw.models.User;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,6 +21,8 @@ import java.util.Map;
 
 @Repository
 public class PasswordResetTokenJdbcDao implements PasswordResetTokenDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PasswordResetTokenJdbcDao.class);
 
     private JdbcTemplate jdbcTemplate;
 
@@ -48,6 +52,7 @@ public class PasswordResetTokenJdbcDao implements PasswordResetTokenDao {
 
     @Override
     public PasswordResetToken findByToken(final String token) {
+        LOGGER.trace("Querying for password reset token: {}", token);
         final List<PasswordResetToken> tokens = jdbcTemplate.query(
                 "SELECT id, user_id, username, name, lastname, password," +
                         " email, token, expires FROM reset_password_tokens NATURAL JOIN users " +
@@ -64,8 +69,11 @@ public class PasswordResetTokenJdbcDao implements PasswordResetTokenDao {
         args.put("token", token);
         args.put("expires", new Timestamp(expires.toDateTime().getMillis()));
         try {
+            LOGGER.trace("Inserting password reset token for user with id {}", userId);
             id = jdbcInsert.executeAndReturnKey(args);
         } catch (DataIntegrityViolationException e) {
+            LOGGER.error("User with id {} doesn't exist", userId);
+            LOGGER.warn("Password reset token for user with id {} was not created", userId);
             return null;
         }
         return new PasswordResetToken(id.longValue(), null, token, expires);
@@ -73,11 +81,13 @@ public class PasswordResetTokenJdbcDao implements PasswordResetTokenDao {
 
     @Override
     public void purgeExpiredTokens() {
+        LOGGER.trace("Deleting expired tokens");
         jdbcTemplate.update("DELETE FROM reset_password_tokens WHERE expires < NOW()");
     }
 
     @Override
     public void deleteUsedToken(String token) {
+        LOGGER.trace("Deleting used token: {}", token);
         jdbcTemplate.update("DELETE FROM reset_password_tokens WHERE token = ?", token);
     }
 }
