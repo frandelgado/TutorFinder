@@ -19,7 +19,7 @@
 
 <div class="content">
     <h1 class="title"><c:out value="${course.subject.area.name} - ${course.subject.name}" escapeXml="true"/></h1>
-    <h4 class="description">${course.description}</h4>
+    <h4 class="description"><c:out value="${course.description}" escapeXml="true"/></h4>
     <hr/>
     <div class="profile">
         <a href="<c:url value="/Professor/${course.professor.id}"/>">

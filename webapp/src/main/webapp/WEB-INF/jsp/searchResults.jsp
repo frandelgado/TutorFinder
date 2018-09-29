@@ -8,10 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
-    <!--
-<link rel="stylesheet" type="text/css" href="./css/stylesheet.css">
-<link rel="stylesheet" href="./css/bootstrap.min.css">
--->
+
     <title>Tu Teoria | <spring:message code="search.results" /> </title>
 </head>
 
@@ -21,14 +18,6 @@
 
 <div class="content">
     <div class="filter-panel">
-        <!--<div class="area-filter">
-            <a>Only tutors from your area?</a>
-            <input type="checkbox" />
-        </div>
-        <div class="area-filter">
-            <a>Include creepy guys?</a>
-            <input type="checkbox" />
-        </div>-->
     </div>
 
     <div class="search-results">
