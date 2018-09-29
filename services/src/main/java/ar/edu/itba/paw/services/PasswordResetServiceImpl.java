@@ -8,6 +8,8 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.PasswordResetToken;
 import ar.edu.itba.paw.models.User;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class PasswordResetServiceImpl implements PasswordResetService {
 
     private static final Integer EXPIRATION = 1;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PasswordResetServiceImpl.class);
 
     @Autowired
     private UserService userService;
@@ -35,9 +38,11 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
         final User user = userService.findByEmail(email);
         if(user == null) {
+            LOGGER.error("Attempted to create password reset token for non registered email");
             return false;
         }
 
+        LOGGER.debug("Creating password reset token for user with id {}", user.getId());
         final String token = UUID.randomUUID().toString();
         final PasswordResetToken passwordResetToken = passwordResetTokenDao.create(user.getId(),
                 token, LocalDateTime.now().plusDays(EXPIRATION));
@@ -52,6 +57,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     @Override
     @Scheduled(fixedRate = 24*60*60*1000) //24 Hours
     public void purgeExpired() {
+        LOGGER.debug("Purging expired tokens");
         passwordResetTokenDao.purgeExpiredTokens();
     }
 
@@ -59,16 +65,20 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     public PasswordResetToken findByToken(final String token) {
 
         if(token == null || token.isEmpty()) {
+            LOGGER.error("Attempted to find password reset token with empty token");
             return null;
         }
 
+        LOGGER.debug("Searching for password reset token with token {}", token);
         return passwordResetTokenDao.findByToken(token);
     }
 
     @Override
     public void deleteUsedToken(final String token) {
-        if(token != null && !token.isEmpty())
+        if(token != null && !token.isEmpty()) {
+            LOGGER.debug("Deleting used password reset token: {}", token);
             passwordResetTokenDao.deleteUsedToken(token);
+        }
     }
 
     @Transactional
@@ -78,10 +88,12 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         final PasswordResetToken passwordResetToken = findByToken(token);
 
         if(passwordResetToken == null) {
+            LOGGER.error("Attempted to change password using an invalid token");
             throw new InvalidTokenException();
         }
 
         final User user = passwordResetToken.getUser();
+        LOGGER.debug("Changing password for user with id {} using token {}", user.getId(), token);
         final boolean changed = userService.changePassword(user.getId(), password);
         if(changed) {
             deleteUsedToken(passwordResetToken.getToken());
