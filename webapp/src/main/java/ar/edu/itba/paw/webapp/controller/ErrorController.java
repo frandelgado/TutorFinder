@@ -49,7 +49,9 @@ public class ErrorController {
 
     @RequestMapping("/403")
     public ModelAndView forbidden() {
-        return new ModelAndView("403");
+        final ModelAndView mav = new ModelAndView("error");
+        mav.addObject("errorMessageCode", "403");
+        return mav;
     }
 
     @RequestMapping("/404")
