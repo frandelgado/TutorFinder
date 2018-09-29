@@ -5,10 +5,7 @@ import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.SameUserConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
-import ar.edu.itba.paw.interfaces.service.ConversationService;
-import ar.edu.itba.paw.interfaces.service.ProfessorService;
-import ar.edu.itba.paw.interfaces.service.SubjectService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +57,9 @@ public class ConversationServiceImplTest {
 
     @Mock
     private SubjectService subjectService;
+
+    @Mock
+    private EmailService emailService;
 
 
     @Before
@@ -149,10 +149,16 @@ public class ConversationServiceImplTest {
         when(user.getId()).thenReturn(USER_ID);
         when(userService.findUserById(USER_ID)).thenReturn(user);
 
+        final Professor professor = mock(Professor.class);
+        when(professor.getId()).thenReturn(PROFESSOR_ID);
+
         final Conversation conversation = mock(Conversation.class);
         when(conversation.belongs(USER_ID)).thenReturn(true);
         when(conversation.getId()).thenReturn(ID);
+        when(conversation.getUser()).thenReturn(user);
+        when(conversation.getProfessor()).thenReturn(professor);
         doReturn(conversation).when(conversationService).findById(ID, USER_ID);
+        doNothing().when(emailService).sendContactEmail(user, professor, conversation);
 
         when(conversationDao.create(user, BODY, conversation)).thenReturn(mock(Message.class));
 

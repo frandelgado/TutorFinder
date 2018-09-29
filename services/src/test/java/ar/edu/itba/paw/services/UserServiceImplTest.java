@@ -4,6 +4,7 @@ import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.ProfessorWithoutUserException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
+import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
@@ -21,6 +22,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -48,6 +51,9 @@ public class UserServiceImplTest {
     @Mock
     private BCryptPasswordEncoder encoder;
 
+    @Mock
+    private EmailService emailService;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -58,6 +64,7 @@ public class UserServiceImplTest {
     public void testCreateValid() throws UsernameAlreadyInUseException, EmailAlreadyInUseException {
         when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
         when(userDao.create(USERNAME, encoder.encode(PASSWORD), EMAIL, NAME, LASTNAME)).thenReturn(mock(User.class));
+        doNothing().when(emailService).sendRegistrationEmail(any());
 
         final User user = userService.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME);
         assertNotNull(user);
