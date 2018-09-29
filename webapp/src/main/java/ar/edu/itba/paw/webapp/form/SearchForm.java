@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 public class SearchForm {
@@ -8,15 +9,24 @@ public class SearchForm {
 
     private String search;
 
-    private String type;
+    private String type = "course";
 
     @Min(0)
     private Double minPrice;
 
+    @Min(0)
     private Double maxPrice;
 
+    @Min(1)
+    @Max(7)
     private Integer day;
+
+    @Min(0)
+    @Max(23)
     private Integer startHour;
+
+    @Min(1)
+    @Max(24)
     private Integer endHour;
 
     public void setSearch(String search) {
