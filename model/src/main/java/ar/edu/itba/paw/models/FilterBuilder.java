@@ -56,25 +56,39 @@ public class FilterBuilder {
                 this.TIME_FILTERS, this.params, this.timeslotParams);
     }
 
-    public FilterBuilder filterByTimeslot(final int day, final int startHour, final int endHour){
+    public FilterBuilder filterByTimeslot(final Integer day, final Integer startHour, final Integer endHour){
+        StringBuilder sb = new StringBuilder();
+        sb.append("(schedules.day = ? ");
         this.timeslotParams.add(day);
-        this.timeslotParams.add(startHour);
-        this.timeslotParams.add(endHour);
-        if(this.TIME_FILTERS == null) {
-            return new FilterBuilder(this.SELECT, this.FROM, this.WHERE,
-                    "(schedules.day = ? AND schedules.hour >= ? AND schedules.hour < ?) ", this.params, this.timeslotParams);
-        } else {
-            return new FilterBuilder(this.SELECT, this.FROM, this.WHERE,
-                    this.TIME_FILTERS + "OR (schedules.day = ? AND schedules.hour >= ? AND schedules.hour < ?) ",
-                    this.params, this.timeslotParams);
+
+        if(startHour != null && endHour != null){
+            this.timeslotParams.add(startHour);
+            this.timeslotParams.add(endHour);
+            sb.append("AND schedules.hour >= ? AND schedules.hour < ?");
+
         }
+        
+        if(this.TIME_FILTERS != null)
+            sb.insert(0,"OR ").insert(0, this.TIME_FILTERS);
+
+        sb.append(") ");
+        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE, sb.toString(), this.params, this.timeslotParams);
 
     }
 
-    public FilterBuilder filterByPrice(final double minPrice, final double maxPrice){
-        this.params.add(minPrice);
-        this.params.add(maxPrice);
-        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE + "AND courses.price >= ? AND courses.price <= ? ",
+    public FilterBuilder filterByPrice(final Double minPrice, final Double maxPrice){
+        StringBuilder sb = new StringBuilder();
+        if(minPrice != null){
+            sb.append("AND courses.price >= ? ");
+            this.params.add(minPrice);
+        }
+
+        if(maxPrice != null){
+            sb.append("AND courses.price <= ? ");
+            this.params.add(maxPrice);
+        }
+
+        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE + sb.toString(),
                 this.TIME_FILTERS, this.params, this.timeslotParams);
     }
 
