@@ -44,7 +44,7 @@
             <form:hidden path="conversationId" />
             <div>
                 <form:label cssClass="label" path="body"><spring:message code="contact.body"/></form:label>
-                <form:textarea cssClass="input-request" type="text" path="body" cols="5" rows="5"/>
+                <form:textarea cssClass="chat-box" type="text" path="body" cols="5" rows="5"/>
                 <form:errors cssClass="error-text" path="body" element="p"/>
             </div>
             <div>

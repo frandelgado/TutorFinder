@@ -1,3 +1,52 @@
+@media screen and(-webkit-min-device-pixel-ratio:0) {
+    /* width */
+    .conversation-messages::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    .conversation-messages::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    .conversation-messages::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    .conversation-messages::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+and (min-resolution:.001dpcm) {
+    /* width */
+    .conversation-messages::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    .conversation-messages::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    .conversation-messages::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    .conversation-messages::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}
+
 *{
     font-family:  Helvetica, sans-serif;
 }
@@ -254,6 +303,7 @@ button {
 }
 
 .search-course-result {
+    position: relative;
     padding: 20px;
     display: grid;
     height: 100%;
@@ -266,8 +316,16 @@ button {
                         "search-result-img search-result-description search-result-specs"
                          "search-result-img search-result-description search-result-specs"
 }
+.search-course-result:hover {
+    background-color: #dedede;
+}
+
+.search-area-result:hover{
+    background-color: #dedede;
+}
 
 .search-area-result {
+    position: relative;
     padding: 20px;
     display: grid;
     height: 100%;
@@ -485,7 +543,16 @@ button {
 .input-request {
     border-width: 0;
     border-bottom: 2px solid #F47C48;
-    border-radius: 0;
+    padding: 4px 0;
+    background-color: white;
+    font-size: 15px;
+    color: #402039;
+    width: 100%;
+}
+
+.chat-box {
+    border-width: 0;
+    border-radius: 15px;
     padding: 4px 0;
     background-color: white;
     font-size: 15px;
@@ -534,7 +601,7 @@ button {
     justify-content: center;
     border: 1px solid #F47C48;
     border-radius: 4px;
-    background: transparent;
+    background: white;
     color: #402039;
     font-size: 15px;
     font-weight: 700;
@@ -569,7 +636,7 @@ button {
 }
 
 .conversation {
-    background-color: #cccccc;
+
 }
 
 .inbox-message {
@@ -602,9 +669,12 @@ button {
 }
 
 .conversation-messages {
+    border: 2px solid #dedede;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 20px;
     overflow-y: auto;
     max-height: 550px;
-    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
 }
@@ -643,8 +713,10 @@ button {
 
 .conversation .form-container {
     padding: 10px;
-    border-radius: 15px;
-    background-color: #dddddd;
+    border: 2px solid #dedede;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    background-color: #dedede;
 }
 
 table, td, th {
