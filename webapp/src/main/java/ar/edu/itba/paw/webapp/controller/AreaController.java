@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class AreaController {
+public class AreaController extends BaseController{
 
     @Autowired
     @Qualifier("areaServiceImpl")
@@ -29,9 +29,7 @@ public class AreaController {
         final ModelAndView mav = new ModelAndView("area");
         final Area area = as.findAreaById(id);
         if(area == null) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","nonExistentArea");
-            return error;
+            return redirectToErrorPage("nonExistentArea");
         }
 
         mav.addObject("area", area);
