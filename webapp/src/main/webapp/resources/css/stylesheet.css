@@ -55,8 +55,9 @@ and (min-resolution:.001dpcm) {
     box-shadow: 0 15px 35px -15px grey;
 }
 
-.class {
-    box-shadow: 0 0 35px 0 grey;
+.class, .search-course-result {
+    border-radius: 20px;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
 }
 
 .navbar {
@@ -118,7 +119,7 @@ body {
 }
 
 .staticProfile {
-    grid-template-columns: 20fr 60fr 20fr;
+    grid-template-columns: 10fr 80fr 10fr;
 }
 
 .navbar-button {
@@ -308,12 +309,10 @@ button {
     display: grid;
     height: 100%;
     align-content: center;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
     grid-template-columns: 220px auto;
-    grid-template-areas: "search-result-img search-result-title search-result-specs"
-                        "search-result-img search-result-professor search-result-specs"
-                        "search-result-img search-result-description search-result-specs"
+    grid-template-areas: "search-result-img search-result-title       search-result-specs"
+                         "search-result-img search-result-professor   search-result-specs"
+                         "search-result-img search-result-description search-result-specs"
                          "search-result-img search-result-description search-result-specs"
 }
 .search-course-result:hover {
@@ -432,22 +431,38 @@ button {
 
 .staticProfile .content {
     display: grid;
-    grid-template-columns: 120px auto;
+    grid-template-columns: 40% 60%;
     grid-template-rows: 50px 50px 80px auto 80px auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
     grid-template-areas:
-        "profile-picture profile-name"
-        "profile-picture profile-description"
-        "............... ..................."
-        "classes         classes"
-        "............... ..................."
-        "addTime addTime"
-        "schedule        schedule"
+        "profile-name        profile-name"
+        "profile-description profile-description"
+        "................... ..................."
+        "class-content       time-content"
         ;
     
 }
 
-.addTime {
-    grid-area: addTime;
+.class-content {
+    display: grid;
+    grid-template-rows: 50px auto;
+    grid-template-areas: 
+            "add-class"
+            "classes"
+            ;
+}
+
+.time-content {
+    display: grid;
+    grid-template-areas: 
+            "add-time"
+            "schedule"
+            ;
+}
+
+.add-time {
+    grid-area: add-time;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -455,6 +470,7 @@ button {
 
 .classes {
     grid-area: classes;
+    margin-top: 20px;
     display: grid;
     grid-auto-rows: 100px;
     grid-row-gap: 20px;
@@ -508,8 +524,11 @@ button {
 }
 
 .add-class {
+    grid-area: add-class;
+    display: grid;
     justify-content: center;
     align-content: center;
+    align-self: end;
     font-size: 32px;
 }
 
@@ -633,6 +652,10 @@ button {
 
 .schedule {
     grid-area: schedule;
+    min-width: 100px;
+    min-height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .conversation {
