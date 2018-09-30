@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        if(username.isEmpty() || password.isEmpty() || email.isEmpty() || name.isEmpty() || lastName.isEmpty()){
+        if(username.length() == 0 || password.length() < 8 || email.length() == 0 || name.length() == 0 || lastName.length() == 0){
             return null;
         }
         if(!name.matches("[a-zA-Z]+") && !lastName.matches("[a-zA-Z]+")){
