@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
-import ar.edu.itba.paw.exceptions.ProfessorWithoutUserException;
-import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
@@ -127,7 +124,7 @@ public class ProfessorServiceImplTest {
     }
 
     @Test(expected = EmailAlreadyInUseException.class)
-    public void testCreateWithUserEmailInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
+    public void testCreateWithUserEmailInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         when(userDao.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME)).thenThrow(new EmailAlreadyInUseException());
 
         final Professor professor = professorService.createWithUser(ID, USERNAME, NAME, LASTNAME, PASSWORD,
@@ -135,7 +132,7 @@ public class ProfessorServiceImplTest {
     }
 
     @Test(expected = UsernameAlreadyInUseException.class)
-    public void testCreateWithUserUsernameInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
+    public void testCreateWithUserUsernameInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         when(userDao.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME)).thenThrow(new UsernameAlreadyInUseException());
 
         final Professor professor = professorService.createWithUser(ID, USERNAME, NAME, LASTNAME, PASSWORD,
@@ -143,7 +140,7 @@ public class ProfessorServiceImplTest {
     }
 
     @Test
-    public void testCreateWithUserInvalidDescription() throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
+    public void testCreateWithUserInvalidDescription() throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         final String description = "Short";
 
         Professor professor = professorService.createWithUser(ID, USERNAME, NAME, LASTNAME, PASSWORD,
@@ -152,7 +149,7 @@ public class ProfessorServiceImplTest {
     }
 
     @Test
-    public void testCreateWithUserValid() throws UsernameAlreadyInUseException, EmailAlreadyInUseException {
+    public void testCreateWithUserValid() throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         final User user = new User(ID, USERNAME, NAME, LASTNAME, PASSWORD, EMAIL);
         when(userDao.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME)).thenReturn(user);
         when(professorDao.create(user, DESCRIPTION)).thenReturn(mock(Professor.class));

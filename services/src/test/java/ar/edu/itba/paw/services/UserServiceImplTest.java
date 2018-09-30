@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.ProfessorWithoutUserException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
@@ -61,7 +62,7 @@ public class UserServiceImplTest {
 
 
     @Test
-    public void testCreateValid() throws UsernameAlreadyInUseException, EmailAlreadyInUseException {
+    public void testCreateValid() throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
         when(userDao.create(USERNAME, encoder.encode(PASSWORD), EMAIL, NAME, LASTNAME)).thenReturn(mock(User.class));
         doNothing().when(emailService).sendRegistrationEmail(any());
@@ -71,7 +72,7 @@ public class UserServiceImplTest {
     }
 
     @Test(expected = EmailAlreadyInUseException.class)
-    public void testCreateWithUserEmailInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
+    public void testCreateWithUserEmailInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
         when(userDao.create(USERNAME, encoder.encode(PASSWORD), EMAIL, NAME, LASTNAME)).thenThrow(new EmailAlreadyInUseException());
 
@@ -79,7 +80,7 @@ public class UserServiceImplTest {
     }
 
     @Test(expected = UsernameAlreadyInUseException.class)
-    public void testCreateWithUserUsernameInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
+    public void testCreateWithUserUsernameInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
         when(userDao.create(USERNAME, encoder.encode(PASSWORD), EMAIL, NAME, LASTNAME)).thenThrow(new UsernameAlreadyInUseException());
 

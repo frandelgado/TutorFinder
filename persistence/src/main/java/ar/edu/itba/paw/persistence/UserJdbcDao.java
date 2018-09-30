@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,7 @@ public class UserJdbcDao implements UserDao {
     @Override
     public User create(final String username, final String password, final String email,
                        final String name, final String lastName)
-            throws UsernameAlreadyInUseException, EmailAlreadyInUseException {
+            throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         final Map<String, Object> args = new HashMap<>();
         final Number userId;
         args.put("username", username);
@@ -89,8 +90,11 @@ public class UserJdbcDao implements UserDao {
         try {
             userId = jdbcInsert.executeAndReturnKey(args);
         } catch (DuplicateKeyException e) {
-            if(findByUsername(username).isPresent())
+            if(findByUsername(username).isPresent()) {
+                if (findByEmail(email).isPresent())
+                    throw new UsernameAndEmailAlreadyInUseException();
                 throw new UsernameAlreadyInUseException();
+            }
             if(findByEmail(email).isPresent())
                 throw new EmailAlreadyInUseException();
             return null;
