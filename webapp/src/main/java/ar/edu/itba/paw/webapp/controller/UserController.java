@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
-public class UserController {
+public class UserController extends BaseController{
 
     @Autowired
     @Qualifier("userServiceImpl")
@@ -75,9 +75,7 @@ public class UserController {
 
         authenticateRegistered(request, u.getUsername(), u.getPassword());
 
-        final RedirectView view = new RedirectView("/" );
-        view.setExposeModelAttributes(false);
-        return new ModelAndView(view);
+        return redirectWithNoExposedModalAttributes("/");
     }
 
     @RequestMapping("/login")
@@ -91,9 +89,7 @@ public class UserController {
                                          @ModelAttribute("currentUserIsProfessor") final boolean isProfessor,
                                          @RequestParam(value = "page", defaultValue = "1") final int page) throws PageOutOfBoundsException {
         if(loggedUser != null && loggedUser.getId() == id && isProfessor) {
-            final RedirectView view = new RedirectView("/Profile");
-            view.setExposeModelAttributes(false);
-            return new ModelAndView(view);
+            return redirectWithNoExposedModalAttributes("/Profile");
         }
 
         final ModelAndView mav = new ModelAndView("profile");
@@ -101,9 +97,7 @@ public class UserController {
         mav.addObject("page", page);
         final Professor professor = ps.findById(id);
         if(professor == null) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","nonExistentProfessor");
-            return error;
+            return redirectToErrorPage("nonExistentProfessor");
         }
         mav.addObject("professor", professor);
         return mav;
@@ -154,9 +148,7 @@ public class UserController {
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
 
-        final RedirectView view = new RedirectView("/" );
-        view.setExposeModelAttributes(false);
-        return new ModelAndView(view);
+        return redirectWithNoExposedModalAttributes("/");
     }
 
     @RequestMapping("/registerAsProfessor")
@@ -180,20 +172,15 @@ public class UserController {
         try {
             ss.reserveTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
         } catch (NonexistentProfessorException e) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","nonExistentUser");
-            return error;
+            return redirectToErrorPage("nonExistentUser");
         } catch (TimeslotAllocatedException e) {
             errors.rejectValue("endHour", "TimeslotAllocatedError");
             return profile(loggedUser, form, 1);
         } catch (InvalidTimeException | InvalidTimeRangeException e) {
-            //Already validated by form
             return profile(loggedUser, form, 1);
         }
 
-        final RedirectView view = new RedirectView("/Profile" );
-        view.setExposeModelAttributes(false);
-        return new ModelAndView(view);
+        return redirectWithNoExposedModalAttributes("/Profile");
     }
 
     @RequestMapping(value = "/forgotPassword")
@@ -224,17 +211,13 @@ public class UserController {
                                       @RequestParam(value="token", required=true) final String token) {
 
         if(token.isEmpty()) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","invalidToken");
-            return error;
+            return redirectToErrorPage("invalidToken");
         }
 
         final PasswordResetToken passwordResetToken = passwordResetService.findByToken(token);
 
         if(passwordResetToken == null) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","invalidToken");
-            return error;
+            return redirectToErrorPage("invalidToken");
         }
 
         return new ModelAndView("resetPassword");
@@ -257,21 +240,15 @@ public class UserController {
         try {
             changedUser = passwordResetService.changePassword(token, form.getPassword());
         } catch (InvalidTokenException e) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","invalidToken");
-            return error;
+            return redirectToErrorPage("invalidToken");
         }
 
         if(changedUser == null) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","changePasswordError");
-            return error;
+            return redirectToErrorPage("changePasswordError");
         }
 
         authenticateRegistered(request, changedUser.getUsername(), form.getPassword());
-        final RedirectView view = new RedirectView("/" );
-        view.setExposeModelAttributes(false);
-        return new ModelAndView(view);
+        return redirectWithNoExposedModalAttributes("/");
     }
 
 

@@ -44,10 +44,6 @@
             <form:textarea cssClass="input-request chat-box" type="text" path="body" rows="5" cols="5"/>
             <form:errors cssClass="error-text" path="body" element="p"/>
         </div>
-        <div>
-            <form:hidden path="extraMessage" />
-            <form:errors cssClass="error-text" path="extraMessage" element="p"/>
-        </div>
         <div class="button-container">
             <input class="button-2" type="submit" value="<spring:message code="send"/>"/>
         </div>

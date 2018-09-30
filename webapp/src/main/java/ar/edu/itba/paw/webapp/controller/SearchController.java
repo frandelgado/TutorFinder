@@ -19,7 +19,7 @@ import javax.jws.WebParam;
 import javax.validation.Valid;
 
 @Controller
-public class SearchController {
+public class SearchController extends BaseController{
 
     @Autowired
     @Qualifier("courseServiceImpl")
@@ -60,9 +60,7 @@ public class SearchController {
                 mav.addObject("pagedResults", as.filterAreasByName(form.getSearch(), page));
                 break;
             default:
-                final ModelAndView error = new ModelAndView("error");
-                error.addObject("errorMessageCode","typeInvalid");
-                return error;
+                return redirectToErrorPage("typeInvalid");
         }
         mav.addObject("search", form.getSearch());
         mav.addObject("type", form.getType());

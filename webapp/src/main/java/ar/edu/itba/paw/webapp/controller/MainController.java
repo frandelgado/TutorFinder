@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 @Controller
-public class MainController {
+public class MainController extends BaseController{
 
     @Autowired
     @Qualifier("userServiceImpl")
@@ -29,8 +29,7 @@ public class MainController {
             @ModelAttribute(value = "ERROR_MESSAGE") final String error_message,
             @ModelAttribute("SearchForm") final SearchForm form
     ){
-        ModelAndView mav = new ModelAndView("index");
-        return mav;
+        return new ModelAndView("index");
     }
 
     @RequestMapping("favicon.ico")

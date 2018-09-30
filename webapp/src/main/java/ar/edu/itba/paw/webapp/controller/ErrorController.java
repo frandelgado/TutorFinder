@@ -10,55 +10,42 @@ import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 @Controller
-public class ErrorController {
+public class ErrorController extends BaseController{
 
     @ExceptionHandler(Exception.class)
     public ModelAndView handleError() {
-
-        final ModelAndView mav = new ModelAndView("error");
-        mav.addObject("errorMessageCode", "somethingWentWrong");
-        return mav;
+        return redirectToErrorPage("somethingWentWrong");
     }
 
     @ExceptionHandler({UserNotInConversationException.class, NonexistentConversationException.class})
     public ModelAndView handleConversationExceptions(Exception e) {
-        final ModelAndView error = new ModelAndView("error");
         final String messageCode;
         if(e instanceof UserNotInConversationException) {
             messageCode = "userNotInConversation";
         } else {
             messageCode = "nonExistentConversation";
         }
-        error.addObject("errorMessageCode", messageCode);
-        return error;
+        return redirectToErrorPage(messageCode);
     }
 
     @ExceptionHandler(PageOutOfBoundsException.class)
-    public ModelAndView handlePageOutOfBounds(PageOutOfBoundsException e) {
-        final ModelAndView error = new ModelAndView("error");
-        error.addObject("errorMessageCode", "pageOutOfBounds");
-        return error;
+    public ModelAndView handlePageOutOfBounds() {
+        return redirectToErrorPage("pageOutOfBounds");
     }
 
     @ExceptionHandler({NonexistentProfessorException.class, ProfessorWithoutUserException.class})
     public ModelAndView handleNonexistentUser() {
-        final ModelAndView error = new ModelAndView("error");
-        error.addObject("errorMessageCode","nonExistentUser");
-        return error;
+        return redirectToErrorPage("nonExistentUser");
     }
 
     @RequestMapping("/403")
     public ModelAndView forbidden() {
-        final ModelAndView mav = new ModelAndView("error");
-        mav.addObject("errorMessageCode", "403");
-        return mav;
+        return redirectToErrorPage("403");
     }
 
     @RequestMapping("/404")
     public ModelAndView resourceNotFound() {
-        final ModelAndView mav = new ModelAndView("error");
-        mav.addObject("errorMessageCode", "404");
-        return mav;
+        return redirectToErrorPage("404");
     }
 
 }
