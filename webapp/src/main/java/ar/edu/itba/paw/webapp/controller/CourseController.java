@@ -84,6 +84,7 @@ public class CourseController extends BaseController{
             return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
         }
         if(sent) {
+            //TODO: Add SuccessMessage
             errors.addError(new FieldError("MessageSent", "body", null,
                     false, new String[]{"MessageSent"},null, "Mensaje Enviado!"));
             form.setBody(null);

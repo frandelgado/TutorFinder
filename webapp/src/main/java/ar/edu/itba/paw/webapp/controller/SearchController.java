@@ -33,7 +33,6 @@ public class SearchController extends BaseController{
     @Qualifier("areaServiceImpl")
     private AreaService as;
 
-    //TODO: MAYBE HAVING A SEARCH SERVICE WOULD BE A GOOD IDEA
     @RequestMapping("/searchResults")
     public ModelAndView search(@RequestParam(value = "page", defaultValue = "1") final int page,
                                @ModelAttribute("searchForm") final SearchForm form,
