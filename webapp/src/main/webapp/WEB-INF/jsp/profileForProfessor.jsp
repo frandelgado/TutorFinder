@@ -21,14 +21,17 @@
 <div class="content">
     <%--<img class="profile-picture" alt="Profile picture" src="<c:url value="/resources/images/logo_invert.jpg" />" />--%>
     <h1 class="profile-name"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
-    <h3 class="profile-description"><c:out value="${professor.description}" escapeXml="true"/></h3>
+    <h3 class="profile-description m-20-b"><c:out value="${professor.description}" escapeXml="true"/></h3>
     <div class="class-content">
-        <a class="class-text"><spring:message code="classesText"/></a>
-        <div class="class add-class">
+        <div class="add-class button-2">
             <a class="class-button" href="<c:url value="/createCourse" />"></a>
-            +
+            <spring:message code="addClass"/>
         </div>
         <div class="classes">
+            <div>
+                <h2><spring:message code="clasesTitleFP"/></h2>
+                <p><spring:message code="clasesDescriptionFP" /></p>
+            </div>
             <c:forEach var="course" items="${courses.results}">
                 <div class="class">
                     <a class="class-button" href="<c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
@@ -52,9 +55,8 @@
     </div>
 
     <div class="time-content">
-        <a class="schedule-text"><spring:message code="schedule"/></a>
-        <div id="add-time-modal-button" class="add-time-modal-button class">
-            +
+        <div id="add-time-modal-button" class="add-time-modal-button button-2">
+            <spring:message code="addTime"/>
         </div>
         <div id="add-time-modal" class="add-time-modal">
             <div>

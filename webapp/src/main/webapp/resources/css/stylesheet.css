@@ -89,7 +89,6 @@ and (min-resolution:.001dpcm) {
 body {
     margin: 0;
     display: grid;
-    background-color: whitesmoke;
     grid-template-columns: 25fr 50fr 25fr;
     grid-template-rows: 65px 100px auto 100px;
     grid-template-areas: "navbar  navbar  navbar"
@@ -302,6 +301,7 @@ button {
     padding: 20px;
     margin-top: 50px;
     border-radius: 20px;
+    height: fit-content;
 }
 
 .search-bar {
@@ -472,10 +472,9 @@ button {
 .class-content {
     display: grid;
     grid-template-rows: 50px auto;
-    grid-template-columns: auto 120px;
     grid-template-areas: 
-            "class-text add-class"
-            "classes    classes"
+            "add-class"
+            "classes"
             ;
 }
 
@@ -489,11 +488,9 @@ button {
 .time-content {
     display: grid;
     grid-template-rows: 50px auto;
-    grid-template-columns: auto 120px;
-    grid-auto-columns: 0;
     grid-template-areas:
-            "schedule-text add-time-modal-button"
-            "schedule      schedule"
+            "button"
+            "schedule"
             ;
 }
 
@@ -504,12 +501,10 @@ button {
     font-size: 24px;
 }
 
-.time-content .add-time-modal-button {
-    grid-area: add-time-modal-button;
-    grid-column-gap: 0;
-    align-content: center;
-    mouse: pointer;
-    font-size: 32px;
+.add-time-modal-button {
+    grid-area: button;
+    align-self: center;
+    justify-self: center;
 }
 
 .add-time-modal {
@@ -551,11 +546,13 @@ button {
 }
 
 .classes {
-    grid-area: classes;
-    margin-top: 20px;
-    display: grid;
-    grid-auto-rows: 100px;
-    grid-row-gap: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #dedede;
+    padding: 10px;
+    margin-top: 25px;
+    border-radius: 20px;
+    height: fit-content;
 }
 
 .class-profile{
@@ -565,7 +562,9 @@ button {
 
 .class {
     position: relative;
-
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 10px;
     display: grid;
     grid-column-gap: 10px;
     justify-content: center;
@@ -612,9 +611,9 @@ button {
 
 .add-class {
     grid-area: add-class;
-    grid-column-gap: 0;
-    align-content: center;
-    font-size: 32px;
+    position: relative;
+    align-self: center;
+    justify-self: center;
 }
 
 .form {
@@ -627,7 +626,7 @@ button {
 }
 
 .form div {
-    margin-bottom: 20px;
+    margin-bottom: 35px;
 }
 
 .form div:last-child{
@@ -703,6 +702,7 @@ button {
 
 .error-text {
     color: red;
+    margin:0;
 }
 
 .success-text {
@@ -750,6 +750,10 @@ button {
 .schedule {
     grid-area: schedule;
     margin: 25px;
+    padding: 10px;
+    border: 2px solid #dedede;
+    border-radius: 15px;
+    background-color: #dedede;
 }
 
 .schedule th {
@@ -871,10 +875,11 @@ table {
 
 th, td {
     padding: 15px;
+    border-color: #402039;
 }
 
 .selected-time {
-    background-color: #99ff99;
+    background-color: #206a9e;
 }
 .previous {
     text-decoration: none;
@@ -898,6 +903,10 @@ th, td {
 
 .center-text {
     text-align: center;
+}
+
+.m-20-b {
+    margin-bottom: 20px;
 }
 
 #display-error
@@ -926,4 +935,24 @@ th, td {
     color: green;
     text-align: center;
     margin-top: 30px;
+}
+
+.register-form {
+    display: grid;
+    grid-template-columns: 350px 312px 350px;
+    grid-template-areas: "--- input errors";
+}
+
+.inputs {
+    grid-area: input;
+}
+
+.errors {
+    grid-area: errors;
+}
+
+.error-msg {
+    margin-left: 15px;
+    height: 45px;
+    margin-bottom: 20px;
 }

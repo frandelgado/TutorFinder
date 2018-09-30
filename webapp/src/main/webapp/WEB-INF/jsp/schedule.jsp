@@ -1,6 +1,8 @@
 <div class="schedule">
-    <table>
-        <tr>
+    <h2><spring:message code="schedule.title"/></h2>
+    <p><spring:message code="schedule.description" /></p>
+    <table style="width:100%; background-color: white">
+    <tr>
             <th>
             </th>
             <th>

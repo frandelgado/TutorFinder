@@ -20,6 +20,10 @@
     <h1 class="profile-name"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
     <h3 class="profile-description"><c:out value="${professor.description}" escapeXml="true"/></h3>
     <div class="classes">
+        <div>
+            <h2><spring:message code="clasesTitle"/></h2>
+            <p><spring:message code="clasesDescription" /></p>
+        </div>
         <c:if test="${courses.results.size() == 0}">
             <h4><spring:message code="no.courses"/></h4>
         </c:if>
