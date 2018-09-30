@@ -24,7 +24,7 @@ public class CourseJdbcDao implements CourseDao {
     private static final String COURSES_SELECT_FROM = "SELECT courses.user_id, courses.subject_id," +
             "courses.description, price, professors.description, users.username," +
             "users.name, users.lastname, users.password, users.email, subjects.description," +
-            "subjects.name, areas.name, areas.description, areas.area_id " +
+            "subjects.name, areas.name, areas.description, areas.area_id, professors.profile_picture " +
             "FROM courses, professors, users, subjects, areas ";
     
     private final static RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
@@ -35,7 +35,8 @@ public class CourseJdbcDao implements CourseDao {
                     rs.getString(8),
                     rs.getString(9),
                     rs.getString(10),
-                    rs.getString(5)
+                    rs.getString(5),
+                    rs.getBytes(16)
                     ),
             new Subject(
                     rs.getLong(2),

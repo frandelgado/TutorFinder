@@ -26,7 +26,7 @@ public class ConversationJdbcDao implements ConversationDao {
             "u.user_id, u.username, u.name, u.lastname, u.password, u.email," +
             " p.user_id, p.username, p.name, p.lastname, p.password, p.email, professors.description," +
             " subjects.subject_id, subjects.description, subjects.name, " +
-            "areas.area_id, areas.description, areas.name, m.latest " +
+            "areas.area_id, areas.description, areas.name, m.latest, professors.profile_picture " +
             "FROM users as u, users as p, professors, subjects, areas, conversations LEFT OUTER JOIN " +
             "(SELECT max(created) AS latest, conversation_id AS c_id FROM messages GROUP BY" +
             " conversation_id) AS m ON m.c_id = conversations.conversation_id ";
@@ -48,7 +48,8 @@ public class ConversationJdbcDao implements ConversationDao {
                         rs.getString(11),
                         rs.getString(12),
                         rs.getString(13),
-                        rs.getString(14)
+                        rs.getString(14),
+                        rs.getBytes(22)
                 ),
                 new Subject(
                         rs.getLong(15),
@@ -111,7 +112,6 @@ public class ConversationJdbcDao implements ConversationDao {
         return new Message(id.longValue(), sender, text, currentTime);
     }
 
-    //TODO: MESSAGE PAGING
     @Override
     public Conversation findById(final Long conversation_id) {
        final Conversation conversation = jdbcTemplate.query(

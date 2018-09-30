@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ProfessorDao {
 
-    Professor create(final User user, final String description);
+    Professor create(final User user, final String description, final byte[] picture);
 
     Optional<Professor> findById(final Long professor_id);
 
