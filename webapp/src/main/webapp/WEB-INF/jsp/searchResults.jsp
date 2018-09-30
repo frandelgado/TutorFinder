@@ -79,7 +79,7 @@
 <div class="content">
     <div class="filter-panel">
 
-        <h2>Filtrar</h2>
+        <h2>Filtros</h2>
         <div>
             <h3><spring:message code="search.dayHeader"/></h3>
             <div>
@@ -130,7 +130,7 @@
                 <form:errors cssClass="error-text" path="maxPrice" element="p"/>
             </div>
         </div>
-        <button class="button-2" type="submit" class="search-button">
+        <button class="button-2 center" type="submit" class="search-button">
             <spring:message code="button.filter"/>
         </button>
     </div>
