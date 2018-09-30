@@ -9,7 +9,7 @@ public class FilterBuilder {
     private static final String BASE_SELECT = "SELECT DISTINCT courses.user_id, courses.subject_id," +
             "courses.description, price, professors.description, users.username," +
             "users.name, users.lastname, users.password, users.email, subjects.description," +
-            "subjects.name, areas.name, areas.description, areas.area_id, professors.profile_picture ";
+            "subjects.name, areas.name, areas.description, areas.area_id, professors.profile_picture, areas.image ";
 
     private static final String BASE_FROM = "FROM courses, users, subjects, areas, professors LEFT OUTER JOIN schedules " +
             "ON schedules.user_id = professors.user_id ";
