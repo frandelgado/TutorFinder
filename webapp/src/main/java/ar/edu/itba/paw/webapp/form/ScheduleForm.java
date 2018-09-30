@@ -13,11 +13,11 @@ public class ScheduleForm {
 
     @NotNull
     @Min(0)
-    @Max(24)
+    @Max(23)
     private Integer startHour;
 
     @NotNull
-    @Min(0)
+    @Min(1)
     @Max(24)
     private Integer endHour;
 

@@ -58,16 +58,26 @@ public class FilterBuilder {
 
     public FilterBuilder filterByTimeslot(final Integer day, final Integer startHour, final Integer endHour){
         StringBuilder sb = new StringBuilder();
-        sb.append("(schedules.day = ? ");
-        this.timeslotParams.add(day);
-
-        if(startHour != null && endHour != null){
-            this.timeslotParams.add(startHour);
-            this.timeslotParams.add(endHour);
-            sb.append("AND schedules.hour >= ? AND schedules.hour < ?");
-
+        sb.append("(");
+        if(day != null) {
+            sb.append("schedules.day = ? ");
+            this.timeslotParams.add(day);
+            if(startHour != null || endHour != null)
+                sb.append("AND ");
         }
-        
+
+        if(startHour != null){
+            this.timeslotParams.add(startHour);
+            sb.append("schedules.hour >= ? ");
+            if(endHour != null)
+                sb.append("AND ");
+        }
+
+        if(endHour != null){
+            this.timeslotParams.add(endHour);
+            sb.append("schedules.hour < ?");
+        }
+
         if(this.TIME_FILTERS != null)
             sb.insert(0,"OR ").insert(0, this.TIME_FILTERS);
 
