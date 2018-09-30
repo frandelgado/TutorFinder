@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
-import ar.edu.itba.paw.interfaces.service.*;
+import ar.edu.itba.paw.interfaces.service.ConversationService;
+import ar.edu.itba.paw.interfaces.service.CourseService;
+import ar.edu.itba.paw.interfaces.service.ScheduleService;
+import ar.edu.itba.paw.interfaces.service.SubjectService;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.User;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
@@ -79,8 +81,7 @@ public class CourseController {
             sent = conversationService.sendMessage(loggedUser.getId(), form.getProfessorId(),
                     form.getSubjectId(), form.getBody());
         } catch (SameUserConversationException e) {
-            errors.addError(new FieldError("SendMessageError", "extraMessage", null,
-                    false, new String[]{"SameUserMessageError"},null, "No puede enviarse un mensaje a si mismo"));
+            errors.rejectValue("extraMessage", "SameUserMessageError");
             form.setBody(null);
             return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
         }
@@ -90,8 +91,7 @@ public class CourseController {
             form.setBody(null);
             final RedirectView redirectView = new RedirectView("/Course");
         } else {
-            errors.addError(new FieldError("SendMessageError", "extraMessage", null,
-                    false, new String[]{"SendMessageError"}, null, "Error al enviar el mensaje."));
+            errors.rejectValue("extraMessage", "SendMessageError");
         }
         return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
     }
@@ -125,8 +125,7 @@ public class CourseController {
             error.addObject("errorMessageCode","nonExistentUser");
             return error;
         } catch (NonexistentSubjectException e) {
-            errors.addError(new FieldError("subjectDoesNotExist", "subjectId", null,
-                    false, new String[]{"subjectDoesNotExist"},null, "La materia que quiere dictar no existe"));
+            errors.rejectValue("subjectId", "subjectDoesNotExist");
             return createCourse(form, user);
         }
 
