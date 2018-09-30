@@ -19,8 +19,6 @@ public class Professor extends User{
     }
 
     public String getPicture() {
-        if(picture == null)
-            return "";
         return new String(Base64.getEncoder().encode(picture));
     }
 }
