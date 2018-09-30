@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 
 @Controller
-public class ConversationController {
+public class ConversationController extends BaseController{
 
     @Autowired
     private ConversationService conversationService;
@@ -58,11 +58,9 @@ public class ConversationController {
 
         final boolean sent = conversationService.sendMessage(loggedUser.getId(), form.getConversationId(), form.getBody());
         if(sent) {
-            final RedirectView view = new RedirectView("/Conversation?id=" + form.getConversationId());
-            view.setExposeModelAttributes(false);
-            return new ModelAndView(view);
+            return redirectWithNoExposedModalAttributes("/Conversation?id=" + form.getConversationId());
         }
-        errors.rejectValue("extraMessage", "SendMessageError");
+        errors.rejectValue("body", "SendMessageError");
         return conversation(form.getConversationId(), form, loggedUser);
     }
 
