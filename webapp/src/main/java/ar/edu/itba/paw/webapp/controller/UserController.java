@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -25,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
-public class UserController {
+public class UserController extends BaseController{
 
     @Autowired
     @Qualifier("userServiceImpl")
@@ -58,8 +57,7 @@ public class UserController {
                                final BindingResult errors, HttpServletRequest request) {
         if(errors.hasErrors() || !form.checkRepeatPassword()) {
             if(!form.checkRepeatPassword()) {
-                errors.addError(new FieldError("RepeatPasswordError", "repeatPassword", form.getRepeatPassword(),
-                        false, new String[]{"RepeatPassword"}, null, "Las contraseñas deben coincidir"));
+                errors.rejectValue("repeatPassword", "RepeatPassword");
             }
             return register(form);
         }
@@ -68,20 +66,16 @@ public class UserController {
         try {
             u = us.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
         } catch (EmailAlreadyInUseException e) {
-            errors.addError(new FieldError("RepeatedEmail", "email", form.getEmail(),
-                    false, new String[]{"RepeatedEmail"}, null, "El correo electronico ya esta en uso"));
+            errors.rejectValue("email", "RepeatedEmail");
             return register(form);
         } catch (UsernameAlreadyInUseException e) {
-            errors.addError(new FieldError("RepeatedUsername", "username", form.getUsername(),
-                    false, new String[]{"RepeatedUsername"}, null, "El nombre de usuario ya esta en uso"));
+            errors.rejectValue("username", "RepeatedUsername");
             return register(form);
         }
 
         authenticateRegistered(request, u.getUsername(), u.getPassword());
 
-        final RedirectView view = new RedirectView("/" );
-        view.setExposeModelAttributes(false);
-        return new ModelAndView(view);
+        return redirectWithNoExposedModalAttributes("/");
     }
 
     @RequestMapping("/login")
@@ -95,9 +89,7 @@ public class UserController {
                                          @ModelAttribute("currentUserIsProfessor") final boolean isProfessor,
                                          @RequestParam(value = "page", defaultValue = "1") final int page) throws PageOutOfBoundsException {
         if(loggedUser != null && loggedUser.getId() == id && isProfessor) {
-            final RedirectView view = new RedirectView("/Profile");
-            view.setExposeModelAttributes(false);
-            return new ModelAndView(view);
+            return redirectWithNoExposedModalAttributes("/Profile");
         }
 
         final ModelAndView mav = new ModelAndView("profile");
@@ -105,9 +97,7 @@ public class UserController {
         mav.addObject("page", page);
         final Professor professor = ps.findById(id);
         if(professor == null) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","nonExistentProfessor");
-            return error;
+            return redirectToErrorPage("nonExistentProfessor");
         }
         mav.addObject("professor", professor);
         return mav;
@@ -158,9 +148,7 @@ public class UserController {
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
 
-        final RedirectView view = new RedirectView("/" );
-        view.setExposeModelAttributes(false);
-        return new ModelAndView(view);
+        return redirectWithNoExposedModalAttributes("/");
     }
 
     @RequestMapping("/registerAsProfessor")
@@ -176,8 +164,7 @@ public class UserController {
     ) throws PageOutOfBoundsException, NonexistentProfessorException {
         if(errors.hasErrors() || !form.validForm()) {
             if(!form.validForm()) {
-                errors.addError(new FieldError("profile.add_schedule.timeError", "endHour", form.getEndHour(),
-                false, new String[]{"profile.add_schedule.timeError"}, null, "El horario de comienzo debe ser menor al de finalización"));
+                errors.rejectValue("endHour", "profile.add_schedule.timeError");
             }
             return profile(loggedUser, form, 1);
         }
@@ -185,21 +172,15 @@ public class UserController {
         try {
             ss.reserveTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
         } catch (NonexistentProfessorException e) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","nonExistentUser");
-            return error;
+            return redirectToErrorPage("nonExistentUser");
         } catch (TimeslotAllocatedException e) {
-            errors.addError(new FieldError("TimeslotAllocatedError", "endHour", form.getEndHour(),
-                    false, new String[]{"TimeslotAllocatedError"}, null, "El horario ya fue seleccionado previamente"));
+            errors.rejectValue("endHour", "TimeslotAllocatedError");
             return profile(loggedUser, form, 1);
         } catch (InvalidTimeException | InvalidTimeRangeException e) {
-            //Already validated by form
             return profile(loggedUser, form, 1);
         }
 
-        final RedirectView view = new RedirectView("/Profile" );
-        view.setExposeModelAttributes(false);
-        return new ModelAndView(view);
+        return redirectWithNoExposedModalAttributes("/Profile");
     }
 
     @RequestMapping(value = "/forgotPassword")
@@ -217,13 +198,10 @@ public class UserController {
         final boolean created = passwordResetService.createToken(form.getEmail());
 
         if(!created) {
-            errors.addError(new FieldError("forgotPasswordError", "email", form.getEmail(),
-                    false, new String[]{"forgotPasswordError"}, null, "El correo electronico no se encuentra registrado"));
+            errors.rejectValue("email", "forgotPasswordError");
             return forgotPassword(form);
         }
-        errors.addError(new FieldError("forgotPasswordSuccess", "successMessage", null,
-                false, new String[]{"forgotPasswordSuccess"}, null,
-                "Se envió un correo electronico a su cuenta, siga los pasos para restaurar su contraseña"));
+        errors.rejectValue("successMessage", "forgotPasswordSuccess");
         form.setEmail("");
         return forgotPassword(form);
     }
@@ -233,17 +211,13 @@ public class UserController {
                                       @RequestParam(value="token", required=true) final String token) {
 
         if(token.isEmpty()) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","invalidToken");
-            return error;
+            return redirectToErrorPage("invalidToken");
         }
 
         final PasswordResetToken passwordResetToken = passwordResetService.findByToken(token);
 
         if(passwordResetToken == null) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","invalidToken");
-            return error;
+            return redirectToErrorPage("invalidToken");
         }
 
         return new ModelAndView("resetPassword");
@@ -257,8 +231,7 @@ public class UserController {
                                       HttpServletRequest request) {
         if(errors.hasErrors() || !form.checkRepeatPassword()) {
             if(!form.checkRepeatPassword()) {
-                errors.addError(new FieldError("RepeatPasswordError", "repeatPassword", form.getRepeatPassword(),
-                        false, new String[]{"RepeatPassword"}, null, "Las contraseñas deben coincidir"));
+                errors.rejectValue("repeatPassword", "RepeatPassword");
             }
             return resetPassword(form, token);
         }
@@ -267,21 +240,15 @@ public class UserController {
         try {
             changedUser = passwordResetService.changePassword(token, form.getPassword());
         } catch (InvalidTokenException e) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","invalidToken");
-            return error;
+            return redirectToErrorPage("invalidToken");
         }
 
         if(changedUser == null) {
-            final ModelAndView error = new ModelAndView("error");
-            error.addObject("errorMessageCode","changePasswordError");
-            return error;
+            return redirectToErrorPage("changePasswordError");
         }
 
         authenticateRegistered(request, changedUser.getUsername(), form.getPassword());
-        final RedirectView view = new RedirectView("/" );
-        view.setExposeModelAttributes(false);
-        return new ModelAndView(view);
+        return redirectWithNoExposedModalAttributes("/");
     }
 
 

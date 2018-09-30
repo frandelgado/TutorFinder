@@ -10,7 +10,7 @@
     <title>Tu Teoria | <c:out value="${area.name}" escapeXml="true"/></title>
 </head>
 
-<body class="staticSearchResults">
+<body class="staticSearchResults body">
 
     <%@ include file="navbar.jsp" %>
 

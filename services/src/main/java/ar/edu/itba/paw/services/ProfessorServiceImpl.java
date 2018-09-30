@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
 
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 3;
 
     @Autowired
     ProfessorDao professorDao;

@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 3;
 
     @Autowired
     private CourseDao courseDao;
@@ -113,13 +113,15 @@ public class CourseServiceImpl implements CourseService {
         }
         FilterBuilder fb = new FilterBuilder();
 
-        if(day != null && startHour != null && endHour != null)
-            fb = fb.filterByTimeslot(day,startHour,endHour);
-        if(minPrice != null && maxPrice != null)
+        if(day != null || startHour != null || endHour != null) {
+            fb = fb.filterByTimeslot(day, startHour, endHour);
+        }
+        if(minPrice != null || maxPrice != null) {
             fb = fb.filterByPrice(minPrice, maxPrice);
-        if(searchText != null)
+        }
+        if(searchText != null) {
             fb = fb.filterByName(searchText);
-
+        }
         final List<Course> courses = courseDao.filter(fb.getFilter(), PAGE_SIZE+1, PAGE_SIZE * (page -1));
         final PagedResults<Course> results;
         final int size = courses.size();

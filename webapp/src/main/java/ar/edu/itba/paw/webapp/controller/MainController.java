@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.form.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -11,18 +12,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 @Controller
-public class MainController {
+public class MainController extends BaseController{
 
     @Autowired
     @Qualifier("userServiceImpl")
     private UserService us;
 
     @RequestMapping("/")
-    public ModelAndView helloWorld(){
+    public ModelAndView index(
+            @ModelAttribute(value = "SUCCESS_MESSAGE") final String success_message,
+            @ModelAttribute(value = "ERROR_MESSAGE") final String error_message,
+            @ModelAttribute("SearchForm") final SearchForm form
+    ){
         return new ModelAndView("index");
     }
 

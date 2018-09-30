@@ -9,7 +9,6 @@ import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,7 +20,7 @@ import javax.validation.Valid;
 
 
 @Controller
-public class ConversationController {
+public class ConversationController extends BaseController{
 
     @Autowired
     private ConversationService conversationService;
@@ -59,12 +58,9 @@ public class ConversationController {
 
         final boolean sent = conversationService.sendMessage(loggedUser.getId(), form.getConversationId(), form.getBody());
         if(sent) {
-            final RedirectView view = new RedirectView("/Conversation?id=" + form.getConversationId());
-            view.setExposeModelAttributes(false);
-            return new ModelAndView(view);
+            return redirectWithNoExposedModalAttributes("/Conversation?id=" + form.getConversationId());
         }
-        errors.addError(new FieldError("SendMessageError", "extraMessage", null,
-                false, new String[]{"SendMessageError"},null, "Error al enviar el mensaje."));
+        errors.rejectValue("body", "SendMessageError");
         return conversation(form.getConversationId(), form, loggedUser);
     }
 
