@@ -83,7 +83,6 @@
         <div>
             <h3><spring:message code="search.dayHeader"/></h3>
             <div>
-                <form:label cssClass="label" path="day"><spring:message code="schedule.form.day"/></form:label>
                 <form:select cssClass="select-subject" path="day">
                     <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
                     <form:option value="1"><spring:message code ="day.monday"/></form:option>
