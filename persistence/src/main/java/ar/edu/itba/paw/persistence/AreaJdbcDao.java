@@ -23,7 +23,8 @@ public class AreaJdbcDao implements AreaDao {
     private final static RowMapper<Area> ROW_MAPPER = (rs, rowNum) -> new Area(
             rs.getLong(1),
             rs.getString(2),
-            rs.getString(3)
+            rs.getString(3),
+            rs.getBytes(4)
     );
 
     @Autowired
@@ -36,25 +37,26 @@ public class AreaJdbcDao implements AreaDao {
     @Override
     public Optional<Area> findById(final long id) {
         final List<Area> list = jdbcTemplate.query(
-                "SELECT area_id, description, name FROM areas WHERE area_id = ?", ROW_MAPPER, id
+                "SELECT area_id, description, name, image FROM areas WHERE area_id = ?", ROW_MAPPER, id
         );
         return list.stream().findFirst();
     }
 
     @Override
-    public Area create(final String name, final String description) {
+    public Area create(final String name, final String description, final byte[] image) {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
         args.put("description", description);
+        args.put("image", image);
         final Number areaId = jdbcInsert.executeAndReturnKey(args);
-        return new Area(areaId.longValue(), description, name);
+        return new Area(areaId.longValue(), description, name, image);
     }
 
     @Override
     public List<Area> filterAreasByName(final String name, final int limit, final int offset) {
         final String search = "%" + name + "%";
         final List<Area> list = jdbcTemplate.query(
-                "SELECT area_id, description, name FROM areas WHERE UPPER(name) LIKE UPPER(?) " +
+                "SELECT area_id, description, name, image FROM areas WHERE UPPER(name) LIKE UPPER(?) " +
                         "order by area_id LIMIT ? OFFSET ?",
                 ROW_MAPPER, search, limit, offset
         );
