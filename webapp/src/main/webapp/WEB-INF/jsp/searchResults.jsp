@@ -135,7 +135,7 @@
         </button>
     </div>
     <div class="search-results">
-        <h3 class="search-data"><c:if test="${search.length() >= 1 }"><spring:message code="search.message" arguments="${search}" htmlEscape="true"/></c:if></h3>
+        <c:if test="${search.length() >= 1 }"><h3 class="search-data"><spring:message code="search.message" arguments="${search}" htmlEscape="true"/></h3></c:if>
         <c:choose>
             <c:when test="${pagedResults.results.size() == 0}">
                 <h1><spring:message code="no.results"/></h1>
@@ -152,8 +152,12 @@
         </c:choose>
 
         <div class="paged-result-buttons">
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page - 1}" var="previous"/>
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page + 1}" var="next"/>
+            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page - 1}
+            &minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}
+            &startHour=${param.startHour}&endHour=${param.endHour}" var="previous"/>
+            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page + 1}
+            &minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}
+            &startHour=${param.startHour}&endHour=${param.endHour}" var="next"/>
 
             <c:if test="${page > 1}">
                 <a href="${previous}" class="previous round">&#8249;</a>

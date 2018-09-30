@@ -71,6 +71,10 @@ public class UserController extends BaseController{
         } catch (UsernameAlreadyInUseException e) {
             errors.rejectValue("username", "RepeatedUsername");
             return register(form);
+        } catch (UsernameAndEmailAlreadyInUseException e){
+            errors.rejectValue("email", "RepeatedEmail");
+            errors.rejectValue("username", "RepeatedUsername");
+            return register(form);
         }
 
         authenticateRegistered(request, u.getUsername(), u.getPassword());

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.persistence;
 
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.models.User;
 
 import java.util.Optional;
@@ -14,7 +15,7 @@ public interface UserDao {
 
     User create(final String username, final String password, final String email,
                 final String name, final String lastName)
-            throws UsernameAlreadyInUseException, EmailAlreadyInUseException;
+            throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException;
 
     Optional<User> findByUsername(final String username);
 

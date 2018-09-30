@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
@@ -46,13 +47,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(final String username, final String password, final String email,
-                       final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException {
+                       final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
 
         if(username == null || password == null || email == null || name == null || lastName == null) {
             return null;
         }
 
-        if(username.isEmpty() || password.isEmpty() || email.isEmpty() || name.isEmpty() || lastName.isEmpty()){
+        if(username.length() == 0 || password.length() < 8 || email.length() == 0 || name.length() == 0 || lastName.length() == 0){
             return null;
         }
         if(!name.matches("[a-zA-Z]+") && !lastName.matches("[a-zA-Z]+")){

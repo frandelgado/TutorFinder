@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
+import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.models.User;
 
 public interface UserService {
@@ -12,7 +13,7 @@ public interface UserService {
     User findByEmail(final String email);
 
     User create(final String username, final String password,
-                final String email, final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException;
+                final String email, final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException;
 
     boolean changePassword(final Long userId, String password);
 }

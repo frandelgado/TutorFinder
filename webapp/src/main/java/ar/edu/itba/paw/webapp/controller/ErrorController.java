@@ -48,4 +48,8 @@ public class ErrorController extends BaseController{
         return redirectToErrorPage("404");
     }
 
+    @RequestMapping("/500")
+    public ModelAndView internalError() {
+        return redirectToErrorPage("500");
+    }
 }

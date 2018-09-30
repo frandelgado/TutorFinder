@@ -28,11 +28,11 @@ public class RegisterForm {
     private String username;
 
     @NotNull
-    @Size(min = 1, max = 64)
+    @Size(min = 8, max = 64)
     private String password;
 
     @NotNull
-    @Size(min = 1, max = 64)
+    @Size(min = 8, max = 64)
     private String repeatPassword;
 
     public void setName(String name) {

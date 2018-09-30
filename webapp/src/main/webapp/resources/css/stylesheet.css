@@ -296,16 +296,12 @@ button {
 
 .search-results {
     grid-area: search-results;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     background-color: #dedede;
     padding: 20px;
     margin-top: 50px;
     border-radius: 20px;
-
-    grid-auto-rows: 210px;
-    grid-row-gap: 70px;
-    grid-template-rows: 25px;
-    grid-template-areas: "search-data"
 }
 
 .search-bar {
@@ -313,14 +309,15 @@ button {
 }
 
 .search-data {
-    grid-area: search-data;
     margin: 0;
-    margin-top: 50px;
+    margin-bottom: 20px;
     align-self: center;
 }
 
 .search-course-result {
+    grid-area: search-data;
     position: relative;
+    margin-bottom: 20px;
     padding: 20px;
     display: grid;
     background-color: white;
@@ -342,6 +339,7 @@ button {
 
 .search-area-result {
     position: relative;
+    margin-bottom: 20px;
     padding: 20px;
     display: grid;
     background-color: white;
@@ -353,6 +351,10 @@ button {
     grid-template-areas: "search-result-img search-result-title"
     "search-result-img search-result-description"
     "search-result-img search-result-description"
+}
+
+.paged-result-buttons{
+    align-self: center;
 }
 
 .search-result {
@@ -372,6 +374,7 @@ button {
 .firstchild {
 
 }
+
 .search-result-title {
     grid-area: search-result-title;
     font-size: 25px;
