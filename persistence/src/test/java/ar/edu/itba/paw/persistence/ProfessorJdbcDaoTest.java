@@ -44,6 +44,7 @@ public class ProfessorJdbcDaoTest {
     private static final String PASSWORD = "dontbecruel";
     private static final Long ID = 2L;
     private static final String TEST_DESCRIPTION = "Juan es un profesor dedicado";
+    private static final byte[] TEST_IMAGE = new byte[1];
     private static final Long INVALID_ID = 666L;
     private static final String INVALID_USERNAME = "InvalidTestUsername";
     private static final String INVALID_FULL_NAME = "InvalidTestFullName";
@@ -66,7 +67,7 @@ public class ProfessorJdbcDaoTest {
         when(mockUser.getUsername()).thenReturn(USERNAME);
         when(mockUser.getPassword()).thenReturn(PASSWORD);
 
-        Professor professor = professorJdbcDao.create(mockUser, TEST_DESCRIPTION);
+        Professor professor = professorJdbcDao.create(mockUser, TEST_DESCRIPTION, TEST_IMAGE);
         assertNotNull(professor);
         assertEquals(USERNAME, professor.getUsername());
         assertEquals(NAME, professor.getName());
