@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class AreaServiceImpl implements AreaService {
 
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 3;
 
     @Autowired
     private AreaDao areaDao;

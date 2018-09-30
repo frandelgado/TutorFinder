@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 public class AreaServiceImplTest {
 
     private static final String NAME = "Mate";
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 3;
 
 
     @InjectMocks
