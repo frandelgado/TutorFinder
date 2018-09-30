@@ -14,8 +14,9 @@ public interface ProfessorService {
 
     PagedResults<Professor> filterByFullName(final String fullName, final int page) throws PageOutOfBoundsException;
 
-    Professor create(final Long userId, final String description) throws ProfessorWithoutUserException;
+    Professor create(final Long userId, final String description, final byte[] picture) throws ProfessorWithoutUserException;
 
     Professor createWithUser(final Long id, final String username, final String name, final String lastname,
-                             final String password, final String email, final String description) throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException;
+                             final String password, final String email, final String description, final byte[] picture)
+            throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException;
 }

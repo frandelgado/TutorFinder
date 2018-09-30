@@ -36,6 +36,7 @@ public class ProfessorServiceImplTest {
     private static final Long INVALID_ID = 666L;
     private static final Long ID = 1L;
     private static final String DESCRIPTION = "Omne duo vim sum nudi uno quod. Latera nullam ad realem passim ii essent ut patere";
+    private static final byte[] TEST_IMAGE = new byte[1];
     private static final String USERNAME = "username";
     private static final String LASTNAME = "Ramos";
     private static final String PASSWORD = "password";
@@ -110,9 +111,9 @@ public class ProfessorServiceImplTest {
         final User user = mock(User.class);
         when(user.getId()).thenReturn(ID);
         when(userDao.findById(ID)).thenReturn(Optional.of(user));
-        when(professorDao.create(user, DESCRIPTION)).thenReturn(mock(Professor.class));
+        when(professorDao.create(user, DESCRIPTION, TEST_IMAGE)).thenReturn(mock(Professor.class));
 
-        final Professor professor = professorService.create(ID, DESCRIPTION);
+        final Professor professor = professorService.create(ID, DESCRIPTION, TEST_IMAGE);
         assertNotNull(professor);
     }
 
@@ -120,7 +121,7 @@ public class ProfessorServiceImplTest {
     public void testCreateInvalidUser() throws ProfessorWithoutUserException {
         when(userDao.findById(INVALID_ID)).thenReturn(Optional.empty());
 
-        final Professor professor = professorService.create(INVALID_ID, DESCRIPTION);
+        final Professor professor = professorService.create(INVALID_ID, DESCRIPTION, TEST_IMAGE);
     }
 
     @Test(expected = EmailAlreadyInUseException.class)
@@ -128,7 +129,7 @@ public class ProfessorServiceImplTest {
         when(userDao.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME)).thenThrow(new EmailAlreadyInUseException());
 
         final Professor professor = professorService.createWithUser(ID, USERNAME, NAME, LASTNAME, PASSWORD,
-                EMAIL, DESCRIPTION);
+                EMAIL, DESCRIPTION, TEST_IMAGE);
     }
 
     @Test(expected = UsernameAlreadyInUseException.class)
@@ -136,7 +137,7 @@ public class ProfessorServiceImplTest {
         when(userDao.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME)).thenThrow(new UsernameAlreadyInUseException());
 
         final Professor professor = professorService.createWithUser(ID, USERNAME, NAME, LASTNAME, PASSWORD,
-                EMAIL, DESCRIPTION);
+                EMAIL, DESCRIPTION, TEST_IMAGE);
     }
 
     @Test
@@ -144,7 +145,7 @@ public class ProfessorServiceImplTest {
         final String description = "Short";
 
         Professor professor = professorService.createWithUser(ID, USERNAME, NAME, LASTNAME, PASSWORD,
-                EMAIL, description);
+                EMAIL, description, TEST_IMAGE);
         assertNull(professor);
     }
 
@@ -152,10 +153,10 @@ public class ProfessorServiceImplTest {
     public void testCreateWithUserValid() throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         final User user = new User(ID, USERNAME, NAME, LASTNAME, PASSWORD, EMAIL);
         when(userDao.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME)).thenReturn(user);
-        when(professorDao.create(user, DESCRIPTION)).thenReturn(mock(Professor.class));
+        when(professorDao.create(user, DESCRIPTION, TEST_IMAGE)).thenReturn(mock(Professor.class));
 
         final Professor professor = professorService.createWithUser(ID, USERNAME, NAME, LASTNAME, PASSWORD,
-                EMAIL, DESCRIPTION);
+                EMAIL, DESCRIPTION, TEST_IMAGE);
 
         assertNotNull(professor);
     }
