@@ -67,61 +67,9 @@
             </button>
         </div>
     </div>
-    <div class="filter-panel">
-        <div>
-            <h1><spring:message code="search.timeHeader"/></h1>
-            <div>
-                <form:label cssClass="label" path="day"><spring:message code="schedule.form.day"/></form:label>
-                <form:select cssClass="select-subject" path="day">
-                    <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
-                    <form:option value="1"><spring:message code ="day.monday"/></form:option>
-                    <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
-                    <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
-                    <form:option value="4"><spring:message code ="day.thursday"/></form:option>
-                    <form:option value="5"><spring:message code ="day.friday"/></form:option>
-                    <form:option value="6"><spring:message code ="day.saturday"/></form:option>
-                    <form:option value="7"><spring:message code ="day.sunday"/></form:option>
-                </form:select>
-                <form:errors cssClass="error-text" path="day" element="p"/>
-            </div>
-            <div>
-                <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
-                <form:select cssClass="select-subject" path="startHour">
-                    <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
-                    <c:forEach var="hour" begin="0" end="23" >
-                        <form:option value="${hour}">${hour}:00</form:option>
-                    </c:forEach>
-                </form:select>
-                <form:errors cssClass="error-text" path="startHour" element="p"/>
-            </div>
-            <div>
-                <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
-                <form:select cssClass="select-subject" path="endHour">
-                    <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
-                    <c:forEach var="hour" begin="1" end="24" >
-                        <form:option value="${hour}">${hour}:00</form:option>
-                    </c:forEach>
-                </form:select>
-                <form:errors cssClass="error-text" path="endHour" element="p"/>
-            </div>
-        </div>
-        <div>
-            <h1><spring:message code="search.priceHeader"/></h1>
-            <div>
-                <form:label path="minPrice"><spring:message code="search.label.minPrice"/></form:label>
-                <form:input cssClass="input-request" type="number" step="0.01" path="minPrice"/>
-                <form:errors cssClass="error-text" path="minPrice" element="p"/>
-            </div>
-            <div>
-                <form:label path="maxPrice"><spring:message code="search.label.maxPrice"/></form:label>
-                <form:input cssClass="input-request" type="number" step="0.01" path="maxPrice"/>
-                <form:errors cssClass="error-text" path="maxPrice" element="p"/>
-            </div>
-        </div>
-    </div>
     </form:form>
 </div>
-<div class="footer">
+<div class="footer">    
 </div>
 </body>
 
