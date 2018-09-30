@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
     <title>Tu Teoria | <spring:message code="profile.title" /> </title>
+
+    <script src="<c:url value="/resources/js/scheduleModal.js" />"></script>
 </head>
 
 <body class="staticProfile">
@@ -21,6 +23,7 @@
     <h1 class="profile-name"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
     <h3 class="profile-description"><c:out value="${professor.description}" escapeXml="true"/></h3>
     <div class="class-content">
+        <a class="class-text"><spring:message code="classesText"/></a>
         <div class="class add-class">
             <a class="class-button" href="<c:url value="/createCourse" />"></a>
             +
@@ -49,48 +52,55 @@
     </div>
 
     <div class="time-content">
-        <div class = "add-time">
-            <h1><spring:message code="addTimeslot"/></h1>
-            <c:url value="/CreateTimeSlot" var="postPath"/>
-            <form:form cssClass="form" modelAttribute="ScheduleForm" action="${postPath}" method="post">
-                <div>
-                    <form:label cssClass="label" path="day"><spring:message code="schedule.form.day"/></form:label>
-                    <form:select cssClass="select-subject" path="day">
-                        <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
-                        <form:option value="1"><spring:message code ="day.monday"/></form:option>
-                        <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
-                        <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
-                        <form:option value="4"><spring:message code ="day.thursday"/></form:option>
-                        <form:option value="5"><spring:message code ="day.friday"/></form:option>
-                        <form:option value="6"><spring:message code ="day.saturday"/></form:option>
-                        <form:option value="7"><spring:message code ="day.sunday"/></form:option>
-                    </form:select>
-                    <form:errors cssClass="error-text" path="day" element="p"/>
-                </div>
-                <div>
-                    <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
-                    <form:select cssClass="select-subject" path="startHour">
-                        <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
-                        <c:forEach var="hour" begin="0" end="23" >
-                            <form:option value="${hour}">${hour}:00</form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors cssClass="error-text" path="startHour" element="p"/>
-                </div>
-                <div>
-                    <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
-                    <form:select cssClass="select-subject" path="endHour">
-                        <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
-                        <c:forEach var="hour" begin="1" end="24" >
-                            <form:option value="${hour}">${hour}:00</form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors cssClass="error-text" path="endHour" element="p"/>
-                </div>
-                <div class="button-container">
-                    <input class="button-2" type="submit" value="<spring:message code="addTimeslot"/>"/>
-                </div>
-            </form:form>
+        <a class="schedule-text"><spring:message code="schedule"/></a>
+        <div id="add-time-modal-button" class="add-time-modal-button class">
+            +
+        </div>
+        <div id="add-time-modal" class="add-time-modal">
+            <div>
+                <span class="modal-close">&times;</span>
+                <h1><spring:message code="addTimeslot"/></h1>
+                <c:url value="/CreateTimeSlot" var="postPath"/>
+                <form:form cssClass="form" modelAttribute="ScheduleForm" action="${postPath}" method="post">
+                    <div>
+                        <form:label cssClass="label" path="day"><spring:message code="schedule.form.day"/></form:label>
+                        <form:select cssClass="select-subject" path="day">
+                            <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
+                            <form:option value="1"><spring:message code ="day.monday"/></form:option>
+                            <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
+                            <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
+                            <form:option value="4"><spring:message code ="day.thursday"/></form:option>
+                            <form:option value="5"><spring:message code ="day.friday"/></form:option>
+                            <form:option value="6"><spring:message code ="day.saturday"/></form:option>
+                            <form:option value="7"><spring:message code ="day.sunday"/></form:option>
+                        </form:select>
+                        <form:errors cssClass="error-text" path="day" element="p"/>
+                    </div>
+                    <div>
+                        <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
+                        <form:select cssClass="select-subject" path="startHour">
+                            <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
+                            <c:forEach var="hour" begin="0" end="23" >
+                                <form:option value="${hour}">${hour}:00</form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors cssClass="error-text" path="startHour" element="p"/>
+                    </div>
+                    <div>
+                        <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
+                        <form:select cssClass="select-subject" path="endHour">
+                            <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
+                            <c:forEach var="hour" begin="1" end="24" >
+                                <form:option value="${hour}">${hour}:00</form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors cssClass="error-text" path="endHour" element="p"/>
+                    </div>
+                    <div class="button-container">
+                        <input class="button-2" type="submit" value="<spring:message code="addTimeslot"/>"/>
+                    </div>
+                </form:form>
+            </div>
         </div>
         <%@ include file="schedule.jsp"%>
     </div>
@@ -100,6 +110,15 @@
 </div>
 <div class="footer">
 </div>
+
+    <script>
+        var modal = document.getElementById('add-time-modal');
+        var btn = document.getElementById("add-time-modal-button");
+        var span = document.getElementsByClassName("modal-close")[0];
+        btn.onclick = function() { modal.style.display = "block"; }
+        span.onclick = function() { modal.style.display = "none"; }
+        window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
+    </script>
 </body>
 
 </html>

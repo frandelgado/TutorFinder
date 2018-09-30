@@ -1,5 +1,5 @@
 <div class="schedule">
-    <table style-="width:100%">
+    <table>
         <tr>
             <th>
             </th>
