@@ -343,7 +343,7 @@ button {
     position: relative;
     padding: 20px;
     display: grid;
-    backgrodund-color: white;
+    background-color: white;
     height: 100%;
     align-content: center;
     border-radius: 20px;
@@ -807,6 +807,8 @@ th, td {
 
 .center-text {
     text-align: center;
+}
+
 #display-error
 {
     border: 1px solid #D8D8D8;
