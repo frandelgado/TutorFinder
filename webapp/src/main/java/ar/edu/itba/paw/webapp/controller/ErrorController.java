@@ -49,6 +49,11 @@ public class ErrorController extends BaseController{
         return redirectToErrorPage("404");
     }
 
+    @RequestMapping("/500")
+    public ModelAndView internalError() {
+        return redirectToErrorPage("500");
+    }
+
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ModelAndView handleFileSizeException() {
         final ModelAndView mav = new ModelAndView("registerAsProfessorForm");
