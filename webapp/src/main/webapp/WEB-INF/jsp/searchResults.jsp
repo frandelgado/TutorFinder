@@ -135,7 +135,7 @@
         </button>
     </div>
     <div class="search-results">
-        <h3 class="search-data"><c:if test="${search.length() >= 1 }"><spring:message code="search.message" arguments="${search}" htmlEscape="true"/></c:if></h3>
+        <c:if test="${search.length() >= 1 }"><h3 class="search-data"><spring:message code="search.message" arguments="${search}" htmlEscape="true"/></h3></c:if>
         <c:choose>
             <c:when test="${pagedResults.results.size() == 0}">
                 <h1><spring:message code="no.results"/></h1>
