@@ -722,6 +722,10 @@ button {
     margin:0;
 }
 
+#pictureError {
+    display: none;
+}
+
 .success-text {
     color: limegreen;
 }
