@@ -31,6 +31,7 @@ public class AreaJdbcDaoTest {
     private static final String NAME = "matematica";
     private static final String DESCRIPTION = "este area es dificil";
     private static final String INVALID_NAME = "InvalidTestName";
+    private static final byte[] TEST_IMAGE = new byte[1];
     private static final Long ID = 1L;
     private static final Long INVALID_ID = 666L;
     private static final Integer LIMIT = 10;
@@ -52,7 +53,7 @@ public class AreaJdbcDaoTest {
     @Test
     public void testCreate() {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
-        final Area area = areaDao.create(NAME, DESCRIPTION);
+        final Area area = areaDao.create(NAME, DESCRIPTION, TEST_IMAGE);
         assertNotNull(area);
         assertEquals(NAME, area.getName());
         assertEquals(DESCRIPTION, area.getDescription());
@@ -61,7 +62,7 @@ public class AreaJdbcDaoTest {
 
     @Test(expected = DuplicateKeyException.class)
     public void testCreateInvalid() {
-        final Area area = areaDao.create(NAME, DESCRIPTION);
+        final Area area = areaDao.create(NAME, DESCRIPTION, TEST_IMAGE);
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "areas"));
     }
 

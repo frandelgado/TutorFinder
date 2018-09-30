@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS areas (
 area_id IDENTITY PRIMARY KEY,
 name VARCHAR(128) UNIQUE NOT NULL,
-description VARCHAR(512) NOT NULL
+description VARCHAR(512) NOT NULL,
+image binary(100) NOT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS subjects (
@@ -76,7 +77,7 @@ expires TIMESTAMP NOT NULL,
 FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-Insert into areas (area_id, name, description) values (1, 'matematica', 'este area es dificil');
+Insert into areas (area_id, name, description, image) values (1, 'matematica', 'este area es dificil', X'01FF');
 INSERT into users (user_id, username, password, email, name, lastname) values (2, 'Juancho', 'dontbecruel', 'juancito@gmail.com', 'Juan', 'lopez' );
 INSERT into users (user_id, username, password, email, name, lastname) values (3, 'mesme', '12345', 'mesme@hotmail.com', 'Martin', 'Mesme' );
 INSERT into users (user_id, username, password, email, name, lastname) values (4, 'juan', '12345', 'test@hotmail.com', 'Wanch', 'Ope' );
