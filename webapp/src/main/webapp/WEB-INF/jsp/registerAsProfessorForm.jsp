@@ -35,9 +35,9 @@
         </div>
         <div id="pictureDiv">
             <form:label cssClass="label" path="picture"><spring:message code="register.picture"/></form:label>
-            <form:input cssClass="input-request" type="file" path="picture" accept="image/jpeg" id="picture"/>
+            <form:input cssClass="input-request" type="file" path="picture" accept="image/jpeg, image/png" id="picture"/>
             <form:errors cssClass="error-text" path="picture" element="p"/>
-            <p id="pictureError" class="error-text">La foto de perfil debe tener un tamaño maximo de 80KB</p>
+            <p id="pictureError" class="error-text"><spring:message code="FileSize.registerAsProfessorForm.picture" /></p>
         </div>
 
         <div class="button-container">
