@@ -96,13 +96,17 @@ public class UserController extends BaseController{
             return redirectWithNoExposedModalAttributes("/Profile");
         }
 
-        final ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("courses", cs.findCourseByProfessorId(id, page));
-        mav.addObject("page", page);
         final Professor professor = ps.findById(id);
         if(professor == null) {
             return redirectToErrorPage("nonExistentProfessor");
         }
+
+        final ModelAndView mav = new ModelAndView("profile");
+        final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
+
+        mav.addObject("courses", cs.findCourseByProfessorId(id, page));
+        mav.addObject("page", page);
+        mav.addObject("schedule", schedule);
         mav.addObject("professor", professor);
         return mav;
     }
