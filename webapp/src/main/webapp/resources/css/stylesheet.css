@@ -146,6 +146,13 @@ body {
     grid-area: content;
 }
 
+.course {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-template-areas: "class class" "contact schedule";
+
+}
+
 .staticSearchResults .content {
     display: grid;
     grid-template-columns: 25fr 50fr 25fr;
@@ -394,6 +401,7 @@ button {
 .profile {
     display: grid;
     grid-template-columns: 80px auto;
+    grid-template-rows: 20px auto;
     grid-template-areas: 
         "profile-picture profile-name"
         "profile-picture profile-description"
@@ -474,6 +482,11 @@ button {
     display: grid;
     grid-auto-rows: 100px;
     grid-row-gap: 20px;
+}
+
+.class-profile{
+    grid-area: class;
+    margin-bottom: 30px;
 }
 
 .class {
@@ -656,6 +669,7 @@ button {
     min-height: 400px;
     overflow-y: scroll;
     overflow-x: hidden;
+    margin: 25px;
 }
 
 .conversation {
@@ -742,6 +756,17 @@ button {
     background-color: #dedede;
 }
 
+.contact {
+    grid-area: contact;
+    padding: 10px;
+    border: 2px solid #dedede;
+    border-radius: 15px;
+    background-color: #dedede;
+    height: 300px;
+    width: 600px;
+    margin: 25px;
+}
+
 table, td, th {
     border: 1px solid #ddd;
     text-align: left;
@@ -777,4 +802,8 @@ th, td {
 
 .round {
     border-radius: 50%;
+}
+
+.center-text {
+    text-align: center;
 }
