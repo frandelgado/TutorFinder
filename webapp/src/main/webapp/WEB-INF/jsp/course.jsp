@@ -23,7 +23,7 @@
         <hr/>
         <div class="profile">
             <a class="profile-picture" href="<c:url value="/Professor/${course.professor.id}"/>">
-                <img class="profile-picture" alt="Profile picture" src="<c:url value="/resources/images/logo_invert.jpg" />"/>
+                <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${course.professor.picture}" />"/>
             </a>
             <div class="profile-name"><c:out value="${course.professor.name}" escapeXml="true"/> <c:out value = "${course.professor.lastname}" escapeXml="true"/></div>
             <div class="profile-description">${course.professor.description}</div>
