@@ -5,6 +5,8 @@ import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +22,8 @@ import java.util.Optional;
 
 @Repository
 public class UserJdbcDao implements UserDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserJdbcDao.class);
 
     private JdbcTemplate jdbcTemplate;
 
@@ -44,6 +48,7 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public Optional<User> findById(final long id) {
+        LOGGER.trace("Querying for user with id {}", id);
         final List<User> users = jdbcTemplate.query(
                 "SELECT user_id, username, name, lastname, password," +
                         " email FROM users WHERE user_id = ?", ROW_MAPPER, id
@@ -53,6 +58,7 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public Optional<User> findByUsername(final String username) {
+        LOGGER.trace("Querying for user with username {}", username);
         final List<User> users = jdbcTemplate.query(
                 "SELECT user_id, username, name, lastname, password," +
                         "email FROM users WHERE username = ?", ROW_MAPPER, username
@@ -62,6 +68,7 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public boolean changePasswordById(Long userId, String newPassword) {
+        LOGGER.trace("Changing password for user with id {}", userId);
         final int updated = jdbcTemplate.update("UPDATE users SET password = ? WHERE user_id = ?",
                 newPassword, userId);
         return updated != 0;
@@ -69,6 +76,7 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public Optional<User> findByEmail(final String email) {
+        LOGGER.trace("Querying for user with email {}", email);
         final List<User> users = jdbcTemplate.query(
                 "SELECT user_id, username, name, lastname, password," +
                         "email FROM users WHERE email = ?", ROW_MAPPER, email
@@ -88,15 +96,21 @@ public class UserJdbcDao implements UserDao {
         args.put("name", name);
         args.put("lastname", lastName);
         try {
+            LOGGER.trace("Inserting user with username {}", username);
             userId = jdbcInsert.executeAndReturnKey(args);
         } catch (DuplicateKeyException e) {
             if(findByUsername(username).isPresent()) {
-                if (findByEmail(email).isPresent())
+                if (findByEmail(email).isPresent()) {
+                    LOGGER.error("User with username {} and email {} already exists", username, email);
                     throw new UsernameAndEmailAlreadyInUseException();
+                }
+                LOGGER.error("User with username {} already exists", username);
                 throw new UsernameAlreadyInUseException();
             }
-            if(findByEmail(email).isPresent())
+            if(findByEmail(email).isPresent()) {
+                LOGGER.error("User with email {} already exists", email);
                 throw new EmailAlreadyInUseException();
+            }
             return null;
         }
         return new User(userId.longValue(), username, name, lastName, password, email);

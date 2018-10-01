@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,8 +15,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ErrorController extends BaseController{
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AreaController.class);
+
     @ExceptionHandler(Exception.class)
-    public ModelAndView handleError() {
+    public ModelAndView handleError(Exception e) {
+        LOGGER.debug("Handling exception {}", e.getCause());
         return redirectToErrorPage("somethingWentWrong");
     }
 

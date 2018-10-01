@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.AreaDao;
 import ar.edu.itba.paw.models.Area;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,6 +18,8 @@ import java.util.Optional;
 
 @Repository
 public class AreaJdbcDao implements AreaDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AreaJdbcDao.class);
 
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
@@ -36,6 +40,7 @@ public class AreaJdbcDao implements AreaDao {
     }
     @Override
     public Optional<Area> findById(final long id) {
+        LOGGER.trace("Querying for area with id {}", id);
         final List<Area> list = jdbcTemplate.query(
                 "SELECT area_id, description, name, image FROM areas WHERE area_id = ?", ROW_MAPPER, id
         );
@@ -55,6 +60,7 @@ public class AreaJdbcDao implements AreaDao {
     @Override
     public List<Area> filterAreasByName(final String name, final int limit, final int offset) {
         final String search = "%" + name + "%";
+        LOGGER.trace("Querying for areas with name containing {}", name);
         final List<Area> list = jdbcTemplate.query(
                 "SELECT area_id, description, name, image FROM areas WHERE UPPER(name) LIKE UPPER(?) " +
                         "order by area_id LIMIT ? OFFSET ?",

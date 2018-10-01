@@ -3,6 +3,8 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,6 +19,8 @@ import java.util.Optional;
 
 @Repository
 public class ProfessorJdbcDao implements ProfessorDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfessorJdbcDao.class);
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
@@ -45,6 +49,7 @@ public class ProfessorJdbcDao implements ProfessorDao {
         args.put("user_id", user.getId());
         args.put("description", description);
         args.put("profile_picture", picture);
+        LOGGER.trace("Adding user with id {} as professor", user.getId());
         jdbcInsert.execute(args);
         return new Professor(user.getId(), user.getUsername(), user.getName(),
                 user.getLastname(), user.getPassword(), user.getEmail(), description, picture);
@@ -52,6 +57,7 @@ public class ProfessorJdbcDao implements ProfessorDao {
 
     @Override
     public Optional<Professor> findById(final Long id) {
+        LOGGER.trace("Querying for professor with id {}", id);
         final List<Professor> professors = jdbcTemplate.query(
                 "SELECT users.user_id, username, name, lastname, password," +
                         " email, description, profile_picture FROM professors," +
@@ -63,6 +69,7 @@ public class ProfessorJdbcDao implements ProfessorDao {
 
     @Override
     public Optional<Professor> findByUsername(final String username) {
+        LOGGER.trace("Querying for professor with username {}", username);
         final List<Professor> professors = jdbcTemplate.query(
                 "SELECT users.user_id, username, name, lastname, password," +
                         " email, description, profile_picture FROM professors, users WHERE username = ?" +
@@ -73,6 +80,7 @@ public class ProfessorJdbcDao implements ProfessorDao {
 
     @Override
     public List<Professor> filterByFullName(final String fullName, final int limit, final int offset) {
+        LOGGER.trace("Querying for professor with full name containing {}", fullName);
         final String search = "%" + fullName + "%";
         final List<Professor> professors = jdbcTemplate.query(
                 "SELECT users.user_id, username, name, lastname, password, email, " +
