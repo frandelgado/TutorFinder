@@ -18,7 +18,7 @@
 <div class="content">
     <div class="inbox-message">
         <hr>
-        <p><spring:message code="conversations.inbox"/></p>
+        <p class="inbox-title"><spring:message code="conversations.inbox"/></p>
         <hr>
     </div>
     <c:if test="${conversations.results.size() == 0}" >

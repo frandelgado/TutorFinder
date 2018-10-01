@@ -529,13 +529,15 @@ button {
 }
 
 .add-time-modal>div{
+    align-items: center;
     background-color: #fefefe;
     margin: auto;
-    max-width: 300px;
-    max-height: 300px;
+    max-width: 400px;
+    max-height: 450px;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    border-radius: 20px;
 }
 
 .modal-close {
@@ -630,6 +632,7 @@ button {
 
 .staticProfile .form {
     grid-area: form;
+    padding: 0 60px;
 }
 
 .form div {
@@ -732,12 +735,6 @@ button {
     padding: 10px 32px;
     margin: 20px;
 
-}
-
-.button-container {
-    display: flex;
-    align-content: center;
-    justify-content: center;
 }
 
 .forgot-password-link {
@@ -978,4 +975,15 @@ th, td {
 
 .b-r-5 {
     border-radius: 5px;
+}
+
+.inbox-title {
+    font-size: 40px;
+}
+
+.button-container {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    margin: 0!important;
 }

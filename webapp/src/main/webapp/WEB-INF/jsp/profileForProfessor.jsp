@@ -61,7 +61,7 @@
         <div id="add-time-modal" class="add-time-modal">
             <div>
                 <span class="modal-close">&times;</span>
-                <h1><spring:message code="addTimeslot"/></h1>
+                <h1 class="center-text"><spring:message code="addTimeslot"/></h1>
                 <c:url value="/CreateTimeSlot" var="postPath"/>
                 <form:form cssClass="form" modelAttribute="ScheduleForm" action="${postPath}" method="post">
                     <div>
