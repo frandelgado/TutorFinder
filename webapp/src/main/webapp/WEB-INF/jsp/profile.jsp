@@ -25,6 +25,9 @@
                 <h2><spring:message code="clasesTitle"/></h2>
                 <p><spring:message code="clasesDescription" /></p>
             </div>
+            <c:if test="${courses.results.size() == 0}">
+                <h4><spring:message code="no.courses"/></h4>
+            </c:if>
             <c:forEach var="course" items="${courses.results}">
                 <div class="class">
                     <a class="class-button" href="<c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
