@@ -15,6 +15,8 @@ public class MessageForm {
 
     private Long conversationId;
 
+    private String extraMessage;
+
     public String getBody() {
         return body;
     }
@@ -45,5 +47,13 @@ public class MessageForm {
 
     public void setConversationId(Long conversationId) {
         this.conversationId = conversationId;
+    }
+
+    public String getExtraMessage() {
+        return extraMessage;
+    }
+
+    public void setExtraMessage(String extraMessage) {
+        this.extraMessage = extraMessage;
     }
 }
