@@ -12,12 +12,12 @@ public class ScheduleForm {
     private Integer day;
 
     @NotNull
-    @Min(0)
+    @Min(1)
     @Max(23)
     private Integer startHour;
 
     @NotNull
-    @Min(1)
+    @Min(2)
     @Max(24)
     private Integer endHour;
 

@@ -33,7 +33,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         if(startTime >= endTime)
             throw new InvalidTimeRangeException();
-        if(startTime > 24 || startTime < 0 || endTime > 24 || endTime < 0)
+        if(startTime > 23 || startTime < 1 || endTime > 24 || endTime < 2)
             throw  new InvalidTimeException();
 
         Professor professor = ps.findById(professor_id);
