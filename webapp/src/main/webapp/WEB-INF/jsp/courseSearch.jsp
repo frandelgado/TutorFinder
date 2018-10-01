@@ -1,6 +1,6 @@
 <c:forEach var="result" items="${pagedResults.results}">
         <div class="search-course-result">
-            <a class="conversation-link" href = "<c:url value="/Course/?professor=${result.professor.id}&subject=${result.subject.id}" />"/>
+            <a class="conversation-link" href = "<c:url value="/Course/?professor=${result.professor.id}&subject=${result.subject.id}" />"></a>
             <a class="search-result-img"><img class="search-result-picture" src="<c:url value="data:image/jpeg;base64,${result.subject.area.image}"/>"/></a>
             <a class="search-result-title">
                 <c:out value="${result.subject.area.name} - ${result.subject.name}" escapeXml="true" /></a>

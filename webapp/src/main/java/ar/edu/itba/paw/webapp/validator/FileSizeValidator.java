@@ -10,6 +10,8 @@ public class FileSizeValidator implements ConstraintValidator<FileSize, Multipar
    }
 
    public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
+      if(file == null)
+         return false;
       return file.getSize() <= 81920 && file.getSize() > 0;
    }
 }

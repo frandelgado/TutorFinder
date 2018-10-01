@@ -26,7 +26,7 @@
                 <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${course.professor.picture}" />"/>
             </a>
             <div class="profile-name"><c:out value="${course.professor.name}" escapeXml="true"/> <c:out value = "${course.professor.lastname}" escapeXml="true"/></div>
-            <div class="profile-description">${course.professor.description}</div>
+            <div class="profile-description"><c:out value="${course.professor.description}" escapeXml="true"/></div>
         </div>
         <hr/>
     </div>

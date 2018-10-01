@@ -27,7 +27,7 @@
     </c:if>
     <c:forEach var="conversation" items="${conversations.results}">
         <div class="chat">
-            <a class="conversation-link" href = "<c:url value="/Conversation?id=${conversation.id}" />"/>
+            <a class="conversation-link" href = "<c:url value="/Conversation?id=${conversation.id}" />"></a>
             <a class="conversation-subject-name"><c:out value="${conversation.subject.name}" escapeXml="true"/></a>
             <h2 class="conversation-participants">
                 <c:out value="${conversation.professor.name} - ${conversation.user.name}" escapeXml="true"/>

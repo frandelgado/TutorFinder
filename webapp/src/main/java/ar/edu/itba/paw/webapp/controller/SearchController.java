@@ -78,12 +78,15 @@ public class SearchController extends BaseController{
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.searchForm", errors);
             redirectAttributes.addFlashAttribute("searchForm", form);
         } else {
+            if(form.getType().equals("course")){
+                redirectAttributes
+                        .addAttribute("day", form.getDay())
+                        .addAttribute("startHour", form.getStartHour())
+                        .addAttribute("endHour", form.getEndHour())
+                        .addAttribute("minPrice", form.getMinPrice())
+                        .addAttribute("maxPrice", form.getMaxPrice());
+            }
             redirectAttributes
-                    .addAttribute("day", form.getDay())
-                    .addAttribute("startHour", form.getStartHour())
-                    .addAttribute("endHour", form.getEndHour())
-                    .addAttribute("minPrice", form.getMinPrice())
-                    .addAttribute("maxPrice", form.getMaxPrice())
                     .addAttribute("search", form.getSearch())
                     .addAttribute("page", page)
                     .addAttribute("type", form.getType());

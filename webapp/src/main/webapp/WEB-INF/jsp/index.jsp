@@ -46,7 +46,6 @@
 
 
 <div class="content">
-    <%@ include file="statusMessages.jsp"%>
     <c:url value="/searchResults" var="postPath"/>
     <form:form modelAttribute="SearchForm" action="${postPath}" method="post">
     <div class="search-box">
