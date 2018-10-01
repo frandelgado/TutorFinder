@@ -77,9 +77,16 @@ public class SearchController extends BaseController{
             }
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.searchForm", errors);
             redirectAttributes.addFlashAttribute("searchForm", form);
-        }else {
-            redirectAttributes.addFlashAttribute("searchForm", form);
-            redirectAttributes.addFlashAttribute("page", page);
+        } else {
+            redirectAttributes
+                    .addAttribute("day", form.getDay())
+                    .addAttribute("startHour", form.getStartHour())
+                    .addAttribute("endHour", form.getEndHour())
+                    .addAttribute("minPrice", form.getMinPrice())
+                    .addAttribute("maxPrice", form.getMaxPrice())
+                    .addAttribute("search", form.getSearch())
+                    .addAttribute("page", page)
+                    .addAttribute("type", form.getType());
         }
         RedirectView redirect = new RedirectView("/searchResults");
         return new ModelAndView(redirect);
