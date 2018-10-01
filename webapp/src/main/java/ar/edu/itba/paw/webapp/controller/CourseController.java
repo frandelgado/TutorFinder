@@ -60,7 +60,7 @@ public class CourseController extends BaseController{
             return redirectToErrorPage("nonExistentCourse");
         }
         mav.addObject("course", course);
-        LOGGER.info("Creating view for Course with professor id {} and subject id {}", professorId, subjectId);
+        LOGGER.debug("Creating view for Course with professor id {} and subject id {}", professorId, subjectId);
 
         final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
         mav.addObject("schedule", schedule);

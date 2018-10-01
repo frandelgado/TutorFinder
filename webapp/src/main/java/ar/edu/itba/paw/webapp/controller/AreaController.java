@@ -36,7 +36,7 @@ public class AreaController extends BaseController {
             return redirectToErrorPage("nonExistentArea");
         }
 
-        LOGGER.info("Creating view for Area with id {}", id);
+        LOGGER.debug("Creating view for Area with id {}", id);
         mav.addObject("area", area);
         mav.addObject("pagedResults", cs.filterByAreaId(id, page));
         mav.addObject("page", page);
