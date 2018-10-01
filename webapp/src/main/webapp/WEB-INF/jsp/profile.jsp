@@ -17,8 +17,11 @@
 
 <div class="content">
     <%--<img class="profile-picture" alt="Profile picture" src="<c:url value="/resources/images/logo_invert.jpg" />" />--%>
-    <h1 class="profile-name"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
-    <h3 class="profile-description m-20-b"><c:out value="${professor.description}" escapeXml="true"/></h3>
+    <divc class="profile-profesor">
+        <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${professor.picture}" />"/>
+        <h1 class="profile-name m-0-10"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
+        <h3 class="profile-description m-0-10"><c:out value="${professor.description}" escapeXml="true"/></h3>
+    </divc>
     <div class="class-content">
         <div class="classes">
             <div>

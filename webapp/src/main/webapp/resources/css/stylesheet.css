@@ -227,7 +227,9 @@ body {
     height: 30px;
     align-self: center;
     border: none;
-    border-bottom: 2px solid #F47C48;
+    border: 2px solid #F47C48;
+    border-radius: 5px;
+    margin-left: 5px;
 }
 
 .navbar .dropdown {
@@ -330,7 +332,7 @@ button {
     background-color: white;
     height: 100%;
     align-content: center;
-    grid-template-columns: 220px auto;
+    grid-template-columns: 170px auto;
     grid-template-areas: "search-result-img search-result-title       search-result-specs"
                          "search-result-img search-result-professor   search-result-specs"
                          "search-result-img search-result-description search-result-specs"
@@ -354,7 +356,7 @@ button {
     align-content: center;
     border-radius: 20px;
     box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
-    grid-template-columns: 220px auto;
+    grid-template-columns: 170px auto;
     grid-template-areas: "search-result-img search-result-title"
     "search-result-img search-result-description"
     "search-result-img search-result-description"
@@ -381,6 +383,7 @@ button {
 .search-result-picture {
     height: 150px;
     width: 150px;
+    border-radius: 20px;
 }
 
 .firstchild {
@@ -426,6 +429,15 @@ button {
     grid-area: search-logo;
     max-width: 272px;
 }
+.profile-profesor {
+    grid-area: description;
+    display: grid;
+    grid-template-columns: 150px auto;
+    grid-template-rows: 50px 100px;
+    grid-template-areas:
+            "profile-picture profile-name"
+            "profile-picture profile-description"
+}
 
 .profile {
     display: grid;
@@ -464,18 +476,21 @@ button {
 }
 
 .staticProfile .profile-picture {
-    max-width: 100px;
+    height: 145px;
+    width: 145px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    padding: 5px;
 }
 
 .staticProfile .content {
     display: grid;
     grid-template-columns: 40fr 60fr;
-    grid-template-rows: 50px 50px 80px auto 80px auto;
+    grid-template-rows: 150px 80px auto 80px auto;
     grid-column-gap: 10px;
-    grid-row-gap: 10px;
+    grid-row-gap: 20px;
     grid-template-areas:
-        "profile-name        profile-name"
-        "profile-description profile-description"
+        "description description"
         "................... ..................."
         "class-content       time-content"
         ;
@@ -667,8 +682,10 @@ button {
 
 
 .input-request {
+    margin-top: 5px;
     border-width: 0;
-    border-bottom: 2px solid #F47C48;
+    border: 2px solid #F47C48;
+    border-radius: 5px;
     padding: 4px 0;
     background-color: white;
     font-size: 15px;
@@ -704,7 +721,8 @@ button {
 }
 
 .label {
-  color:#402039;
+    color:#402039;
+    margin-bottom: 10px;
 }
 
 .custom-input-container,
@@ -743,7 +761,7 @@ button {
     align-items: center;
     justify-content: center;
     border: 1px solid #F47C48;
-    border-radius: 4px;
+    border-radius: 5px;
     background: white;
     color: #402039;
     font-size: 15px;
@@ -786,7 +804,7 @@ button {
 }
 
 .staticProfile .schedule {
-    min-width: 100px;
+    min-width: 655px;
 }
 
 .conversation {
@@ -1003,4 +1021,8 @@ th, td {
     align-content: center;
     justify-content: center;
     margin: 0!important;
+}
+.m-0-10 {
+    margin: 20px;
+    margin-top: 0px;
 }
