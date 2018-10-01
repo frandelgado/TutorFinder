@@ -135,12 +135,8 @@
         </c:choose>
 
         <div class="paged-result-buttons">
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page - 1}
-            &minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}
-            &startHour=${param.startHour}&endHour=${param.endHour}" var="previous"/>
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page + 1}
-            &minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}
-            &startHour=${param.startHour}&endHour=${param.endHour}" var="next"/>
+            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page - 1}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}&startHour=${param.startHour}&endHour=${param.endHour}" var="previous"/>
+            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page + 1}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}&startHour=${param.startHour}&endHour=${param.endHour}" var="next"/>
 
             <c:if test="${page > 1}">
                 <a href="${previous}" class="previous round">&#8249;</a>
