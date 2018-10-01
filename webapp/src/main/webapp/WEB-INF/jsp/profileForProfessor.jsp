@@ -104,7 +104,11 @@
                 </form:form>
             </div>
         </div>
-        <%@ include file="schedule.jsp"%>
+        <div class="schedule">
+            <h2><spring:message code="schedule.titleFP"/></h2>
+            <p><spring:message code="schedule.descriptionFP" /></p>
+            <%@ include file="schedule.jsp"%>
+        </div>
     </div>
 
 
