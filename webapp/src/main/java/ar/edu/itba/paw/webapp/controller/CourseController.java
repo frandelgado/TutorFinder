@@ -10,6 +10,8 @@ import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,8 @@ import javax.validation.Valid;
 
 @Controller
 public class CourseController extends BaseController{
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
     @Autowired
     @Qualifier("courseServiceImpl")
@@ -56,6 +60,7 @@ public class CourseController extends BaseController{
             return redirectToErrorPage("nonExistentCourse");
         }
         mav.addObject("course", course);
+        LOGGER.info("Creating view for Course with professor id {} and subject id {}", professorId, subjectId);
 
         final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
         mav.addObject("schedule", schedule);
@@ -124,6 +129,7 @@ public class CourseController extends BaseController{
             return createCourse(form, user);
         }
 
+        LOGGER.debug("Posting request for course creation for professor with id {} in subject with id {}", user.getId(), form.getSubjectId());
         return redirectWithNoExposedModalAttributes("/Course/?professor=" + course.getProfessor().getId()
                 + "&subject=" + course.getSubject().getId());
     }

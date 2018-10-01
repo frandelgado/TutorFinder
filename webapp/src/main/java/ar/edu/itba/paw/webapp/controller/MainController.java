@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.SearchForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 @Controller
 public class MainController extends BaseController{
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
     @Autowired
     @Qualifier("userServiceImpl")
@@ -45,8 +49,13 @@ public class MainController extends BaseController{
             return null;
 
         final String username = auth.getName();
-        if(!username.equals("anonymousUser"))
-            return us.findByUsername(username);
+        if(!username.equals("anonymousUser")) {
+            final User user = us.findByUsername(username);
+            if(user != null) {
+                LOGGER.debug("Currently logged user has id {}", user.getId());
+            }
+            return user;
+        }
         return null;
     }
 

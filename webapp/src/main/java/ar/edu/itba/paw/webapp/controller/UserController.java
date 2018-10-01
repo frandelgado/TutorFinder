@@ -7,6 +7,8 @@ import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +27,8 @@ import java.io.IOException;
 
 @Controller
 public class UserController extends BaseController{
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     @Qualifier("userServiceImpl")
@@ -77,6 +81,7 @@ public class UserController extends BaseController{
             return register(form);
         }
 
+        LOGGER.debug("Authenticating user with id {}", u.getId());
         authenticateRegistered(request, u.getUsername(), u.getPassword());
 
         return redirectWithNoExposedModalAttributes("/");

@@ -4,6 +4,8 @@ import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.models.Area;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class AreaController extends BaseController{
+public class AreaController extends BaseController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AreaController.class);
 
     @Autowired
     @Qualifier("areaServiceImpl")
@@ -32,6 +36,7 @@ public class AreaController extends BaseController{
             return redirectToErrorPage("nonExistentArea");
         }
 
+        LOGGER.info("Creating view for Area with id {}", id);
         mav.addObject("area", area);
         mav.addObject("pagedResults", cs.filterByAreaId(id, page));
         mav.addObject("page", page);
