@@ -1,7 +1,7 @@
 <c:forEach var="result" items="${pagedResults.results}">
         <div class="search-course-result">
             <a class="conversation-link" href = "<c:url value="/Course/?professor=${result.professor.id}&subject=${result.subject.id}" />"/>
-            <a class="search-result-img"><img src="<c:url value="https://static.thenounproject.com/png/337699-200.png" />"/></a>
+            <a class="search-result-img"><img src="<c:url value="/resources/images/search.png" />"/></a>
             <a class="search-result-title">
                 <c:out value="${result.subject.area.name} - ${result.subject.name}" escapeXml="true" /></a>
             <a class="search-result-professor" >

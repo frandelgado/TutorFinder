@@ -21,23 +21,6 @@
         <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
     </a>
 
-    <%--<div class="search-bar">--%>
-        <%--<form role="search" action="<c:url value="/searchResults" />" class="search-bar">--%>
-            <%--<input class="search-input" type="search" name="search" placeholder="<spring:message code="search"/>"/>--%>
-            <%--<div class="dropdown">--%>
-                <%--<select class="select-search-type" name="type">--%>
-                    <%--<option value="" selected disabled><spring:message code="search.category" /> </option>--%>
-                    <%--<option value="professor"><spring:message code="professor" /> </option>--%>
-                    <%--<option value="course"><spring:message code="course.title" /> </option>--%>
-                    <%--<option value="area"><spring:message code="area" /></option>--%>
-                <%--</select>--%>
-            <%--</div>--%>
-            <%--<button type="submit" class="search-button">--%>
-                <%--<img class="search-img" src="<c:url value="https://static.thenounproject.com/png/337699-200.png" />" />--%>
-            <%--</button>--%>
-        <%--</form>--%>
-    <%--</div>--%>
-
     <div class="search-bar">
         <spring:message code="search" var="searchPlaceholder"/>
         <form:input class="search-input" type="search" path="search" name="search" placeholder="${searchPlaceholder}"/>
@@ -50,7 +33,7 @@
             </form:select>
         </div>
         <button type="submit" class="search-button">
-            <img class="search-img" src="https://static.thenounproject.com/png/337699-200.png" />
+            <img class="search-img" src="<c:url value="/resources/images/search.png" />" />
         </button>
     </div>
 

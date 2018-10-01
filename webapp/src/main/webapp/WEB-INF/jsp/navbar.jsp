@@ -15,7 +15,7 @@
                 </select>
             </div>
             <button type="submit" class="search-button">
-                <img class="search-img" src="<c:url value="https://static.thenounproject.com/png/337699-200.png" />" />
+                <img class="search-img" src="<c:url value="/resources/images/search.png" />" />
             </button>
         </form>
     </div>
