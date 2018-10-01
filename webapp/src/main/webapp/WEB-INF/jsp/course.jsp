@@ -53,7 +53,11 @@
     </form:form>
     </div>
 
-    <%@ include file="schedule.jsp"%>
+    <div class="schedule">
+        <h2><spring:message code="schedule.title"/></h2>
+        <p><spring:message code="schedule.description" /></p>
+        <%@ include file="schedule.jsp"%>
+    </div>
 </div>
 <div class="footer">
 </div>
