@@ -9,7 +9,7 @@ import java.util.List;
 public interface AreaService {
     Area findAreaById(final long id);
 
-    Area create(final String name, final String description);
+    Area create(final String name, final String description, final byte[] image);
 
     PagedResults<Area> filterAreasByName(final String name, final int page) throws PageOutOfBoundsException;
 }

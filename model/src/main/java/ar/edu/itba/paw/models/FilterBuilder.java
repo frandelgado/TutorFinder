@@ -9,13 +9,14 @@ public class FilterBuilder {
     private static final String BASE_SELECT = "SELECT DISTINCT courses.user_id, courses.subject_id," +
             "courses.description, price, professors.description, users.username," +
             "users.name, users.lastname, users.password, users.email, subjects.description," +
-            "subjects.name, areas.name, areas.description, areas.area_id ";
+            "subjects.name, areas.name, areas.description, areas.area_id, professors.profile_picture, areas.image ";
 
-    private static final String BASE_FROM = "FROM courses, professors, users, subjects, areas, schedules ";
+    private static final String BASE_FROM = "FROM courses, users, subjects, areas, professors LEFT OUTER JOIN schedules " +
+            "ON schedules.user_id = professors.user_id ";
 
     private static final String BASE_WHERE = "WHERE courses.user_id = users.user_id AND" +
             " courses.subject_id = subjects.subject_id AND professors.user_id = users.user_id " +
-            "AND areas.area_id = subjects.area_id AND schedules.user_id = professors.user_id ";
+            "AND areas.area_id = subjects.area_id ";
 
 
     private  final String SELECT;

@@ -9,6 +9,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
+    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>" ></script>
+    <script src="<c:url value="/resources/js/registerAsProfessor.js"/>" ></script>
     <title>Tu Teoria | <spring:message code="register"/></title>
 </head>
 
@@ -24,16 +26,22 @@
     <div class="button-container">
         <h2 class="label"><spring:message code="register.professor" /> </h2>
     </div>
-    <c:url value="/registerAsProfessor" var="postPath"/>
-    <form:form cssClass="form" modelAttribute="registerAsProfessorForm" action="${postPath}" method="post">
+    <c:url value="/registerAsProfessor" var="postPath" />
+    <form:form cssClass="form" modelAttribute="registerAsProfessorForm" action="${postPath}" enctype="multipart/form-data" method="post">
         <div>
             <form:label cssClass="label" path="description"><spring:message code="register.description"/></form:label>
             <form:textarea cssClass="input-request" type="text" path="description" rows="5" cols="5"/>
             <form:errors cssClass="error-text" path="description" element="p"/>
         </div>
+        <div id="pictureDiv">
+            <form:label cssClass="label" path="picture"><spring:message code="register.picture"/></form:label>
+            <form:input cssClass="input-request" type="file" path="picture" accept="image/jpeg, image/png" id="picture"/>
+            <form:errors cssClass="error-text" path="picture" element="p"/>
+            <p id="pictureError" class="error-text"><spring:message code="FileSize.registerAsProfessorForm.picture" /></p>
+        </div>
 
         <div class="button-container">
-            <input class="button-2" type="submit" value="<spring:message code="register"/>"/>
+            <input class="button-2" id="registerAsProfessorSubmit" type="submit" value="<spring:message code="register"/>"/>
         </div>
     </form:form>
 </div>

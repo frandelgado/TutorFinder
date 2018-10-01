@@ -25,8 +25,8 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Area create(String name, String description) {
-        return areaDao.create(name,description);
+    public Area create(final String name, final String description, final byte[] image) {
+        return areaDao.create(name,description, image);
     }
 
 

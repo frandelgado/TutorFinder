@@ -45,7 +45,7 @@ public class ScheduleServiceImplTest {
     public void setUp() throws TimeslotAllocatedException {
         MockitoAnnotations.initMocks(this);
         final Professor professor = new Professor(2L, "username","Carlos","Ramos",
-                "password","carlitos@gmail.com","test description");
+                "password","carlitos@gmail.com","test description", new byte[1]);
         when(scheduleDao.reserveTimeSlot(professor,1, 12)).thenReturn( new Timeslot(1,12));
         when(scheduleDao.reserveTimeSlot(professor,1, 14)).thenReturn( new Timeslot(1,14));
         when(scheduleDao.reserveTimeSlot(professor,1, 15)).thenReturn( new Timeslot(1,15));

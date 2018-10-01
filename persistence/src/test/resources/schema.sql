@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS areas (
 area_id IDENTITY PRIMARY KEY,
 name VARCHAR(128) UNIQUE NOT NULL,
-description VARCHAR(512) NOT NULL
+description VARCHAR(512) NOT NULL,
+image binary(100) NOT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS subjects (
@@ -24,6 +25,7 @@ lastname VARCHAR(128) NOT NULL
 CREATE TABLE IF NOT EXISTS professors (
 user_id BIGINT NOT NULL,
 description VARCHAR(512) NOT NULL,
+profile_picture binary(100) NOT NULL,
 FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
 PRIMARY KEY(user_id)
 );
@@ -75,13 +77,13 @@ expires TIMESTAMP NOT NULL,
 FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-Insert into areas (area_id, name, description) values (1, 'matematica', 'este area es dificil');
+Insert into areas (area_id, name, description, image) values (1, 'matematica', 'este area es dificil', X'01FF');
 INSERT into users (user_id, username, password, email, name, lastname) values (2, 'Juancho', 'dontbecruel', 'juancito@gmail.com', 'Juan', 'lopez' );
 INSERT into users (user_id, username, password, email, name, lastname) values (3, 'mesme', '12345', 'mesme@hotmail.com', 'Martin', 'Mesme' );
 INSERT into users (user_id, username, password, email, name, lastname) values (4, 'juan', '12345', 'test@hotmail.com', 'Wanch', 'Ope' );
 INSERT into users (user_id, username, password, email, name, lastname) values (5, 'mugi', '12345', 'straw@hotmail.com', 'Mugi', 'Wara' );
-INSERT into professors (user_id, description) values (2, 'Juan es un profesor dedicado');
-INSERT into professors (user_id, description) values (5, 'Kaizoku Mugiwara no Luffy');
+INSERT into professors (user_id, description, profile_picture) values (2, 'Juan es un profesor dedicado', X'01FF');
+INSERT into professors (user_id, description, profile_picture) values (5, 'Kaizoku Mugiwara no Luffy', X'01FF');
 INSERT into subjects (subject_id, name, description, area_id) values (1, 'Algebra', 'Complicado', 1);
 INSERT into subjects (subject_id, name, description, area_id) values (2, 'Algebra Lineal', 'Autovectores', 1);
 INSERT into subjects (subject_id, name, description, area_id) values (3, 'Integrales', 'Barrow', 1);

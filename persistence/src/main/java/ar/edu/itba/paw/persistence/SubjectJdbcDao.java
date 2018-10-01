@@ -28,14 +28,16 @@ public class SubjectJdbcDao implements SubjectDao {
             new Area(
                     rs.getLong(4),
                     rs.getString(6),
-                    rs.getString(5)
-            )
+                    rs.getString(5),
+                    rs.getBytes(7)
+                    )
     );
 
     private final static RowMapper<Area> AREA_ROW_MAPPER= (rs, rowNum) -> new Area(
             rs.getLong(1),
             rs.getString(3),
-            rs.getString(2)
+            rs.getString(2),
+            rs.getBytes(4)
     );
 
     @Autowired
@@ -51,7 +53,7 @@ public class SubjectJdbcDao implements SubjectDao {
                 "SELECT subject_id, subjects.name as subjects_name, " +
                         "subjects.description as subject_description, " +
                         "subjects.area_id as area_id, areas.name as areas_name, " +
-                        "areas.description as areas_description FROM subjects, areas " +
+                        "areas.description as areas_description, areas.image FROM subjects, areas " +
                         "WHERE subject_id = ? AND areas.area_id=subjects.area_id;", ROW_MAPPER, id
         );
         return subjects.stream().findFirst();
@@ -65,7 +67,7 @@ public class SubjectJdbcDao implements SubjectDao {
         args.put("area_id", area_id);
         final Number subjectId = jdbcInsert.executeAndReturnKey(args);
         final Area area = jdbcTemplate.query(
-                "SELECT area_id, name, description FROM areas where area_id = ?", AREA_ROW_MAPPER, area_id
+                "SELECT area_id, name, description, image FROM areas where area_id = ?", AREA_ROW_MAPPER, area_id
         ).stream().findFirst().orElse(null);
         return new Subject(subjectId.longValue(), description, name, area);
     }
@@ -78,7 +80,7 @@ public class SubjectJdbcDao implements SubjectDao {
                 "SELECT subject_id, subjects.name as subjects_name, " +
                         "subjects.description as subject_description, " +
                         "subjects.area_id as area_id, areas.name as areas_name, " +
-                        "areas.description as areas_description FROM subjects, areas " +
+                        "areas.description as areas_description, areas.image FROM subjects, areas " +
                         "WHERE UPPER(subjects.name) LIKE UPPER(?) AND subjects.area_id = areas.area_id", ROW_MAPPER, search
         );
         return subjects;
@@ -91,7 +93,7 @@ public class SubjectJdbcDao implements SubjectDao {
                 "SELECT subjects.subject_id, subjects.name as subjects_name, " +
                         "subjects.description as subject_description, " +
                         "subjects.area_id as area_id, areas.name as areas_name, " +
-                        "areas.description as areas_description FROM subjects, areas " +
+                        "areas.description as areas_description, areas.image FROM subjects, areas " +
                         "WHERE subjects.area_id = areas.area_id AND NOT EXISTS " +
                         "(SELECT * FROM courses WHERE courses.subject_id = subjects.subject_id " +
                         "AND courses.user_id = ?)", ROW_MAPPER, id

@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS areas (
 area_id SERIAL PRIMARY KEY,
 name VARCHAR(128) UNIQUE NOT NULL,
+image BYTEA NOT NULL,
 description VARCHAR(512) NOT NULL
 );
 
@@ -24,6 +25,7 @@ lastname VARCHAR(128) NOT NULL
 CREATE TABLE IF NOT EXISTS professors (
 user_id BIGINT NOT NULL,
 description VARCHAR(512) NOT NULL,
+profile_picture BYTEA NOT NULL,
 FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
 PRIMARY KEY(user_id)
 );

@@ -62,23 +62,25 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Professor create(final Long userId, final String description) throws ProfessorWithoutUserException {
+    public Professor create(final Long userId, final String description, final byte[] picture)
+            throws ProfessorWithoutUserException {
         final User user = userDao.findById(userId).orElseThrow(() ->
                 new ProfessorWithoutUserException("A valid user id must be provided in order to "));
-        return professorDao.create(user, description);
+        return professorDao.create(user, description, picture);
     }
 
     @Transactional
     @Override
     public Professor createWithUser(final Long id, final String username, final String name,
                                     final String lastname, final String password, final String email,
-                                    final String description) throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
+                                    final String description, final byte[] picture)
+            throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         final User user;
         user = userDao.create(username, password, email, name, lastname);
 
         if(description.length() < 50 || description.length() > 300)
             return null;
 
-        return professorDao.create(user, description);
+        return professorDao.create(user, description, picture);
     }
 }

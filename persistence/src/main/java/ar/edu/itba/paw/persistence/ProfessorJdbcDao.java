@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
-import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,8 @@ public class ProfessorJdbcDao implements ProfessorDao {
             rs.getString(4),
             rs.getString(5),
             rs.getString(6),
-            rs.getString(7)
+            rs.getString(7),
+            rs.getBytes(8)
     );
 
     @Autowired
@@ -40,21 +40,23 @@ public class ProfessorJdbcDao implements ProfessorDao {
     }
 
     @Override
-    public Professor create(final User user, final String description) {
+    public Professor create(final User user, final String description, final byte[] picture) {
         final Map<String, Object> args = new HashMap<>();
         args.put("user_id", user.getId());
         args.put("description", description);
+        args.put("profile_picture", picture);
         jdbcInsert.execute(args);
         return new Professor(user.getId(), user.getUsername(), user.getName(),
-                user.getLastname(), user.getPassword(), user.getEmail(), description);
+                user.getLastname(), user.getPassword(), user.getEmail(), description, picture);
     }
 
     @Override
     public Optional<Professor> findById(final Long id) {
         final List<Professor> professors = jdbcTemplate.query(
                 "SELECT users.user_id, username, name, lastname, password," +
-                        " email, description FROM professors, users WHERE users.user_id = ?" +
-                        "AND users.user_id = professors.user_id", ROW_MAPPER, id
+                        " email, description, profile_picture FROM professors," +
+                        " users WHERE users.user_id = ? AND users.user_id = professors.user_id"
+                , ROW_MAPPER, id
         );
         return professors.stream().findFirst();
     }
@@ -63,7 +65,7 @@ public class ProfessorJdbcDao implements ProfessorDao {
     public Optional<Professor> findByUsername(final String username) {
         final List<Professor> professors = jdbcTemplate.query(
                 "SELECT users.user_id, username, name, lastname, password," +
-                        " email, description FROM professors, users WHERE username = ?" +
+                        " email, description, profile_picture FROM professors, users WHERE username = ?" +
                         "AND users.user_id = professors.user_id", ROW_MAPPER, username
         );
         return professors.stream().findFirst();
@@ -74,7 +76,7 @@ public class ProfessorJdbcDao implements ProfessorDao {
         final String search = "%" + fullName + "%";
         final List<Professor> professors = jdbcTemplate.query(
                 "SELECT users.user_id, username, name, lastname, password, email, " +
-                        "description FROM professors, users WHERE " +
+                        "description, profile_picture FROM professors, users WHERE " +
                         "UPPER (concat(name, ' ', lastname)) LIKE UPPER(?) " +
                         "AND users.user_id = professors.user_id ORDER BY professors.user_id LIMIT ? OFFSET ?",
                 ROW_MAPPER, search, limit, offset

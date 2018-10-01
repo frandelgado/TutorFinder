@@ -18,10 +18,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 public class UserController extends BaseController{
@@ -111,7 +111,6 @@ public class UserController extends BaseController{
         return mav;
     }
 
-    //TODO: CHECK
     @RequestMapping("/Profile")
     public ModelAndView profile(
             @ModelAttribute("currentUser") final User loggedUser,
@@ -152,7 +151,12 @@ public class UserController extends BaseController{
             return registerProfessor(form);
         }
 
-        final Professor p = ps.create(loggedUser.getId(), form.getDescription());
+        final Professor p;
+        try {
+            p = ps.create(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
+        } catch (IOException e) {
+            return redirectToErrorPage("fileUploadError");
+        }
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
 

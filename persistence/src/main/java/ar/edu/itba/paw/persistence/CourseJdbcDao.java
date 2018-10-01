@@ -4,7 +4,6 @@ import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,8 +23,8 @@ public class CourseJdbcDao implements CourseDao {
     private static final String COURSES_SELECT_FROM = "SELECT courses.user_id, courses.subject_id," +
             "courses.description, price, professors.description, users.username," +
             "users.name, users.lastname, users.password, users.email, subjects.description," +
-            "subjects.name, areas.name, areas.description, areas.area_id " +
-            "FROM courses, professors, users, subjects, areas ";
+            "subjects.name, areas.name, areas.description, areas.area_id, professors.profile_picture," +
+            "areas.image FROM courses, professors, users, subjects, areas ";
     
     private final static RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
             new Professor(
@@ -35,7 +34,8 @@ public class CourseJdbcDao implements CourseDao {
                     rs.getString(8),
                     rs.getString(9),
                     rs.getString(10),
-                    rs.getString(5)
+                    rs.getString(5),
+                    rs.getBytes(16)
                     ),
             new Subject(
                     rs.getLong(2),
@@ -44,7 +44,8 @@ public class CourseJdbcDao implements CourseDao {
                     new Area(
                             rs.getLong(15),
                             rs.getString(14),
-                            rs.getString(13)
+                            rs.getString(13),
+                            rs.getBytes(17)
                             )
                     ),
             rs.getString(3),
