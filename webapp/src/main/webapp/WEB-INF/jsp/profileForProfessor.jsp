@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
     <title>Tu Teoria | <spring:message code="profile.title" /> </title>
-
+    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/scheduleModal.js" />"></script>
 </head>
 
@@ -82,7 +82,7 @@
                         <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
                         <form:select cssClass="select-subject" path="startHour">
                             <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
-                            <c:forEach var="hour" begin="0" end="23" >
+                            <c:forEach var="hour" begin="1" end="23" >
                                 <form:option value="${hour}">${hour}:00</form:option>
                             </c:forEach>
                         </form:select>
@@ -92,7 +92,7 @@
                         <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
                         <form:select cssClass="select-subject" path="endHour">
                             <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
-                            <c:forEach var="hour" begin="1" end="24" >
+                            <c:forEach var="hour" begin="2" end="24" >
                                 <form:option value="${hour}">${hour}:00</form:option>
                             </c:forEach>
                         </form:select>
@@ -109,18 +109,9 @@
 
 
 </div>
-</div>
 <div class="footer">
 </div>
 
-    <script>
-        var modal = document.getElementById('add-time-modal');
-        var btn = document.getElementById("add-time-modal-button");
-        var span = document.getElementsByClassName("modal-close")[0];
-        btn.onclick = function() { modal.style.display = "block"; }
-        span.onclick = function() { modal.style.display = "none"; }
-        window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
-    </script>
 </body>
 
 </html>
