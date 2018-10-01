@@ -59,9 +59,4 @@ public class ErrorController extends BaseController{
         final ModelAndView mav = new ModelAndView("registerAsProfessorForm");
         return mav;
     }
-
-    @RequestMapping("/500")
-    public ModelAndView internalError() {
-        return redirectToErrorPage("500");
-    }
 }
