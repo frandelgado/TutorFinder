@@ -66,7 +66,7 @@
         <div>
             <h3><spring:message code="search.dayHeader"/></h3>
             <div>
-                <form:select cssClass="select-subject" path="day">
+                <form:select cssClass="select-subject no-border b-r-5" path="day">
                     <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
                     <form:option value="1"><spring:message code ="day.monday"/></form:option>
                     <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
@@ -79,9 +79,9 @@
                 <form:errors cssClass="error-text" path="day" element="p"/>
             </div>
             <h3><spring:message code="search.hourHeader"/></h3>
-            <div>
+            <div class="m-10-b">
                 <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
-                <form:select cssClass="select-subject" path="startHour">
+                <form:select cssClass="select-subject no-border b-r-5" path="startHour">
                     <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
                     <c:forEach var="hour" begin="0" end="23" >
                         <form:option value="${hour}">${hour}:00</form:option>
@@ -91,7 +91,7 @@
             </div>
             <div>
                 <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
-                <form:select cssClass="select-subject" path="endHour">
+                <form:select cssClass="select-subject no-border b-r-5" path="endHour">
                     <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
                     <c:forEach var="hour" begin="1" end="24" >
                         <form:option value="${hour}">${hour}:00</form:option>
@@ -102,14 +102,14 @@
         </div>
         <div>
             <h3><spring:message code="search.priceHeader"/></h3>
-            <div>
+            <div class="m-10-b">
                 <form:label path="minPrice"><spring:message code="search.label.minPrice"/></form:label>
-                <form:input cssClass="input-request-filter" type="number" step="0.01" path="minPrice"/>
+                <form:input cssClass="input-request-filter no-border b-r-5" type="number" step="0.01" path="minPrice"/>
                 <form:errors cssClass="error-text" path="minPrice" element="p"/>
             </div>
             <div>
                 <form:label path="maxPrice"><spring:message code="search.label.maxPrice"/></form:label>
-                <form:input cssClass="input-request-filter" type="number" step="0.01" path="maxPrice"/>
+                <form:input cssClass="input-request-filter no-border b-r-5" type="number" step="0.01" path="maxPrice"/>
                 <form:errors cssClass="error-text" path="maxPrice" element="p"/>
             </div>
         </div>
