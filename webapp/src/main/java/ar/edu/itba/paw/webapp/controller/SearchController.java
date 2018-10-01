@@ -88,7 +88,7 @@ public class SearchController extends BaseController{
                     .addAttribute("page", page)
                     .addAttribute("type", form.getType());
         }
-        RedirectView redirect = new RedirectView("/searchResults");
+        RedirectView redirect = new RedirectView("/searchResults", true);
         return new ModelAndView(redirect);
 
 

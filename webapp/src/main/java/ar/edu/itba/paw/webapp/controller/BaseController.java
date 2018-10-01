@@ -14,7 +14,7 @@ public class BaseController {
     }
 
     public ModelAndView redirectWithNoExposedModalAttributes(final String url) {
-        final RedirectView view = new RedirectView(url);
+        final RedirectView view = new RedirectView(url, true);
         view.setExposeModelAttributes(false);
         return new ModelAndView(view);
     }
