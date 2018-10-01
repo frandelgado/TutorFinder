@@ -51,7 +51,6 @@ public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    @Async
     public void sendRestorePasswordEmail(final User user, final String token) {
         final Document doc;
         try {
