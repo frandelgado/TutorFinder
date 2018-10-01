@@ -62,7 +62,7 @@
 <div class="content">
     <div class="filter-panel">
 
-        <h2>Filtros</h2>
+        <h2><spring:message code="filter" /> </h2>
         <div>
             <h3><spring:message code="search.dayHeader"/></h3>
             <div>
@@ -83,7 +83,7 @@
                 <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
                 <form:select cssClass="select-subject no-border b-r-5" path="startHour">
                     <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
-                    <c:forEach var="hour" begin="0" end="23" >
+                    <c:forEach var="hour" begin="1" end="23" >
                         <form:option value="${hour}">${hour}:00</form:option>
                     </c:forEach>
                 </form:select>
@@ -93,7 +93,7 @@
                 <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
                 <form:select cssClass="select-subject no-border b-r-5" path="endHour">
                     <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
-                    <c:forEach var="hour" begin="1" end="24" >
+                    <c:forEach var="hour" begin="2" end="24" >
                         <form:option value="${hour}">${hour}:00</form:option>
                     </c:forEach>
                 </form:select>

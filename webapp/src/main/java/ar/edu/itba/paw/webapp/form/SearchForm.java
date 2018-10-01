@@ -21,11 +21,11 @@ public class SearchForm {
     @Max(7)
     private Integer day;
 
-    @Min(0)
+    @Min(1)
     @Max(23)
     private Integer startHour;
 
-    @Min(1)
+    @Min(2)
     @Max(24)
     private Integer endHour;
 
@@ -83,5 +83,17 @@ public class SearchForm {
 
     public Integer getEndHour() {
         return endHour;
+    }
+
+    public boolean validTimeRange() {
+        if(startHour == null || endHour == null)
+            return true;
+        return startHour < endHour;
+    }
+
+    public boolean validPriceRange() {
+        if(maxPrice == null || minPrice == null)
+            return true;
+        return minPrice <= maxPrice;
     }
 }
