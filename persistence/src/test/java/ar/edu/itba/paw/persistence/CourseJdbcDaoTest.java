@@ -140,7 +140,8 @@ public class CourseJdbcDaoTest {
 
     @Test
     public void testFilterCoursesByNameInvalid() {
-        final List<Course> courses = courseDao.filterCoursesByName(INVALID_NAME, LIMIT, OFFSET);
+        FilterBuilder filterBuilder = new FilterBuilder();
+        final List<Course> courses = courseDao.filter(filterBuilder.filterByName(INVALID_NAME).getFilter(), LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(0, courses.size());
     }

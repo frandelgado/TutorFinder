@@ -8,10 +8,7 @@ import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.SubjectService;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.PagedResults;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -57,6 +55,10 @@ public class CourseServiceImplTest {
     @Mock
     private SubjectService subjectService;
 
+    @Mock
+    private Filter filter;
+
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -69,9 +71,9 @@ public class CourseServiceImplTest {
         for (int i = 0; i < PAGE_SIZE + 1; i++) {
             courses.add(mock(Course.class));
         }
-        when(courseDao.filterCoursesByName(eq(NAME), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.filter(any(), anyInt(), anyInt())).thenReturn(courses);
 
-        final PagedResults<Course> results = courseService.filterCoursesByName(NAME, PAGE);
+        final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, PAGE);
         assertTrue(results.isHasNext());
         assertEquals(PAGE_SIZE, results.getResults().size());
     }
@@ -84,9 +86,10 @@ public class CourseServiceImplTest {
         for (int i = 0; i < RESULT_NUMBER; i++) {
             courses.add(mock(Course.class));
         }
-        when(courseDao.filterCoursesByName(eq(NAME), anyInt(), anyInt())).thenReturn(courses);
 
-        final PagedResults<Course> results = courseService.filterCoursesByName(NAME, PAGE);
+        when(courseDao.filter(any(), anyInt(), anyInt())).thenReturn(courses);
+
+        final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, PAGE);
         assertFalse(results.isHasNext());
         assertEquals(RESULT_NUMBER, results.getResults().size());
     }
@@ -95,11 +98,13 @@ public class CourseServiceImplTest {
     public void testFilterCoursesByNamePageOutOfBounds() throws PageOutOfBoundsException {
         final List<Course> courses = mock(List.class);
         when(courses.size()).thenReturn(0);
-        when(courseDao.filterCoursesByName(eq(NAME), anyInt(), anyInt())).thenReturn(courses);
+
+        FilterBuilder filterBuilder = new FilterBuilder();
+        when(courseDao.filter(filterBuilder.filterByName(eq(NAME)).getFilter(), anyInt(), anyInt())).thenReturn(courses);
 
         final Integer INVALID_PAGE = 999;
 
-        final PagedResults<Course> results = courseService.filterCoursesByName(NAME, INVALID_PAGE);
+        final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, INVALID_PAGE);
     }
 
     @Test(expected = PageOutOfBoundsException.class)
@@ -107,7 +112,7 @@ public class CourseServiceImplTest {
 
         final Integer INVALID_PAGE = -2;
 
-        final PagedResults<Course> results = courseService.filterCoursesByName(NAME, INVALID_PAGE);
+        final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, INVALID_PAGE);
     }
 
     @Test
