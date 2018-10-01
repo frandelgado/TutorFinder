@@ -1,5 +1,9 @@
+$(document).ready(function(){
+    var selected = $('select[name=type] option:selected');
+    if(selected.val() == "course") {
+        $('.filter-panel').css("display", "flex");
+    }
 
-jQuery(document).ready(function($){
     $('select[name=type]').change(function () {
         // hide all optional elements
 
@@ -9,7 +13,7 @@ jQuery(document).ready(function($){
                 $('.filter-panel').hide();
 
             } else if(value == "course") {
-                $('.filter-panel').show();
+                $('.filter-panel').css("display", "flex");
             }
 
         });
