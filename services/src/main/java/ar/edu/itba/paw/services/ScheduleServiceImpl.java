@@ -39,7 +39,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             LOGGER.error("Attempted to reserve timeslot with an invalid time range");
             throw new InvalidTimeRangeException();
         }
-        if(startTime > 23 || startTime < 1 || endTime > 24 || endTime < 2)
+        if(startTime > 23 || startTime < 1 || endTime > 24 || endTime < 2) {
             LOGGER.error("Attempted to reserve timeslot with invalid start time or end time");
             throw new InvalidTimeException();
         }

@@ -7,6 +7,8 @@ import ar.edu.itba.paw.models.User;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -20,9 +22,10 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 
-//TODO: LOG WHEN MERGED
 @Service
 public class EmailServiceImpl implements EmailService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     @Value("classpath:WelcomeMail.html")
     private Resource registrationMail;
@@ -38,6 +41,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendEmail(String to, String subject, String text) {
+        LOGGER.debug("Sending email to {} with subject {}", to, subject);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
@@ -53,10 +57,12 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendRestorePasswordEmail(final User user, final String token) {
+        LOGGER.debug("Creating Password Restore Email for user with id {} and token {}", user.getId(), token);
         final Document doc;
         try {
             doc = Jsoup.parse(restorePassword.getInputStream(), "UTF-8", "");
         } catch (IOException e) {
+            LOGGER.debug("IO Exception when creating Password Restore Email for user with id {}", user.getId());
             throw new RuntimeException();
         }
         final Element mail = doc.select("td.mail").first();
@@ -69,9 +75,12 @@ public class EmailServiceImpl implements EmailService {
 
         final MimeMessage message = prepareMail(SUBJECT, user.getEmail(), doc.html());
 
-        if(message == null)
+        if(message == null) {
+            LOGGER.debug("Error creating Password Restore Email for user with id {}", user.getId());
             throw new RuntimeException();
+        }
 
+        LOGGER.debug("Sending Password Restore Email for user with id {}", user.getId());
         emailSender.send(message);
     }
 
@@ -79,10 +88,12 @@ public class EmailServiceImpl implements EmailService {
     @Override
     @Async
     public void sendRegistrationEmail(final User user) {
+        LOGGER.debug("Creating Registration Email for user with id {}", user.getId());
         final Document doc;
         try {
             doc = Jsoup.parse(registrationMail.getInputStream(), "UTF-8", "");
         } catch (IOException e) {
+            LOGGER.debug("IO Exception when creating Registration Email for user with id {}", user.getId());
             throw new RuntimeException();
         }
         final Element username = doc.select("td.username").first();
@@ -95,19 +106,25 @@ public class EmailServiceImpl implements EmailService {
 
         final MimeMessage message = prepareMail(REGISTRATION_SUBJECT, user.getEmail(), doc.html());
 
-        if(message == null)
+        if(message == null) {
+            LOGGER.debug("Error creating Registration Email for user with id {}", user.getId());
             throw new RuntimeException();
+        }
 
+        LOGGER.debug("Sending Registration Email for user with id {}", user.getId());
         emailSender.send(message);
     }
 
     @Override
     @Async
     public void sendContactEmail(final User from, final User to, final Conversation conversation) {
+        LOGGER.debug("Creating Contact Email for user with id {} from user with id {} for conversation with id {}", to.getId(),
+                from.getId(), conversation.getId());
         final Document doc;
         try {
             doc = Jsoup.parse(contactMail.getInputStream(), "UTF-8", "");
         } catch (IOException e) {
+            LOGGER.debug("IO Exception when creating Contact Email for user with id {} from conversation with id {}", to.getId(), conversation.getId());
             throw new RuntimeException();
         }
         Element element = doc.select("td.name").first();
@@ -124,9 +141,12 @@ public class EmailServiceImpl implements EmailService {
 
         final MimeMessage message = prepareMail(SUBJECT, to.getEmail(), doc.html());
 
-        if(message == null)
+        if(message == null) {
+            LOGGER.debug("Error creating Contact Email for user with id {} from conversation with id {}", to.getId(), conversation.getId());
             throw new RuntimeException();
+        }
 
+        LOGGER.debug("Sending Contact Email for user with id {} from conversation with id {}", to.getId(), conversation.getId());
         emailSender.send(message);
     }
 

@@ -100,12 +100,14 @@ public class UserJdbcDao implements UserDao {
             userId = jdbcInsert.executeAndReturnKey(args);
         } catch (DuplicateKeyException e) {
             if(findByUsername(username).isPresent()) {
-                if (findByEmail(email).isPresent())
+                if (findByEmail(email).isPresent()) {
+                    LOGGER.error("User with username {} and email {} already exists", username, email);
                     throw new UsernameAndEmailAlreadyInUseException();
+                }
                 LOGGER.error("User with username {} already exists", username);
                 throw new UsernameAlreadyInUseException();
             }
-            if(findByEmail(email).isPresent())
+            if(findByEmail(email).isPresent()) {
                 LOGGER.error("User with email {} already exists", email);
                 throw new EmailAlreadyInUseException();
             }

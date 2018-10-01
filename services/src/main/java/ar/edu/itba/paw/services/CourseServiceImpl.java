@@ -104,15 +104,19 @@ public class CourseServiceImpl implements CourseService {
             LOGGER.error("Attempted to find 0 or negative page number");
             throw new PageOutOfBoundsException();
         }
+        LOGGER.debug("Creating filter builder");
         FilterBuilder fb = new FilterBuilder();
 
         if(day != null || startHour != null || endHour != null) {
+            LOGGER.debug("Adding filter by timeslot");
             fb = fb.filterByTimeslot(day, startHour, endHour);
         }
         if(minPrice != null || maxPrice != null) {
+            LOGGER.debug("Adding filter with price");
             fb = fb.filterByPrice(minPrice, maxPrice);
         }
         if(searchText != null) {
+            LOGGER.debug("Adding filter by search text containing {}", searchText);
             fb = fb.filterByName(searchText);
         }
         final List<Course> courses = courseDao.filter(fb.getFilter(), PAGE_SIZE+1, PAGE_SIZE * (page -1));

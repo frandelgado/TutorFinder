@@ -102,6 +102,8 @@ public class ConversationServiceImpl implements ConversationService {
                 ? conversation.getUser(): conversation.getProfessor();
 
         if(message != null) {
+            LOGGER.debug("Sending contact email from user with id {} to user with id {} in conversation with id {}",
+                    userId, to.getId(), conversationId);
             emailService.sendContactEmail(from, to, conversation);
         }
 

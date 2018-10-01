@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -63,7 +62,8 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        if(username.length() == 0 || password.length() < 8 || email.length() == 0 || name.length() == 0 || lastName.length() == 0){
+        if(username.length() == 0 || password.length() < 8 || email.length() == 0 || name.length() == 0 || lastName.length() == 0) {
+            LOGGER.error("Attempted to create user with invalid field lengths");
             return null;
         }
         if(!name.matches("[a-zA-Z]+") && !lastName.matches("[a-zA-Z]+")){

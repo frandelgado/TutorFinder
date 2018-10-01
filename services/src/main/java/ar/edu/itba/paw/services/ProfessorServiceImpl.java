@@ -23,10 +23,10 @@ public class ProfessorServiceImpl implements ProfessorService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProfessorServiceImpl.class);
 
     @Autowired
-    ProfessorDao professorDao;
+    private ProfessorDao professorDao;
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Override
     public Professor findById(final Long id) {
@@ -77,7 +77,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     public Professor create(final Long userId, final String description, final byte[] picture)
             throws ProfessorWithoutUserException {
         LOGGER.debug("Adding user with id {} as professor", userId);
-        final User user = userService.findById(userId).orElse(null);
+        final User user = userDao.findById(userId).orElse(null);
         if(user == null) {
             LOGGER.error("Attempted to add a non existent user to professors");
             throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");

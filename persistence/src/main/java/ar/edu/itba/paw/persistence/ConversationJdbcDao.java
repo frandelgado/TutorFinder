@@ -155,7 +155,8 @@ public class ConversationJdbcDao implements ConversationDao {
 
     @Override
     public Conversation findByIds(final Long user_id, final Long professor_id, final Long subject_id) {
-        LOGGER.trace("Querying for conversation belonging to the users with id {} and {}", user_id, professor_id);
+        LOGGER.trace("Querying for conversation belonging to the users with id {} and {} for subject with id {}",
+                user_id, professor_id, subject_id);
         final List<Conversation> conversations = jdbcTemplate.query(
                 CONVERSATION_SELECT_FROM + "WHERE conversations.user_id = ? AND " +
                         "conversations.professor_id = ? AND conversations.subject_id = ? AND " +
