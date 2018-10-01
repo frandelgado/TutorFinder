@@ -11,8 +11,6 @@ public interface CourseDao {
 
     List<Course> findByProfessorId(final long professor_id, final int limit, final int offset);
 
-    List<Course> filterCoursesByName(final String name, final int limit, final int offset);
-
     List<Course> filterByAreaId(final long areaId, final int limit, final int offset);
 
     List<Course>  filter(final Filter filter, final int limit, final int offset);

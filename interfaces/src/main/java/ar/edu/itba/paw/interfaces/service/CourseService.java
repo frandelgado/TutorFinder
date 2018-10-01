@@ -12,8 +12,6 @@ public interface CourseService {
 
     PagedResults<Course> findCourseByProfessorId(final long professor_id, final int page) throws PageOutOfBoundsException;
 
-    PagedResults<Course> filterCoursesByName(String name, final int page) throws PageOutOfBoundsException;
-
     PagedResults<Course> filterByAreaId(final long areaId, final int page) throws PageOutOfBoundsException;
 
     Course create(final Long professorId, final Long subjectId, final String description, final Double price)
