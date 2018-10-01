@@ -104,12 +104,12 @@
             <h3><spring:message code="search.priceHeader"/></h3>
             <div class="m-10-b">
                 <form:label path="minPrice"><spring:message code="search.label.minPrice"/></form:label>
-                <form:input cssClass="input-request-filter no-border b-r-5" type="number" step="0.01" path="minPrice"/>
+                <form:input cssClass="input-request-filter no-border b-r-5" type="number"  min="0" step="0.01" path="minPrice"/>
                 <form:errors cssClass="error-text" path="minPrice" element="p"/>
             </div>
             <div>
                 <form:label path="maxPrice"><spring:message code="search.label.maxPrice"/></form:label>
-                <form:input cssClass="input-request-filter no-border b-r-5" type="number" step="0.01" path="maxPrice"/>
+                <form:input cssClass="input-request-filter no-border b-r-5" type="number" min="0" step="0.01" path="maxPrice"/>
                 <form:errors cssClass="error-text" path="maxPrice" element="p"/>
             </div>
         </div>
