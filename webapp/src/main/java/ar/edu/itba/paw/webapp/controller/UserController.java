@@ -162,6 +162,9 @@ public class UserController extends BaseController{
         } catch (IOException e) {
             return redirectToErrorPage("fileUploadError");
         }
+        if(p == null) {
+            return registerProfessor(form);
+        }
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
 

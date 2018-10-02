@@ -83,7 +83,26 @@ public class ProfessorServiceImpl implements ProfessorService {
             throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");
         }
 
-        return professorDao.create(user, description, picture);
+        if(description == null) {
+            LOGGER.error("Attempted to create professor with null description");
+            return null;
+        }
+
+        if(description.length() < 50 || description.length() > 300) {
+            LOGGER.error("Attempted to create professor with invalid description of size {}", description.length());
+            return null;
+        }
+        if(picture == null) {
+            LOGGER.error("Attempted to create professor without profile picture");
+            return null;
+        }
+
+        final Professor professor = professorDao.create(user, description, picture);
+        if(professor == null) {
+            LOGGER.error("Attempted to add a non existent user to professors");
+            throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");
+        }
+        return professor;
     }
 
     @Transactional
@@ -93,8 +112,39 @@ public class ProfessorServiceImpl implements ProfessorService {
                                     final String description, final byte[] picture)
             throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
 
+        if(username == null || password == null || email == null || name == null || lastname == null) {
+            LOGGER.error("Attempted to create professor with empty fields");
+            return null;
+        }
+
+        if(username.length() < 1 || username.length() > 128) {
+            LOGGER.error("Attempted to create professor with invalid username length");
+            return null;
+        }
+
+        if(!name.matches("[a-zA-Z]+") || !lastname.matches("[a-zA-Z]+") ||
+                name.length() < 1 || lastname.length() < 1 || name.length() > 128 || lastname.length() > 128){
+            LOGGER.error("Attempted to create professor with invalid name");
+            return null;
+        }
+
+        if(!email.matches("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+") || email.length() < 1 || email.length() > 512){
+            LOGGER.error("Attempted to create professor with invalid email");
+            return null;
+        }
+
+        if(password.length() < 8 || password.length() > 64){
+            LOGGER.error("Attempted to create professor with invalid password length");
+            return null;
+        }
+
         if(description.length() < 50 || description.length() > 300) {
             LOGGER.error("Attempting to create professor with invalid description of size {}", description.length());
+            return null;
+        }
+
+        if(picture == null) {
+            LOGGER.error("Attempted to create professor without profile picture");
             return null;
         }
 
