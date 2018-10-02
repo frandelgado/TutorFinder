@@ -7,13 +7,13 @@
     /* Track */
     .conversation-messages::-webkit-scrollbar-track {
         background: #f1f1f1;
-        border-radius: 10px;
+        border-radius: 5px;
     }
 
     /* Handle */
     .conversation-messages::-webkit-scrollbar-thumb {
         background: #888;
-        border-radius: 10px;
+        border-radius: 5px;
     }
 
     /* Handle on hover */
@@ -32,13 +32,13 @@ and (min-resolution:.001dpcm) {
     /* Track */
     .conversation-messages::-webkit-scrollbar-track {
         background: #f1f1f1;
-        border-radius: 10px;
+        border-radius: 5px;
     }
 
     /* Handle */
     .conversation-messages::-webkit-scrollbar-thumb {
         background: #888;
-        border-radius: 10px;
+        border-radius: 5px;
     }
 
     /* Handle on hover */
@@ -48,7 +48,7 @@ and (min-resolution:.001dpcm) {
 }
 
 *{
-    font-family:  Helvetica, sans-serif;
+    font-family: 'lato';
 }
 
 .navbar, .search-result, .dropdown-area, .contact-button, .class {
@@ -56,7 +56,7 @@ and (min-resolution:.001dpcm) {
 }
 
 .class, .search-course-result, .add-time>div {
-    border-radius: 20px;
+    border-radius: 5px;
     box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
     background-color: white;
 }
@@ -293,7 +293,7 @@ button {
     flex-direction: column;
     justify-self: center;
     background-color: #dedede;
-    border-radius: 20px;
+    border-radius: 5px;
     height: fit-content;
     width: fit-content;
     margin-top: 50px;
@@ -309,7 +309,7 @@ button {
     background-color: #dedede;
     padding: 20px;
     margin-top: 50px;
-    border-radius: 20px;
+    border-radius: 5px;
     height: fit-content;
 }
 
@@ -354,7 +354,7 @@ button {
     background-color: white;
     height: 100%;
     align-content: center;
-    border-radius: 20px;
+    border-radius: 5px;
     box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
     grid-template-columns: 170px auto;
     grid-template-areas: "search-result-img search-result-title"
@@ -383,7 +383,7 @@ button {
 .search-result-picture {
     height: 150px;
     width: 150px;
-    border-radius: 20px;
+    border-radius: 5px;
 }
 
 .firstchild {
@@ -401,7 +401,7 @@ button {
     font-size: 18px;
     color: #686f7a;
     font-weight: 400;
-    word-break: break-all;
+    word-break: break-word;
     text-align: justify;
 }
 
@@ -478,7 +478,7 @@ button {
 .staticProfile .profile-picture {
     height: 145px;
     width: 145px;
-    border-radius: 20px;
+    border-radius: 5px;
     border: 1px solid #ddd;
     padding: 5px;
 }
@@ -565,7 +565,7 @@ button {
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    border-radius: 20px;
+    border-radius: 5px;
 }
 
 .modal-close {
@@ -588,7 +588,7 @@ button {
     background-color: #dedede;
     padding: 10px;
     margin-top: 25px;
-    border-radius: 20px;
+    border-radius: 5px;
     height: fit-content;
 }
 
@@ -707,7 +707,7 @@ button {
 .input-request-filter {
     border-width: 0;
     border-bottom: 2px solid #F47C48;
-    border-radius: 1px;
+    border-radius: 5px;
     padding: 4px 0;
     background-color: white;
     font-size: 15px;
@@ -791,7 +791,7 @@ button {
     margin: 25px;
     padding: 10px;
     border: 2px solid #dedede;
-    border-radius: 15px;
+    border-radius: 5px;
     background-color: #dedede;
 }
 
@@ -799,8 +799,8 @@ button {
     padding: 10px;
 }
 
-.schedule table th:first-child {
-    border-radius: 100px 0 0 0;
+.schedule td>div {
+    height: 20px;
 }
 
 .staticProfile .schedule {
@@ -823,7 +823,7 @@ button {
     border: solid 1px grey;
     position: relative;
     background-image: linear-gradient(#cccccc, white);
-    border-radius: 15px;
+    border-radius: 5px;
 }
 
 .conversation-link {
@@ -863,7 +863,7 @@ button {
     padding-left: 8px;
     padding-right: 8px;
     border: solid 1px #bdd8a6;
-    border-radius: 15px;
+    border-radius: 5px;
     background-color: #D8F5C0;
 }
 
@@ -873,7 +873,8 @@ button {
 
 .message-text {
     grid-area: message-text;
-    word-break: break-all;
+    word-break: break-word;
+
     text-align: justify;
 }
 
@@ -895,7 +896,7 @@ button {
     grid-area: contact;
     padding: 10px;
     border: 2px solid #dedede;
-    border-radius: 15px;
+    border-radius: 5px;
     background-color: #dedede;
     height: fit-content;
     width: 600px;

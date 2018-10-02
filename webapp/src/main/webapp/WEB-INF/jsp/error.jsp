@@ -6,6 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
     <link href="<c:url value="/resources/css/fonts.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/errors.css" />" rel="stylesheet">
     <title>Tu Teoria | <spring:message code="error.title"/></title>

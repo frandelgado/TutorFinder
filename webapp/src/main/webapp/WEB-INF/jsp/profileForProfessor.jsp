@@ -8,6 +8,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
     <title>Tu Teoria | <spring:message code="profile.title" /> </title>
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>

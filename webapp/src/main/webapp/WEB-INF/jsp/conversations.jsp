@@ -7,6 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
     <title>Tu Teoria | <spring:message code="conversations.title"/></title>
 </head>
