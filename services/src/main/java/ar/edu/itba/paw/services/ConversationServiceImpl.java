@@ -50,8 +50,13 @@ public class ConversationServiceImpl implements ConversationService {
         final Professor professor = professorService.findById(professorId);
         final Subject subject = subjectService.findSubjectById(subjectId);
 
-        if(user == null || professor == null || subject == null || body == null || body.length() > 512) {
+        if(user == null || professor == null || subject == null) {
             LOGGER.error("Attempted to send message with invalid parameters");
+            return false;
+        }
+
+        if(body == null || body.length() < 1 || body.length() > 1024) {
+            LOGGER.error("Attempted to send message invalid body size");
             return false;
         }
 
@@ -84,14 +89,14 @@ public class ConversationServiceImpl implements ConversationService {
         }
         final Conversation conversation = findById(conversationId, from.getId());
 
-        if(!conversation.belongs(from.getId())) {
+        if(conversation == null || !conversation.belongs(from.getId())) {
             LOGGER.error("Attempted to send message in conversation with id {} from a user that is not part of it",
                     conversationId);
             throw new UserNotInConversationException();
         }
 
-        if(body == null || body.isEmpty()) {
-            LOGGER.error("Attempted to send empty message");
+        if(body == null || body.length() < 1 || body.length() > 1024) {
+            LOGGER.error("Attempted to send message invalid body size");
             return false;
         }
 
