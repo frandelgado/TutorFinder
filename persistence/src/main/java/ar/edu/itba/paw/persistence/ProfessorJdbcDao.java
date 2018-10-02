@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -49,8 +50,14 @@ public class ProfessorJdbcDao implements ProfessorDao {
         args.put("user_id", user.getId());
         args.put("description", description);
         args.put("profile_picture", picture);
-        LOGGER.trace("Adding user with id {} as professor", user.getId());
-        jdbcInsert.execute(args);
+        try {
+            LOGGER.trace("Adding user with id {} as professor", user.getId());
+            jdbcInsert.execute(args);
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("User with id {} doesn't exist", user.getId());
+            LOGGER.warn("Professor with id {} was not created", user.getId());
+            return null;
+        }
         return new Professor(user.getId(), user.getUsername(), user.getName(),
                 user.getLastname(), user.getPassword(), user.getEmail(), description, picture);
     }
