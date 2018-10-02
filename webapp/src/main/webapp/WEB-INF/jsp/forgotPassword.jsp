@@ -18,6 +18,13 @@
     <a href="<c:url value="/" />" class="logo-box">
         <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
     </a>
+
+    <div class="search-bar"></div>
+
+    <div class="navbar-buttons">
+        <a href="<c:url value="/register" />" class="navbar-button"><spring:message code="register"/></a>
+        <a href="<c:url value="/login" />" class="navbar-button"><spring:message code="login"/></a>
+    </div>
 </div>
 
 <div class="content">

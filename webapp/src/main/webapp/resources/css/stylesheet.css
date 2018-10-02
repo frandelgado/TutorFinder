@@ -454,7 +454,7 @@ button {
 
 .profile-description {
     grid-area: profile-description;
-    word-break: break-all;
+    word-break: break-word;
     text-align: justify;
 }
 
@@ -637,7 +637,7 @@ button {
     grid-area: class-description;
     margin-left: 5px;
     align-self: center;
-    word-break: break-all;
+    word-break: break-word;
     text-align: justify;
 }
 
@@ -663,11 +663,11 @@ button {
     padding: 0 60px;
 }
 
-.form div {
+.form .inputs>div {
     margin-bottom: 35px;
 }
 
-.form div:last-child{
+.form .inputs>div:last-child{
     margin-bottom: 0;
 }
 
@@ -991,10 +991,13 @@ th, td {
     grid-area: errors;
 }
 
+.errors div:first-child {
+    margin-top: 20px;
+}
+
 .error-msg {
-    margin-left: 15px;
     height: 45px;
-    margin-bottom: 20px;
+    margin: 0 0 46px 15px;
 }
 
 .center {
