@@ -11,6 +11,7 @@
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
     <script src="<c:url value="/resources/js/searchForm.js" />"></script>
+    <script src="<c:url value="/resources/js/responsive.js" />"></script>
     <title>Tu Teoria | <spring:message code="index.title"/></title>
 </head>
 

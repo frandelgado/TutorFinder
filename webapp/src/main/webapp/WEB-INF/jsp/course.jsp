@@ -21,7 +21,6 @@
     <div class="class-profile">
         <h1 class="title center-text"><c:out value="${course.subject.area.name} - ${course.subject.name}" escapeXml="true"/></h1>
         <h4 class="description center-text"><c:out value="${course.description}" escapeXml="true"/></h4>
-        <hr/>
         <div class="profile">
             <a class="profile-picture" href="<c:url value="/Professor/${course.professor.id}"/>">
                 <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${course.professor.picture}" />"/>
@@ -29,7 +28,6 @@
             <div class="profile-name"><c:out value="${course.professor.name}" escapeXml="true"/> <c:out value = "${course.professor.lastname}" escapeXml="true"/></div>
             <div class="profile-description"><c:out value="${course.professor.description}" escapeXml="true"/></div>
         </div>
-        <hr/>
     </div>
     <div class="contact">
         <div class="button-container">
