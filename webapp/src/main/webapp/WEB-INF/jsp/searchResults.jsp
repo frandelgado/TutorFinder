@@ -29,7 +29,7 @@
     <div class="search-bar">
         <spring:message code="search" var="searchPlaceholder"/>
         <form:input class="search-input" type="search" path="search" name="search" placeholder="${searchPlaceholder}"/>
-        <div class="dropdown">
+        <div class="search-dropdown">
             <form:select class="select-search-type" path="type" name="type">
                 <form:option value="" selected="true" disabled="true"><spring:message code="search.category" /> </form:option>
                 <form:option value="professor"><spring:message code="professor" /> </form:option>

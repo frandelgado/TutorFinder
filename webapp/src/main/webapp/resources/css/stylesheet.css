@@ -55,9 +55,8 @@ textarea {
     resize: none;
 }
 
-
-.navbar, .search-result, .dropdown-area, .contact-button, .class {
-    box-shadow: 0 15px 35px -15px grey;
+.navbar, .search-result, .dropdown-area, .contact-button, .class, .dropdown-content {
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
 .class, .search-course-result, .add-time>div {
@@ -228,7 +227,7 @@ body {
     width: 100px;
 }
 
-.dropdown {
+.search-dropdown {
     padding: 1px;
     margin-left: 0;
     padding-left: 0px;
@@ -245,10 +244,24 @@ body {
     margin-left: 5px;
 }
 
-.navbar .dropdown {
+.navbar .search-dropdown {
     width: fit-content;
     height: 30px;
     align-self: center;
+}
+
+/*Generic dropdown*/
+
+
+.dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.dropdown {
 }
 
 .dropdown-button {
@@ -256,16 +269,41 @@ body {
     height: 100%;
 }
 
-.dropdown .dropdown-button:hover {
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 65px;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/*End generic dropdown*/
+
+.search-dropdown .dropdown-button:hover {
     background-color: rgb(247, 92, 36);
 }
 
-.dropdown .dropdown-area {
+.search-dropdown .dropdown-area {
     display: none;
     position: absolute;
 }
 
-.dropdown:hover .dropdown-area {
+.search-dropdown:hover .dropdown-area {
     display: grid;
     background-color: #F47C48;
 }
