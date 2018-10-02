@@ -81,6 +81,10 @@ public class UserController extends BaseController{
             return register(form);
         }
 
+        if(u == null) {
+            return register(form);
+        }
+
         LOGGER.debug("Authenticating user with id {}", u.getId());
         authenticateRegistered(request, u.getUsername(), u.getPassword());
 

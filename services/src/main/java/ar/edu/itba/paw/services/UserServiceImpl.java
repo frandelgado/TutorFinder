@@ -62,16 +62,24 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        if(username.length() == 0 || password.length() < 8 || email.length() == 0 || name.length() == 0 || lastName.length() == 0) {
-            LOGGER.error("Attempted to create user with invalid field lengths");
+        if(username.length() < 1 || username.length() > 128) {
+            LOGGER.error("Attempted to create user with invalid username length");
             return null;
         }
-        if(!name.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+") && !lastName.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+")){
+
+        if(!name.matches("[a-zA-Z]+") || !lastName.matches("[a-zA-Z]+") ||
+                name.length() < 1 || lastName.length() < 1 || name.length() > 128 || lastName.length() > 128){
             LOGGER.error("Attempted to create user with invalid name");
             return null;
         }
-        if(!email.matches("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+")){
+
+        if(!email.matches("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+") || email.length() < 1 || email.length() > 512){
             LOGGER.error("Attempted to create user with invalid email");
+            return null;
+        }
+
+        if(password.length() < 8 || password.length() > 64){
+            LOGGER.error("Attempted to create user with invalid password length");
             return null;
         }
 
@@ -89,7 +97,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean changePassword(Long userId, String newPassword) {
         if(userId == null || newPassword == null) {
-            LOGGER.error("Attempted to change password with null parameters");
+            LOGGER.error("Attempted to change password with invalid parameters");
+            return false;
+        }
+
+        if(newPassword.length() < 8 || newPassword.length() > 64) {
+            LOGGER.error("Attempted to change password with invalid password length");
             return false;
         }
         LOGGER.debug("Changing password for user with id {}", userId);
