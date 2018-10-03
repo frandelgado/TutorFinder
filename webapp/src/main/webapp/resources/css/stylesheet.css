@@ -1140,7 +1140,10 @@ th, td {
         grid-template-columns: 70px auto 70px;
     }
 
-    .navbar-buttons.responsive {position: relative;}
+    .navbar-buttons.responsive {
+        position: relative;
+    }
+
     .navbar-buttons.responsive .icon {
         position: absolute;
         right: 0;
@@ -1181,24 +1184,29 @@ th, td {
     table, td, th {
         font-size: 15px;
     }
+
     th, td {
         padding: 2px;
     }
+
     .staticProfile {
         grid-template-areas: "navbar" "......" "content";
         grid-template-columns: 100fr;
 
     }
+
     .staticProfile .content {
         padding: 10px;
         grid-template-columns: 100fr;
         grid-template-rows: 150px auto auto;
         grid-template-areas: "description" "class-content" "time-content";
     }
+
     .classes {
         max-width: 550px;
     }
-    .profile-profesor{
+
+    .profile-profesor {
         max-width: 550px;
     }
 
@@ -1212,34 +1220,38 @@ th, td {
         margin: 0;
         margin-top: 25px;
     }
+
     .responsiveRow {
         display: flex;
         align-items: center;
         width: 100%;
         justify-content: space-around;
     }
-    .responsiveDelete{
+
+    .responsiveDelete {
         display: none;
     }
-    .rm-10-b {
-        margin: 0;
-    }
-    .r-filter-title{
-        width: 180px;
-    }
-    .input-request-filter {
-        width:100px;
-    }
-    .search-results {
-        width: 550px;
-    }
-    .conversation-messages {
-        max-height: 200px;
-    }
-    .conversations {
-        grid-template-columns: 100fr;
-        grid-template-areas: "navbar " "....." "content" "......";
-    }
+}
+
+.rm-10-b {
+    margin: 0;
+}
+.r-filter-title{
+    width: 180px;
+}
+.input-request-filter {
+    width:100px;
+}
+.search-results {
+    width: 550px;
+}
+.conversation-messages {
+    max-height: 200px;
+}
+.conversations {
+    grid-template-columns: 100fr;
+    grid-template-areas: "navbar " "....." "content" "......";
+}
 
 .column {
     display: flex;
@@ -1299,4 +1311,12 @@ th, td {
     grid-template-rows: auto auto auto;
 }
 
-
+.navbar-button {
+    padding: 0;
+}
+.navbar-buttons {
+    display: block;
+}
+.dropdown-button{
+    padding: 20px;
+}
