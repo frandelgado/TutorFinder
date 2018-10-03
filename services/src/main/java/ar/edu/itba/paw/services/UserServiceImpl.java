@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
             LOGGER.error("Attempted to create user with invalid field lengths");
             return null;
         }
-        if(!name.matches("[a-zA-Z]+") && !lastName.matches("[a-zA-Z]+")){
+        if(!name.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+") && !lastName.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+")){
             LOGGER.error("Attempted to create user with invalid name");
             return null;
         }

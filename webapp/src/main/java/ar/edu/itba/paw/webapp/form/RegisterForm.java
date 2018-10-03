@@ -10,12 +10,12 @@ public class RegisterForm {
 
     @NotNull
     @Size(min = 1, max = 128)
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+")
     private String name;
 
     @NotNull
     @Size(min = 1, max = 128)
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+")
     private String lastname;
 
     @NotNull
