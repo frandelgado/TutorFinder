@@ -1,3 +1,5 @@
+
+
 <div class="navbar">
     <a href="<c:url value="/" />" class="logo-box">
         <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
@@ -23,9 +25,9 @@
     <div class="navbar-buttons" id="navbar-buttons">
         <c:choose>
             <c:when test="${currentUser != null}">
-                <div class="navbar-button dropdown">
-                    <a class="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
-                    <div class="dropdown-content">
+                <div class="navbar-button dropdown" id="dropdown">
+                    <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
+                    <div class="dropdown-content" id="dropdown-content">
                         <c:choose>
                             <c:when test="${currentUserIsProfessor == true}">
                                 <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
