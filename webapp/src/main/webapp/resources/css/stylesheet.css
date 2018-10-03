@@ -540,8 +540,8 @@ button {
 .time-content-other {
     display: grid;
     grid-template-areas:
-            "schedule"
-;
+            "schedule";
+    grid-template-rows: auto;
 }
 
 .schedule-text {

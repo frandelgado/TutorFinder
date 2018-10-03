@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <div class="time-content-other">
+    <div class="time-content time-content-other">
         <div class="schedule">
             <h2><spring:message code="schedule.title"/></h2>
             <p><spring:message code="schedule.description" /></p>
