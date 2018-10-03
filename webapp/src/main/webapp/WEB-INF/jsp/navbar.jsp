@@ -39,8 +39,5 @@
                 <a href="<c:url value="/login" />" class="navbar-button"><spring:message code="login"/></a>
             </c:otherwise>
         </c:choose>
-        <a href="javascript:void(0);" class="icon" onclick="responsiveNavbar()">
-            <i class="fa fa-bars"></i>
-        </a>
     </div>
 </div>
