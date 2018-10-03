@@ -2,10 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.PasswordResetToken;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.Schedule;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class UserController extends BaseController{
@@ -81,6 +79,10 @@ public class UserController extends BaseController{
             return register(form);
         }
 
+        if(u == null) {
+            return register(form);
+        }
+
         LOGGER.debug("Authenticating user with id {}", u.getId());
         authenticateRegistered(request, u.getUsername(), u.getPassword());
 
@@ -96,7 +98,7 @@ public class UserController extends BaseController{
     public ModelAndView professorProfile(@PathVariable(value = "id") long id,
                                          @ModelAttribute("currentUser") final User loggedUser,
                                          @ModelAttribute("currentUserIsProfessor") final boolean isProfessor,
-                                         @RequestParam(value = "page", defaultValue = "1") final int page) throws PageOutOfBoundsException {
+                                         @RequestParam(value = "page", defaultValue = "1") final int page) {
         if(loggedUser != null && loggedUser.getId() == id && isProfessor) {
             return redirectWithNoExposedModalAttributes("/Profile");
         }
@@ -109,7 +111,13 @@ public class UserController extends BaseController{
         final ModelAndView mav = new ModelAndView("profile");
         final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
 
-        mav.addObject("courses", cs.findCourseByProfessorId(id, page));
+        final PagedResults<Course> courses = cs.findCourseByProfessorId(id, page);
+
+        if(courses == null) {
+            redirectToErrorPage("pageOutOfBounds");
+        }
+
+        mav.addObject("courses", courses);
         mav.addObject("page", page);
         mav.addObject("schedule", schedule);
         mav.addObject("professor", professor);
@@ -121,7 +129,7 @@ public class UserController extends BaseController{
             @ModelAttribute("currentUser") final User loggedUser,
             @ModelAttribute("ScheduleForm") final ScheduleForm scheduleForm,
             @RequestParam(value = "page", defaultValue = "1") final int page
-    ) throws PageOutOfBoundsException, NonexistentProfessorException {
+    ) throws NonexistentProfessorException {
         final Professor professor = ps.findById(loggedUser.getId());
         if(professor == null) {
             throw new NonexistentProfessorException();
@@ -131,7 +139,13 @@ public class UserController extends BaseController{
 
         final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
 
-        mav.addObject("courses", cs.findCourseByProfessorId(professor.getId(), page));
+        final PagedResults<Course> courses = cs.findCourseByProfessorId(professor.getId(), page);
+
+        if(courses == null) {
+            redirectToErrorPage("pageOutOfBounds");
+        }
+
+        mav.addObject("courses", courses);
         mav.addObject("professor", professor);
         mav.addObject("schedule", schedule);
         mav.addObject("page", page);
@@ -162,6 +176,9 @@ public class UserController extends BaseController{
         } catch (IOException e) {
             return redirectToErrorPage("fileUploadError");
         }
+        if(p == null) {
+            return registerProfessor(form);
+        }
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
 
@@ -178,7 +195,7 @@ public class UserController extends BaseController{
             @ModelAttribute("currentUser") final User loggedUser,
             @Valid @ModelAttribute("ScheduleForm") final ScheduleForm form,
             final BindingResult errors
-    ) throws PageOutOfBoundsException, NonexistentProfessorException {
+    ) throws NonexistentProfessorException {
         if(errors.hasErrors() || !form.validForm()) {
             if(!form.validForm()) {
                 errors.rejectValue("endHour", "profile.add_schedule.timeError");
@@ -186,14 +203,18 @@ public class UserController extends BaseController{
             return profile(loggedUser, form, 1);
         }
 
+        final List<Timeslot> timeslots;
+
         try {
-            ss.reserveTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
+            timeslots = ss.reserveTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
         } catch (NonexistentProfessorException e) {
             return redirectToErrorPage("nonExistentUser");
         } catch (TimeslotAllocatedException e) {
             errors.rejectValue("endHour", "TimeslotAllocatedError");
             return profile(loggedUser, form, 1);
-        } catch (InvalidTimeException | InvalidTimeRangeException e) {
+        }
+
+        if(timeslots == null) {
             return profile(loggedUser, form, 1);
         }
 
@@ -212,7 +233,13 @@ public class UserController extends BaseController{
             return forgotPassword(form);
         }
 
-        final boolean created = passwordResetService.createToken(form.getEmail());
+        final boolean created;
+        try {
+            created = passwordResetService.createToken(form.getEmail());
+        } catch (TokenCrationException e) {
+            errors.rejectValue("email", "mailSendError");
+            return forgotPassword(form);
+        }
 
         if(!created) {
             errors.rejectValue("email", "forgotPasswordError");

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.InvalidTokenException;
+import ar.edu.itba.paw.exceptions.TokenCrationException;
 import ar.edu.itba.paw.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.PasswordResetService;
@@ -32,9 +33,9 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     @Autowired
     private EmailService emailService;
 
-    @Transactional
+    @Transactional(rollbackFor = TokenCrationException.class)
     @Override
-    public boolean createToken(final String email) {
+    public boolean createToken(final String email) throws TokenCrationException {
 
         final User user = userService.findByEmail(email);
         if(user == null) {
@@ -48,7 +49,10 @@ public class PasswordResetServiceImpl implements PasswordResetService {
                 token, LocalDateTime.now().plusDays(EXPIRATION));
 
         if(passwordResetToken != null) {
-            emailService.sendRestorePasswordEmail(user, passwordResetToken.getToken());
+            final boolean created = emailService.sendRestorePasswordEmail(user, passwordResetToken.getToken());
+            if(!created) {
+                throw new TokenCrationException();
+            }
         }
 
         return true;

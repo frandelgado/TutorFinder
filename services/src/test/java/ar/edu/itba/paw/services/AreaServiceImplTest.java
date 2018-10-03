@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.persistence.AreaDao;
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.models.Area;
@@ -45,7 +44,7 @@ public class AreaServiceImplTest {
     }
 
     @Test
-    public void testFilterAreasByNameHasNext() throws PageOutOfBoundsException {
+    public void testFilterAreasByNameHasNext() {
         final List<Area> areas = new LinkedList<>();
         final Integer PAGE = 1;
         for (int i = 0; i < PAGE_SIZE + 1; i++) {
@@ -59,7 +58,7 @@ public class AreaServiceImplTest {
     }
 
     @Test
-    public void testFilterAreasByNameNoNext() throws PageOutOfBoundsException {
+    public void testFilterAreasByNameNoNext() {
         final List<Area> areas = new LinkedList<>();
         final Integer PAGE = 1;
         final int RESULT_NUMBER = PAGE_SIZE - 1;
@@ -73,8 +72,8 @@ public class AreaServiceImplTest {
         assertEquals(RESULT_NUMBER, results.getResults().size());
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFilterAreasByNamePageOutOfBounds() throws PageOutOfBoundsException {
+    @Test
+    public void testFilterAreasByNamePageOutOfBounds() {
         final List<Area> areas = mock(List.class);
         when(areas.size()).thenReturn(0);
         when(areaDao.filterAreasByName(eq(NAME), anyInt(), anyInt())).thenReturn(areas);
@@ -82,13 +81,15 @@ public class AreaServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Area> results = areaService.filterAreasByName(NAME, INVALID_PAGE);
+        assertNull(results);
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFilterAreasByNameNegativePage() throws PageOutOfBoundsException {
+    @Test
+    public void testFilterAreasByNameNegativePage() {
 
         final Integer INVALID_PAGE = -2;
 
         final PagedResults<Area> results = areaService.filterAreasByName(NAME, INVALID_PAGE);
+        assertNull(results);
     }
 }

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.SameUserConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
@@ -50,8 +49,13 @@ public class ConversationServiceImpl implements ConversationService {
         final Professor professor = professorService.findById(professorId);
         final Subject subject = subjectService.findSubjectById(subjectId);
 
-        if(user == null || professor == null || subject == null || body == null || body.length() > 512) {
+        if(user == null || professor == null || subject == null) {
             LOGGER.error("Attempted to send message with invalid parameters");
+            return false;
+        }
+
+        if(body == null || body.length() < 1 || body.length() > 1024) {
+            LOGGER.error("Attempted to send message invalid body size");
             return false;
         }
 
@@ -84,14 +88,18 @@ public class ConversationServiceImpl implements ConversationService {
         }
         final Conversation conversation = findById(conversationId, from.getId());
 
+        if(conversation == null) {
+            throw new NonexistentConversationException();
+        }
+
         if(!conversation.belongs(from.getId())) {
             LOGGER.error("Attempted to send message in conversation with id {} from a user that is not part of it",
                     conversationId);
             throw new UserNotInConversationException();
         }
 
-        if(body == null || body.isEmpty()) {
-            LOGGER.error("Attempted to send empty message");
+        if(body == null || body.length() < 1 || body.length() > 1024) {
+            LOGGER.error("Attempted to send message invalid body size");
             return false;
         }
 
@@ -112,10 +120,10 @@ public class ConversationServiceImpl implements ConversationService {
 
 
     @Override
-    public PagedResults<Conversation> findByUserId(final Long userId, final int page) throws PageOutOfBoundsException {
+    public PagedResults<Conversation> findByUserId(final Long userId, final int page) {
         if(page <= 0) {
             LOGGER.error("Attempted to find 0 or negative page number");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         LOGGER.debug("Searching for conversations belonging to user with id {}", userId);
@@ -125,7 +133,7 @@ public class ConversationServiceImpl implements ConversationService {
 
         if(size == 0 && page > 1) {
             LOGGER.error("Page number exceeds total page count");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         if(size > PAGE_SIZE) {
@@ -140,13 +148,13 @@ public class ConversationServiceImpl implements ConversationService {
     @Transactional
     @Override
     public Conversation findById(final Long conversationId, final Long userId)
-            throws UserNotInConversationException, NonexistentConversationException {
+            throws UserNotInConversationException {
         LOGGER.debug("Searching for conversation with id {}", conversationId);
         final Conversation conversation = conversationDao.findById(conversationId);
 
         if(conversation == null) {
             LOGGER.error("Attempted to get a non existent conversation");
-            throw new NonexistentConversationException();
+            return null;
         }
 
         if(!conversation.belongs(userId)) {

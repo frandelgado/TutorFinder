@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.SameUserConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.models.Conversation;
@@ -15,7 +14,7 @@ public interface ConversationService {
 
     boolean sendMessage(final Long userId, final Long conversationId, final String body) throws UserNotInConversationException, NonexistentConversationException;
 
-    PagedResults<Conversation> findByUserId(final Long userId, final int page) throws PageOutOfBoundsException;
+    PagedResults<Conversation> findByUserId(final Long userId, final int page);
 
-    Conversation findById(final Long conversation_id, final  Long userId) throws UserNotInConversationException, NonexistentConversationException;
+    Conversation findById(final Long conversation_id, final  Long userId) throws UserNotInConversationException;
 }

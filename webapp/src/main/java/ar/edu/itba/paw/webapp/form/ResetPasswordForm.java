@@ -6,11 +6,11 @@ import javax.validation.constraints.Size;
 public class ResetPasswordForm {
 
     @NotNull
-    @Size(min = 1, max = 64)
+    @Size(min = 8, max = 64)
     private String password;
 
     @NotNull
-    @Size(min = 1, max = 64)
+    @Size(min = 8, max = 64)
     private String repeatPassword;
 
     public String getPassword() {

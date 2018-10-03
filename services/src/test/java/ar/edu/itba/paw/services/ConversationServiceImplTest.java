@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.SameUserConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
@@ -17,14 +16,11 @@ import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.util.AopTestUtils;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
-import static org.mockito.AdditionalAnswers.delegatesTo;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -68,7 +64,7 @@ public class ConversationServiceImplTest {
     }
 
     @Test
-    public void testFindByUserIdHasNext() throws PageOutOfBoundsException {
+    public void testFindByUserIdHasNext() {
         final List<Conversation> conversations = new LinkedList<>();
         final Integer PAGE = 1;
         for (int i = 0; i < PAGE_SIZE + 1; i++) {
@@ -82,7 +78,7 @@ public class ConversationServiceImplTest {
     }
 
     @Test
-    public void testFindByUserIdNoNext() throws PageOutOfBoundsException {
+    public void testFindByUserIdNoNext() {
         final List<Conversation> conversations = new LinkedList<>();
         final int RESULT_NUMBER = PAGE_SIZE - 1;
         final Integer PAGE = 1;
@@ -96,8 +92,8 @@ public class ConversationServiceImplTest {
         assertEquals(RESULT_NUMBER, results.getResults().size());
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFindByUserIdPageOutOfBounds() throws PageOutOfBoundsException {
+    @Test
+    public void testFindByUserIdPageOutOfBounds() {
         final List<Conversation> conversations = mock(List.class);
         when(conversations.size()).thenReturn(0);
         when(conversationDao.findByUserId(eq(ID), anyInt(), anyInt())).thenReturn(conversations);
@@ -105,18 +101,20 @@ public class ConversationServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Conversation> results = conversationService.findByUserId(ID, INVALID_PAGE);
+        assertNull(results);
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFindByUserIdNegativePage() throws PageOutOfBoundsException {
+    @Test
+    public void testFindByUserIdNegativePage() {
 
         final Integer INVALID_PAGE = -2;
 
         final PagedResults<Conversation> results = conversationService.findByUserId(ID, INVALID_PAGE);
+        assertNull(results);
     }
 
     @Test
-    public void testFindByIdValid() throws NonexistentConversationException, UserNotInConversationException {
+    public void testFindByIdValid() throws UserNotInConversationException {
         final Conversation conversationMock = mock(Conversation.class);
         when(conversationMock.belongs(USER_ID)).thenReturn(true);
         when(conversationDao.findById(ID)).thenReturn(conversationMock);
@@ -125,16 +123,17 @@ public class ConversationServiceImplTest {
         assertNotNull(conversation);
     }
 
-    @Test(expected = NonexistentConversationException.class)
-    public void testFindByIdInvalidConversation() throws NonexistentConversationException, UserNotInConversationException {
+    @Test
+    public void testFindByIdInvalidConversation() throws UserNotInConversationException {
 
         when(conversationDao.findById(INVALID_ID)).thenReturn(null);
 
         final Conversation conversation = conversationService.findById(INVALID_ID, USER_ID);
+        assertNull(conversation);
     }
 
     @Test(expected = UserNotInConversationException.class)
-    public void testFindByIdUserNotInConversation() throws NonexistentConversationException, UserNotInConversationException {
+    public void testFindByIdUserNotInConversation() throws UserNotInConversationException {
         final Conversation conversationMock = mock(Conversation.class);
         when(conversationMock.belongs(INVALID_ID)).thenReturn(false);
         when(conversationDao.findById(ID)).thenReturn(conversationMock);

@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.exceptions.TimeslotAllocatedException;
 import ar.edu.itba.paw.interfaces.persistence.ScheduleDao;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Timeslot;
@@ -37,7 +36,7 @@ public class ScheduleJdbcDao implements ScheduleDao {
     }
 
     @Override
-    public Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) throws TimeslotAllocatedException {
+    public Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) {
         final Map<String, Object> args = new HashMap<>();
         args.put("user_id", professor.getId());
         args.put("day", day);
@@ -49,7 +48,7 @@ public class ScheduleJdbcDao implements ScheduleDao {
         } catch (DuplicateKeyException e) {
             LOGGER.error("Timeslot for professor with id {} at day {}, hour {} already exists", professor.getId(),
                     day, hour );
-            throw new TimeslotAllocatedException();
+            return null;
         }
         return new Timeslot(day, hour);
 

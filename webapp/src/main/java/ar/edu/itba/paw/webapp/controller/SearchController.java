@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
+import ar.edu.itba.paw.models.Area;
+import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.PagedResults;
+import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.webapp.form.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,23 +39,37 @@ public class SearchController extends BaseController{
 
     @RequestMapping(value = "/searchResults", method = RequestMethod.GET)
     public ModelAndView search(@RequestParam(value = "page", defaultValue = "1") final int page,
-                               @ModelAttribute("searchForm") final SearchForm form) throws PageOutOfBoundsException {
+                               @ModelAttribute("searchForm") final SearchForm form) {
 
         final ModelAndView mav = new ModelAndView("searchResults");
         mav.addObject("page", page);
 
         switch (form.getType()) {
             case "professor":
-                mav.addObject("pagedResults", ps.filterByFullName(form.getSearch(), page));
+                final PagedResults<Professor> professorPagedResults = ps.filterByFullName(form.getSearch(), page);
+
+                if(professorPagedResults == null) {
+                    redirectToErrorPage("pageOutOfBounds");
+                }
+
+                mav.addObject("pagedResults", professorPagedResults);
                 break;
             case "course":
-                mav.addObject("pagedResults", cs.filterCourses(
+                final PagedResults<Course> coursePagedResults = cs.filterCourses(
                         form.getDay(), form.getStartHour(), form.getEndHour(),
-                        form.getMinPrice(), form.getMaxPrice(), form.getSearch(), page
-                ));
+                        form.getMinPrice(), form.getMaxPrice(), form.getSearch(), page);
+
+                if(coursePagedResults == null) {
+                    redirectToErrorPage("pageOutOfBounds");
+                }
+                mav.addObject("pagedResults", coursePagedResults);
                 break;
             case "area":
-                mav.addObject("pagedResults", as.filterAreasByName(form.getSearch(), page));
+                final PagedResults<Area> areaPagedResults = as.filterAreasByName(form.getSearch(), page);
+                if(areaPagedResults == null) {
+                    redirectToErrorPage("pageOutOfBounds");
+                }
+                mav.addObject("pagedResults", areaPagedResults);
                 break;
             default:
                 return redirectToErrorPage("typeInvalid");
@@ -66,7 +83,7 @@ public class SearchController extends BaseController{
     public ModelAndView search(@RequestParam(value = "page", defaultValue = "1")final int page,
                                @Valid @ModelAttribute("searchForm") final SearchForm form,
                                final BindingResult errors,
-                               final RedirectAttributes redirectAttributes) throws PageOutOfBoundsException {
+                               final RedirectAttributes redirectAttributes) {
 
         if(errors.hasErrors() || !form.validPriceRange() || !form.validTimeRange()) {
             if(!form.validPriceRange()){
@@ -93,7 +110,6 @@ public class SearchController extends BaseController{
         }
         RedirectView redirect = new RedirectView("/searchResults", true);
         return new ModelAndView(redirect);
-
 
     }
 

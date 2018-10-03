@@ -127,6 +127,10 @@ public class CourseController extends BaseController{
             return createCourse(form, user);
         }
 
+        if(course == null) {
+            return createCourse(form, user);
+        }
+
         LOGGER.debug("Posting request for course creation for professor with id {} in subject with id {}", user.getId(), form.getSubjectId());
         return redirectWithNoExposedModalAttributes("/Course/?professor=" + course.getProfessor().getId()
                 + "&subject=" + course.getSubject().getId());
