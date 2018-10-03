@@ -1,3 +1,3 @@
 $(document).ready(function() {
-    $('.select-subject').select2();
+    $('.course-select').select2();
 });
