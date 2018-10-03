@@ -69,10 +69,11 @@ textarea {
     grid-area: navbar;
     background-color: #F47C48;
     display: grid;
-    width: 100%;
     grid-template-areas: "logo-box search-bar navbar-buttons";
     grid-template-rows: 65px;
     grid-template-columns: 300px 1fr 300px;
+    padding: 10px;
+    align-content: center;
 }
 
 .staticHome .navbar {
@@ -94,6 +95,7 @@ textarea {
 body {
     margin: 0;
     display: grid;
+    width: 100%;
     grid-template-columns: 25fr 50fr 25fr;
     grid-template-rows: 65px 25px auto 100px;
     grid-template-areas: "navbar  navbar  navbar"
@@ -286,7 +288,7 @@ body {
     display: none;
     position: absolute;
     top: 65px;
-    right: 0px;
+    right: 35px;
     left: auto;
     background-color: #f9f9f9;
     min-width: 160px;
@@ -1138,13 +1140,6 @@ th, td {
         grid-template-columns: 70px auto 70px;
     }
 
-    .navbar-buttons .navbar-button {
-        display: none;
-    }
-    .navbar-buttons a .icon {
-        float: right;
-        display: block;
-    }
     .navbar-buttons.responsive {position: relative;}
     .navbar-buttons.responsive .icon {
         position: absolute;
@@ -1244,5 +1239,11 @@ th, td {
     .conversations {
         grid-template-columns: 100fr;
         grid-template-areas: "navbar " "....." "content" "......";
+    }
+    .register-form {
+        grid-template-columns: auto 312px auto;
+    }
+    .class-content {
+        grid-template-rows: auto auto auto;
     }
 }
