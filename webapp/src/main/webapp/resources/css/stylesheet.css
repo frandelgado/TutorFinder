@@ -1246,4 +1246,13 @@ th, td {
     .class-content {
         grid-template-rows: auto auto auto;
     }
+    .navbar-button {
+        padding: 0;
+    }
+    .navbar-buttons {
+        display: block;
+    }
+    .dropdown-button{
+        padding: 20px;
+    }
 }
