@@ -288,7 +288,7 @@ body {
     display: none;
     position: absolute;
     top: 65px;
-    right: 35px;
+    right: 32px;
     left: auto;
     background-color: #f9f9f9;
     min-width: 160px;
@@ -306,9 +306,9 @@ body {
 
 .dropdown-content a:hover {background-color: #f1f1f1}
 
-.dropdown:hover .dropdown-content {
+/*.dropdown:hover .dropdown-content {
     display: block;
-}
+}*/
 
 /*End generic dropdown*/
 

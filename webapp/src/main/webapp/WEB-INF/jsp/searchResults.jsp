@@ -11,6 +11,7 @@
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
+    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
     <script src="<c:url value="/resources/js/searchForm.js" />"></script>
 
     <title>Tu Teoria | <spring:message code="search.results" /> </title>
@@ -43,9 +44,9 @@
     <div class="navbar-buttons">
         <c:choose>
             <c:when test="${currentUser != null}">
-                <div class="navbar-button dropdown">
-                    <a class="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
-                    <div class="dropdown-content">
+                <div class="navbar-button dropdown" id="dropdown">
+                    <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
+                    <div class="dropdown-content" id="dropdown-content">
                         <c:choose>
                             <c:when test="${currentUserIsProfessor == true}">
                                 <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
