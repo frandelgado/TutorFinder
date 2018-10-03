@@ -17,15 +17,22 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
 
 @Service
 public class EmailServiceImpl implements EmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
+    private static final String PNG = "image/png";
 
     @Value("classpath:WelcomeMail.html")
     private Resource registrationMail;
@@ -36,8 +43,14 @@ public class EmailServiceImpl implements EmailService {
     @Value("classpath:RestorePassword.html")
     private Resource restorePassword;
 
+    @Value("classpath:logo.png")
+    private Resource logo;
+
     @Autowired
     private JavaMailSender emailSender;
+
+    @Autowired
+    private TemplateEngine resourceTemplateEngine;
 
     @Override
     public void sendEmail(String to, String subject, String text) {
@@ -73,46 +86,59 @@ public class EmailServiceImpl implements EmailService {
         mail.text("Email: " + user.getEmail());
         String SUBJECT = "Restaura tu contraseña";
 
-        final MimeMessage message = prepareMail(SUBJECT, user.getEmail(), doc.html());
-
-        if(message == null) {
-            LOGGER.debug("Error creating Password Restore Email for user with id {}", user.getId());
-            throw new RuntimeException();
-        }
-
-        LOGGER.debug("Sending Password Restore Email for user with id {}", user.getId());
-        emailSender.send(message);
+//        final MimeMessage message = prepareMail(SUBJECT, user.getEmail(), doc.html());
+//
+//        if(message == null) {
+//            LOGGER.debug("Error creating Password Restore Email for user with id {}", user.getId());
+//            throw new RuntimeException();
+//        }
+//
+//        LOGGER.debug("Sending Password Restore Email for user with id {}", user.getId());
+//        emailSender.send(message);
     }
 
 
     @Override
     @Async
     public void sendRegistrationEmail(final User user) {
-        LOGGER.debug("Creating Registration Email for user with id {}", user.getId());
-        final Document doc;
-        try {
-            doc = Jsoup.parse(registrationMail.getInputStream(), "UTF-8", "");
-        } catch (IOException e) {
-            LOGGER.debug("IO Exception when creating Registration Email for user with id {}", user.getId());
-            throw new RuntimeException();
-        }
-        final Element username = doc.select("td.username").first();
-        final Element logo = doc.select("img.logo-img").first();
-        logo.attr("src", "http://localhost:8080/resources/images/logo.png");
-        final Element a = doc.select("a.link").first();
-        a.attr("href", "http://localhost:8080");
-        username.text("Username: " + user.getUsername());
+//        LOGGER.debug("Creating Registration Email for user with id {}", user.getId());
+//        final Document doc;
+//        try {
+//            doc = Jsoup.parse(registrationMail.getInputStream(), "UTF-8", "");
+//        } catch (IOException e) {
+//            LOGGER.debug("IO Exception when creating Registration Email for user with id {}", user.getId());
+//            throw new RuntimeException();
+//        }
+//        final Element username = doc.select("td.username").first();
+//        final Element logo = doc.select("img.logo-img").first();
+//        logo.attr("src", "http://localhost:8080/resources/images/logo.png");
+//        final Element a = doc.select("a.link").first();
+//        a.attr("href", "http://localhost:8080");
+//        username.text("Username: " + user.getUsername());
+        final Context ctx = new Context();
+        ctx.setVariable("name", user.getName());
+        ctx.setVariable("username", user.getUsername());
+        ctx.setVariable("url", "http://localhost:8080");
         String REGISTRATION_SUBJECT = "Bienvenido a Tu Teoria!";
 
-        final MimeMessage message = prepareMail(REGISTRATION_SUBJECT, user.getEmail(), doc.html());
+        final String resource = htmlString(registrationMail);
+
+        if(resource == null) {
+            LOGGER.debug("Error creating Registration Email for user with id {}", user.getId());
+            return;
+        }
+
+        final String html = resourceTemplateEngine.process(resource ,ctx);
+        final MimeMessage mimeMessage = emailSender.createMimeMessage();
+        final MimeMessageHelper message = prepareMail(mimeMessage, REGISTRATION_SUBJECT, user.getEmail(), html);
 
         if(message == null) {
             LOGGER.debug("Error creating Registration Email for user with id {}", user.getId());
-            throw new RuntimeException();
+            return;
         }
 
         LOGGER.debug("Sending Registration Email for user with id {}", user.getId());
-        emailSender.send(message);
+        emailSender.send(mimeMessage);
     }
 
     @Override
@@ -139,29 +165,42 @@ public class EmailServiceImpl implements EmailService {
         logo.attr("src", "http://localhost:8080/resources/images/logo.png");
         final String SUBJECT = "Se han contactado con vos!";
 
-        final MimeMessage message = prepareMail(SUBJECT, to.getEmail(), doc.html());
-
-        if(message == null) {
-            LOGGER.debug("Error creating Contact Email for user with id {} from conversation with id {}", to.getId(), conversation.getId());
-            throw new RuntimeException();
-        }
-
-        LOGGER.debug("Sending Contact Email for user with id {} from conversation with id {}", to.getId(), conversation.getId());
-        emailSender.send(message);
+//        final MimeMessage message = prepareMail(SUBJECT, to.getEmail(), doc.html());
+//
+//        if(message == null) {
+//            LOGGER.debug("Error creating Contact Email for user with id {} from conversation with id {}", to.getId(), conversation.getId());
+//            throw new RuntimeException();
+//        }
+//
+//        LOGGER.debug("Sending Contact Email for user with id {} from conversation with id {}", to.getId(), conversation.getId());
+//        emailSender.send(message);
     }
 
-    private MimeMessage prepareMail(final String subject, final String to, final String html) {
-        final MimeMessage message;
+    private MimeMessageHelper prepareMail(MimeMessage message, final String subject, final String to, final String html) {
+        final MimeMessageHelper helper;
         try {
-            message = emailSender.createMimeMessage();
-            final MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(html, true);
+            helper.addInline("logo", logo, PNG);
         } catch (MessagingException e) {
             return null;
         }
-        return message;
+        return helper;
     }
 
+    private String htmlString(final Resource resource){
+        final InputStream resourceIo;
+        final String html;
+        try {
+            resourceIo = resource.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(resourceIo));
+            html = reader.lines()
+                    .collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            return null;
+        }
+        return html;
+    }
 }

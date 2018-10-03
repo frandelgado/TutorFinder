@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
+    <title th:remove="all">Welcome Template</title>
 </head>
 <body style="margin:0;padding:0;background:#f4f4f4;">
 
@@ -16,17 +16,17 @@
                 <tbody>
                 <tr>
                     <td style="padding-top:20px;padding-left:20px;">
-                        <img class="logo-img" alt="" style="width: 90px;height: 90px"/>
+                        <img src="logo.png" class="logo-img" alt="" style="width: 90px;height: 90px" data-th-src="|cid:logo|"/>
                     </td>
                 </tr>
 
                 <tr>
                     <td style="text-align: center;padding: 40px 10px 0;">
                         <div style="margin-bottom:15px;">
-                            <div style="font-family:Arial;font-size:32px;font-weight:normal;color:#333;display:block; margin: 4px 0">
+                            <div style="font-family:Arial;font-size:32px;font-weight:normal;color:#333;display:block; margin: 4px 0" th:text="#{welcome(${name})}">
                                 Bienvenido a Tu Teoria!
                             </div>
-                            <div style="font-size:12px; color: #798796;font-weight:normal">
+                            <div style="font-size:12px; color: #798796;font-weight:normal" th:text="#{welcomeText}">
                                 Te damos la bienvenida a Tu Teoria, donde podras encontrar tu proxima clase particular de manera rapida y sencilla.
                             </div>
                         </div>
@@ -44,14 +44,14 @@
                                            style="table-layout:fixed;margin: 0 auto !important;" border="0"
                                            cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td class="username" style="color:#888;border-top: 1px solid #ebebeb;padding: 15px 20px; background-color:#f8f9fb;font-size:13px;text-align:center">
+                                            <td class="username" style="color:#888;border-top: 1px solid #ebebeb;padding: 15px 20px; background-color:#f8f9fb;font-size:13px;text-align:center" th:text="#{mail.username(${username})}">
                                             </td>
                                         </tr>
                                     </table>
 
 
-                                    <span style="font-family:Arial;font-size:26px;font-weight:normal;color:#333;display:block; margin: 4px 0 20px;">Que sigue?</span>
-									<div style="font-size:12px; color: #798796;font-weight:normal">
+                                    <span style="font-family:Arial;font-size:26px;font-weight:normal;color:#333;display:block; margin: 4px 0 20px;" th:text="#{whatsNext}">Que sigue?</span>
+									<div style="font-size:12px; color: #798796;font-weight:normal" th:text="#{whatsNextWelcome}">
 								Simple, ya podes contactarte facilmente con profesores particulares de acuerdo a tus necesidades
 								</div>
                                 </td>
@@ -80,7 +80,7 @@
         border-width: 1px;
         box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
         border-radius:2px; -moz-border-radius:2px; -webkit-border-radius:2px;
-        ">Ingresa Ahora</a>
+        " th:text="#{signInNow}" th:href="${url}">Ingresa Ahora</a>
 		</td>
 		</tr>
                 </tbody>
