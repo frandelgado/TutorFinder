@@ -66,8 +66,8 @@
     <div class="filter-panel">
 
         <h2><spring:message code="filter" /> </h2>
-        <div>
-            <h3><spring:message code="search.dayHeader"/></h3>
+        <div class="responsiveRow">
+            <h3 class="responsiveDelete"><spring:message code="search.dayHeader"/></h3>
             <div>
                 <form:select cssClass="select-subject no-border b-r-5" path="day">
                     <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
@@ -81,8 +81,8 @@
                 </form:select>
                 <form:errors cssClass="error-text" path="day" element="p"/>
             </div>
-            <h3><spring:message code="search.hourHeader"/></h3>
-            <div class="m-10-b">
+            <h3 class="responsiveDelete"><spring:message code="search.hourHeader"/></h3>
+            <div class="m-10-b rm-10-b">
                 <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
                 <form:select cssClass="select-subject no-border b-r-5" path="startHour">
                     <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
@@ -103,9 +103,9 @@
                 <form:errors cssClass="error-text" path="endHour" element="p"/>
             </div>
         </div>
-        <div>
-            <h3><spring:message code="search.priceHeader"/></h3>
-            <div class="m-10-b">
+        <div class="responsiveRow">
+            <h3 class="r-filter-title"><spring:message code="search.priceHeader"/></h3>
+            <div class="m-10-b rm-10-b">
                 <form:label path="minPrice"><spring:message code="search.label.minPrice"/></form:label>
                 <form:input cssClass="input-request-filter no-border b-r-5" type="number"  min="0" step="0.01" path="minPrice"/>
                 <form:errors cssClass="error-text" path="minPrice" element="p"/>
