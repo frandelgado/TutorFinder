@@ -66,7 +66,7 @@ public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    public void sendRestorePasswordEmail(final User user, final String token) {
+    public boolean sendRestorePasswordEmail(final User user, final String token) {
         LOGGER.debug("Creating Password Restore Email for user with id {} and token {}", user.getId(), token);
         final Context ctx = new Context();
         ctx.setVariable("mail", user.getEmail());
@@ -77,7 +77,7 @@ public class EmailServiceImpl implements EmailService {
 
         if(resource == null) {
             LOGGER.debug("Error creating Password Restore Email for user with id {}", user.getId());
-            return;
+            return false;
         }
 
         final String html = resourceTemplateEngine.process(resource ,ctx);
@@ -86,11 +86,12 @@ public class EmailServiceImpl implements EmailService {
 
         if(message == null) {
             LOGGER.debug("Error creating Password Restore Email for user with id {}", user.getId());
-            return;
+            return false;
         }
 
         LOGGER.debug("Sending Password Restore Email for user with id {}", user.getId());
         emailSender.send(mimeMessage);
+        return true;
     }
 
 

@@ -1,9 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.service.ConversationService;
+import ar.edu.itba.paw.models.Conversation;
+import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 
@@ -27,9 +27,15 @@ public class ConversationController extends BaseController{
 
     @RequestMapping("/Conversations")
     public ModelAndView conversations(@ModelAttribute("currentUser") final User loggedUser,
-                                      @RequestParam(value="page", defaultValue="1") final int page) throws PageOutOfBoundsException {
+                                      @RequestParam(value="page", defaultValue="1") final int page) {
         final ModelAndView mav = new ModelAndView("conversations");
-        mav.addObject("conversations", conversationService.findByUserId(loggedUser.getId(), page));
+        final PagedResults<Conversation> conversations = conversationService.findByUserId(loggedUser.getId(), page);
+
+        if(conversations == null) {
+            redirectToErrorPage("pageOutOfBounds");
+        }
+
+        mav.addObject("conversations", conversations);
         mav.addObject("page", page);
         return mav;
     }
@@ -38,10 +44,16 @@ public class ConversationController extends BaseController{
     public ModelAndView conversation(@RequestParam(value="id", required=true) final Long id,
                                      @ModelAttribute("messageForm") final MessageForm form,
                                      @ModelAttribute("currentUser") final User loggedUser)
-            throws UserNotInConversationException, NonexistentConversationException {
+            throws UserNotInConversationException {
 
         final ModelAndView mav = new ModelAndView("conversation");
-        mav.addObject("conversation", conversationService.findById(id, loggedUser.getId()));
+        final Conversation conversation = conversationService.findById(id, loggedUser.getId());
+
+        if(conversation == null) {
+            redirectToErrorPage("nonExistentConversation");
+        }
+
+        mav.addObject("conversation", conversation);
         form.setConversationId(id);
         return mav;
     }

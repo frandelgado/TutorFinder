@@ -1,12 +1,13 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.exceptions.InvalidTokenException;
+import ar.edu.itba.paw.exceptions.TokenCrationException;
 import ar.edu.itba.paw.models.PasswordResetToken;
 import ar.edu.itba.paw.models.User;
 
 public interface PasswordResetService {
 
-    boolean createToken(final String email);
+    boolean createToken(final String email) throws TokenCrationException;
 
     void purgeExpired();
 

@@ -45,11 +45,10 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public PagedResults<Professor> filterByFullName(final String fullName, final int page)
-            throws PageOutOfBoundsException {
+    public PagedResults<Professor> filterByFullName(final String fullName, final int page) {
         if(page <= 0) {
             LOGGER.error("Attempted to find 0 or negative page number");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         LOGGER.debug("Searching for professors with full name containing {}", fullName);
@@ -59,7 +58,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
         if(size == 0 && page > 1) {
             LOGGER.error("Page number exceeds total page count");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         if(size > PAGE_SIZE) {

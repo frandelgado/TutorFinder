@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.services;
 
 
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.persistence.AreaDao;
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.models.Area;
@@ -36,10 +35,10 @@ public class AreaServiceImpl implements AreaService {
 
 
     @Override
-    public PagedResults<Area> filterAreasByName(final String name, final int page) throws PageOutOfBoundsException {
+    public PagedResults<Area> filterAreasByName(final String name, final int page){
         if(page <= 0) {
             LOGGER.error("Attempted to find 0 or negative page number");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         LOGGER.debug("Searching for areas with name containing {}", name);
@@ -49,7 +48,7 @@ public class AreaServiceImpl implements AreaService {
 
         if(size == 0 && page > 1) {
             LOGGER.error("Page number exceeds total page count");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         if(size > PAGE_SIZE) {

@@ -34,11 +34,6 @@ public class ErrorController extends BaseController{
         return redirectToErrorPage(messageCode);
     }
 
-    @ExceptionHandler(PageOutOfBoundsException.class)
-    public ModelAndView handlePageOutOfBounds() {
-        return redirectToErrorPage("pageOutOfBounds");
-    }
-
     @ExceptionHandler({NonexistentProfessorException.class, ProfessorWithoutUserException.class})
     public ModelAndView handleNonexistentUser() {
         return redirectToErrorPage("nonExistentUser");

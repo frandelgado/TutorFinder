@@ -7,7 +7,7 @@ import ar.edu.itba.paw.models.Timeslot;
 import java.util.List;
 
 public interface ScheduleDao {
-    Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) throws TimeslotAllocatedException;
+    Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour);
 
     List<Timeslot> getTimeslotsForProfessor(Professor professor);
 }

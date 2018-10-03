@@ -3,7 +3,6 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
 import ar.edu.itba.paw.exceptions.NonexistentSubjectException;
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
@@ -39,10 +38,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PagedResults<Course> findCourseByProfessorId(long professor_id, final int page) throws PageOutOfBoundsException {
+    public PagedResults<Course> findCourseByProfessorId(long professor_id, final int page) {
         if(page <= 0) {
             LOGGER.error("Attempted to find 0 or negative page number");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         LOGGER.debug("Searching for courses taught by professor with id {}", professor_id);
@@ -53,7 +52,7 @@ public class CourseServiceImpl implements CourseService {
 
         if(size == 0 && page > 1) {
             LOGGER.error("Page number exceeds total page count");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         if(size > PAGE_SIZE) {
@@ -68,10 +67,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PagedResults<Course> filterByAreaId(final long areaId, final int page) throws PageOutOfBoundsException {
+    public PagedResults<Course> filterByAreaId(final long areaId, final int page) {
         if(page <= 0) {
             LOGGER.error("Attempted to find 0 or negative page number");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         LOGGER.debug("Searching for courses from area with id {}", areaId);
@@ -81,7 +80,7 @@ public class CourseServiceImpl implements CourseService {
 
         if(size == 0 && page > 1) {
             LOGGER.error("Page number exceeds total page count");
-            throw new PageOutOfBoundsException();
+            return null;
         }
 
         if(size > PAGE_SIZE) {
@@ -99,10 +98,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour,
                                               final Double minPrice, final Double maxPrice, final String searchText,
-                                              final int page) throws PageOutOfBoundsException {
+                                              final int page) {
         if(page <= 0){
             LOGGER.error("Attempted to find 0 or negative page number");
-            throw new PageOutOfBoundsException();
+            return null;
         }
         LOGGER.debug("Creating filter builder");
         FilterBuilder fb = new FilterBuilder();
@@ -124,7 +123,7 @@ public class CourseServiceImpl implements CourseService {
         final int size = courses.size();
         if(size == 0 && page > 1){
             LOGGER.error("Page number exceeds total page count");
-            throw new PageOutOfBoundsException();
+            return null;
         }
         if(size > PAGE_SIZE) {
             LOGGER.trace("Search has more results to show, removing extra result");

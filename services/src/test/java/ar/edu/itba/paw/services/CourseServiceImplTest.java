@@ -3,7 +3,6 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
 import ar.edu.itba.paw.exceptions.NonexistentSubjectException;
-import ar.edu.itba.paw.exceptions.PageOutOfBoundsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
@@ -65,7 +64,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void testFilterCoursesByNameHasNext() throws PageOutOfBoundsException {
+    public void testFilterCoursesByNameHasNext() {
         final List<Course> courses = new LinkedList<>();
         final Integer PAGE = 1;
         for (int i = 0; i < PAGE_SIZE + 1; i++) {
@@ -79,7 +78,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void testFilterCoursesByNameNoNext() throws PageOutOfBoundsException {
+    public void testFilterCoursesByNameNoNext() {
         final List<Course> courses = new LinkedList<>();
         final Integer PAGE = 1;
         final int RESULT_NUMBER = PAGE_SIZE - 1;
@@ -94,8 +93,8 @@ public class CourseServiceImplTest {
         assertEquals(RESULT_NUMBER, results.getResults().size());
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFilterCoursesByNamePageOutOfBounds() throws PageOutOfBoundsException {
+    @Test
+    public void testFilterCoursesByNamePageOutOfBounds() {
         final List<Course> courses = mock(List.class);
         when(courses.size()).thenReturn(0);
 
@@ -105,14 +104,16 @@ public class CourseServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, INVALID_PAGE);
+        assertNull(results);
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFilterCoursesByNameNegativePage() throws PageOutOfBoundsException {
+    @Test
+    public void testFilterCoursesByNameNegativePage() {
 
         final Integer INVALID_PAGE = -2;
 
         final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, INVALID_PAGE);
+        assertNull(results);
     }
 
     @Test
@@ -195,7 +196,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void testFindCoursesByProfessorIdHasNext() throws PageOutOfBoundsException {
+    public void testFindCoursesByProfessorIdHasNext() {
         final List<Course> courses = new LinkedList<>();
         final Integer PAGE = 1;
         for (int i = 0; i < PAGE_SIZE + 1; i++) {
@@ -209,7 +210,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void testFindCoursesByProfessorIdNoNext() throws PageOutOfBoundsException {
+    public void testFindCoursesByProfessorIdNoNext() {
         final List<Course> courses = new LinkedList<>();
         final Integer PAGE = 1;
         final int RESULT_NUMBER = PAGE_SIZE - 1;
@@ -223,8 +224,8 @@ public class CourseServiceImplTest {
         assertEquals(RESULT_NUMBER, results.getResults().size());
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFindCoursesByProfessorIdPageOutOfBounds() throws PageOutOfBoundsException {
+    @Test
+    public void testFindCoursesByProfessorIdPageOutOfBounds() {
         final List<Course> courses = mock(List.class);
         when(courses.size()).thenReturn(0);
         when(courseDao.findByProfessorId(eq(PROFESSOR_ID), anyInt(), anyInt())).thenReturn(courses);
@@ -232,18 +233,20 @@ public class CourseServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Course> results = courseService.findCourseByProfessorId(PROFESSOR_ID, INVALID_PAGE);
+        assertNull(results);
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFindCoursesByProfessorIdNegativePage() throws PageOutOfBoundsException {
+    @Test
+    public void testFindCoursesByProfessorIdNegativePage() {
 
         final Integer INVALID_PAGE = -2;
 
         final PagedResults<Course> results = courseService.findCourseByProfessorId(PROFESSOR_ID, INVALID_PAGE);
+        assertNull(results);
     }
 
     @Test
-    public void testFilterByAreaIdHasNext() throws PageOutOfBoundsException {
+    public void testFilterByAreaIdHasNext() {
         final List<Course> courses = new LinkedList<>();
         final Integer PAGE = 1;
         for (int i = 0; i < PAGE_SIZE + 1; i++) {
@@ -257,7 +260,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void testFilterByAreaIdNoNext() throws PageOutOfBoundsException {
+    public void testFilterByAreaIdNoNext() {
         final List<Course> courses = new LinkedList<>();
         final Integer PAGE = 1;
         final int RESULT_NUMBER = PAGE_SIZE - 1;
@@ -271,8 +274,8 @@ public class CourseServiceImplTest {
         assertEquals(RESULT_NUMBER, results.getResults().size());
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFilterByAreaIdPageOutOfBounds() throws PageOutOfBoundsException {
+    @Test
+    public void testFilterByAreaIdPageOutOfBounds() {
         final List<Course> courses = mock(List.class);
         when(courses.size()).thenReturn(0);
         when(courseDao.filterByAreaId(eq(AREA_ID), anyInt(), anyInt())).thenReturn(courses);
@@ -280,13 +283,15 @@ public class CourseServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Course> results = courseService.filterByAreaId(AREA_ID, INVALID_PAGE);
+        assertNull(results);
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFilterByAreaIdNegativePage() throws PageOutOfBoundsException {
+    @Test
+    public void testFilterByAreaIdNegativePage() {
 
         final Integer INVALID_PAGE = -2;
 
         final PagedResults<Course> results = courseService.filterByAreaId(AREA_ID, INVALID_PAGE);
+        assertNull(results);
     }
 }

@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.exceptions.InvalidTimeException;
-import ar.edu.itba.paw.exceptions.InvalidTimeRangeException;
 import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
 import ar.edu.itba.paw.exceptions.TimeslotAllocatedException;
 import ar.edu.itba.paw.interfaces.persistence.ScheduleDao;
@@ -33,15 +31,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     @Override
     public List<Timeslot> reserveTimeSlot(final Long professor_id, final Integer day, final Integer startTime, final Integer endTime)
-            throws InvalidTimeException, InvalidTimeRangeException, TimeslotAllocatedException, NonexistentProfessorException {
+            throws TimeslotAllocatedException, NonexistentProfessorException {
 
         if(startTime >= endTime) {
             LOGGER.error("Attempted to reserve timeslot with an invalid time range");
-            throw new InvalidTimeRangeException();
+            return null;
         }
         if(startTime > 23 || startTime < 1 || endTime > 24 || endTime < 2) {
             LOGGER.error("Attempted to reserve timeslot with invalid start time or end time");
-            throw new InvalidTimeException();
+            return null;
         }
 
         Professor professor = ps.findById(professor_id);
@@ -56,6 +54,11 @@ public class ScheduleServiceImpl implements ScheduleService {
             LOGGER.debug("Reserving timeslot for professor with id {}, with day {}, at hour {}", professor_id,
                     day, i);
             Timeslot timeslot = sd.reserveTimeSlot(professor, day, i);
+
+            if(timeslot == null) {
+                throw new TimeslotAllocatedException();
+            }
+
             list.add(timeslot);
         }
         return list;

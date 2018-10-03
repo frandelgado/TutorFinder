@@ -20,6 +20,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -45,7 +46,7 @@ public class ScheduleJdbcDaoTest {
     }
     
     @Test
-    public void testReserveValid() throws TimeslotAllocatedException {
+    public void testReserveValid() {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
@@ -57,14 +58,15 @@ public class ScheduleJdbcDaoTest {
         assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
-    @Test(expected = TimeslotAllocatedException.class)
-    public void testReserveOccupied() throws TimeslotAllocatedException {
+    @Test
+    public void testReserveOccupied() {
         Professor mockProfessor = mock(Professor.class);
         when(mockProfessor.getId()).thenReturn(5l);
         Integer DAY = 2;
         Integer HOUR = 2;
 
         Timeslot reservedTimeSlot = scheduleJdbcDao.reserveTimeSlot(mockProfessor, DAY,HOUR);
+        assertNull(reservedTimeSlot);
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 

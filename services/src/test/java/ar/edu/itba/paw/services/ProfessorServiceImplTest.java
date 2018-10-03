@@ -59,7 +59,7 @@ public class ProfessorServiceImplTest {
     }
 
     @Test
-    public void testFilterByFullNameHasNext() throws PageOutOfBoundsException {
+    public void testFilterByFullNameHasNext() {
         final List<Professor> professors = new LinkedList<>();
         final Integer PAGE = 1;
         for (int i = 0; i < PAGE_SIZE + 1; i++) {
@@ -73,7 +73,7 @@ public class ProfessorServiceImplTest {
     }
 
     @Test
-    public void testFilterByFullNameNoNext() throws PageOutOfBoundsException {
+    public void testFilterByFullNameNoNext() {
         final List<Professor> professors = new LinkedList<>();
         final Integer PAGE = 1;
         final int RESULT_NUMBER = PAGE_SIZE - 1;
@@ -87,8 +87,8 @@ public class ProfessorServiceImplTest {
         assertEquals(RESULT_NUMBER, results.getResults().size());
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFilterByFullNamePageOutOfBounds() throws PageOutOfBoundsException {
+    @Test
+    public void testFilterByFullNamePageOutOfBounds() {
         final List<Professor> professors = mock(List.class);
         when(professors.size()).thenReturn(0);
         when(professorDao.filterByFullName(eq(NAME), anyInt(), anyInt())).thenReturn(professors);
@@ -96,14 +96,16 @@ public class ProfessorServiceImplTest {
         final Integer INVALID_PAGE = 666;
 
         final PagedResults<Professor> results = professorService.filterByFullName(NAME, INVALID_PAGE);
+        assertNull(results);
     }
 
-    @Test(expected = PageOutOfBoundsException.class)
-    public void testFilterByFullNameNegativePage() throws PageOutOfBoundsException {
+    @Test
+    public void testFilterByFullNameNegativePage() {
 
         final Integer INVALID_PAGE = -2;
 
         final PagedResults<Professor> results = professorService.filterByFullName(NAME, INVALID_PAGE);
+        assertNull(results);
     }
 
     @Test
