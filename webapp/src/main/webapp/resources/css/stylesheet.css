@@ -119,6 +119,9 @@ body {
     grid-template-columns: 5fr 90fr 5fr;
     grid-template-rows: 65px 50px auto 50px;
 }
+.conversations {
+    grid-template-rows: 65px 0px auto 50px;
+}
 
 .staticProfile {
     grid-template-columns: 10fr 80fr 10fr;
@@ -1113,8 +1116,10 @@ th, td {
         min-width: 550px;
         margin: 20px 0;
     }
+
     .staticProfile .schedule {
         min-width: 550px;
+        max-width: 550px;
     }
 
     table, td, th {
@@ -1125,10 +1130,58 @@ th, td {
     }
     .staticProfile {
         grid-template-areas: "navbar" "......" "content";
+        grid-template-columns: 100fr;
+
     }
     .staticProfile .content {
+        padding: 10px;
+        grid-template-columns: 100fr;
         grid-template-rows: 150px auto auto;
         grid-template-areas: "description" "class-content" "time-content";
-        margin: 5px;
+    }
+    .classes {
+        max-width: 550px;
+    }
+    .profile-profesor{
+        max-width: 550px;
+    }
+
+    .staticSearchResults .content {
+        grid-template-areas: "filter-panel" "search-results";
+        padding: 5px;
+    }
+
+    .filter-panel {
+        width: 550px;
+        margin: 0;
+        margin-top: 25px;
+    }
+    .responsiveRow {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-around;
+    }
+    .responsiveDelete{
+        display: none;
+    }
+    .rm-10-b {
+        margin: 0;
+    }
+    .r-filter-title{
+        width: 180px;
+    }
+    .input-request-filter {
+        width:100px;
+    }
+    .search-results {
+        width: 550px;
+    }
+    .conversation-messages {
+        max-height: 200px;
+    }
+    .conversations {
+        grid-template-columns: 100fr;
+        grid-template-areas: "navbar " "....." "content" "......";
     }
 }
