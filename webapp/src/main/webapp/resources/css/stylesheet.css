@@ -51,6 +51,11 @@ and (min-resolution:.001dpcm) {
     font-family: 'lato';
 }
 
+textarea {
+    resize: none;
+}
+
+
 .navbar, .search-result, .dropdown-area, .contact-button, .class {
     box-shadow: 0 15px 35px -15px grey;
 }
