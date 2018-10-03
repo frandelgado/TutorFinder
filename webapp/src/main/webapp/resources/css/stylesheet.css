@@ -1011,11 +1011,13 @@ th, td {
 
 .errors div:first-child {
     margin-top: 20px;
+    padding-top: 0;
 }
 
 .error-msg {
     height: 45px;
     margin: 0 0 46px 15px;
+    padding-top: 10px;
 }
 
 .center {
