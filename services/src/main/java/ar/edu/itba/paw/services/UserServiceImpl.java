@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        if(!name.matches("[a-zA-Z]+") || !lastName.matches("[a-zA-Z]+") ||
+        if(!name.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+") || !lastName.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+") ||
                 name.length() < 1 || lastName.length() < 1 || name.length() > 128 || lastName.length() > 128){
             LOGGER.error("Attempted to create user with invalid name");
             return null;

@@ -122,7 +122,7 @@ public class ProfessorServiceImpl implements ProfessorService {
             return null;
         }
 
-        if(!name.matches("[a-zA-Z]+") || !lastname.matches("[a-zA-Z]+") ||
+        if(!name.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+") || !lastname.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+") ||
                 name.length() < 1 || lastname.length() < 1 || name.length() > 128 || lastname.length() > 128){
             LOGGER.error("Attempted to create professor with invalid name");
             return null;
