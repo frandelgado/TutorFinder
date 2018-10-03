@@ -12,6 +12,7 @@
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
+    <script src="<c:url value="/resources/js/searchForm.js" />"></script>
     <title>Tu Teoria | <spring:message code="index.title"/></title>
 </head>
 
