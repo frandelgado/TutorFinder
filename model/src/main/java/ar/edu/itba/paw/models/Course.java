@@ -19,6 +19,8 @@ public class Course {
     @Column(nullable = false)
     private Double price;
 
+    public Course(){}
+
     public Course(Professor professor, Subject subject, String description, Double price) {
         this.professor = professor;
         this.subject = subject;
