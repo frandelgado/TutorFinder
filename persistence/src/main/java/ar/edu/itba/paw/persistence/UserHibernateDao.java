@@ -40,7 +40,7 @@ public class UserHibernateDao implements UserDao {
     //TODO: podriamos hacer que no retorne un optional
     @Override
     public Optional<User> findByUsername(String username) {
-        final TypedQuery<User> query = em.createQuery("from User as u where u.username = :username", User.class);
+        final TypedQuery<User> query = em.createQuery("select u from User as u where u.username = :username", User.class);
         query.setParameter("username", username);
         final List<User> list = query.getResultList();
         return list.isEmpty() ? null : Optional.ofNullable(list.get(0));
