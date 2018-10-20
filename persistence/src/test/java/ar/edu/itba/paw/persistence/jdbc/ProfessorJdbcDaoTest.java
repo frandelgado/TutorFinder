@@ -1,7 +1,8 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.persistence.jdbc;
 
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.persistence.ProfessorJdbcDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = JdbcTestConfig.class)
 @Sql("classpath:schema.sql")
 public class ProfessorJdbcDaoTest {
 
