@@ -29,6 +29,12 @@ public class Professor extends User{
         this.picture = picture;
     }
 
+    public Professor(Long id, String username, String name, String lastname, String password, String email, String description, byte[] picture) {
+        super(username, name, lastname, password, email);
+        this.description = description;
+        this.picture = picture;
+    }
+
     public String getDescription() {
         return description;
     }

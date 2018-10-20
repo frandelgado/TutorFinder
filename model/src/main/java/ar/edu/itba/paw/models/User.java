@@ -31,11 +31,20 @@ public class User {
     User(){}
 
     public User(String username, String name, String lastname, String password, String email) {
-        this.username = username;
-        this.name = name;
-        this.lastname = lastname;
-        this.password = password;
-        this.email = email;
+        this.username   = username;
+        this.name       = name;
+        this.lastname   = lastname;
+        this.password   = password;
+        this.email      = email;
+    }
+
+    public User(Long id, String username, String name, String lastname, String password, String email) {
+        this.id         = id;
+        this.username   = username;
+        this.name       = name;
+        this.lastname   = lastname;
+        this.password   = password;
+        this.email      = email;
     }
 
     public Long getId() {
