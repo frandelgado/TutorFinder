@@ -26,7 +26,6 @@ public class SubjectJdbcDao implements SubjectDao {
             rs.getString(3),
             rs.getString(2),
             new Area(
-                    rs.getLong(4),
                     rs.getString(6),
                     rs.getString(5),
                     rs.getBytes(7)
@@ -34,7 +33,6 @@ public class SubjectJdbcDao implements SubjectDao {
     );
 
     private final static RowMapper<Area> AREA_ROW_MAPPER= (rs, rowNum) -> new Area(
-            rs.getLong(1),
             rs.getString(3),
             rs.getString(2),
             rs.getBytes(4)

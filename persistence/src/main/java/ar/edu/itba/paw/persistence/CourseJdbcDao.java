@@ -45,7 +45,6 @@ public class CourseJdbcDao implements CourseDao {
                     rs.getString(11),
                     rs.getString(12),
                     new Area(
-                            rs.getLong(15),
                             rs.getString(14),
                             rs.getString(13),
                             rs.getBytes(17)

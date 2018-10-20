@@ -60,7 +60,6 @@ public class ConversationJdbcDao implements ConversationDao {
                         rs.getString(16),
                         rs.getString(17),
                         new Area(
-                                rs.getLong(18),
                                 rs.getString(19),
                                 rs.getString(20),
                                 rs.getBytes(23)
