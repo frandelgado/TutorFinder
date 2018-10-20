@@ -4,12 +4,15 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "courses")
+@IdClass(CourseID.class)
 public class Course {
 
     //TODO: no estoy seguro si el schema refleja que el profesor no deberia ser nullable.
+    @Id
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Professor professor;
 
+    @Id
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Subject subject;
 
