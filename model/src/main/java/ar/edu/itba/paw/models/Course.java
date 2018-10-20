@@ -1,11 +1,23 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "courses")
 public class Course {
 
-    private final Professor professor;
-    private final Subject subject;
-    private final String description;
-    private final Double price;
+    //TODO: no estoy seguro si el schema refleja que el profesor no deberia ser nullable.
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    private Professor professor;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    private Subject subject;
+
+    @Column(length = 512, nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    private Double price;
 
     public Course(Professor professor, Subject subject, String description, Double price) {
         this.professor = professor;
