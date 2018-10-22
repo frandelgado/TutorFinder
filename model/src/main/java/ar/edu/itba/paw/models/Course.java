@@ -10,10 +10,12 @@ public class Course {
     //TODO: no estoy seguro si el schema refleja que el profesor no deberia ser nullable.
     @Id
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="user_id")
     private Professor professor;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="subject_id")
     private Subject subject;
 
     @Column(length = 512, nullable = false)

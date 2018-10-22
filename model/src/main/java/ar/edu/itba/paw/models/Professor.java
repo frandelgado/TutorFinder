@@ -6,14 +6,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "professors")
+@PrimaryKeyJoinColumn(referencedColumnName="user_id")
 public class Professor extends User{
 
     @Column(length = 512, nullable = false)
     private String description;
 
-    //TODO: No estoy muy seguro del column definition, revisar si guarda apropiadamente una imagen.
-    @Lob
-    @Column(name = "profile_picture", nullable = false, columnDefinition = "BYTEA")
+    @Column(name = "profile_picture", nullable = false)
     private byte[] picture;
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = false, mappedBy = "professor")
