@@ -27,7 +27,10 @@ public class UserHibernateDao implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return Optional.empty();
+        final TypedQuery<User> query = em.createQuery("from User as u where u.email = :email", User.class);
+        query.setParameter("email", email);
+        final List<User> users = query.getResultList();
+        return users.isEmpty()? Optional.empty() : Optional.ofNullable(users.get(0));
     }
 
     @Override
@@ -40,10 +43,10 @@ public class UserHibernateDao implements UserDao {
     //TODO: podriamos hacer que no retorne un optional
     @Override
     public Optional<User> findByUsername(String username) {
-        final TypedQuery<User> query = em.createQuery("select u from User as u where u.username = :username", User.class);
+        final TypedQuery<User> query = em.createQuery("from User as u where u.username = :username", User.class);
         query.setParameter("username", username);
-        final List<User> list = query.getResultList();
-        return list.isEmpty() ? null : Optional.ofNullable(list.get(0));
+        final List<User> users = query.getResultList();
+        return users.isEmpty() ? Optional.empty() : Optional.ofNullable(users.get(0));
     }
 
     @Override
