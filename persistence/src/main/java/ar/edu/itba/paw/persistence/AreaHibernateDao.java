@@ -30,12 +30,12 @@ public class AreaHibernateDao implements AreaDao {
     //TODO: ver como vamos a manejar paginación con hibernate. Esto es un primer approach
     @Override
     public List<Area> filterAreasByName(String name, int limit, int offset) {
-        final TypedQuery<Area> query = em.createQuery("select a from Area as a where u.name = :name", Area.class);
-        query.setParameter("name", name);
+        final String search = "%" + name + "%";
+        final TypedQuery<Area> query = em.createQuery("from Area as a where upper(a.name) like upper(:name)" +
+                "order by a.id", Area.class);
+        query.setParameter("name", search);
         query.setFirstResult(offset);
         query.setMaxResults(limit);
-        final List<Area> areas = query.getResultList();
-        return areas.isEmpty() ? null : areas;
-
+        return query.getResultList();
     }
 }

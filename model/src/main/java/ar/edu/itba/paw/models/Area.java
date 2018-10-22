@@ -16,13 +16,13 @@ public class Area {
     @Column(nullable = false, length = 512)
     private String description;
 
-    @Column(nullable = false, length = 128)
+    @Column(nullable = false, length = 128, unique = true)
     private String name;
 
-    //TODO: No estoy muy seguro del column definition, revisar si guarda apropiadamente una imagen.
-    @Lob
-    @Column(nullable = false, columnDefinition = "BYTEA")
+    @Column(nullable = false)
     private byte[] image;
+
+    Area(){}
 
     public Area(String description, String name, byte[] image) {
         this.description = description;
