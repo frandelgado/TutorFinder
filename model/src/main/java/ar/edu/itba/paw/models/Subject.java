@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.models;
 
+
 import javax.persistence.*;
 
-
+@Entity
+@Table(name = "subjects")
 public class Subject {
 
     @Id
@@ -11,17 +13,21 @@ public class Subject {
     @Column(name = "subject_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 512)
     private String description;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, length = 128, unique = true)
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="area_id")
     private Area area;
 
-    public Subject(Long id, String description, String name, Area area) {
-        this.id = id;
+    /* default */ Subject() {
+        // Just for Hibernate
+    }
+
+    public Subject(String description, String name, Area area) {
         this.description = description;
         this.name = name;
         this.area = area;
