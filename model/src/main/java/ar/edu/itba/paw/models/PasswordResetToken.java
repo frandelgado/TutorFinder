@@ -2,12 +2,29 @@ package ar.edu.itba.paw.models;
 
 import org.joda.time.LocalDateTime;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "reset_password_tokens")
 public class PasswordResetToken {
 
-    private final Long id;
-    private final User user;
-    private final String token;
-    private final LocalDateTime expireDate;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reset_password_tokens_id_seq")
+    @SequenceGenerator(sequenceName = "reset_password_tokens_id_seq", name = "reset_password_tokens_id_seq",  allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    private User user;
+
+    @Column(nullable = false, length = 36)
+    private String token;
+
+    @Column(nullable = false)
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime expireDate;
+
+    PasswordResetToken(){}
 
     public PasswordResetToken(Long id, User user, String token, LocalDateTime expireDate) {
         this.id = id;
