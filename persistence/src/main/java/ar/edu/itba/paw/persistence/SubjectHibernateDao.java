@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.SubjectDao;
+import ar.edu.itba.paw.models.Area;
 import ar.edu.itba.paw.models.Subject;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +25,8 @@ public class SubjectHibernateDao implements SubjectDao {
 
     @Override
     public Subject create(final String name, final String description, final Long area_id) {
-        final Subject subject = new Subject(description, name, null);
+        final Area area = em.getReference(Area.class, area_id);
+        final Subject subject = new Subject(description, name, area);
         em.persist(subject);
         return subject;
     }
