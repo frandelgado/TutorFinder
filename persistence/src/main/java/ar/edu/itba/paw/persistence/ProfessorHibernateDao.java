@@ -36,8 +36,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
         final TypedQuery<Professor> query = em.createQuery("from Professor as p where p.username = :username",
                 Professor.class);
         query.setParameter("username", username);
-        final List<Professor> professors = query.getResultList();
-        return professors.isEmpty()? Optional.empty() : Optional.ofNullable(professors.get(0));
+        return query.getResultList().stream().findFirst();
     }
 
     @Override

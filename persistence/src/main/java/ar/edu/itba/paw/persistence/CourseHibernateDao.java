@@ -2,10 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.Filter;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -27,8 +24,7 @@ public class CourseHibernateDao implements CourseDao {
                 "where c.professor.id = :professor and c.subject.id = :subject", Course.class);
         query.setParameter("professor", professor_id);
         query.setParameter("subject", subject_id);
-        final List<Course> courses = query.getResultList();
-        return courses.isEmpty()? Optional.empty(): Optional.ofNullable(courses.get(0));
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
@@ -58,6 +54,8 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public Course create(Professor professor, Subject subject, String description, Double price) throws CourseAlreadyExistsException {
-        return null;
+        final Course course = new Course(professor, subject, description, price);
+        em.persist(course);
+        return course;
     }
 }

@@ -29,8 +29,7 @@ public class UserHibernateDao implements UserDao {
     public Optional<User> findByEmail(String email) {
         final TypedQuery<User> query = em.createQuery("from User as u where u.email = :email", User.class);
         query.setParameter("email", email);
-        final List<User> users = query.getResultList();
-        return users.isEmpty()? Optional.empty() : Optional.ofNullable(users.get(0));
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
@@ -45,8 +44,7 @@ public class UserHibernateDao implements UserDao {
     public Optional<User> findByUsername(String username) {
         final TypedQuery<User> query = em.createQuery("from User as u where u.username = :username", User.class);
         query.setParameter("username", username);
-        final List<User> users = query.getResultList();
-        return users.isEmpty() ? Optional.empty() : Optional.ofNullable(users.get(0));
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
