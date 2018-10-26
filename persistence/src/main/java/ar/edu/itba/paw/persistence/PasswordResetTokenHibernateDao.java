@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.paw.models.PasswordResetToken;
+import ar.edu.itba.paw.models.User;
 import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +28,10 @@ public class PasswordResetTokenHibernateDao implements PasswordResetTokenDao {
 
     @Override
     public PasswordResetToken create(Long userId, String token, LocalDateTime expires) {
-        return null;
+        final User user = em.getReference(User.class, userId);
+        final PasswordResetToken passwordResetToken = new PasswordResetToken(user, token, expires);
+        em.persist(passwordResetToken);
+        return passwordResetToken;
     }
 
     @Override

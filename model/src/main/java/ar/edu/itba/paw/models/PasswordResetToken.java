@@ -15,6 +15,7 @@ public class PasswordResetToken {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="user_id")
     private User user;
 
     @Column(nullable = false, length = 36)
@@ -26,8 +27,7 @@ public class PasswordResetToken {
 
     PasswordResetToken(){}
 
-    public PasswordResetToken(Long id, User user, String token, LocalDateTime expireDate) {
-        this.id = id;
+    public PasswordResetToken(User user, String token, LocalDateTime expireDate) {
         this.user = user;
         this.token = token;
         this.expireDate = expireDate;

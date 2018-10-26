@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.LinkedList;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -17,22 +17,41 @@ public class ConversationHibernateDao implements ConversationDao {
 
     @Override
     public Conversation create(User user, Professor professor, Subject subject) {
-        return null;
+        final Conversation conversation = new Conversation(user, professor, subject, null);
+        em.persist(conversation);
+        return conversation;
     }
 
     @Override
     public Conversation findById(Long conversation_id) {
-        return null;
+        return em.find(Conversation.class, conversation_id);
     }
 
     @Override
     public List<Conversation> findByUserId(Long user_id, int limit, int offset) {
-        return new LinkedList<>();
+        final TypedQuery<Conversation> query = em.createQuery("from Conversation as c where" +
+                " c.professor.id = :id or c.user.id = :id order by c.id", Conversation.class);
+        query.setParameter("id", user_id);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.getResultList();
     }
 
     @Override
     public Conversation findByIds(Long user_id, Long professor_id, Long subject_id) {
-        return null;
+        final TypedQuery<Conversation> query = em.createQuery("from Conversation as c " +
+                "where c.user.id = :user_id and c.professor.id = :professor_id and " +
+                "c.subject.id = :subject_id", Conversation.class);
+        query.setParameter("user_id", user_id);
+        query.setParameter("professor_id", professor_id);
+        query.setParameter("subject_id", subject_id);
+        final List<Conversation> conversations = query.getResultList();
+        return conversations.isEmpty()? null : conversations.get(0);
+    }
+
+    @Override
+    public Conversation merge(final Conversation conversation) {
+        return em.merge(conversation);
     }
 
     @Override
