@@ -29,7 +29,7 @@ public class Professor extends User{
     }
 
     public Professor(Long id, String username, String name, String lastname, String password, String email, String description, byte[] picture) {
-        super(username, name, lastname, password, email);
+        super(id, username, name, lastname, password, email);
         this.description = description;
         this.picture = picture;
     }
