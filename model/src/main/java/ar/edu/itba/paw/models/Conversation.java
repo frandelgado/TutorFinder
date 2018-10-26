@@ -2,21 +2,42 @@ package ar.edu.itba.paw.models;
 
 import org.joda.time.LocalDateTime;
 
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
+@Entity
+@Table(name = "conversations")
 public class Conversation {
 
-    private final Long id;
-    private final User user;
-    private final Professor professor;
-    private final Subject subject;
-    private final List<Message> messages;
-    private final LocalDateTime latestMessage;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "conversations_conversation_id_seq")
+    @SequenceGenerator(sequenceName = "conversations_conversation_id_seq",
+            name = "conversations_conversation_id_seq",  allocationSize = 1)
+    @Column(name = "conversation_id")
+    private Long id;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="user_id")
+    private User user;
 
-    public Conversation(Long id, final User user, final Professor professor, final Subject subject, LocalDateTime latestMessage) {
-        this.id = id;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="professor_id")
+    private Professor professor;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="subject_id")
+    private Subject subject;
+
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "conversation")
+    private List<Message> messages;
+
+//    @Formula("(SELECT max(m.created) FROM messages m WHERE m.conversation_id = conversation_id GROUP BY conversation_id)")
+    private LocalDateTime latestMessage;
+
+    Conversation() {}
+
+    public Conversation(final User user, final Professor professor, final Subject subject, LocalDateTime latestMessage) {
         this.user = user;
         this.professor = professor;
         this.subject = subject;

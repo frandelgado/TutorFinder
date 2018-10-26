@@ -2,18 +2,47 @@ package ar.edu.itba.paw.models;
 
 import org.joda.time.LocalDateTime;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "messages")
 public class Message {
 
-    private final Long id;
-    private final User sender;
-    private final String text;
-    private final LocalDateTime created;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "messages_message_id_seq")
+    @SequenceGenerator(sequenceName = "messages_message_id_seq",
+            name = "messages_message_id_seq",  allocationSize = 1)
+    @Column(name = "message_id")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="sender_id")
+    private User sender;
+
+    @Column(nullable = false, length = 1024, name = "message")
+    private String text;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="conversation_id")
+    private Conversation conversation;
+
+    @Column(nullable = false)
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime created;
+
+    Message() {}
+
+    public Message(User sender, String text, LocalDateTime created) {
+        this.sender = sender;
+        this.text = text;
+        //this.created = created;
+    }
 
     public Message(Long id, User sender, String text, LocalDateTime created) {
         this.id = id;
         this.sender = sender;
         this.text = text;
-        this.created = created;
+        //this.created = created;
     }
 
     public Long getId() {

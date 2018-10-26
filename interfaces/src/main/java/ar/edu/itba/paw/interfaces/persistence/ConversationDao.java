@@ -14,5 +14,7 @@ public interface ConversationDao {
 
     Conversation findByIds(final Long user_id, final Long professor_id, final Long subject_id);
 
+    Conversation merge(Conversation conversation);
+
     Message create(final User sender, final String text, final Conversation conversation);
 }

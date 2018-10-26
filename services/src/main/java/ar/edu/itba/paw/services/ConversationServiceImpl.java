@@ -165,4 +165,12 @@ public class ConversationServiceImpl implements ConversationService {
         return conversation;
     }
 
+    @Transactional
+    @Override
+    public Conversation initializeMessages(final Conversation conversation) {
+        final Conversation ret = conversationDao.merge(conversation);
+        ret.getMessages().size();
+        return ret;
+    }
+
 }
