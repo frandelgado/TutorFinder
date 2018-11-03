@@ -10,7 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/select2.min.css" />" rel="stylesheet" />
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
+    <script src="<c:url value="/resources/js/select2.min.js" />"></script>
     <script src="<c:url value="/resources/js/searchForm.js" />"></script>
 
     <title>Tu Teoria | <spring:message code="search.results" /> </title>
@@ -69,8 +71,7 @@
         <div class="responsiveRow">
             <h3 class="responsiveDelete"><spring:message code="search.dayHeader"/></h3>
             <div>
-                <form:select cssClass="select-subject no-border b-r-5 no-margin filter-input" path="day">
-                    <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
+                <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input" path="day" multiple="multiple">
                     <form:option value="1"><spring:message code ="day.monday"/></form:option>
                     <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
                     <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
