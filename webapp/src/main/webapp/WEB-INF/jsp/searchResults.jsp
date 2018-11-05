@@ -71,7 +71,7 @@
         <div class="responsiveRow">
             <h3 class="responsiveDelete"><spring:message code="search.dayHeader"/></h3>
             <div>
-                <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input" path="day" multiple="multiple">
+                <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input m-w-200" path="day" multiple="multiple">
                     <form:option value="1"><spring:message code ="day.monday"/></form:option>
                     <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
                     <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
