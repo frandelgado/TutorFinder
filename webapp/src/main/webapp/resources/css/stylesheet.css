@@ -1232,3 +1232,15 @@ th, td {
     min-width: 200px;
     max-width: 200px;
 }
+
+.edit {
+    color: #F47C48;
+}
+
+.r-center {
+    justify-content: center;
+}
+
+.fit-content {
+    width: fit-content;
+}
