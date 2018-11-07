@@ -47,6 +47,15 @@ public class Conversation {
         this.messages = new LinkedList<>();
     }
 
+    public Conversation(final Long id, final User user, final Professor professor, final Subject subject, LocalDateTime latestMessage) {
+        this.id = id;
+        this.user = user;
+        this.professor = professor;
+        this.subject = subject;
+        this.latestMessage = latestMessage;
+        this.messages = new LinkedList<>();
+    }
+
     public Long getId() {
         return id;
     }

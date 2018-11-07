@@ -33,6 +33,14 @@ public class Subject {
         this.area = area;
     }
 
+    public Subject(Long id, String description, String name, Area area) {
+        this.id = id;
+        this.description = description;
+        this.name = name;
+        this.area = area;
+    }
+
+
     public String getDescription(){
         return description;
     }

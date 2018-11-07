@@ -33,6 +33,13 @@ public class PasswordResetToken {
         this.expireDate = expireDate;
     }
 
+    public PasswordResetToken(Long id, User user, String token, LocalDateTime expireDate) {
+        this.id = id;
+        this.user = user;
+        this.token = token;
+        this.expireDate = expireDate;
+    }
+
     public Long getId() {
         return id;
     }

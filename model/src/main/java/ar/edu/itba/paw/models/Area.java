@@ -30,6 +30,13 @@ public class Area {
         this.image = image;
     }
 
+    public Area(long id, String description, String name, byte[] image) {
+        this.id = id;
+        this.description = description;
+        this.name = name;
+        this.image = image;
+    }
+
     public String getDescription(){
      return description;
     }

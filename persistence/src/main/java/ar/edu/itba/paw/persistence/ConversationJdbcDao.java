@@ -167,6 +167,11 @@ public class ConversationJdbcDao implements ConversationDao {
         return conversations.stream().findFirst().orElse(null);
     }
 
+    @Override
+    public Conversation merge(Conversation conversation) {
+        return null;
+    }
+
     private List<Message> getMessagesByConversationId(final Long conversation_id) {
         LOGGER.trace("Getting messages for conversation with id {}", conversation_id);
         final List<Message> messages = jdbcTemplate.query("SELECT users.user_id, users.username, " +
