@@ -4,15 +4,18 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "schedules")
+@IdClass(TimeSlotID.class)
 public class Timeslot {
-    //TODO construir primary key compuesta por todos sus atributos
-
+    
+    @Id
     @Column(nullable = false)
     private Integer day;
 
+    @Id
     @Column(nullable = false)
     private Integer hour;
 
+    @Id
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name="user_id")
     private Professor professor;
