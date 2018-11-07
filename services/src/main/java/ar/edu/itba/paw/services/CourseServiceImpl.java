@@ -141,8 +141,8 @@ public class CourseServiceImpl implements CourseService {
     public Course create(final Long professorId, final Long subjectId, final String description, final Double price)
             throws CourseAlreadyExistsException, NonexistentProfessorException, NonexistentSubjectException {
 
-        if(price <= 0){
-            LOGGER.error("Attempted to create course with 0 or negative price");
+        if(price < 1){
+            LOGGER.error("Attempted to create course with price lower than 1");
             return null;
         }
 
