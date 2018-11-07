@@ -21,7 +21,7 @@ public class PasswordResetToken {
     @Column(nullable = false, length = 36)
     private String token;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "expires")
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime expireDate;
 

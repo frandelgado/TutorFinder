@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -32,7 +33,8 @@ public class Conversation {
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "conversation")
     private List<Message> messages;
 
-//    @Formula("(SELECT max(m.created) FROM messages m WHERE m.conversation_id = conversation_id GROUP BY conversation_id)")
+    @Formula("(SELECT max(m.created) FROM messages m WHERE m.conversation_id = conversation_id GROUP BY conversation_id)")
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime latestMessage;
 
     Conversation() {}
