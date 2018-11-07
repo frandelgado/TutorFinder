@@ -18,11 +18,14 @@ public class ScheduleHibernateDao implements ScheduleDao {
 
     @Override
     public Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) {
-        return null;
+        Timeslot timeslot = new Timeslot(day, hour, professor);
+        em.persist(timeslot);
+        return timeslot;
     }
 
     @Override
     public List<Timeslot> getTimeslotsForProfessor(Professor professor) {
-        return new LinkedList<Timeslot>();
+        em.merge(professor);
+        return professor.getTimeslots();
     }
 }
