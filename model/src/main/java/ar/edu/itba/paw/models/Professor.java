@@ -15,12 +15,13 @@ public class Professor extends User{
     @Column(name = "profile_picture", nullable = false)
     private byte[] picture;
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = false, mappedBy = "professor")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
     private List<Course> courses;
 
-    public Professor(){
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
+    private List<Timeslot> timeslots;
 
-    }
+    public Professor(){}
 
     public Professor(String username, String name, String lastname, String password, String email, String description, byte[] picture) {
         super(username, name, lastname, password, email);
