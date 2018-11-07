@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "courses")
@@ -47,5 +48,22 @@ public class Course {
 
     public Double getPrice() {
         return price;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(professor, course.professor) &&
+                Objects.equals(subject, course.subject) &&
+                Objects.equals(description, course.description) &&
+                Objects.equals(price, course.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(professor, subject, description, price);
     }
 }

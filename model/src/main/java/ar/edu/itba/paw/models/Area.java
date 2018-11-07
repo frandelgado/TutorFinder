@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 
 @Entity
 @Table(name = "areas")
@@ -49,5 +51,23 @@ public class Area {
 
     public String getImage() {
         return new String(Base64.getEncoder().encode(image));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Area area = (Area) o;
+        return Objects.equals(id, area.id) &&
+                Objects.equals(description, area.description) &&
+                Objects.equals(name, area.name) &&
+                Arrays.equals(image, area.image);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, description, name);
+        result = 31 * result + Arrays.hashCode(image);
+        return result;
     }
 }
