@@ -26,7 +26,7 @@ public class ScheduleJdbcDao implements ScheduleDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Timeslot> TIMESLOT_ROW_MAPPER =
-            (rs, rowNum) -> new Timeslot(rs.getInt(1), rs.getInt(2));
+            (rs, rowNum) -> new Timeslot(rs.getInt(1), rs.getInt(2), new Professor());
 
     @Autowired
     public ScheduleJdbcDao(final DataSource ds) {
@@ -50,7 +50,7 @@ public class ScheduleJdbcDao implements ScheduleDao {
                     day, hour );
             return null;
         }
-        return new Timeslot(day, hour);
+        return new Timeslot(day, hour, professor);
 
     }
 
