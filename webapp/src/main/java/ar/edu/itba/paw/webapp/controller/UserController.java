@@ -168,17 +168,17 @@ public class UserController extends BaseController{
                                         @Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
                                         final BindingResult errors, final HttpServletRequest request) throws ProfessorWithoutUserException {
         if(errors.hasErrors()) {
-            return registerProfessor(form);
+            return registerProfessor(loggedUser, form);
         }
 
         final Professor p;
         try {
-            p = ps.create(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
+            p = ps.modifyOrCreate(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
         } catch (IOException e) {
             return redirectToErrorPage("fileUploadError");
         }
         if(p == null) {
-            return registerProfessor(form);
+            return registerProfessor(loggedUser, form);
         }
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
@@ -187,9 +187,16 @@ public class UserController extends BaseController{
     }
 
     @RequestMapping("/registerAsProfessor")
-    public ModelAndView registerProfessor(@ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form) {
+    public ModelAndView registerProfessor(@ModelAttribute("currentUser") final User loggedUser,
+            @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form) {
+
+        final Professor professor = ps.findById(loggedUser.getId());
+        if(professor != null){
+            form.setDescription(professor.getDescription());
+        }
         return new ModelAndView("registerAsProfessorForm");
     }
+
 
     @RequestMapping(value = "/CreateTimeSlot", method = RequestMethod.POST)
     public ModelAndView createTimeslot(

@@ -15,7 +15,11 @@ public interface ProfessorService {
 
     PagedResults<Professor> filterByFullName(final String fullName, final int page);
 
-    Professor create(final Long userId, final String description, final byte[] picture) throws ProfessorWithoutUserException;
+    Professor create(final Long userId, final String description,
+                     final byte[] picture) throws ProfessorWithoutUserException;
+
+    Professor modifyOrCreate(final Long userId, final String description,
+                             final byte[] picture) throws ProfessorWithoutUserException;
 
     Professor createWithUser(final Long id, final String username, final String name, final String lastname,
                              final String password, final String email, final String description, final byte[] picture)

@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -159,6 +160,46 @@ public class ProfessorServiceImpl implements ProfessorService {
         );
 
         return croppedImage;
+    }
+
+    @Override
+    public Professor modifyOrCreate(Long userId, String description, byte[] picture)
+            throws ProfessorWithoutUserException {
+        LOGGER.debug("Adding or editing user with id {} as professor", userId);
+        final User user = userDao.findById(userId).orElse(null);
+        if(user == null) {
+            LOGGER.error("Attempted to add a non existent user to professors");
+            throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");
+        }
+
+        Optional<Professor> professor = professorDao.findById(userId);
+
+        if(description == null && !professor.isPresent()) {
+            LOGGER.error("Attempted to create professor with null description");
+            return null;
+        }
+
+        if(description.length() < 50 || description.length() > 300) {
+            LOGGER.error("Attempted to create professor with invalid description of size {}", description.length());
+            return null;
+        }
+        if(picture == null && !professor.isPresent()) {
+            LOGGER.error("Attempted to create professor without profile picture");
+            return null;
+        }
+
+
+        Professor retProfessor;
+        if(!professor.isPresent()) {
+            retProfessor = professorDao.create(user, description, picture);
+        } else {
+            retProfessor = professorDao.modify(professor.get(), description, picture);
+        }
+        if(retProfessor == null) {
+            LOGGER.error("Attempted to add a non existent user to professors");
+            throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");
+        }
+        return retProfessor;
     }
 
     @Transactional
