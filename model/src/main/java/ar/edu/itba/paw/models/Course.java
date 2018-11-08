@@ -1,11 +1,31 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.*;
+import java.util.Objects;
+
+@Entity
+@Table(name = "courses")
+@IdClass(CourseID.class)
 public class Course {
 
-    private final Professor professor;
-    private final Subject subject;
-    private final String description;
-    private final Double price;
+    //TODO: no estoy seguro si el schema refleja que el profesor no deberia ser nullable.
+    @Id
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="user_id")
+    private Professor professor;
+
+    @Id
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="subject_id")
+    private Subject subject;
+
+    @Column(length = 512, nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    private Double price;
+
+    public Course(){}
 
     public Course(Professor professor, Subject subject, String description, Double price) {
         this.professor = professor;
@@ -28,5 +48,22 @@ public class Course {
 
     public Double getPrice() {
         return price;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(professor, course.professor) &&
+                Objects.equals(subject, course.subject) &&
+                Objects.equals(description, course.description) &&
+                Objects.equals(price, course.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(professor, subject, description, price);
     }
 }

@@ -65,6 +65,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    @Transactional
     public Schedule getScheduleForProfessor(final Long professorId) {
 
         LOGGER.debug("Getting schedule for professor with id {}", professorId);

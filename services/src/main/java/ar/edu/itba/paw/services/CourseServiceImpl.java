@@ -164,6 +164,14 @@ public class CourseServiceImpl implements CourseService {
         }
 
         LOGGER.debug("Creating course taught by professor with id {} about subject with id {}", professorId, subjectId);
+
+        final boolean exists = courseDao.findByIds(professorId, subjectId).isPresent();
+
+        if(exists) {
+            LOGGER.error("Course with user_id {} and subject_id {} already exists", professor.getId(), subject.getId());
+            throw new CourseAlreadyExistsException();
+        }
+
         return courseDao.create(professor, subject, description, price);
     }
 }

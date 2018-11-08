@@ -1,13 +1,12 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.persistence.jdbc;
 
-import ar.edu.itba.paw.interfaces.persistence.AreaDao;
 import ar.edu.itba.paw.models.Area;
+import ar.edu.itba.paw.persistence.AreaJdbcDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,7 +23,7 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = JdbcTestConfig.class)
 @Sql("classpath:schema.sql")
 public class AreaJdbcDaoTest {
 
@@ -68,7 +67,7 @@ public class AreaJdbcDaoTest {
 
     @Test
     public void testFindByIdValid() {
-        final Area area = areaDao.findById(ID).orElse(null);
+        final Area area = areaDao.findById(ID);
         assertNotNull(area);
         assertEquals(ID, area.getId());
         assertEquals(NAME, area.getName());
@@ -77,7 +76,7 @@ public class AreaJdbcDaoTest {
 
     @Test
     public void testFindByIdInvalid() {
-        final Area area = areaDao.findById(INVALID_ID).orElse(null);
+        final Area area = areaDao.findById(INVALID_ID);
         assertNull(area);
     }
 

@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository
 public class ConversationJdbcDao implements ConversationDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConversationJdbcDao.class);
@@ -60,7 +59,6 @@ public class ConversationJdbcDao implements ConversationDao {
                         rs.getString(16),
                         rs.getString(17),
                         new Area(
-                                rs.getLong(18),
                                 rs.getString(19),
                                 rs.getString(20),
                                 rs.getBytes(23)
@@ -166,6 +164,11 @@ public class ConversationJdbcDao implements ConversationDao {
                 , CONVERSATION_ROW_MAPPER, user_id, professor_id, subject_id);
 
         return conversations.stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public Conversation merge(Conversation conversation) {
+        return null;
     }
 
     private List<Message> getMessagesByConversationId(final Long conversation_id) {

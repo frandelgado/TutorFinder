@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
 public class ProfessorJdbcDao implements ProfessorDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProfessorJdbcDao.class);
