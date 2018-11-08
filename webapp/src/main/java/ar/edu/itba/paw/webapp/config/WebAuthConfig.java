@@ -44,7 +44,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/login/**", "/register/**", "/forgotPassword/**", "/resetPassword/**").anonymous()
                     .antMatchers("/logout/**", "/sendMessage/**", "/Conversations/**", "/Conversation/**").authenticated()
-                    .antMatchers("/registerAsProfessor/**").hasRole("USER")
+                    .antMatchers("/registerAsProfessor/**").authenticated()
                     .antMatchers("/createCourse/**", "/Profile/**", "/CreateTimeSlot/**").hasRole("PROFESSOR")
                     .anyRequest().permitAll()
                 .and().formLogin()
