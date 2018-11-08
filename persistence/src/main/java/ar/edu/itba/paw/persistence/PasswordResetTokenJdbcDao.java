@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository
 public class PasswordResetTokenJdbcDao implements PasswordResetTokenDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PasswordResetTokenJdbcDao.class);

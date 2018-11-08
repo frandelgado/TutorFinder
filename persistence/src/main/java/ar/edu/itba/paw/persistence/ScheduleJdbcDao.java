@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository
 public class ScheduleJdbcDao implements ScheduleDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleJdbcDao.class);
