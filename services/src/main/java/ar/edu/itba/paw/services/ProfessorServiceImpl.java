@@ -174,32 +174,40 @@ public class ProfessorServiceImpl implements ProfessorService {
 
         Optional<Professor> professor = professorDao.findById(userId);
 
-        if(description == null && !professor.isPresent()) {
-            LOGGER.error("Attempted to create professor with null description");
-            return null;
-        }
+        if(professor.isPresent()){
+            String newDescription =null;
+            if(description.length() > 50 && description.length() < 300){
+                newDescription = description;
+            } else {
+                LOGGER.debug("Attempted to modify {} professor profile with invalid description size {}, " +
+                                "keeping old description",
+                        professor.get().getName(), description.length());
+            }
+            return professorDao.modify(professor.get(), newDescription, picture);
 
-        if(description.length() < 50 || description.length() > 300) {
-            LOGGER.error("Attempted to create professor with invalid description of size {}", description.length());
-            return null;
-        }
-        if(picture == null && !professor.isPresent()) {
-            LOGGER.error("Attempted to create professor without profile picture");
-            return null;
-        }
-
-
-        Professor retProfessor;
-        if(!professor.isPresent()) {
-            retProfessor = professorDao.create(user, description, picture);
         } else {
-            retProfessor = professorDao.modify(professor.get(), description, picture);
+            if(description == null) {
+                LOGGER.error("Attempted to create professor with null description");
+                return null;
+            }
+
+            if(description.length() < 50 || description.length() > 300) {
+                LOGGER.error("Attempted to create professor with invalid description of size {}", description.length());
+                return null;
+            }
+            if(picture == null) {
+                LOGGER.error("Attempted to create professor without profile picture");
+                return null;
+            }
+
+            final Professor newProfessor = professorDao.create(user, description, picture);
+            if(newProfessor == null) {
+                LOGGER.error("Attempted to add a non existent user to professors");
+                throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");
+            }
+            return newProfessor;
         }
-        if(retProfessor == null) {
-            LOGGER.error("Attempted to add a non existent user to professors");
-            throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");
-        }
-        return retProfessor;
+
     }
 
     @Transactional
