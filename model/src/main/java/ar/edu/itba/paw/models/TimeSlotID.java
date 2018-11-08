@@ -1,8 +1,9 @@
 package ar.edu.itba.paw.models;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class TimeSlotID {
+public class TimeSlotID implements Serializable {
 
     protected Integer day;
     protected Integer hour;
