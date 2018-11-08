@@ -87,7 +87,23 @@ public class UserServiceImpl implements UserService {
 
         LOGGER.debug("Creating user with username {}", username);
 
-        User user = userDao.create(username, encoder.encode(password), email, name, lastName);
+        final boolean existsEmail = findByEmail(email) != null;
+        final boolean existsUsername = findByEmail(email) != null;
+
+        if(existsUsername) {
+            if (existsEmail) {
+                LOGGER.error("User with username {} and email {} already exists", username, email);
+                throw new UsernameAndEmailAlreadyInUseException();
+            }
+            LOGGER.error("User with username {} already exists", username);
+            throw new UsernameAlreadyInUseException();
+        }
+        if(existsEmail) {
+            LOGGER.error("User with email {} already exists", email);
+            throw new EmailAlreadyInUseException();
+        }
+
+        final User user = userDao.create(username, encoder.encode(password), email, name, lastName);
 
         if (user != null){
             LOGGER.debug("Sending welcome mail for user with id {}", user.getId());
