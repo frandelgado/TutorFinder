@@ -9,7 +9,10 @@ import java.util.Objects;
 public class ClassRequest {
 
     @Id
-    private Integer classRequestId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_requests_id_seq")
+    @SequenceGenerator(sequenceName = "course_requests_id_seq", name = "course_requests_id_seq",  allocationSize = 1)
+    @Column(name = "id")
+    private Long classRequestId;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @Column(name = "student_id")
@@ -32,7 +35,7 @@ public class ClassRequest {
     @Column(name = "status")
     private Integer status;
 
-    ClassRequest(){};
+    ClassRequest(){}
 
     public ClassRequest(User student, Professor professor, Integer day, Integer startHour,
                         Integer endHour, Integer status) {
