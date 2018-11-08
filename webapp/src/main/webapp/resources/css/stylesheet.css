@@ -1192,3 +1192,55 @@ th, td {
         grid-template-areas: "navbar " "....." "content" "......";
     }
 }
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-input {
+    min-width: 75px;
+    padding-left: 5px;
+    max-width: 75px;
+    height: 30px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.m-w-80 {
+    max-width: 80px;
+}
+
+.m-l-5 {
+    margin-left: 5px;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.m-r-5 {
+    margin-right: 5px;
+}
+
+.select2-selection--multiple {
+    overflow: auto;
+    max-height: 25px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.edit {
+    color: #F47C48;
+}
+
+.r-center {
+    justify-content: center;
+}
+
+.fit-content {
+    width: fit-content;
+}

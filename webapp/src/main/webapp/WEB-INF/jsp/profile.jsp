@@ -58,7 +58,14 @@
         <div class="schedule">
             <h2><spring:message code="schedule.title"/></h2>
             <p><spring:message code="schedule.description" /></p>
-            <%@ include file="schedule.jsp"%>
+            <c:choose>
+                <c:when test="${schedule.monday.isEmpty() && schedule.tuesday.isEmpty() && schedule.wednesday.isEmpty() && schedule.thursday.isEmpty() && schedule.friday.isEmpty() && schedule.saturday.isEmpty() && schedule.sunday.isEmpty()}">
+                    <h4><spring:message code="schedule.empty"/></h4>
+                </c:when>
+                <c:otherwise>
+                    <%@ include file="schedule.jsp"%>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 
