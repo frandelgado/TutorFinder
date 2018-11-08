@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -27,6 +28,9 @@ public class User {
 
     @Column(length = 512, unique = true, nullable = false)
     private String email;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
+    private List<ClassRequest> classRequests;
 
     User(){}
 

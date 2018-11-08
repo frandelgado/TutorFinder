@@ -76,3 +76,15 @@ token CHAR(36) NOT NULL,
 expires TIMESTAMP NOT NULL,
 FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS course_requests (
+id BIGSERIAL PRIMARY KEY,
+student_id BIGINT NOT NULL,
+professor_id BIGINT NOT NULL,
+day INT NOT NULL,
+start_hour INT NOT NULL,
+end_hour INT NOT NULL,
+status INT NOT NULL,
+FOREIGN KEY(student_id) REFERENCES users(user_id) ON DELETE CASCADE,
+FOREIGN KEY(professor_id) REFERENCES professors(user_id) ON DELETE CASCADE
+);
