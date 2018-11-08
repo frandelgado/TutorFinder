@@ -71,7 +71,7 @@ public class FilterBuilder {
         }
 
         if(endHour != null){
-            sb.append("schedules.hour < ");
+            sb.append("t.hour < ");
             sb.append(endHour.toString());
         }
 
@@ -92,7 +92,7 @@ public class FilterBuilder {
         }
 
         if(maxPrice != null){
-            sb.append("AND courses.price <= ");
+            sb.append("AND c.price <= ");
             sb.append(maxPrice.toString());
             sb.append(" ");
         }
