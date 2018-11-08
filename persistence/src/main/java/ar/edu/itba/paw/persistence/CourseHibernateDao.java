@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Repository
 public class CourseHibernateDao implements CourseDao {
@@ -49,13 +50,27 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public List<Course> filter(Filter filter, int limit, int offset) {
-        return new LinkedList<>();
+        TypedQuery<Course> query = em.createQuery(filter.getQuery(), Course.class);
+        List<Object> params = filter.getQueryParams();
+        IntStream.range(0, params.size())
+                .forEach(i-> query.setParameter(i+1, params.get(i)));
+
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+
+        return query.getResultList();
     }
 
     @Override
     public Course create(Professor professor, Subject subject, String description, Double price) throws CourseAlreadyExistsException {
-        final Course course = new Course(professor, subject, description, price);
-        em.persist(course);
-        return course;
+        try {
+            final Course course = new Course(professor, subject, description, price);
+            em.persist(course);
+            return course;
+        }
+        //TODO specify exception
+        catch (Exception e) {
+            throw new CourseAlreadyExistsException();
+        }
     }
 }

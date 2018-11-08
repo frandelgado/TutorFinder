@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "schedules")
 @IdClass(TimeSlotID.class)
 public class Timeslot {
-    
+
     @Id
     @Column(nullable = false)
     private Integer day;
