@@ -55,9 +55,8 @@ textarea {
     resize: none;
 }
 
-
-.navbar, .search-result, .dropdown-area, .contact-button, .class {
-    box-shadow: 0 15px 35px -15px grey;
+.navbar, .search-result, .dropdown-area, .contact-button, .class, .dropdown-content {
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
 .class, .search-course-result, .add-time>div {
@@ -73,7 +72,8 @@ textarea {
     grid-template-areas: "logo-box search-bar navbar-buttons";
     grid-template-rows: 65px;
     grid-template-columns: 300px 1fr 300px;
-    padding: 0 20px;
+    padding: 10px;
+    align-content: center;
 }
 
 .staticHome .navbar {
@@ -82,9 +82,9 @@ textarea {
 
 .logo-box {
     grid-area: logo-box;
-    align-self: center;
-    height: 45px;
-    width: 45px;
+    height: 65px;
+    width: 75px;
+    padding-left: 20px;
 }
 
 .logo {
@@ -95,6 +95,7 @@ textarea {
 body {
     margin: 0;
     display: grid;
+    width: 100%;
     grid-template-columns: 25fr 50fr 25fr;
     grid-template-rows: 65px 25px auto 100px;
     grid-template-areas: "navbar  navbar  navbar"
@@ -228,7 +229,7 @@ body {
     width: 100px;
 }
 
-.dropdown {
+.search-dropdown {
     padding: 1px;
     margin-left: 0;
     padding-left: 0px;
@@ -245,27 +246,82 @@ body {
     margin-left: 5px;
 }
 
-.navbar .dropdown {
+.navbar .search-dropdown {
     width: fit-content;
     height: 30px;
     align-self: center;
 }
 
+/*Generic dropdown*/
+
+
+.dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.dropdown {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
 .dropdown-button {
     position: relative;
     height: 100%;
+    max-width: 50px;
 }
 
-.dropdown .dropdown-button:hover {
+.dropdown-button:after{
+    content: '';
+    border: 4px solid transparent;
+    border-top: 4px solid white;
+    margin-left: 2px;
+    margin-bottom: 3px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 65px;
+    right: 32px;
+    left: auto;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/*.dropdown:hover .dropdown-content {
+    display: block;
+}*/
+
+/*End generic dropdown*/
+
+.search-dropdown .dropdown-button:hover {
     background-color: rgb(247, 92, 36);
 }
 
-.dropdown .dropdown-area {
+.search-dropdown .dropdown-area {
     display: none;
     position: absolute;
 }
 
-.dropdown:hover .dropdown-area {
+.search-dropdown:hover .dropdown-area {
     display: grid;
     background-color: #F47C48;
 }
@@ -1084,14 +1140,10 @@ th, td {
         grid-template-columns: 70px auto 70px;
     }
 
-    .navbar-buttons .navbar-button {
-        display: none;
+    .navbar-buttons.responsive {
+        position: relative;
     }
-    .navbar-buttons a .icon {
-        float: right;
-        display: block;
-    }
-    .navbar-buttons.responsive {position: relative;}
+
     .navbar-buttons.responsive .icon {
         position: absolute;
         right: 0;
@@ -1132,24 +1184,29 @@ th, td {
     table, td, th {
         font-size: 15px;
     }
+
     th, td {
         padding: 2px;
     }
+
     .staticProfile {
         grid-template-areas: "navbar" "......" "content";
         grid-template-columns: 100fr;
 
     }
+
     .staticProfile .content {
         padding: 10px;
         grid-template-columns: 100fr;
         grid-template-rows: 150px auto auto;
         grid-template-areas: "description" "class-content" "time-content";
     }
+
     .classes {
         max-width: 550px;
     }
-    .profile-profesor{
+
+    .profile-profesor {
         max-width: 550px;
     }
 
@@ -1163,34 +1220,37 @@ th, td {
         margin: 0;
         margin-top: 25px;
     }
+
     .responsiveRow {
         display: flex;
         align-items: center;
         width: 100%;
         justify-content: space-around;
     }
-    .responsiveDelete{
+
+    .responsiveDelete {
         display: none;
     }
-    .rm-10-b {
-        margin: 0;
-    }
-    .r-filter-title{
-        width: 180px;
-    }
-    .input-request-filter {
-        width:100px;
-    }
-    .search-results {
-        width: 550px;
-    }
-    .conversation-messages {
-        max-height: 200px;
-    }
-    .conversations {
-        grid-template-columns: 100fr;
-        grid-template-areas: "navbar " "....." "content" "......";
-    }
+}
+
+.rm-10-b {
+    margin: 0;
+}
+.r-filter-title{
+    width: 180px;
+}
+.input-request-filter {
+    width:100px;
+}
+.search-results {
+    width: 550px;
+}
+.conversation-messages {
+    max-height: 200px;
+}
+.conversations {
+    grid-template-columns: 100fr;
+    grid-template-areas: "navbar " "....." "content" "......";
 }
 
 .column {
@@ -1243,4 +1303,20 @@ th, td {
 
 .fit-content {
     width: fit-content;
+}
+.register-form {
+    grid-template-columns: auto 312px auto;
+}
+.class-content {
+    grid-template-rows: auto auto auto;
+}
+
+.navbar-button {
+    padding: 0;
+}
+.navbar-buttons {
+    display: block;
+}
+.dropdown-button{
+    padding: 20px;
 }

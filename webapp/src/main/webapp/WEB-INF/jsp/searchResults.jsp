@@ -13,6 +13,7 @@
     <link href="<c:url value="/resources/css/select2.min.css" />" rel="stylesheet" />
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/select2.min.js" />"></script>
+    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
     <script src="<c:url value="/resources/js/searchForm.js" />"></script>
 
     <title>Tu Teoria | <spring:message code="search.results" /> </title>
@@ -29,7 +30,7 @@
     <div class="search-bar">
         <spring:message code="search" var="searchPlaceholder"/>
         <form:input class="search-input" type="search" path="search" name="search" placeholder="${searchPlaceholder}"/>
-        <div class="dropdown">
+        <div class="search-dropdown">
             <form:select class="select-search-type" path="type" name="type">
                 <form:option value="" selected="true" disabled="true"><spring:message code="search.category" /> </form:option>
                 <form:option value="professor"><spring:message code="professor" /> </form:option>
@@ -45,16 +46,22 @@
     <div class="navbar-buttons">
         <c:choose>
             <c:when test="${currentUser != null}">
-                <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
-                <c:choose>
-                    <c:when test="${currentUserIsProfessor == true}">
-                        <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="<c:url value="/registerAsProfessor" />" class="navbar-button"><spring:message code="register.professor"/></a>
-                    </c:otherwise>
-                </c:choose>
-                <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
+                <div class="navbar-button dropdown" id="dropdown">
+                    <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
+                    <div class="dropdown-content" id="dropdown-content">
+                        <c:choose>
+                            <c:when test="${currentUserIsProfessor == true}">
+                                <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
+                                <!--<a>Modificar</a>-->
+                            </c:when>
+                            <c:otherwise>
+                                <a href="<c:url value="/registerAsProfessor" />" class="navbar-button"><spring:message code="register.professor"/></a>
+                            </c:otherwise>
+                        </c:choose>
+                        <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
+                        <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
+                    </div>
+                </div>
             </c:when>
             <c:otherwise>
                 <a href="<c:url value="/register" />" class="navbar-button"><spring:message code="register"/></a>
