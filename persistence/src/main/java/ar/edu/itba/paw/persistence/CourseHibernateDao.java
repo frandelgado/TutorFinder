@@ -30,7 +30,7 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public List<Course> findByProfessorId(long professor_id, int limit, int offset) {
-        final TypedQuery<Course> query = em.createQuery("from Course as c where c.professor.id = :id" +
+        final TypedQuery<Course> query = em.createQuery("from Course as c where c.professor.id = :id " +
                 "order by c.professor.id, c.subject.id", Course.class);
         query.setParameter("id", professor_id);
         query.setFirstResult(offset);
@@ -40,7 +40,7 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public List<Course> filterByAreaId(long areaId, int limit, int offset) {
-        final TypedQuery<Course> query = em.createQuery("from Course as c where c.subject.area.id = :id" +
+        final TypedQuery<Course> query = em.createQuery("from Course as c where c.subject.area.id = :id " +
                 "order by c.professor.id, c.subject.id", Course.class);
         query.setParameter("id", areaId);
         query.setFirstResult(offset);
