@@ -125,4 +125,9 @@ public class CourseJdbcDao implements CourseDao {
         }
         return new Course(professor, subject, description, price);
     }
+
+    @Override
+    public Comment create(User sender, String text, Course course) {
+        return null;
+    }
 }

@@ -19,4 +19,6 @@ public interface CourseService {
             throws CourseAlreadyExistsException, NonexistentProfessorException, NonexistentSubjectException;
 
     PagedResults<Course> filterCourses(final List<Integer> days, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page);
+
+    boolean comment(final Long userId, final Long professorId, final Long subjectId, final String body, final int rating);
 }
