@@ -45,9 +45,13 @@ public class CourseController extends BaseController{
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private ClassReservationService classReservationService;
+
     @RequestMapping("/Course")
     public ModelAndView course(
-            @ModelAttribute("messageForm") final MessageForm form,
+            @ModelAttribute("messageForm") final MessageForm messageForm,
+            @ModelAttribute("classReservationForm") final ClassReservationForm classReservationForm,
             @RequestParam(value="professor", required=true) final Long professorId,
             @RequestParam(value="subject", required=true) final Long subjectId,
             @ModelAttribute(value = "SUCCESS_MESSAGE") final String success_message,
@@ -63,8 +67,8 @@ public class CourseController extends BaseController{
 
         final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
         mav.addObject("schedule", schedule);
-        form.setProfessorId(professorId);
-        form.setSubjectId(subjectId);
+        messageForm.setProfessorId(professorId);
+        messageForm.setSubjectId(subjectId);
         return mav;
     }
 
@@ -75,7 +79,7 @@ public class CourseController extends BaseController{
             @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException, NonexistentConversationException {
 
         if(errors.hasErrors()) {
-            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form, new ClassReservationForm(), form.getProfessorId(), form.getSubjectId(), null, null);
         }
 
         final boolean sent;
@@ -85,16 +89,16 @@ public class CourseController extends BaseController{
         } catch (SameUserConversationException e) {
             errors.rejectValue("body", "SameUserMessageError");
             form.setBody(null);
-            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form, new ClassReservationForm(), form.getProfessorId(), form.getSubjectId(), null, null);
         }
         if(sent) {
             errors.rejectValue("extraMessage", "MessageSent");
             form.setBody(null);
-            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form, new ClassReservationForm(),form.getProfessorId(), form.getSubjectId(), null, null);
         } else {
             errors.rejectValue("body", "SendMessageError");
         }
-        return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+        return course(form, new ClassReservationForm(),form.getProfessorId(), form.getSubjectId(), null, null);
     }
 
 
@@ -133,6 +137,21 @@ public class CourseController extends BaseController{
         LOGGER.debug("Posting request for course creation for professor with id {} in subject with id {}", user.getId(), form.getSubjectId());
         return redirectWithNoExposedModalAttributes("/Course/?professor=" + course.getProfessor().getId()
                 + "&subject=" + course.getSubject().getId());
+    }
+
+    @RequestMapping(value = "/reserveClass", method = RequestMethod.POST)
+    public ModelAndView reserveClass(@ModelAttribute("currentUser") final User user,
+                                     @Valid @ModelAttribute("classReservationForm")
+                                     final ClassReservationForm form,
+                                     final BindingResult errors) {
+        if(errors.hasErrors()) {
+            return course(new MessageForm(), form, form.getProfessorId(), form.getSubjectId(), null, null);
+        }
+
+        ClassReservation reservation = classReservationService.reserve(form.getDay(), form.getStartHour(),
+                form.getEndHour(), form.getProfessorId(), form.getStudentId());
+
+        return course(new MessageForm(), form, form.getProfessorId(), form.getSubjectId(), null, null);
     }
 
 }
