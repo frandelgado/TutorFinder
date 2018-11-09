@@ -1,7 +1,6 @@
-package ar.edu.itba.paw.persistence.jdbc;
+package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Area;
-import ar.edu.itba.paw.persistence.AreaJdbcDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -23,9 +24,10 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JdbcTestConfig.class)
+@ContextConfiguration(classes = HibernateTestConfig.class)
 @Sql("classpath:schema.sql")
-public class AreaJdbcDaoTest {
+@Transactional
+public class AreaHibernateDaoTest {
 
     private static final String NAME = "matematica";
     private static final String DESCRIPTION = "este area es dificil";
@@ -40,7 +42,7 @@ public class AreaJdbcDaoTest {
     private DataSource ds;
 
     @Autowired
-    private AreaJdbcDao areaDao;
+    private AreaHibernateDao areaDao;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -49,9 +51,13 @@ public class AreaJdbcDaoTest {
         jdbcTemplate = new JdbcTemplate(ds);
     }
 
+    public void cleanDatabase() {
+        jdbcTemplate.execute("TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
+    }
+
     @Test
     public void testCreate() {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
+        cleanDatabase();
         final Area area = areaDao.create(NAME, DESCRIPTION, TEST_IMAGE);
         assertNotNull(area);
         assertEquals(NAME, area.getName());
@@ -59,7 +65,7 @@ public class AreaJdbcDaoTest {
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "areas"));
     }
 
-    @Test(expected = DuplicateKeyException.class)
+    @Test(expected = PersistenceException.class)
     public void testCreateInvalid() {
         final Area area = areaDao.create(NAME, DESCRIPTION, TEST_IMAGE);
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "areas"));
@@ -101,8 +107,7 @@ public class AreaJdbcDaoTest {
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
+        cleanDatabase();
     }
 
 }

@@ -1,7 +1,6 @@
-package ar.edu.itba.paw.persistence.jdbc;
+package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Subject;
-import ar.edu.itba.paw.persistence.SubjectJdbcDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +11,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -21,9 +23,10 @@ import static junit.framework.TestCase.*;
 import static org.junit.Assert.assertNotEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JdbcTestConfig.class)
+@ContextConfiguration(classes = HibernateTestConfig.class)
 @Sql("classpath:schema.sql")
-public class SubjectJdbcDaoTest {
+@Transactional
+public class SubjectHibernateDaoTest {
 
     private static final String NAME = "Algebra";
     private static final String DESCRIPTION = "Complicado";
@@ -37,8 +40,11 @@ public class SubjectJdbcDaoTest {
     @Autowired
     private DataSource ds;
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
-    private SubjectJdbcDao subjectDao;
+    private SubjectHibernateDao subjectDao;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -47,8 +53,15 @@ public class SubjectJdbcDaoTest {
         jdbcTemplate = new JdbcTemplate(ds);
     }
 
+    public void cleanDatabase() {
+        jdbcTemplate.execute("TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
+    }
+
     @Test
     public void testCreate() {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "messages");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "conversations");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "courses");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "subjects");
         final Subject subject = subjectDao.create(NAME, DESCRIPTION, AREA_ID);
         assertNotNull(subject);
@@ -114,7 +127,6 @@ public class SubjectJdbcDaoTest {
     
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
+        cleanDatabase();
     }
 }
