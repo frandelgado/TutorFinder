@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProfessorServiceImpl implements ProfessorService {
 
     private static final int PAGE_SIZE = 3;

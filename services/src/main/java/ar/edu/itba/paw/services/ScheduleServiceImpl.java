@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ScheduleServiceImpl implements ScheduleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleServiceImpl.class);

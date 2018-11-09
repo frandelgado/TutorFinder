@@ -20,6 +20,7 @@ import java.util.List;
 
 
 @Service
+@Transactional
 public class ConversationServiceImpl implements ConversationService {
 
     private static final int PAGE_SIZE = 3;
