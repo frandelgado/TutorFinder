@@ -58,7 +58,7 @@ public class SearchController extends BaseController{
                 break;
             case "course":
                 final PagedResults<Course> coursePagedResults = cs.filterCourses(
-                        null, form.getStartHour(), form.getEndHour(),
+                        form.getDays(), form.getStartHour(), form.getEndHour(),
                         form.getMinPrice(), form.getMaxPrice(), form.getSearch(), page);
 
                 if(coursePagedResults == null) {
