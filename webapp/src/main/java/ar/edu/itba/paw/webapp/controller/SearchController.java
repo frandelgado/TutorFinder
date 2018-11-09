@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class SearchController extends BaseController{
@@ -56,7 +57,7 @@ public class SearchController extends BaseController{
                 break;
             case "course":
                 final PagedResults<Course> coursePagedResults = cs.filterCourses(
-                        form.getDay(), form.getStartHour(), form.getEndHour(),
+                        null, form.getStartHour(), form.getEndHour(),
                         form.getMinPrice(), form.getMaxPrice(), form.getSearch(), page);
 
                 if(coursePagedResults == null) {
@@ -97,11 +98,17 @@ public class SearchController extends BaseController{
         } else {
             if(form.getType().equals("course")){
                 redirectAttributes
-                        .addAttribute("day", form.getDay())
+                       // .addAttribute("day", form.getDays().get(0))
                         .addAttribute("startHour", form.getStartHour())
                         .addAttribute("endHour", form.getEndHour())
                         .addAttribute("minPrice", form.getMinPrice())
                         .addAttribute("maxPrice", form.getMaxPrice());
+
+                if(form.getDays() != null) {
+                    for (Integer day : form.getDays()) {
+                        redirectAttributes.addAttribute("days", day);
+                    }
+                }
             }
             redirectAttributes
                     .addAttribute("search", form.getSearch())
@@ -110,7 +117,5 @@ public class SearchController extends BaseController{
         }
         RedirectView redirect = new RedirectView("/searchResults", true);
         return new ModelAndView(redirect);
-
     }
-
 }

@@ -79,13 +79,12 @@
 
 <div class="content">
     <div class="filter-panel">
-
         <h2 class="text-center-responsive"><spring:message code="filter" /> </h2>
         <div class="responsiveColumn">
             <div class="responsiveRow">
                 <h3><spring:message code="search.dayHeader"/></h3>
                 <div>
-                    <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input m-w-200" path="day" multiple="multiple">
+                    <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input m-w-200" path="days" multiple="multiple">
                         <form:option value="1"><spring:message code ="day.monday"/></form:option>
                         <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
                         <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
@@ -94,7 +93,7 @@
                         <form:option value="6"><spring:message code ="day.saturday"/></form:option>
                         <form:option value="7"><spring:message code ="day.sunday"/></form:option>
                     </form:select>
-                    <form:errors cssClass="error-text" path="day" element="p"/>
+                    <form:errors cssClass="error-text" path="days" element="p"/>
                 </div>
             </div>
             <div class="responsiveRow">
