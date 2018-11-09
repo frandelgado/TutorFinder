@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -98,17 +99,13 @@ public class SearchController extends BaseController{
         } else {
             if(form.getType().equals("course")){
                 redirectAttributes
-                       // .addAttribute("day", form.getDays().get(0))
                         .addAttribute("startHour", form.getStartHour())
                         .addAttribute("endHour", form.getEndHour())
                         .addAttribute("minPrice", form.getMinPrice())
                         .addAttribute("maxPrice", form.getMaxPrice());
 
-                if(form.getDays() != null) {
-                    for (Integer day : form.getDays()) {
-                        redirectAttributes.addAttribute("days", day);
-                    }
-                }
+                ((HashMap<String, Object>) redirectAttributes).putIfAbsent("days",
+                        form.getDays());
             }
             redirectAttributes
                     .addAttribute("search", form.getSearch())

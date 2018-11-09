@@ -123,7 +123,11 @@ public class FilterBuilder {
 
     public Filter getFilter(){
         if(TIME_FILTERS == null){
-            return new Filter(SELECT+FROM+WHERE, params);
+            if(this.WHERE == null) {
+                return new Filter(SELECT + FROM, params);
+            } else {
+                return new Filter(SELECT + FROM + WHERE, params);
+            }
         } else {
             if(this.WHERE == null){
                 return new Filter(SELECT+FROM+ " where ( " + TIME_FILTERS + " ) ", params);
