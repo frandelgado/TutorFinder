@@ -1,13 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
-import ar.edu.itba.paw.interfaces.service.ConversationService;
-import ar.edu.itba.paw.interfaces.service.CourseService;
-import ar.edu.itba.paw.interfaces.service.ScheduleService;
-import ar.edu.itba.paw.interfaces.service.SubjectService;
+import ar.edu.itba.paw.interfaces.service.*;
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.slf4j.Logger;

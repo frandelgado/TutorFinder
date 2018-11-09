@@ -85,6 +85,7 @@ day INT NOT NULL,
 start_hour INT NOT NULL,
 end_hour INT NOT NULL,
 status INT NOT NULL,
+comment VARCHAR(200),
 FOREIGN KEY(student_id) REFERENCES users(user_id) ON DELETE CASCADE,
 FOREIGN KEY(professor_id) REFERENCES professors(user_id) ON DELETE CASCADE
 );
