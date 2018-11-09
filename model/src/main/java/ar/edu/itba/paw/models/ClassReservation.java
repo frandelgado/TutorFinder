@@ -1,12 +1,11 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "course_requests")
-public class ClassRequest {
+public class ClassReservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_requests_id_seq")
@@ -15,30 +14,30 @@ public class ClassRequest {
     private Long classRequestId;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @Column(name = "student_id")
     private User student;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @Column(name = "professor_id")
     private Professor professor;
 
-    @Column(name = "day")
+    @Column(name = "day", nullable = false)
     private Integer day;
 
-    @Column(name = "start_hour")
+    @Column(name = "start_hour", nullable = false)
     private Integer startHour;
 
-    @Column(name = "end_hour")
+    @Column(name = "end_hour", nullable = false)
     private Integer endHour;
 
     //Status is 0 if approved, 1 if denied, 2 if yet undefined;
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private Integer status;
 
-    ClassRequest(){}
+    private String comment;
 
-    public ClassRequest(User student, Professor professor, Integer day, Integer startHour,
-                        Integer endHour, Integer status) {
+    ClassReservation(){}
+
+    public ClassReservation(User student, Professor professor, Integer day, Integer startHour,
+                            Integer endHour, Integer status) {
         this.student = student;
         this.professor = professor;
         this.day = day;
@@ -47,12 +46,14 @@ public class ClassRequest {
         this.status = status;
     }
 
-    public ClassRequest confirm() {
+    public ClassReservation confirm(String comment) {
+        this.comment = comment;
         this.status = 0;
         return this;
     }
 
-    public ClassRequest deny() {
+    public ClassReservation deny(String comment) {
+        this.comment = comment;
         this.status = 2;
         return this;
     }
@@ -61,7 +62,7 @@ public class ClassRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassRequest that = (ClassRequest) o;
+        ClassReservation that = (ClassReservation) o;
         return Objects.equals(classRequestId, that.classRequestId) &&
                 Objects.equals(student, that.student) &&
                 Objects.equals(professor, that.professor) &&
