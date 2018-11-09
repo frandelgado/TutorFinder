@@ -29,12 +29,14 @@ public class ProfessorServiceImpl implements ProfessorService {
     private UserDao userDao;
 
     @Override
+    @Transactional
     public Professor findById(final Long id) {
         LOGGER.debug("Searching for professor with id {}", id);
         return professorDao.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional
     public Professor findByUsername(final String username) {
         if(username == null || username.isEmpty()) {
             LOGGER.error("Attempted to find professor with empty username");
@@ -45,6 +47,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
+    @Transactional
     public PagedResults<Professor> filterByFullName(final String fullName, final int page) {
         if(page <= 0) {
             LOGGER.error("Attempted to find 0 or negative page number");
@@ -73,6 +76,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
+    @Transactional
     public Professor create(final Long userId, final String description, final byte[] picture)
             throws ProfessorWithoutUserException {
         LOGGER.debug("Adding user with id {} as professor", userId);
