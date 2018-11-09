@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class PasswordResetTokenHibernateDao implements PasswordResetTokenDao {
     @Override
     public PasswordResetToken findByToken(String token) {
         final TypedQuery<PasswordResetToken> query = em.createQuery("from PasswordResetToken as t " +
-                "where t.token = :token", PasswordResetToken.class);
+                "where t.token = :token and t.expireDate >= NOW()", PasswordResetToken.class);
         query.setParameter("token", token);
         final List<PasswordResetToken> tokens = query.getResultList();
         return tokens.isEmpty()? null : tokens.get(0);
@@ -31,6 +32,11 @@ public class PasswordResetTokenHibernateDao implements PasswordResetTokenDao {
         final User user = em.getReference(User.class, userId);
         final PasswordResetToken passwordResetToken = new PasswordResetToken(user, token, expires);
         em.persist(passwordResetToken);
+        try {
+            em.flush();
+        } catch (PersistenceException e) {
+            return null;
+        }
         return passwordResetToken;
     }
 
