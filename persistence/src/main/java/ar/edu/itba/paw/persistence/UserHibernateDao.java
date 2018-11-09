@@ -49,6 +49,8 @@ public class UserHibernateDao implements UserDao {
 
     @Override
     public boolean changePasswordById(Long userId, String newPassword) {
-        return false;
+        final User user = em.find(User.class, userId);
+        user.setPassword(newPassword);
+        return em.merge(user) != null;
     }
 }
