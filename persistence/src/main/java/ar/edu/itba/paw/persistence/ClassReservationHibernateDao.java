@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
+import org.joda.time.LocalDateTime;
 
 @Repository
 public class ClassReservationHibernateDao implements ClassReservationDao {
@@ -18,8 +18,8 @@ public class ClassReservationHibernateDao implements ClassReservationDao {
     private EntityManager em;
 
     @Override
-    public ClassReservation reserve(int day, int startHour, int endHour, Professor professor, User student) {
-        ClassReservation classReservation = new ClassReservation(student, professor, day, startHour, endHour, 2);
+    public ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour, Professor professor, User student) {
+        ClassReservation classReservation = new ClassReservation(student, professor, startHour, endHour, 2);
         em.persist(classReservation);
         return classReservation;
     }

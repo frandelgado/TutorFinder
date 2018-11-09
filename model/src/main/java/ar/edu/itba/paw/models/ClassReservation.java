@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.joda.time.LocalDateTime;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -19,14 +21,14 @@ public class ClassReservation {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Professor professor;
 
-    @Column(name = "day", nullable = false)
-    private Integer day;
 
-    @Column(name = "start_hour", nullable = false)
-    private Integer startHour;
+    @Column(nullable = false)
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime startTime;
 
-    @Column(name = "end_hour", nullable = false)
-    private Integer endHour;
+    @Column(nullable = false)
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime endTime;
 
     //Status is 0 if approved, 1 if denied, 2 if yet undefined;
     @Column(name = "status", nullable = false)
@@ -36,14 +38,14 @@ public class ClassReservation {
 
     ClassReservation(){}
 
-    public ClassReservation(User student, Professor professor, Integer day, Integer startHour,
-                            Integer endHour, Integer status) {
-        this.student = student;
-        this.professor = professor;
-        this.day = day;
-        this.startHour = startHour;
-        this.endHour = endHour;
-        this.status = status;
+    public ClassReservation(User student, Professor professor, LocalDateTime startTime,
+                            LocalDateTime endTime, Integer status) {
+
+        this.student    = student;
+        this.professor  = professor;
+        this.endTime    = endTime;
+        this.startTime  = startTime;
+        this.status     = status;
     }
 
     public ClassReservation confirm(String comment) {
@@ -66,15 +68,14 @@ public class ClassReservation {
         return Objects.equals(classRequestId, that.classRequestId) &&
                 Objects.equals(student, that.student) &&
                 Objects.equals(professor, that.professor) &&
-                Objects.equals(day, that.day) &&
-                Objects.equals(startHour, that.startHour) &&
-                Objects.equals(endHour, that.endHour) &&
-                Objects.equals(status, that.status);
+                Objects.equals(startTime, that.startTime) &&
+                Objects.equals(endTime, that.endTime) &&
+                Objects.equals(status, that.status) &&
+                Objects.equals(comment, that.comment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(classRequestId, student, professor, day, startHour, endHour, status);
+        return Objects.hash(classRequestId, student, professor, startTime, endTime, status, comment);
     }
-
 }

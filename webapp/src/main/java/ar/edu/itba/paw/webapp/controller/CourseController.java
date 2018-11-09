@@ -148,8 +148,12 @@ public class CourseController extends BaseController{
             return course(new MessageForm(), form, form.getProfessorId(), form.getSubjectId(), null, null);
         }
 
-        ClassReservation reservation = classReservationService.reserve(form.getDay(), form.getStartHour(),
-                form.getEndHour(), form.getProfessorId(), form.getStudentId());
+        ClassReservation reservation = classReservationService.reserve(form.getStartTime(), form.getEndTime(),
+                form.getProfessorId(), form.getStudentId());
+
+        if(reservation != null){
+            //TODO: handle error
+        }
 
         return course(new MessageForm(), form, form.getProfessorId(), form.getSubjectId(), null, null);
     }

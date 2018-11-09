@@ -9,8 +9,10 @@ import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.joda.time.LocalDateTime;
 
 @Service
 public class ClassReservationServiceImpl implements ClassReservationService {
@@ -26,15 +28,14 @@ public class ClassReservationServiceImpl implements ClassReservationService {
 
     @Override
     @Transactional
-    public ClassReservation reserve(int day, int startHour, int endHour, Long professorId, Long studentId) {
+    public ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour, Long professorId, Long studentId) {
         Professor professor = ps.findById(professorId);
         User student = us.findUserById(studentId);
 
         if(professor == null || student == null) {
              return null;
         }
-
-        return crd.reserve(day, startHour, endHour, professor, student);
+        return crd.reserve(startHour, endHour, professor, student);
     }
 
     @Override

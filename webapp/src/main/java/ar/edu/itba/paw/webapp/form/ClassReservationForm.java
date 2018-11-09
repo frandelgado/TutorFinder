@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.webapp.form;
 
+import org.joda.time.LocalDateTime;
+
+import javax.validation.constraints.Future;
+
 public class ClassReservationForm {
 
     private Long subjectId;
@@ -8,34 +12,20 @@ public class ClassReservationForm {
 
     private Long studentId;
 
-    private Integer day;
+    @Future
+    private LocalDateTime startTime;
 
-    private Integer startHour;
+    @Future
+    private LocalDateTime endTime;
 
-    private Integer endHour;
+    public boolean validForm() {
+        if(startTime == null || endTime == null)
+            return false;
 
-    public Integer getDay() {
-        return day;
-    }
-
-    public void setDay(Integer day) {
-        this.day = day;
-    }
-
-    public Integer getStartHour() {
-        return startHour;
-    }
-
-    public void setStartHour(Integer startHour) {
-        this.startHour = startHour;
-    }
-
-    public Integer getEndHour() {
-        return endHour;
-    }
-
-    public void setEndHour(Integer endHour) {
-        this.endHour = endHour;
+        if (startTime.compareTo(endTime) > 0){
+            return false;
+        }
+        return true;
     }
 
     public Long getSubjectId() {
@@ -60,5 +50,21 @@ public class ClassReservationForm {
 
     public void setStudentId(Long studentId) {
         this.studentId = studentId;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 }
