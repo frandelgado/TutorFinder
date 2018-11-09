@@ -74,11 +74,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         for (int i = startTime; i < endTime; i++) {
             LOGGER.debug("Removing timeslot for professor with id {}, with day {}, at hour {}", professor_id,
                     day, i);
-            boolean removed = sd.removeTimeSlot(professor, day, i);
-
-            if(!removed) {
-                return false;
-            }
+            sd.removeTimeSlot(professor, day, i);
         }
         return true;
     }

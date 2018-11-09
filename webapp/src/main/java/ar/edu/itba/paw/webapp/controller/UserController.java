@@ -221,6 +221,28 @@ public class UserController extends BaseController{
         return redirectWithNoExposedModalAttributes("/Profile");
     }
 
+
+    @RequestMapping(value = "/RemoveTimeSlot", method = RequestMethod.POST)
+    public ModelAndView RemoveTimeslot(
+            @ModelAttribute("currentUser") final User loggedUser,
+            @Valid @ModelAttribute("ScheduleForm") final ScheduleForm form,
+            final BindingResult errors
+    ) throws NonexistentProfessorException {
+        if(errors.hasErrors() || !form.validForm()) {
+            if(!form.validForm()) {
+                errors.rejectValue("endHour", "profile.add_schedule.timeError");
+            }
+            return profile(loggedUser, form, 1);
+        }
+        try {
+            ss.removeTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
+        } catch (NonexistentProfessorException e) {
+            return redirectToErrorPage("nonExistentUser");
+        }
+
+        return redirectWithNoExposedModalAttributes("/Profile");
+    }
+
     @RequestMapping(value = "/forgotPassword")
     public ModelAndView forgotPassword(@ModelAttribute("resetPasswordForm") final ResetPasswordRequestForm form) {
         return new ModelAndView("forgotPassword");
