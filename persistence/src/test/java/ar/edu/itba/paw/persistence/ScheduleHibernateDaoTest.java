@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -33,6 +35,9 @@ public class ScheduleHibernateDaoTest {
 
     @Autowired
     private DataSource dataSource;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     private ScheduleHibernateDao hibernateDao;

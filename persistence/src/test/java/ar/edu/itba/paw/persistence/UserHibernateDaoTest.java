@@ -1,10 +1,9 @@
-package ar.edu.itba.paw.persistence.jdbc;
+package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.persistence.UserJdbcDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,15 +14,20 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
 import static junit.framework.TestCase.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JdbcTestConfig.class)
+@ContextConfiguration(classes = HibernateTestConfig.class)
 @Sql("classpath:schema.sql")
-public class UserJdbcDaoTest {
+@Transactional
+public class UserHibernateDaoTest {
 
     private static final String NAME = "Juan";
     private static final String SURNAME = "lopez";
@@ -39,8 +43,11 @@ public class UserJdbcDaoTest {
     @Autowired
     private DataSource dataSource;
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
-    private UserJdbcDao userDao;
+    private UserHibernateDao userDao;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -49,10 +56,16 @@ public class UserJdbcDaoTest {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public void cleanDatabase() {
+        jdbcTemplate.execute("TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
+    }
+
     @Test
-    public void testCreateValid() throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate,"users");
+    public void testCreateValid() throws UsernameAndEmailAlreadyInUseException, EmailAlreadyInUseException, UsernameAlreadyInUseException {
+        cleanDatabase();
         final User user = userDao.create(USERNAME, PASSWORD, EMAIL, NAME, SURNAME);
+        em.flush();
+
         assertNotNull(user);
         assertEquals(USERNAME, user.getUsername());
         assertEquals(NAME, user.getName());
@@ -63,23 +76,29 @@ public class UserJdbcDaoTest {
 
     }
 
-    @Test(expected = UsernameAlreadyInUseException.class)
-    public void testCreateRepeatUsername() throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
+    @Test(expected = PersistenceException.class)
+    public void testCreateRepeatUsername() throws UsernameAndEmailAlreadyInUseException, EmailAlreadyInUseException, UsernameAlreadyInUseException {
         final String otherEmail = "OtherEmailTest";
         final User user = userDao.create(USERNAME, PASSWORD, otherEmail, NAME, SURNAME);
+        em.flush();
+
         assertEquals(4, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
     }
 
-    @Test(expected = EmailAlreadyInUseException.class)
-    public void testCreateRepeatEmail() throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
+    @Test(expected = PersistenceException.class)
+    public void testCreateRepeatEmail() throws UsernameAndEmailAlreadyInUseException, EmailAlreadyInUseException, UsernameAlreadyInUseException {
         final String otherUsername = "OtherUsernameTest";
         final User user = userDao.create(otherUsername, PASSWORD, EMAIL, NAME, SURNAME);
+        em.flush();
+
         assertEquals(4, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
     }
 
-    @Test(expected = UsernameAndEmailAlreadyInUseException.class)
-    public void testCreateRepeatEmailAndPassword() throws EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException, UsernameAlreadyInUseException {
+    @Test(expected = PersistenceException.class)
+    public void testCreateRepeatEmailAndPassword() throws UsernameAndEmailAlreadyInUseException, EmailAlreadyInUseException, UsernameAlreadyInUseException {
         final User user = userDao.create(USERNAME, PASSWORD, EMAIL, NAME, SURNAME);
+        em.flush();
+
         assertEquals(4, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
     }
 
@@ -151,8 +170,7 @@ public class UserJdbcDaoTest {
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
+        cleanDatabase();
     }
 
 }

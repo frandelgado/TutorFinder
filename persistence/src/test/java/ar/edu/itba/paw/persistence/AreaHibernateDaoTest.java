@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
@@ -38,6 +40,10 @@ public class AreaHibernateDaoTest {
     private static final Integer LIMIT = 10;
     private static final Integer OFFSET = 0;
 
+
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
     private DataSource ds;
 
@@ -59,6 +65,8 @@ public class AreaHibernateDaoTest {
     public void testCreate() {
         cleanDatabase();
         final Area area = areaDao.create(NAME, DESCRIPTION, TEST_IMAGE);
+        em.flush();
+
         assertNotNull(area);
         assertEquals(NAME, area.getName());
         assertEquals(DESCRIPTION, area.getDescription());
@@ -68,6 +76,8 @@ public class AreaHibernateDaoTest {
     @Test(expected = PersistenceException.class)
     public void testCreateInvalid() {
         final Area area = areaDao.create(NAME, DESCRIPTION, TEST_IMAGE);
+        em.flush();
+
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "areas"));
     }
 

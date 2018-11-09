@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.UUID;
@@ -33,6 +35,9 @@ public class PasswordResetTokenHibernateDaoTest {
     private static final Long USER_ID = 5L;
     private static final Long INVALID_ID = 666L;
     private static final String INVALID_TOKEN = "123e4567-e89b-12d3-a456-666666666666";
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     private DataSource dataSource;

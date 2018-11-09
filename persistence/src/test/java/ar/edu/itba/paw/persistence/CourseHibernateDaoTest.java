@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -44,6 +46,9 @@ public class CourseHibernateDaoTest {
     private static final Integer STARTHOUR = 2;
     private static final Integer ENDHOUR = 3;
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
     private DataSource dataSource;
 
@@ -69,6 +74,8 @@ public class CourseHibernateDaoTest {
         when(mockProfessor.getId()).thenReturn(PROFESSOR_ID);
         when(mockSubject.getId()).thenReturn(SUBJECT_ID);
         final Course course = courseDao.create(mockProfessor, mockSubject, DESCRIPTION, PRICE);
+
+        em.flush();
 
         assertNotNull(course);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "courses",

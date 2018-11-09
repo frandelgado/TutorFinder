@@ -64,6 +64,8 @@ public class SubjectHibernateDaoTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "courses");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "subjects");
         final Subject subject = subjectDao.create(NAME, DESCRIPTION, AREA_ID);
+        em.flush();
+
         assertNotNull(subject);
         assertEquals(NAME, subject.getName());
         assertEquals(DESCRIPTION, subject.getDescription());

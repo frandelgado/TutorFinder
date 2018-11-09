@@ -13,6 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -41,6 +43,9 @@ public class ConversationHibernateDaoTest {
     private static final int CONVERSATION_NUMBER = 2;
     private static final Integer LIMIT = 10;
     private static final Integer OFFSET = 0;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     private DataSource dataSource;
