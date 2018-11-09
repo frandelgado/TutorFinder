@@ -360,7 +360,7 @@ button {
     grid-area: filter-panel;
     display: none;
     flex-direction: column;
-    justify-self: center;
+    justify-self: end;
     background-color: #dedede;
     border-radius: 5px;
     height: fit-content;
@@ -1129,6 +1129,94 @@ th, td {
     align-self: center;
 }
 
+.rm-10-b {
+    margin: 0;
+}
+.r-filter-title{
+    width: 180px;
+}
+.input-request-filter {
+    width:100px;
+}
+.search-results {
+    justify-self: center;
+    width: 550px;
+}
+.conversation-messages {
+    max-height: 200px;
+}
+.conversations {
+    grid-template-columns: 100fr;
+    grid-template-areas: "navbar " "....." "content" "......";
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-input {
+    min-width: 75px;
+    padding-left: 5px;
+    max-width: 75px;
+    height: 30px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.m-w-80 {
+    max-width: 80px;
+}
+
+.m-l-5 {
+    margin-left: 5px;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.m-r-5 {
+    margin-right: 5px;
+}
+
+.select2-selection--multiple {
+    overflow: auto;
+    max-height: 25px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.edit {
+    color: #F47C48;
+}
+
+.r-center {
+    justify-content: center;
+}
+
+.fit-content {
+    width: fit-content;
+}
+.register-form {
+    grid-template-columns: auto 312px auto;
+}
+.class-content {
+    grid-template-rows: auto auto auto;
+}
+
+.navbar-button {
+    padding: 0;
+    margin-left: 20px;
+}
+
+.dropdown-button{
+    padding: 20px;
+}
+
 @media only screen and (max-width: 600px) {
 
     .search-input {
@@ -1154,6 +1242,14 @@ th, td {
         float: none;
         display: block;
         text-align: left;
+    }
+
+    .navbar-buttons {
+        display: block;
+    }
+
+    .navbar-button {
+        margin-left: 0px;
     }
 
     .navbar .search-input {
@@ -1225,98 +1321,24 @@ th, td {
         display: flex;
         align-items: center;
         width: 100%;
-        justify-content: space-around;
+        justify-content: center;
+    }
+    .responsiveColumn {
+        display: flex;
+        flex-direction: column;
+    }
+    .text-center-responsive{
+        text-align: center;
     }
 
     .responsiveDelete {
         display: none;
     }
-}
 
-.rm-10-b {
-    margin: 0;
-}
-.r-filter-title{
-    width: 180px;
-}
-.input-request-filter {
-    width:100px;
-}
-.search-results {
-    width: 550px;
-}
-.conversation-messages {
-    max-height: 200px;
-}
-.conversations {
-    grid-template-columns: 100fr;
-    grid-template-areas: "navbar " "....." "content" "......";
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-}
-
-.filter-input {
-    min-width: 75px;
-    padding-left: 5px;
-    max-width: 75px;
-    height: 30px;
-}
-
-.row {
-    display: flex;
-    flex-direction: row;
-}
-
-.m-w-80 {
-    max-width: 80px;
-}
-
-.m-l-5 {
-    margin-left: 5px;
-}
-
-.no-margin {
-    margin: 0;
-}
-
-.m-r-5 {
-    margin-right: 5px;
-}
-
-.select2-selection--multiple {
-    overflow: auto;
-    max-height: 25px;
-    min-width: 200px;
-    max-width: 200px;
-}
-
-.edit {
-    color: #F47C48;
-}
-
-.r-center {
-    justify-content: center;
-}
-
-.fit-content {
-    width: fit-content;
-}
-.register-form {
-    grid-template-columns: auto 312px auto;
-}
-.class-content {
-    grid-template-rows: auto auto auto;
-}
-
-.navbar-button {
-    padding: 0;
-}
-.navbar-buttons {
-    display: block;
-}
-.dropdown-button{
-    padding: 20px;
+    .select-search-type {
+        max-width: 80px;
+    }
+    .r-filter-title {
+        width: fit-content;
+    }
 }
