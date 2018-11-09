@@ -19,18 +19,19 @@ public class Conversation {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", foreignKey = @ForeignKey(name = "conversations_user_id_fkey"))
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="professor_id")
+    @JoinColumn(name="professor_id", foreignKey = @ForeignKey(name = "conversations_professor_id_fkey"))
     private Professor professor;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="subject_id")
+    @JoinColumn(name="subject_id", foreignKey = @ForeignKey(name = "conversations_subject_id_fkey"))
     private Subject subject;
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "conversation")
+    @OrderBy("created ASC")
     private List<Message> messages;
 
     @Formula("(SELECT max(m.created) FROM messages m WHERE m.conversation_id = conversation_id GROUP BY conversation_id)")
@@ -44,7 +45,6 @@ public class Conversation {
         this.professor = professor;
         this.subject = subject;
         this.latestMessage = latestMessage;
-        this.messages = new LinkedList<>();
     }
 
     public Conversation(final Long id, final User user, final Professor professor, final Subject subject, LocalDateTime latestMessage) {
@@ -53,7 +53,6 @@ public class Conversation {
         this.professor = professor;
         this.subject = subject;
         this.latestMessage = latestMessage;
-        this.messages = new LinkedList<>();
     }
 
     public Long getId() {

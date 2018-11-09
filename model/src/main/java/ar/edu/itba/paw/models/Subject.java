@@ -20,7 +20,7 @@ public class Subject {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="area_id")
+    @JoinColumn(name="area_id", foreignKey = @ForeignKey(name = "subjects_area_id_fkey"))
     private Area area;
 
     /* default */ Subject() {

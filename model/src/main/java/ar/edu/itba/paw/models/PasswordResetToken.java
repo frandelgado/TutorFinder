@@ -15,7 +15,7 @@ public class PasswordResetToken {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", foreignKey = @ForeignKey(name = "reset_password_tokens_user_id_fkey"))
     private User user;
 
     @Column(nullable = false, length = 36)

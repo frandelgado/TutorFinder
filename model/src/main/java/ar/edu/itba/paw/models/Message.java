@@ -16,14 +16,14 @@ public class Message {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="sender_id")
+    @JoinColumn(name="sender_id", foreignKey = @ForeignKey(name = "messages_sender_id_fkey"))
     private User sender;
 
     @Column(nullable = false, length = 1024, name = "message")
     private String text;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="conversation_id")
+    @JoinColumn(name="conversation_id", foreignKey = @ForeignKey(name = "messages_conversation_id_fkey"))
     private Conversation conversation;
 
     @Column(nullable = false)

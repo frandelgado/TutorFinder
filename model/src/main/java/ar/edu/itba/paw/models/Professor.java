@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "professors")
-@PrimaryKeyJoinColumn(referencedColumnName="user_id")
+@PrimaryKeyJoinColumn(referencedColumnName="user_id", foreignKey = @ForeignKey(name = "professors_user_id_fkey"))
 public class Professor extends User{
 
     @Column(length = 512, nullable = false)

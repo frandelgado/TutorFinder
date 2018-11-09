@@ -126,7 +126,7 @@ public class FilterBuilder {
             return new Filter(SELECT+FROM+WHERE, params);
         } else {
             if(this.WHERE == null){
-                return new Filter(SELECT+FROM+WHERE+ " where ( " + TIME_FILTERS + " ) ", params);
+                return new Filter(SELECT+FROM+ " where ( " + TIME_FILTERS + " ) ", params);
             }
             return new Filter(SELECT+FROM+WHERE+ " and ( " + TIME_FILTERS + " ) ", params);
         }

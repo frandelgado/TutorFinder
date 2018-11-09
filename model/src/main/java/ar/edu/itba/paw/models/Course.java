@@ -11,12 +11,12 @@ public class Course {
     //TODO: no estoy seguro si el schema refleja que el profesor no deberia ser nullable.
     @Id
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", foreignKey = @ForeignKey(name = "courses_user_id_fkey"))
     private Professor professor;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="subject_id")
+    @JoinColumn(name="subject_id", foreignKey = @ForeignKey(name = "courses_subject_id_fkey"))
     private Subject subject;
 
     @Column(length = 512, nullable = false)

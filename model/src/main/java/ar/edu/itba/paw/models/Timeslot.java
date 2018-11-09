@@ -17,7 +17,7 @@ public class Timeslot {
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", foreignKey = @ForeignKey(name = "schedules_user_id_fkey"))
     private Professor professor;
 
     public Timeslot(Integer day, Integer hour, Professor professor) {
