@@ -34,8 +34,6 @@ public class ClassReservationServiceImpl implements ClassReservationService {
              return null;
         }
 
-        boolean overlap = crd.findOverlap(day, startHour, endHour, professor);
-
         return crd.reserve(day, startHour, endHour, professor, student);
     }
 

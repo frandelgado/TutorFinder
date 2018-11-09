@@ -30,7 +30,7 @@ public class User {
     private String email;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    private List<ClassRequest> classRequests;
+    private List<ClassReservation> classRequests;
 
     User(){}
 
