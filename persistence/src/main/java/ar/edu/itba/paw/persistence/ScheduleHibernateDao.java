@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.ScheduleDao;
 import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.TimeSlotID;
 import ar.edu.itba.paw.models.Timeslot;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +22,18 @@ public class ScheduleHibernateDao implements ScheduleDao {
         Timeslot timeslot = new Timeslot(day, hour, professor);
         em.persist(timeslot);
         return timeslot;
+    }
+
+    @Override
+    public boolean removeTimeSlot(Professor professor, Integer day, Integer hour) {
+        Timeslot timeslot = em.find(Timeslot.class, new TimeSlotID(day, hour, professor));
+        if(timeslot == null){
+            return false;
+        } else {
+            em.remove(timeslot);
+            return true;
+        }
+
     }
 
     @Override
