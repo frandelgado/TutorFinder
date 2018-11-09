@@ -157,7 +157,8 @@ public class ConversationServiceImplTest {
         when(conversation.getUser()).thenReturn(user);
         when(conversation.getProfessor()).thenReturn(professor);
         doReturn(conversation).when(conversationService).findById(ID, USER_ID);
-        doNothing().when(emailService).sendContactEmail(user, professor, conversation);
+        doNothing().when(emailService).sendContactEmail(any(User.class), any(Professor.class),
+                any(Conversation.class), any(Message.class));
 
         when(conversationDao.create(user, BODY, conversation)).thenReturn(mock(Message.class));
 
