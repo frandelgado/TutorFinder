@@ -14,6 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -101,12 +107,58 @@ public class ProfessorServiceImpl implements ProfessorService {
             return null;
         }
 
-        final Professor professor = professorDao.create(user, description, picture);
+        byte[] newPicture = null;
+        try {
+            BufferedImage croppedImage = cropImageSquare(picture);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(croppedImage,"png", baos);
+            baos.flush();
+            newPicture = baos.toByteArray();
+            baos.close();
+        }
+        catch (IOException e){
+            //TODO handle crop errors
+        }
+
+        final Professor professor = professorDao.create(user, description, newPicture);
         if(professor == null) {
             LOGGER.error("Attempted to add a non existent user to professors");
             throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");
         }
         return professor;
+    }
+
+
+    private BufferedImage cropImageSquare(byte[] image) throws IOException {
+        // Get a BufferedImage object from a byte array
+        InputStream in = new ByteArrayInputStream(image);
+        BufferedImage originalImage = ImageIO.read(in);
+
+        // Get image dimensions
+        int height = originalImage.getHeight();
+        int width = originalImage.getWidth();
+
+        // The image is already a square
+        if (height == width) {
+            return originalImage;
+        }
+
+        // Compute the size of the square
+        int squareSize = (height > width ? width : height);
+
+        // Coordinates of the image's middle
+        int xc = width / 2;
+        int yc = height / 2;
+
+        // Crop
+        BufferedImage croppedImage = originalImage.getSubimage(
+                xc - (squareSize / 2), // x coordinate of the upper-left corner
+                yc - (squareSize / 2), // y coordinate of the upper-left corner
+                squareSize,            // widht
+                squareSize             // height
+        );
+
+        return croppedImage;
     }
 
     @Transactional
