@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,13 +64,14 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public Course create(Professor professor, Subject subject, String description, Double price) throws CourseAlreadyExistsException {
+        final Course course = new Course(professor, subject, description, price);
         try {
-            final Course course = new Course(professor, subject, description, price);
             em.persist(course);
+            em.flush();
             return course;
         }
         //TODO specify exception
-        catch (Exception e) {
+        catch (PersistenceException e) {
             throw new CourseAlreadyExistsException();
         }
     }
