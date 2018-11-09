@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static junit.framework.TestCase.*;
 import static org.mockito.Matchers.any;
@@ -132,6 +133,7 @@ public class CourseServiceImplTest {
         when(course.getProfessor()).thenReturn(professor);
         when(course.getSubject()).thenReturn(subject);
         when(courseDao.create(professor, subject, DESCRIPTION, PRICE)).thenReturn(course);
+        when(courseDao.findByIds(professor.getId(), subject.getId())).thenReturn(Optional.empty());
 
         final Course created = courseService.create(PROFESSOR_ID, SUBJECT_ID, DESCRIPTION, PRICE);
         assertNotNull(created);
@@ -191,6 +193,7 @@ public class CourseServiceImplTest {
         when(course.getProfessor()).thenReturn(professor);
         when(course.getSubject()).thenReturn(subject);
         when(courseDao.create(professor, subject, DESCRIPTION, PRICE)).thenThrow(new CourseAlreadyExistsException());
+        when(courseDao.findByIds(professor.getId(), subject.getId())).thenReturn(Optional.of(course));
 
         final Course created = courseService.create(PROFESSOR_ID, SUBJECT_ID, DESCRIPTION, PRICE);
     }

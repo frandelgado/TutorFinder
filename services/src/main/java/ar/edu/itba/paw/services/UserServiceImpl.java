@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.debug("Creating user with username {}", username);
 
         final boolean existsEmail = findByEmail(email) != null;
-        final boolean existsUsername = findByEmail(email) != null;
+        final boolean existsUsername = findByUsername(username) != null;
 
         if(existsUsername) {
             if (existsEmail) {

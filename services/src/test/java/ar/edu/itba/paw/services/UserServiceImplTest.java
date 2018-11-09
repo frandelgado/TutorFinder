@@ -65,6 +65,8 @@ public class UserServiceImplTest {
     public void testCreateValid() throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
         when(userDao.create(USERNAME, encoder.encode(PASSWORD), EMAIL, NAME, LASTNAME)).thenReturn(mock(User.class));
+        when(userDao.findByEmail(EMAIL)).thenReturn(Optional.empty());
+        when(userDao.findByUsername(USERNAME)).thenReturn(Optional.empty());
         doNothing().when(emailService).sendRegistrationEmail(any());
 
         final User user = userService.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME);
@@ -73,16 +75,22 @@ public class UserServiceImplTest {
 
     @Test(expected = EmailAlreadyInUseException.class)
     public void testCreateWithUserEmailInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
+        final User mock = mock(User.class);
         when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
         when(userDao.create(USERNAME, encoder.encode(PASSWORD), EMAIL, NAME, LASTNAME)).thenThrow(new EmailAlreadyInUseException());
+        when(userDao.findByEmail(EMAIL)).thenReturn(Optional.of(mock));
+        when(userDao.findByUsername(USERNAME)).thenReturn(Optional.empty());
 
         final User user = userService.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME);
     }
 
     @Test(expected = UsernameAlreadyInUseException.class)
     public void testCreateWithUserUsernameInUse() throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
+        final User mock = mock(User.class);
         when(encoder.encode(PASSWORD)).thenReturn(PASSWORD);
         when(userDao.create(USERNAME, encoder.encode(PASSWORD), EMAIL, NAME, LASTNAME)).thenThrow(new UsernameAlreadyInUseException());
+        when(userDao.findByEmail(EMAIL)).thenReturn(Optional.empty());
+        when(userDao.findByUsername(USERNAME)).thenReturn(Optional.of(mock));
 
         final User user = userService.create(USERNAME, PASSWORD, EMAIL, NAME, LASTNAME);
     }
