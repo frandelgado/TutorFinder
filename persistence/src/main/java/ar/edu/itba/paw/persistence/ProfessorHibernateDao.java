@@ -19,9 +19,22 @@ public class ProfessorHibernateDao implements ProfessorDao {
 
     @Override
     public Professor create(User user, String description, byte[] picture) {
-        final Professor professor = new Professor(user.getUsername(), user.getName(),
+
+        final boolean exists = em.find(User.class, user.getId()) != null;
+
+        final Professor professor = new Professor(user.getId(), user.getUsername(), user.getName(),
                 user.getLastname(), user.getPassword(), user.getEmail(), description, picture);
-        em.persist(professor);
+
+        if(exists) {
+            em.createNativeQuery("insert into professors(user_id, description, profile_picture)" +
+                    " values (?, ?, ?)")
+                    .setParameter(1, user.getId())
+                    .setParameter(2, description)
+                    .setParameter(3, picture)
+                    .executeUpdate();
+        } else {
+            em.persist(professor);
+        }
         return professor;
     }
 
