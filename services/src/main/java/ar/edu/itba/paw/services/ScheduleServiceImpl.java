@@ -56,10 +56,6 @@ public class ScheduleServiceImpl implements ScheduleService {
                     day, i);
             Timeslot timeslot = sd.reserveTimeSlot(professor, day, i);
 
-            if(timeslot == null) {
-                throw new TimeslotAllocatedException();
-            }
-
             list.add(timeslot);
         }
         return list;
