@@ -72,8 +72,6 @@ textarea {
     grid-template-areas: "logo-box search-bar navbar-buttons";
     grid-template-rows: 65px;
     grid-template-columns: 25fr 50fr 25fr;
-    grid-template-rows: 45px;
-    grid-template-columns: 300px 1fr 300px;
     padding: 10px;
     align-content: center;
 }
@@ -81,9 +79,9 @@ textarea {
 .logo-box {
     grid-area: logo-box;
     height: 65px;
-    width: 75px;
     padding-left: 10px;
     padding-right: 10px;
+    margin-top: 7px;
 }
 
 .logo {
@@ -108,7 +106,7 @@ body {
     display: block;
 }
 
-.staticHome, .staticClass, .staticProfile, .register, .conversations, .conversation {
+.staticHome, .register, .conversations, .conversation {
     grid-template-areas: "navbar navbar  navbar"
                          "...... ....... ......"
                          "...... content ......"
@@ -122,10 +120,6 @@ body {
                          "content content content"
                          "content content content"
 ;
-}
-
-.staticSearchResults .navbar {
-    padding: 0 10px;
 }
 
 .conversations, .conversation {
@@ -312,6 +306,7 @@ body {
     padding: 12px 16px;
     text-decoration: none;
     width: 100%;
+    margin: 0;
     display: block;
     text-align: left;
 }
@@ -1017,6 +1012,7 @@ button {
     border: 2px solid #dedede;
     border-radius: 5px;
     background-color: #dedede;
+    justify-self: center;
     height: fit-content;
     width: 600px;
     margin: 25px;
@@ -1266,7 +1262,7 @@ th, td {
     padding: 20px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
 
     .search-input {
         width: 300px;
@@ -1287,10 +1283,6 @@ th, td {
         float: none;
         display: block;
         text-align: left;
-    }
-
-    .navbar-buttons {
-        display: block;
     }
 
     .navbar-button {
@@ -1408,7 +1400,6 @@ th, td {
     .dropdown-button{
         padding: 20px;
     }
-}
 
     .select-search-type {
         max-width: 80px;
