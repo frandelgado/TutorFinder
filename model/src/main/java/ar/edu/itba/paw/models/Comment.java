@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -17,14 +19,19 @@ public class Comment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Course course;
 
     @Column(nullable = false, length = 1024, name = "comment")
     private String comment;
+
+    @Column(nullable = false, name = "rating")
+    private Integer rating;
 
     @Column(name = "created", nullable = false)
     @ColumnDefault("now()")
@@ -33,19 +40,21 @@ public class Comment {
 
     Comment() {}
 
-    public Comment(final User user, final Course course, final String comment, LocalDateTime created) {
+    public Comment(final User user, final Course course, final String comment, final LocalDateTime created, final Integer rating) {
         this.user = user;
         this.course = course;
         this.comment = comment;
         this.created = created;
+        this.rating = rating;
     }
 
-    public Comment(final Long id, final User user, final Course course, final String comment, LocalDateTime created) {
+    public Comment(final Long id, final User user, final Course course, final String comment, final LocalDateTime created, final Integer rating) {
         this.id = id;
         this.user = user;
         this.course = course;
         this.comment = comment;
         this.created = created;
+        this.rating = rating;
     }
 
     public Long getId() {
@@ -106,5 +115,13 @@ public class Comment {
 
     public int getYear() {
         return created.getYear();
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 }

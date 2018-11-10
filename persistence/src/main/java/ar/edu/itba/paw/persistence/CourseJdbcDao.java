@@ -127,7 +127,7 @@ public class CourseJdbcDao implements CourseDao {
     }
 
     @Override
-    public Comment create(User sender, String text, Course course) {
+    public Comment create(User creator, String text, Course course, int rating) {
         return null;
     }
 }

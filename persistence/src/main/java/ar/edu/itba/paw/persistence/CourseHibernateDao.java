@@ -79,7 +79,7 @@ public class CourseHibernateDao implements CourseDao {
     @Override
     public Comment create(final User creator, final String text, final Course course, final int rating) {
         final LocalDateTime currentTime = LocalDateTime.now();
-        final Comment comment = new Comment(creator, course, text, currentTime);
+        final Comment comment = new Comment(creator, course, text, currentTime, rating);
         em.persist(comment);
         return comment;
     }
