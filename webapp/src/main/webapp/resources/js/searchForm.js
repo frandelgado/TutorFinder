@@ -33,11 +33,11 @@ $(document).ready(function(){
     if(Number.isInteger(maxPrice)) {
         maxPriceObj.value = maxPrice | 0;
     }
-    document.getElementById("startHourSelect").onclick = function() {
-        $("#endHourSelect option").each(function (e) {
-            var startHour = document.getElementById("startHourSelect");
+    document.getElementById("startHour").onclick = function() {
+        $("#endHour option").each(function (e) {
+            var startHour = document.getElementById("startHour");
             var startHourValue = startHour[startHour.selectedIndex].value;
-            var option = $("#endHourSelect option[value='" + e.valueOf() + "']");
+            var option = $("#endHour option[value='" + e.valueOf() + "']");
             option.show();
             if(e.valueOf() <= startHourValue) {
                 //option.remove();
