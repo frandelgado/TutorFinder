@@ -76,10 +76,6 @@ textarea {
     align-content: center;
 }
 
-.staticHome .navbar {
-    grid-template-areas: "logo-box navbar-buttons";
-}
-
 .logo-box {
     grid-area: logo-box;
     height: 65px;
@@ -1170,6 +1166,10 @@ th, td {
 }
 
 @media only screen and (max-width:800px) {
+    .staticHome .navbar {
+        grid-template-columns: 70px auto 120px;
+    }
+
     .select-search-type {
         max-width: 85px;
     }
@@ -1183,10 +1183,6 @@ th, td {
     .search-input {
         width: 300px;
         border: 1px solid grey;
-    }
-
-    .navbar {
-        grid-template-columns: 70px auto 70px;
     }
 
     .navbar-buttons.responsive {
