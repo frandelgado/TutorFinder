@@ -181,26 +181,7 @@ public class ProfessorServiceImpl implements ProfessorService {
             return professorDao.modify(professor.get(), newDescription, picture);
 
         } else {
-            if(description == null) {
-                LOGGER.error("Attempted to create professor with null description");
-                return null;
-            }
-
-            if(description.length() < 50 || description.length() > 300) {
-                LOGGER.error("Attempted to create professor with invalid description of size {}", description.length());
-                return null;
-            }
-            if(picture == null) {
-                LOGGER.error("Attempted to create professor without profile picture");
-                return null;
-            }
-
-            final Professor newProfessor = professorDao.create(user, description, picture);
-            if(newProfessor == null) {
-                LOGGER.error("Attempted to add a non existent user to professors");
-                throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");
-            }
-            return newProfessor;
+            throw new NonexistentProfessorException();
         }
 
     }

@@ -168,35 +168,52 @@ public class UserController extends BaseController{
                                         @Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
                                         final BindingResult errors, final HttpServletRequest request) throws ProfessorWithoutUserException {
         if(errors.hasErrors()) {
-            return registerProfessor(loggedUser, form);
+            return registerProfessor(form);
         }
 
         final Professor p;
         try {
-            p = ps.modifyOrCreate(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
+            p = ps.create(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
         } catch (IOException e) {
             return redirectToErrorPage("fileUploadError");
         }
         if(p == null) {
-            return registerProfessor(loggedUser, form);
+            return registerProfessor(form);
         }
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
-
         return redirectWithNoExposedModalAttributes("/");
     }
 
     @RequestMapping("/registerAsProfessor")
-    public ModelAndView registerProfessor(@ModelAttribute("currentUser") final User loggedUser,
-            @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form) {
+    public ModelAndView registerProfessor(@ModelAttribute("registerAsProfessorForm")
+                                              final RegisterProfessorForm form) {
 
-        final Professor professor = ps.findById(loggedUser.getId());
-        if(professor != null){
-            form.setDescription(professor.getDescription());
-        }
         return new ModelAndView("registerAsProfessorForm");
     }
 
+    @RequestMapping(value="/editProfessorProfile", method = RequestMethod.POST)
+    public ModelAndView editProfessor(@ModelAttribute("currentUser") final User loggedUser,
+                                      @Valid @ModelAttribute("editProfessorProfileForm") final EditProfessorProfileForm form,
+                                      final BindingResult errors ) throws NonexistentProfessorException {
+        final Professor professor;
+        try {
+            professor = ps.modify(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
+        } catch (IOException e) {
+            return redirectToErrorPage("fileUploadError");
+        } catch (NonexistentProfessorException | ProfessorWithoutUserException e) {
+            return redirectToErrorPage("oops");
+        }
+        return profile(loggedUser, new ScheduleForm(), 1);
+    }
+
+    @RequestMapping(value = "/editProfessorProfile")
+    public ModelAndView editProfessor(@ModelAttribute("editProfessorProfileForm") final EditProfessorProfileForm form,
+                                      @ModelAttribute("currentUser") final User loggedUser) {
+        final Professor professor = ps.findById(loggedUser.getId());
+        form.setDescription(professor.getDescription());
+        return new ModelAndView("modifyProfessorProfileForm");
+    }
 
     @RequestMapping(value = "/CreateTimeSlot", method = RequestMethod.POST)
     public ModelAndView createTimeslot(
