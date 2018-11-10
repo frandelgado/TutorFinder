@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -32,6 +33,10 @@ public class Course {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Comment> comments;
 
+    @Formula("COALESCE((SELECT AVG(c.rating) FROM comments c WHERE c.course_user_id = user_id AND" +
+            " c.course_subject_id = subject_id), 0)")
+    private Double rating;
+
     public Course(){}
 
     public Course(Professor professor, Subject subject, String description, Double price) {
@@ -63,6 +68,10 @@ public class Course {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Double getRating() {
+        return rating;
     }
 
     @Override
