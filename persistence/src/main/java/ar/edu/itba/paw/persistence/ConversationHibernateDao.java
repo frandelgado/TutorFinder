@@ -60,6 +60,7 @@ public class ConversationHibernateDao implements ConversationDao {
     public Message create(User sender, String text, Conversation conversation) {
         final LocalDateTime currentTime = LocalDateTime.now();
         final Message message = new Message(sender, text, currentTime);
+        message.setConversation(conversation);
         em.persist(message);
         try {
             em.flush();

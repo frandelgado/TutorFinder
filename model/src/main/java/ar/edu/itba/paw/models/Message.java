@@ -35,14 +35,14 @@ public class Message {
     public Message(User sender, String text, LocalDateTime created) {
         this.sender = sender;
         this.text = text;
-        //this.created = created;
+        this.created = created;
     }
 
     public Message(Long id, User sender, String text, LocalDateTime created) {
         this.id = id;
         this.sender = sender;
         this.text = text;
-        //this.created = created;
+        this.created = created;
     }
 
     public Long getId() {
@@ -79,5 +79,13 @@ public class Message {
 
     public int getYear() {
         return created.getYear();
+    }
+
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
     }
 }
