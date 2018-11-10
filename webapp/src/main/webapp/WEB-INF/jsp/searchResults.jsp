@@ -10,6 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
+    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/course.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
     <link href="<c:url value="/resources/css/select2.min.css" />" rel="stylesheet" />
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/select2.min.js" />"></script>

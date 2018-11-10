@@ -1,0 +1,18 @@
+
+.class-profile {
+    grid-area: class;
+    margin: 25px;
+    margin-bottom: 30px;
+}
+
+.contact {
+    grid-area: contact;
+    padding: 10px;
+    border: 2px solid #dedede;
+    border-radius: 5px;
+    background-color: #dedede;
+    justify-self: center;
+    height: fit-content;
+    width: 600px;
+    margin: 25px;
+}
