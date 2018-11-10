@@ -71,7 +71,7 @@ textarea {
     display: grid;
     grid-template-areas: "logo-box search-bar navbar-buttons";
     grid-template-rows: 65px;
-    grid-template-columns: 300px 1fr 300px;
+    grid-template-columns: 25fr 50fr 25fr;
     padding: 10px;
     align-content: center;
 }
@@ -84,7 +84,8 @@ textarea {
     grid-area: logo-box;
     height: 65px;
     width: 75px;
-    padding-left: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .logo {
@@ -118,7 +119,15 @@ body {
 }
 
 .staticSearchResults {
-    grid-template-areas: "navbar"  "content";
+    grid-template-areas: "navbar  navbar  navbar"
+                         "content content content"
+                         "content content content"
+                         "content content content"
+;
+}
+
+.staticSearchResults .navbar {
+    padding: 0 10px;
 }
 
 .conversations, .conversation {
@@ -405,7 +414,7 @@ button {
     grid-template-areas: "search-result-img search-result-title       search-result-specs"
                          "search-result-img search-result-professor   search-result-specs"
                          "search-result-img search-result-description search-result-specs"
-                         "search-result-img search-result-description search-result-specs"
+                         "search-result-img search-result-description search-result-rating"
 }
 .search-course-result:hover {
     background-color: #dedede;
@@ -683,6 +692,7 @@ button {
     grid-column-gap: 10px;
     justify-content: center;
     grid-template-areas: "class-title class-description";
+    min-width: 300px;
 }
 
 .class-button {
@@ -866,12 +876,37 @@ button {
 
 
 .schedule {
+    display: grid;
     grid-area: schedule;
     margin: 25px;
     padding: 10px;
     border: 2px solid #dedede;
     border-radius: 5px;
     background-color: #dedede;
+    grid-template-rows: auto;
+    grid-template-areas:
+            "schedule-titulo schedule-boton"
+            "schedule-desc   schedule-desc"
+            "schedule-tabla  schedule-tabla";
+}
+
+.schedule h2 {
+    grid-area: schedule-titulo;
+}
+
+.schedule input {
+    max-width: 200px;
+    justify-self: end;
+    text-align: center;
+    grid-area: schedule-boton;
+}
+
+.schedule p {
+    grid-area: schedule-desc;
+}
+
+.schedule table {
+    grid-area: schedule-tabla;
 }
 
 .schedule th {
@@ -1129,6 +1164,15 @@ th, td {
     align-self: center;
 }
 
+@media only screen and (max-width:800px) {
+    .select-search-type {
+        max-width: 85px;
+    }
+    .navbar .search-input {
+        max-width: 150px;
+    }
+}
+
 @media only screen and (max-width: 600px) {
 
     .search-input {
@@ -1151,10 +1195,6 @@ th, td {
         float: none;
         display: block;
         text-align: left;
-    }
-
-    .navbar .search-input {
-        max-width: 200px;
     }
 
     .course {
