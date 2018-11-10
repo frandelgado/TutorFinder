@@ -19,6 +19,11 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     </param-value>
   </context-param>
 
+  <context-param>
+    <param-name>spring.profiles.active</param-name>
+    <param-value>dev</param-value>
+  </context-param>
+
   <listener>
     <listener-class>
       org.springframework.web.context.ContextLoaderListener

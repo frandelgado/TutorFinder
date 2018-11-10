@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.webapp.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -48,6 +51,10 @@ import java.util.Properties;
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence" })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+
+    @Autowired
+    private Environment env;
+
     @Bean
     public ViewResolver viewResolver(){
         final InternalResourceViewResolver vr = new InternalResourceViewResolver();
@@ -57,6 +64,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return vr;
     }
 
+
+    @Profile("dev")
     @Bean
     public MessageSource messageSource() {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -66,6 +75,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return messageSource;
     }
 
+    @Profile("prod")
+    @Bean(name = "messageSource")
+    public MessageSource prodMessageSource() {
+        final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:i18n/messages");
+        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
+        messageSource.setCacheSeconds(3600);
+        return messageSource;
+    }
+
+    @Profile("dev")
     @Bean
     public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
@@ -73,6 +93,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ds.setUrl("jdbc:postgresql://localhost/paw");
         ds.setUsername("root");
         ds.setPassword("root");
+        return ds;
+    }
+
+    @Profile("prod")
+    @Bean(name = "dataSource")
+    public DataSource prodDataSource() {
+        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        ds.setDriverClass(org.postgresql.Driver.class);
+        ds.setUrl("jdbc:postgresql://localhost/paw-2018b-09");
+        ds.setUsername("paw-2018b-09");
+        ds.setPassword("79CDlwqzy");
         return ds;
     }
 
