@@ -127,7 +127,8 @@ public class UserController extends BaseController{
     @RequestMapping("/Profile")
     public ModelAndView profile(
             @ModelAttribute("currentUser") final User loggedUser,
-            @ModelAttribute("ScheduleForm") final ScheduleForm scheduleForm,
+            @ModelAttribute("addScheduleForm") final ScheduleForm addScheduleForm,
+            @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
             @RequestParam(value = "page", defaultValue = "1") final int page
     ) throws NonexistentProfessorException {
         final Professor professor = ps.findById(loggedUser.getId());
@@ -200,7 +201,7 @@ public class UserController extends BaseController{
             if(!form.validForm()) {
                 errors.rejectValue("endHour", "profile.add_schedule.timeError");
             }
-            return profile(loggedUser, form, 1);
+            return profile(loggedUser, form, new ScheduleForm(), 1);
         }
 
         final List<Timeslot> timeslots;
@@ -211,11 +212,11 @@ public class UserController extends BaseController{
             return redirectToErrorPage("nonExistentUser");
         } catch (TimeslotAllocatedException e) {
             errors.rejectValue("endHour", "TimeslotAllocatedError");
-            return profile(loggedUser, form, 1);
+            return profile(loggedUser, form, new ScheduleForm(),1);
         }
 
         if(timeslots == null) {
-            return profile(loggedUser, form, 1);
+            return profile(loggedUser, form, new ScheduleForm(), 1);
         }
 
         return redirectWithNoExposedModalAttributes("/Profile");
@@ -232,7 +233,7 @@ public class UserController extends BaseController{
             if(!form.validForm()) {
                 errors.rejectValue("endHour", "profile.add_schedule.timeError");
             }
-            return profile(loggedUser, form, 1);
+            return profile(loggedUser, new ScheduleForm(), form, 1);
         }
         try {
             ss.removeTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
