@@ -157,8 +157,31 @@
         </c:choose>
 
         <div class="paged-result-buttons">
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page - 1}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}&startHour=${param.startHour}&endHour=${param.endHour}" var="previous"/>
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page + 1}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}&startHour=${param.startHour}&endHour=${param.endHour}" var="next"/>
+            <c:url value ="/searchResults" var="previous">
+                <c:forEach items="${searchForm.days}" var="day">
+                    <c:param name="days"><c:out value="${day}"/></c:param>
+                </c:forEach>
+                <c:param name="page">${page - 1}</c:param>
+                <c:param name="search">${param.search}</c:param>
+                <c:param name="type">${type}</c:param>
+                <c:param name="minPrice">${param.minPrice}</c:param>
+                <c:param name="maxPrice">${param.maxPrice}</c:param>
+                <c:param name="startHour">${param.startHour}</c:param>
+                <c:param name="endHour">${param.endHour}</c:param>
+            </c:url>
+
+            <c:url value ="/searchResults" var="next">
+                <c:forEach items="${searchForm.days}" var="day">
+                    <c:param name="days"><c:out value="${day}"/></c:param>
+                </c:forEach>
+                <c:param name="page">${page + 1}</c:param>
+                <c:param name="search">${param.search}</c:param>
+                <c:param name="type">${type}</c:param>
+                <c:param name="minPrice">${param.minPrice}</c:param>
+                <c:param name="maxPrice">${param.maxPrice}</c:param>
+                <c:param name="startHour">${param.startHour}</c:param>
+                <c:param name="endHour">${param.endHour}</c:param>
+            </c:url>
 
             <c:if test="${page > 1}">
                 <a href="${previous}" class="previous round">&#8249;</a>
