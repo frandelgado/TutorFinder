@@ -57,9 +57,15 @@ public class CourseHibernateDaoTest {
 
     private JdbcTemplate jdbcTemplate;
 
+    private Professor professorTest;
+
+    private Subject subjectTest;
+
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
+        subjectTest = em.find(Subject.class, SUBJECT_ID);
+        professorTest = em.find(Professor.class, PROFESSOR_ID);
     }
 
     public void cleanDatabase() {
@@ -69,11 +75,7 @@ public class CourseHibernateDaoTest {
     @Test
     public void testCreateValid() throws CourseAlreadyExistsException {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "courses");
-        Professor mockProfessor = mock(Professor.class);
-        Subject mockSubject = mock(Subject.class);
-        when(mockProfessor.getId()).thenReturn(PROFESSOR_ID);
-        when(mockSubject.getId()).thenReturn(SUBJECT_ID);
-        final Course course = courseDao.create(mockProfessor, mockSubject, DESCRIPTION, PRICE);
+        final Course course = courseDao.create(professorTest, subjectTest, DESCRIPTION, PRICE);
 
         em.flush();
 
@@ -85,11 +87,7 @@ public class CourseHibernateDaoTest {
 
     @Test(expected = CourseAlreadyExistsException.class)
     public void testCreateInvalid() throws CourseAlreadyExistsException {
-        Professor mockProfessor = mock(Professor.class);
-        Subject mockSubject = mock(Subject.class);
-        when(mockProfessor.getId()).thenReturn(PROFESSOR_ID);
-        when(mockSubject.getId()).thenReturn(SUBJECT_ID);
-        final Course course = courseDao.create(mockProfessor, mockSubject, DESCRIPTION, PRICE);
+        final Course course = courseDao.create(professorTest, subjectTest, DESCRIPTION, PRICE);
 
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "courses",
                 "user_id = " + PROFESSOR_ID + " AND subject_id = " + SUBJECT_ID));

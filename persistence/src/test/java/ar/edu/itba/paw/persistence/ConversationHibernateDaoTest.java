@@ -55,9 +55,20 @@ public class ConversationHibernateDaoTest {
 
     private JdbcTemplate jdbcTemplate;
 
+    private Conversation conversationTest;
+
+    private User userTest;
+
+    private Professor professorTest;
+
+    private Subject subjectTest;
+
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
+        userTest = em.find(User.class, USER_ID);
+        subjectTest = em.find(Subject.class, SUBJECT_ID);
+        professorTest = em.find(Professor.class, PROFESSOR_ID);
     }
 
     public void cleanDatabase() {
@@ -66,6 +77,7 @@ public class ConversationHibernateDaoTest {
 
     @Test
     public void testConversationCreateValid() {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "messages");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "conversations");
         Professor mockProfessor = mock(Professor.class);
         User mockUser = mock(User.class);
@@ -74,7 +86,8 @@ public class ConversationHibernateDaoTest {
         when(mockUser.getId()).thenReturn(USER_ID);
         when(mockSubject.getId()).thenReturn(SUBJECT_ID);
 
-        final Conversation conversation = conversationDao.create(mockUser, mockProfessor, mockSubject);
+        final Conversation conversation = conversationDao.create(userTest, professorTest, subjectTest);
+        em.flush();
 
         assertNotNull(conversation);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "conversations",
@@ -86,12 +99,10 @@ public class ConversationHibernateDaoTest {
     @Test
     public void testMessageCreateValid() {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "messages");
-        Conversation mockConversation = mock(Conversation.class);
-        User mockUser = mock(User.class);
-        when(mockConversation.getId()).thenReturn(CONVERSATION_ID);
-        when(mockUser.getId()).thenReturn(USER_ID);
+        conversationTest = em.find(Conversation.class, CONVERSATION_ID);
 
-        final Message message = conversationDao.create(mockUser, BODY_1, mockConversation);
+        final Message message = conversationDao.create(userTest, BODY_1, conversationTest);
+        em.flush();
 
         assertNotNull(message);
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "messages"));

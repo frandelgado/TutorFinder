@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -45,10 +46,14 @@ public class ScheduleHibernateDaoTest {
     private JdbcTemplate jdbcTemplate;
 
     private final String TEST_DESCRIPTION = "test description";
+    private Professor testProfessor;
+    private Professor testProfessorOcupied;
 
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
+        testProfessor = em.find(Professor.class, 2L);
+        testProfessorOcupied = em.find(Professor.class, 5L);
     }
 
     public void cleanDatabase() {
@@ -57,37 +62,35 @@ public class ScheduleHibernateDaoTest {
     
     @Test
     public void testReserveValid() {
-        Professor mockProfessor = mock(Professor.class);
-        when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
         Integer HOUR = 4;
 
-        Timeslot reservedTimeSlot = hibernateDao.reserveTimeSlot(mockProfessor, DAY,HOUR);
+        Timeslot reservedTimeSlot = hibernateDao.reserveTimeSlot(testProfessor, DAY,HOUR);
+        em.flush();
+
         assertEquals(DAY, reservedTimeSlot.getDay());
         assertEquals(HOUR, reservedTimeSlot.getHour());
         assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
-    @Test
+    @Test(expected = PersistenceException.class)
     public void testReserveOccupied() {
-        Professor mockProfessor = mock(Professor.class);
-        when(mockProfessor.getId()).thenReturn(5l);
         Integer DAY = 2;
         Integer HOUR = 2;
 
-        Timeslot reservedTimeSlot = hibernateDao.reserveTimeSlot(mockProfessor, DAY,HOUR);
+        Timeslot reservedTimeSlot = hibernateDao.reserveTimeSlot(testProfessorOcupied, DAY,HOUR);
+        em.flush();
+
         assertNull(reservedTimeSlot);
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
     @Test
     public void testGetTimeslotsForProfessor() {
-        final Professor mockProfessor = mock(Professor.class);
-        when(mockProfessor.getId()).thenReturn(5L);
         final Integer DAY = 2;
         final Integer HOUR = 2;
 
-        List<Timeslot> reservedTimeSlots = hibernateDao.getTimeslotsForProfessor(mockProfessor);
+        List<Timeslot> reservedTimeSlots = hibernateDao.getTimeslotsForProfessor(testProfessorOcupied);
         assertNotNull(reservedTimeSlots);
         assertEquals(1, reservedTimeSlots.size());
         Timeslot reservedTimeSlot = reservedTimeSlots.get(0);
