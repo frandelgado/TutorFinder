@@ -119,16 +119,6 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
-                <form:select id="endHourSelect" cssClass="select-subject no-border b-r-5" path="endHour">
-                    <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
-                    <c:forEach var="hour" begin="2" end="24" >
-                        <form:option value="${hour}">${hour}:00</form:option>
-                    </c:forEach>
-                </form:select>
-                <form:errors cssClass="error-text" path="endHour" element="p"/>
-            </div>
         </div>
         <div class="responsiveRow">
             <h3 class="r-filter-title"><spring:message code="search.priceHeader"/></h3>
