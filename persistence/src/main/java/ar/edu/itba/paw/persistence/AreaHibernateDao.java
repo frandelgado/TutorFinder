@@ -16,12 +16,12 @@ public class AreaHibernateDao implements AreaDao {
     private EntityManager em;
 
     @Override
-    public Area findById(long id) {
+    public Area findById(final long id) {
         return em.find(Area.class, id);
     }
 
     @Override
-    public Area create(String name, String description, byte[] image) {
+    public Area create(final String name, final String description, final byte[] image) {
         final Area area = new Area(description, name, image);
         em.persist(area);
         return area;
@@ -29,7 +29,7 @@ public class AreaHibernateDao implements AreaDao {
 
     //TODO: ver como vamos a manejar paginación con hibernate. Esto es un primer approach
     @Override
-    public List<Area> filterAreasByName(String name, int limit, int offset) {
+    public List<Area> filterAreasByName(final String name, final int limit, final int offset) {
         final String search = "%" + name + "%";
         final TypedQuery<Area> query = em.createQuery("from Area as a where upper(a.name) like upper(:name)" +
                 "order by a.id", Area.class);

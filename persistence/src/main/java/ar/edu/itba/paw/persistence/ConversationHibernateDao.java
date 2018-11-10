@@ -18,19 +18,19 @@ public class ConversationHibernateDao implements ConversationDao {
     private EntityManager em;
 
     @Override
-    public Conversation create(User user, Professor professor, Subject subject) {
+    public Conversation create(final User user, final Professor professor, final Subject subject) {
         final Conversation conversation = new Conversation(user, professor, subject, null);
         em.persist(conversation);
         return conversation;
     }
 
     @Override
-    public Conversation findById(Long conversation_id) {
+    public Conversation findById(final Long conversation_id) {
         return em.find(Conversation.class, conversation_id);
     }
 
     @Override
-    public List<Conversation> findByUserId(Long user_id, int limit, int offset) {
+    public List<Conversation> findByUserId(final Long user_id, final int limit, final int offset) {
         final TypedQuery<Conversation> query = em.createQuery("from Conversation as c where" +
                 " c.professor.id = :id or c.user.id = :id order by c.id", Conversation.class);
         query.setParameter("id", user_id);
@@ -40,7 +40,7 @@ public class ConversationHibernateDao implements ConversationDao {
     }
 
     @Override
-    public Conversation findByIds(Long user_id, Long professor_id, Long subject_id) {
+    public Conversation findByIds(final Long user_id, final Long professor_id, final Long subject_id) {
         final TypedQuery<Conversation> query = em.createQuery("from Conversation as c " +
                 "where c.user.id = :user_id and c.professor.id = :professor_id and " +
                 "c.subject.id = :subject_id", Conversation.class);

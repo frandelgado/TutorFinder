@@ -18,7 +18,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
     private EntityManager em;
 
     @Override
-    public Professor create(User user, String description, byte[] picture) {
+    public Professor create(final User user, final String description, final byte[] picture) {
 
         final boolean exists = em.find(User.class, user.getId()) != null;
 
@@ -39,13 +39,13 @@ public class ProfessorHibernateDao implements ProfessorDao {
     }
 
     @Override
-    public Optional<Professor> findById(Long professor_id) {
+    public Optional<Professor> findById(final Long professor_id) {
         final Professor professor = em.find(Professor.class, professor_id);
         return Optional.ofNullable(professor);
     }
 
     @Override
-    public Optional<Professor> findByUsername(String username) {
+    public Optional<Professor> findByUsername(final String username) {
         final TypedQuery<Professor> query = em.createQuery("from Professor as p where p.username = :username",
                 Professor.class);
         query.setParameter("username", username);
@@ -53,7 +53,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
     }
 
     @Override
-    public List<Professor> filterByFullName(String fullName, int limit, int offset) {
+    public List<Professor> filterByFullName(final String fullName, final int limit, final int offset) {
         final String search = "%" + fullName + "%";
         final TypedQuery<Professor> query = em.createQuery("from Professor as p where upper(concat(p.name, ' ', p.lastname)) like upper(:name)" +
                 "order by p.id", Professor.class);

@@ -21,7 +21,7 @@ public class CourseHibernateDao implements CourseDao {
     private EntityManager em;
 
     @Override
-    public Optional<Course> findByIds(long professor_id, long subject_id) {
+    public Optional<Course> findByIds(final long professor_id, final long subject_id) {
         final TypedQuery<Course> query = em.createQuery("from Course as c " +
                 "where c.professor.id = :professor and c.subject.id = :subject", Course.class);
         query.setParameter("professor", professor_id);
@@ -30,7 +30,7 @@ public class CourseHibernateDao implements CourseDao {
     }
 
     @Override
-    public List<Course> findByProfessorId(long professor_id, int limit, int offset) {
+    public List<Course> findByProfessorId(final long professor_id, final int limit, final int offset) {
         final TypedQuery<Course> query = em.createQuery("from Course as c where c.professor.id = :id " +
                 "order by c.professor.id, c.subject.id", Course.class);
         query.setParameter("id", professor_id);
@@ -40,7 +40,7 @@ public class CourseHibernateDao implements CourseDao {
     }
 
     @Override
-    public List<Course> filterByAreaId(long areaId, int limit, int offset) {
+    public List<Course> filterByAreaId(final long areaId, final int limit, final int offset) {
         final TypedQuery<Course> query = em.createQuery("from Course as c where c.subject.area.id = :id " +
                 "order by c.professor.id, c.subject.id", Course.class);
         query.setParameter("id", areaId);
@@ -50,7 +50,7 @@ public class CourseHibernateDao implements CourseDao {
     }
 
     @Override
-    public List<Course> filter(Filter filter, int limit, int offset) {
+    public List<Course> filter(final Filter filter, final int limit, final int offset) {
         TypedQuery<Course> query = em.createQuery(filter.getQuery(), Course.class);
         List<Object> params = filter.getQueryParams();
         IntStream.range(0, params.size())
@@ -63,7 +63,7 @@ public class CourseHibernateDao implements CourseDao {
     }
 
     @Override
-    public Course create(Professor professor, Subject subject, String description, Double price) throws CourseAlreadyExistsException {
+    public Course create(final Professor professor, final Subject subject, final String description, final Double price) throws CourseAlreadyExistsException {
         final Course course = new Course(professor, subject, description, price);
         try {
             em.persist(course);

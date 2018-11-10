@@ -18,14 +18,14 @@ public class ScheduleHibernateDao implements ScheduleDao {
     private EntityManager em;
 
     @Override
-    public Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) {
+    public Timeslot reserveTimeSlot(final Professor professor, final Integer day, final Integer hour) {
         Timeslot timeslot = new Timeslot(day, hour, professor);
         em.persist(timeslot);
         return timeslot;
     }
 
     @Override
-    public boolean removeTimeSlot(Professor professor, Integer day, Integer hour) {
+    public boolean removeTimeSlot(final Professor professor, final Integer day, final Integer hour) {
         Timeslot timeslot = em.find(Timeslot.class, new TimeSlotID(day, hour, professor));
         if(timeslot == null){
             return false;
@@ -37,7 +37,7 @@ public class ScheduleHibernateDao implements ScheduleDao {
     }
 
     @Override
-    public List<Timeslot> getTimeslotsForProfessor(Professor professor) {
+    public List<Timeslot> getTimeslotsForProfessor(final Professor professor) {
         em.merge(professor);
         return professor.getTimeslots();
     }

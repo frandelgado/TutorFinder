@@ -20,20 +20,20 @@ public class UserHibernateDao implements UserDao {
     private EntityManager em;
 
     @Override
-    public Optional<User> findById(long id) {
+    public Optional<User> findById(final long id) {
         User us =  em.find(User.class, id);
         return Optional.ofNullable(us);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> findByEmail(final String email) {
         final TypedQuery<User> query = em.createQuery("from User as u where u.email = :email", User.class);
         query.setParameter("email", email);
         return query.getResultList().stream().findFirst();
     }
 
     @Override
-    public User create(String username, String password, String email, String name, String lastName) throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
+    public User create(final String username, final String password, final String email, final String name, final String lastName) throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
         final User user = new User(username, name, lastName, password, email);
         em.persist(user);
         return user;
@@ -41,14 +41,14 @@ public class UserHibernateDao implements UserDao {
 
     //TODO: podriamos hacer que no retorne un optional
     @Override
-    public Optional<User> findByUsername(String username) {
+    public Optional<User> findByUsername(final String username) {
         final TypedQuery<User> query = em.createQuery("from User as u where u.username = :username", User.class);
         query.setParameter("username", username);
         return query.getResultList().stream().findFirst();
     }
 
     @Override
-    public boolean changePasswordById(Long userId, String newPassword) {
+    public boolean changePasswordById(final Long userId, final String newPassword) {
         final User user = em.find(User.class, userId);
 
         if(user == null) {

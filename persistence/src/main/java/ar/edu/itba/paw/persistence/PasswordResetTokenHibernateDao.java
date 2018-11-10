@@ -19,7 +19,7 @@ public class PasswordResetTokenHibernateDao implements PasswordResetTokenDao {
     private EntityManager em;
 
     @Override
-    public PasswordResetToken findByToken(String token) {
+    public PasswordResetToken findByToken(final String token) {
         final TypedQuery<PasswordResetToken> query = em.createQuery("from PasswordResetToken as t " +
                 "where t.token = :token and t.expireDate >= NOW()", PasswordResetToken.class);
         query.setParameter("token", token);
@@ -28,7 +28,7 @@ public class PasswordResetTokenHibernateDao implements PasswordResetTokenDao {
     }
 
     @Override
-    public PasswordResetToken create(Long userId, String token, LocalDateTime expires) {
+    public PasswordResetToken create(final Long userId, final String token, final LocalDateTime expires) {
         final User user = em.getReference(User.class, userId);
         final PasswordResetToken passwordResetToken = new PasswordResetToken(user, token, expires);
         em.persist(passwordResetToken);
@@ -47,7 +47,7 @@ public class PasswordResetTokenHibernateDao implements PasswordResetTokenDao {
     }
 
     @Override
-    public void deleteUsedToken(String token) {
+    public void deleteUsedToken(final String token) {
         em.createQuery("delete from PasswordResetToken as t where t.token = :token")
                 .setParameter("token", token)
                 .executeUpdate();
