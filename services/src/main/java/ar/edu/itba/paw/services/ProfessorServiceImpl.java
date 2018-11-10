@@ -163,19 +163,14 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Professor modifyOrCreate(Long userId, String description, byte[] picture)
-            throws ProfessorWithoutUserException {
-        LOGGER.debug("Adding or editing user with id {} as professor", userId);
-        final User user = userDao.findById(userId).orElse(null);
-        if(user == null) {
-            LOGGER.error("Attempted to add a non existent user to professors");
-            throw new ProfessorWithoutUserException("A valid user id must be provided in order to ");
-        }
+    public Professor modify(Long userId, String description, byte[] picture)
+            throws ProfessorWithoutUserException, NonexistentProfessorException {
+        LOGGER.debug("Editing professor with id {}", userId);
 
         Optional<Professor> professor = professorDao.findById(userId);
 
         if(professor.isPresent()){
-            String newDescription =null;
+            String newDescription = null;
             if(description.length() > 50 && description.length() < 300){
                 newDescription = description;
             } else {
