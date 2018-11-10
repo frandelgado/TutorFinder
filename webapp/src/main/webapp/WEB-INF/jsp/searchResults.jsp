@@ -10,7 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/select2.min.css" />" rel="stylesheet" />
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
+    <script src="<c:url value="/resources/js/select2.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
     <script src="<c:url value="/resources/js/searchForm.js" />"></script>
 
@@ -44,7 +46,7 @@
     <div class="navbar-buttons">
         <c:choose>
             <c:when test="${currentUser != null}">
-                <div class="navbar-button dropdown" id="dropdown">
+                <div class="dropdown navbar-button" id="dropdown">
                     <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
                     <div class="dropdown-content" id="dropdown-content">
                         <c:choose>
@@ -78,8 +80,7 @@
         <div class="responsiveRow">
             <h3 class="responsiveDelete"><spring:message code="search.dayHeader"/></h3>
             <div>
-                <form:select cssClass="select-subject no-border b-r-5" path="day">
-                    <form:option selected="selected" value=""><spring:message code="select.day"/></form:option>
+                <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input m-w-200" path="day" multiple="multiple">
                     <form:option value="1"><spring:message code ="day.monday"/></form:option>
                     <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
                     <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
@@ -114,15 +115,16 @@
         </div>
         <div class="responsiveRow">
             <h3 class="r-filter-title"><spring:message code="search.priceHeader"/></h3>
-            <div class="m-10-b rm-10-b">
-                <form:label path="minPrice"><spring:message code="search.label.minPrice"/></form:label>
-                <form:input cssClass="input-request-filter no-border b-r-5" type="number"  min="0" step="0.01" path="minPrice"/>
-                <form:errors cssClass="error-text" path="minPrice" element="p"/>
-            </div>
-            <div>
-                <form:label path="maxPrice"><spring:message code="search.label.maxPrice"/></form:label>
-                <form:input cssClass="input-request-filter no-border b-r-5" type="number" min="0" step="0.01" path="maxPrice"/>
-                <form:errors cssClass="error-text" path="maxPrice" element="p"/>
+            <div class="row">
+                <div class="m-10-b rm-10-b m-w-80">
+                    <form:input cssClass="input-request-filter first-input no-border b-r-5 m-r-5 filter-input" type="number"  min="0" step="0.01" path="minPrice" placeholder="Minimo"/>
+                    <form:errors cssClass="error-text" path="minPrice" element="p"/>
+                </div>
+                -
+                <div class="m-w-80 m-l-5">
+                    <form:input cssClass="input-request-filter no-border b-r-5 filter-input" type="number" min="0" step="0.01" path="maxPrice" placeholder="Máximo"/>
+                    <form:errors cssClass="error-text" path="maxPrice" element="p"/>
+                </div>
             </div>
         </div>
         <button class="button-2 center" type="submit" class="search-button">

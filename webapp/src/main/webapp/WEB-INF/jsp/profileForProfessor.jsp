@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <title>Tu Teoria | <spring:message code="profile.title" /> </title>
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
@@ -24,13 +25,21 @@
     <%--<img class="profile-picture" alt="Profile picture" src="<c:url value="/resources/images/logo_invert.jpg" />" />--%>
     <div class="profile-profesor">
         <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${professor.picture}" />"/>
-        <h1 class="profile-name m-0-10"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
+        <div class="profile-name row">
+            <h1 class="m-0-10 fit-content"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
+            <a class="fas fa-pen center" href="<c:url value="/createCourse" />"></a>
+        </div>
         <h3 class="profile-description m-0-10"><c:out value="${professor.description}" escapeXml="true"/></h3>
     </div>
     <div class="class-content">
-        <div class="add-class button-2">
-            <a class="class-button" href="<c:url value="/createCourse" />"></a>
-            <spring:message code="addClass"/>
+        <div class="row r-center">
+            <div class="add-class button-2">
+                <a class="class-button" href="<c:url value="/createCourse" />"></a>
+                <spring:message code="addClass"/>
+            </div>
+            <div class="add-class">
+                <a class="fas fa-pen center" href="<c:url value="/createCourse" />"></a>
+            </div>
         </div>
         <div class="classes">
             <div>
@@ -60,8 +69,13 @@
     </div>
 
     <div class="time-content">
-        <div id="add-time-modal-button" class="add-time-modal-button button-2">
-            <spring:message code="addTime"/>
+        <div class="row r-center">
+            <div id="add-time-modal-button" class="add-time-modal-button button-2">
+                <spring:message code="addTime"/>
+            </div>
+            <div class="add-class">
+                <a class="fas fa-pen center" href="<c:url value="/createCourse" />"></a>
+            </div>
         </div>
         <div id="add-time-modal" class="add-time-modal">
             <div>

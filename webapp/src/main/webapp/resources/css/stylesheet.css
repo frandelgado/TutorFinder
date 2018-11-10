@@ -146,8 +146,9 @@ body {
     background-color: inherit;
     border: none;
     display: grid;
-    padding: 26px 10px;
+    padding: 0px 10px;
     cursor: pointer;
+    align-content: center;
     text-align: center;
     text-decoration: none;
     color: white;
@@ -156,10 +157,11 @@ body {
 }
 
 .navbar-buttons {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: flex-end;
+    display: grid;
+    align-content: center;
+    grid-auto-flow: column;
+    height: 100%;
+    justify-content: end;
 }
 
 .content {
@@ -273,6 +275,9 @@ body {
 }
 
 .dropdown {
+    display: grid;
+    align-content: center;
+    height: 65px;
     padding-right: 20px;
     padding-left: 20px;
 }
@@ -883,7 +888,7 @@ button {
     border: 2px solid #dedede;
     border-radius: 5px;
     background-color: #dedede;
-    grid-template-rows: auto;
+    grid-template-rows: 90px 100px 1fr;
     grid-template-areas:
             "schedule-titulo schedule-boton"
             "schedule-desc   schedule-desc"
@@ -1184,7 +1189,10 @@ th, td {
         grid-template-columns: 70px auto 70px;
     }
 
-    .navbar-buttons.responsive {position: relative;}
+    .navbar-buttons.responsive {
+        position: relative;
+    }
+
     .navbar-buttons.responsive .icon {
         position: absolute;
         right: 0;
@@ -1221,24 +1229,29 @@ th, td {
     table, td, th {
         font-size: 15px;
     }
+
     th, td {
         padding: 2px;
     }
+
     .staticProfile {
         grid-template-areas: "navbar" "......" "content";
         grid-template-columns: 100fr;
 
     }
+
     .staticProfile .content {
         padding: 10px;
         grid-template-columns: 100fr;
         grid-template-rows: 150px auto auto;
         grid-template-areas: "description" "class-content" "time-content";
     }
+
     .classes {
         max-width: 550px;
     }
-    .profile-profesor{
+
+    .profile-profesor {
         max-width: 550px;
     }
 
@@ -1252,13 +1265,15 @@ th, td {
         margin: 0;
         margin-top: 25px;
     }
+
     .responsiveRow {
         display: flex;
         align-items: center;
         width: 100%;
         justify-content: space-around;
     }
-    .responsiveDelete{
+
+    .responsiveDelete {
         display: none;
     }
     .rm-10-b {
@@ -1286,13 +1301,88 @@ th, td {
     .class-content {
         grid-template-rows: auto auto auto;
     }
-    .navbar-button {
-        padding: 0;
-    }
-    .navbar-buttons {
-        display: block;
-    }
     .dropdown-button{
         padding: 20px;
     }
+}
+
+.rm-10-b {
+    margin: 0;
+}
+.r-filter-title{
+    width: 180px;
+}
+.input-request-filter {
+    width:100px;
+}
+.search-results {
+    width: 550px;
+}
+.conversation-messages {
+    max-height: 200px;
+}
+.conversations {
+    grid-template-columns: 100fr;
+    grid-template-areas: "navbar " "....." "content" "......";
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-input {
+    min-width: 75px;
+    padding-left: 5px;
+    max-width: 75px;
+    height: 30px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.m-w-80 {
+    max-width: 80px;
+}
+
+.m-l-5 {
+    margin-left: 5px;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.m-r-5 {
+    margin-right: 5px;
+}
+
+.select2-selection--multiple {
+    overflow: auto;
+    max-height: 25px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.edit {
+    color: #F47C48;
+}
+
+.r-center {
+    justify-content: center;
+}
+
+.fit-content {
+    width: fit-content;
+}
+.register-form {
+    grid-template-columns: auto 312px auto;
+}
+.class-content {
+    grid-template-rows: auto auto auto;
+}
+.dropdown-button{
+    padding: 0 20px;
 }

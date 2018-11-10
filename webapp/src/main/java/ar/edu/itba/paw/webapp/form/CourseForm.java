@@ -14,7 +14,7 @@ public class CourseForm {
     private String description;
 
     @NotNull
-    @DecimalMin("0")
+    @DecimalMin("1")
     private Double price;
 
     public Long getSubjectId() {

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-@Controller
 public class BaseController {
 
     public ModelAndView redirectToErrorPage(final String errorCode) {
