@@ -5,6 +5,11 @@ import java.util.List;
 
 public class FilterBuilder {
 
+    private static final String BASE_HIBERNATE_SELECT = "select distinct c ";
+
+    private static final String BASE_HIBERNATE_FROM = "from Course as c join c.professor.timeslots as t ";
+
+    private static final String BASE_HIBERNATE_WHERE = null;
 
     private static final String BASE_SELECT = "SELECT DISTINCT courses.user_id, courses.subject_id," +
             "courses.description, price, professors.description, users.username," +
@@ -29,85 +34,87 @@ public class FilterBuilder {
 
     private final List<Object> params;
 
-    private final List<Object> timeslotParams;
-
-    private FilterBuilder(String SELECT, String FROM, String WHERE, String TIME_FILTERS, List<Object> params, List<Object> timeslotParams) {
+    private FilterBuilder(String SELECT, String FROM, String WHERE, String TIME_FILTERS, List<Object> params) {
         this.SELECT = SELECT;
         this.FROM = FROM;
         this.WHERE = WHERE;
         this.TIME_FILTERS = TIME_FILTERS;
         this.params = params;
-        this.timeslotParams = timeslotParams;
     }
 
     public FilterBuilder(){
-        this.SELECT = BASE_SELECT;
-        this.FROM = BASE_FROM;
-        this.WHERE = BASE_WHERE;
+        this.SELECT = BASE_HIBERNATE_SELECT;
+        this.FROM = BASE_HIBERNATE_FROM;
+        this.WHERE = BASE_HIBERNATE_WHERE;
         this.TIME_FILTERS = null;
         this.params = new ArrayList<>();
-        this.timeslotParams = new ArrayList<>();
     }
 
-    public FilterBuilder filterByProfessor(final long professor_id){
-
-        this.params.add(professor_id);
-
-        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE+"AND professors.user_id = ? ",
-                this.TIME_FILTERS, this.params, this.timeslotParams);
-    }
 
     public FilterBuilder filterByTimeslot(final Integer day, final Integer startHour, final Integer endHour){
         StringBuilder sb = new StringBuilder();
         sb.append("(");
         if(day != null) {
-            sb.append("schedules.day = ? ");
-            this.timeslotParams.add(day);
+            sb.append("t.day = ");
+            sb.append(day.toString());
+            sb.append(" ");
             if(startHour != null || endHour != null)
-                sb.append("AND ");
+                sb.append(" and ");
         }
 
         if(startHour != null){
-            this.timeslotParams.add(startHour);
-            sb.append("schedules.hour >= ? ");
+            sb.append("t.hour >= ");
+            sb.append(startHour.toString());
+            sb.append(" ");
             if(endHour != null)
-                sb.append("AND ");
+                sb.append("and ");
         }
 
         if(endHour != null){
-            this.timeslotParams.add(endHour);
-            sb.append("schedules.hour < ?");
+            sb.append("t.hour < ");
+            sb.append(endHour.toString());
         }
 
         if(this.TIME_FILTERS != null)
-            sb.insert(0,"OR ").insert(0, this.TIME_FILTERS);
+            sb.insert(0,"or ").insert(0, this.TIME_FILTERS);
 
         sb.append(") ");
-        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE, sb.toString(), this.params, this.timeslotParams);
+        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE, sb.toString(), this.params);
 
     }
 
     public FilterBuilder filterByPrice(final Double minPrice, final Double maxPrice){
         StringBuilder sb = new StringBuilder();
         if(minPrice != null){
-            sb.append("AND courses.price >= ? ");
-            this.params.add(minPrice);
+            sb.append("AND c.price >= ");
+            sb.append(minPrice.toString());
+            sb.append(" ");
         }
 
         if(maxPrice != null){
-            sb.append("AND courses.price <= ? ");
-            this.params.add(maxPrice);
+            sb.append("AND c.price <= ");
+            sb.append(maxPrice.toString());
+            sb.append(" ");
         }
-
+        if(this.WHERE == null){
+            sb.delete(0, 3);
+            sb.insert(0, "where");
+            return new FilterBuilder(this.SELECT, this.FROM, sb.toString(),
+                    this.TIME_FILTERS, this.params);
+        }
         return new FilterBuilder(this.SELECT, this.FROM, this.WHERE + sb.toString(),
-                this.TIME_FILTERS, this.params, this.timeslotParams);
+                this.TIME_FILTERS, this.params);
     }
 
     public FilterBuilder filterByName(String name){
         if(name != null) {
             this.params.add("%" + name + "%");
-            return new FilterBuilder(this.SELECT, this.FROM, this.WHERE + "AND UPPER(subjects.name) LIKE UPPER(?) ",
-                    this.TIME_FILTERS, this.params, this.timeslotParams);
+            if(this.WHERE == null) {
+                return new FilterBuilder(this.SELECT, this.FROM, "where upper(c.subject.name) like upper(?) ",
+                        this.TIME_FILTERS, this.params);
+            }
+            return new FilterBuilder(this.SELECT, this.FROM, this.WHERE + "and upper(c.subject.name) like upper(?) ",
+                    this.TIME_FILTERS, this.params);
         }
         else{
             return this.clone();
@@ -118,13 +125,15 @@ public class FilterBuilder {
         if(TIME_FILTERS == null){
             return new Filter(SELECT+FROM+WHERE, params);
         } else {
-            params.addAll(timeslotParams);
-            return new Filter(SELECT+FROM+WHERE+ " AND ( " + TIME_FILTERS + " ) ", params);
+            if(this.WHERE == null){
+                return new Filter(SELECT+FROM+ " where ( " + TIME_FILTERS + " ) ", params);
+            }
+            return new Filter(SELECT+FROM+WHERE+ " and ( " + TIME_FILTERS + " ) ", params);
         }
     }
 
     @Override
     public FilterBuilder clone(){
-        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE, this.TIME_FILTERS, this.params, this.timeslotParams);
+        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE, this.TIME_FILTERS, this.params);
     }
 }

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.models.Conversation;
+import ar.edu.itba.paw.models.Message;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import org.slf4j.Logger;
@@ -127,13 +128,15 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     @Async
-    public void sendContactEmail(final User from, final User to, final Conversation conversation) {
+    public void sendContactEmail(final User from, final User to, final Conversation conversation,
+                                 final Message sentMessage) {
         LOGGER.debug("Creating Contact Email for user with id {} from user with id {} for conversation with id {}", to.getId(),
                 from.getId(), conversation.getId());
         final Context ctx = new Context();
         ctx.setVariable("name", from.getName());
         ctx.setVariable("lastname", from.getLastname());
         ctx.setVariable("subject", conversation.getSubject().getName());
+        ctx.setVariable("message", sentMessage.getText());
         ctx.setVariable("url", "http://localhost:8080/Conversation?id=" + conversation.getId());
         final String SUBJECT = "Se han contactado con vos!";
 

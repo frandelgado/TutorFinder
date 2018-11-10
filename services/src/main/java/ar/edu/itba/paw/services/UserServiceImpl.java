@@ -12,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -53,6 +55,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findByEmail(email).orElse(null);
     }
 
+    @Transactional
     @Override
     public User create(final String username, final String password, final String email,
                        final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException {
@@ -85,7 +88,23 @@ public class UserServiceImpl implements UserService {
 
         LOGGER.debug("Creating user with username {}", username);
 
-        User user = userDao.create(username, encoder.encode(password), email, name, lastName);
+        final boolean existsEmail = findByEmail(email) != null;
+        final boolean existsUsername = findByUsername(username) != null;
+
+        if(existsUsername) {
+            if (existsEmail) {
+                LOGGER.error("User with username {} and email {} already exists", username, email);
+                throw new UsernameAndEmailAlreadyInUseException();
+            }
+            LOGGER.error("User with username {} already exists", username);
+            throw new UsernameAlreadyInUseException();
+        }
+        if(existsEmail) {
+            LOGGER.error("User with email {} already exists", email);
+            throw new EmailAlreadyInUseException();
+        }
+
+        final User user = userDao.create(username, encoder.encode(password), email, name, lastName);
 
         if (user != null){
             LOGGER.debug("Sending welcome mail for user with id {}", user.getId());

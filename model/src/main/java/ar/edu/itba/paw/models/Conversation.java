@@ -1,27 +1,58 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
 import org.joda.time.LocalDateTime;
 
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
+@Entity
+@Table(name = "conversations")
 public class Conversation {
 
-    private final Long id;
-    private final User user;
-    private final Professor professor;
-    private final Subject subject;
-    private final List<Message> messages;
-    private final LocalDateTime latestMessage;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "conversations_conversation_id_seq")
+    @SequenceGenerator(sequenceName = "conversations_conversation_id_seq",
+            name = "conversations_conversation_id_seq",  allocationSize = 1)
+    @Column(name = "conversation_id")
+    private Long id;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="user_id", foreignKey = @ForeignKey(name = "conversations_user_id_fkey"))
+    private User user;
 
-    public Conversation(Long id, final User user, final Professor professor, final Subject subject, LocalDateTime latestMessage) {
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="professor_id", foreignKey = @ForeignKey(name = "conversations_professor_id_fkey"))
+    private Professor professor;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="subject_id", foreignKey = @ForeignKey(name = "conversations_subject_id_fkey"))
+    private Subject subject;
+
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "conversation")
+    @OrderBy("created ASC")
+    private List<Message> messages;
+
+    @Formula("(SELECT max(m.created) FROM messages m WHERE m.conversation_id = conversation_id GROUP BY conversation_id)")
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime latestMessage;
+
+    Conversation() {}
+
+    public Conversation(final User user, final Professor professor, final Subject subject, LocalDateTime latestMessage) {
+        this.user = user;
+        this.professor = professor;
+        this.subject = subject;
+        this.latestMessage = latestMessage;
+    }
+
+    public Conversation(final Long id, final User user, final Professor professor, final Subject subject, LocalDateTime latestMessage) {
         this.id = id;
         this.user = user;
         this.professor = professor;
         this.subject = subject;
         this.latestMessage = latestMessage;
-        this.messages = new LinkedList<>();
     }
 
     public Long getId() {

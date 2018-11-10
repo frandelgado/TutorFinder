@@ -14,9 +14,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-@Repository
 public class AreaJdbcDao implements AreaDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AreaJdbcDao.class);
@@ -25,7 +23,6 @@ public class AreaJdbcDao implements AreaDao {
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Area> ROW_MAPPER = (rs, rowNum) -> new Area(
-            rs.getLong(1),
             rs.getString(2),
             rs.getString(3),
             rs.getBytes(4)
@@ -39,12 +36,12 @@ public class AreaJdbcDao implements AreaDao {
                 .usingGeneratedKeyColumns("area_id");
     }
     @Override
-    public Optional<Area> findById(final long id) {
+    public Area findById(final long id) {
         LOGGER.trace("Querying for area with id {}", id);
         final List<Area> list = jdbcTemplate.query(
                 "SELECT area_id, description, name, image FROM areas WHERE area_id = ?", ROW_MAPPER, id
         );
-        return list.stream().findFirst();
+        return list.stream().findFirst().get();
     }
 
     @Override
@@ -54,7 +51,7 @@ public class AreaJdbcDao implements AreaDao {
         args.put("description", description);
         args.put("image", image);
         final Number areaId = jdbcInsert.executeAndReturnKey(args);
-        return new Area(areaId.longValue(), description, name, image);
+        return new Area(description, name, image);
     }
 
     @Override

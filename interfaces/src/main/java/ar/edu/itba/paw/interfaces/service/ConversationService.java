@@ -17,4 +17,6 @@ public interface ConversationService {
     PagedResults<Conversation> findByUserId(final Long userId, final int page);
 
     Conversation findById(final Long conversation_id, final  Long userId) throws UserNotInConversationException;
+
+    Conversation initializeMessages(Conversation conversation);
 }

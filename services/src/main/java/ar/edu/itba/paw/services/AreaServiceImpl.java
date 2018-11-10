@@ -9,10 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class AreaServiceImpl implements AreaService {
 
     private static final int PAGE_SIZE = 3;
@@ -24,7 +26,7 @@ public class AreaServiceImpl implements AreaService {
     @Override
     public Area findAreaById(long id) {
         LOGGER.debug("Searching for area with id {}", id);
-        return areaDao.findById(id).orElse(null);
+        return areaDao.findById(id);
     }
 
     @Override

@@ -1,6 +1,7 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.persistence.jdbc;
 
 import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.persistence.SubjectJdbcDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +21,7 @@ import static junit.framework.TestCase.*;
 import static org.junit.Assert.assertNotEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = JdbcTestConfig.class)
 @Sql("classpath:schema.sql")
 public class SubjectJdbcDaoTest {
 

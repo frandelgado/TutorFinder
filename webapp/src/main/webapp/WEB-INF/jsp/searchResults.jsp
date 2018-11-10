@@ -61,6 +61,8 @@
                         <a href="<c:url value="/" />" class="navbar-button"><spring:message code="reservations.title"/></a>
                         <a href="<c:url value="/" />" class="navbar-button"><spring:message code="classes.title"/></a>
                         <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
+                        <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="reservation"/></a>
+                        <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="myclsases"/></a>
                         <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
                     </div>
                 </div>
@@ -76,31 +78,46 @@
 <div class="content">
     <div class="filter-panel">
 
-        <h2><spring:message code="filter" /> </h2>
-        <div class="responsiveRow">
-            <h3 class="responsiveDelete"><spring:message code="search.dayHeader"/></h3>
-            <div>
-                <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input m-w-200" path="day" multiple="multiple">
-                    <form:option value="1"><spring:message code ="day.monday"/></form:option>
-                    <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
-                    <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
-                    <form:option value="4"><spring:message code ="day.thursday"/></form:option>
-                    <form:option value="5"><spring:message code ="day.friday"/></form:option>
-                    <form:option value="6"><spring:message code ="day.saturday"/></form:option>
-                    <form:option value="7"><spring:message code ="day.sunday"/></form:option>
-                </form:select>
-                <form:errors cssClass="error-text" path="day" element="p"/>
+        <h2 class="text-center-responsive"><spring:message code="filter" /> </h2>
+        <div class="responsiveColumn">
+            <div class="responsiveRow">
+                <h3><spring:message code="search.dayHeader"/></h3>
+                <div>
+                    <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input m-w-200" path="day" multiple="multiple">
+                        <form:option value="1"><spring:message code ="day.monday"/></form:option>
+                        <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
+                        <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
+                        <form:option value="4"><spring:message code ="day.thursday"/></form:option>
+                        <form:option value="5"><spring:message code ="day.friday"/></form:option>
+                        <form:option value="6"><spring:message code ="day.saturday"/></form:option>
+                        <form:option value="7"><spring:message code ="day.sunday"/></form:option>
+                    </form:select>
+                    <form:errors cssClass="error-text" path="day" element="p"/>
+                </div>
             </div>
-            <h3 class="responsiveDelete"><spring:message code="search.hourHeader"/></h3>
-            <div class="m-10-b rm-10-b">
-                <form:label cssClass="label" path="startHour"><spring:message code="schedule.form.startHour"/></form:label>
-                <form:select id="startHourSelect" cssClass="select-subject no-border b-r-5" path="startHour">
-                    <form:option selected="selected" value=""><spring:message code="select.startHour"/></form:option>
-                    <c:forEach var="hour" begin="1" end="23" >
-                        <form:option value="${hour}">${hour}:00</form:option>
-                    </c:forEach>
-                </form:select>
-                <form:errors cssClass="error-text" path="startHour" element="p"/>
+            <div class="responsiveRow">
+                <h3><spring:message code="search.hourHeader"/></h3>
+                <div class="row">
+                    <div class="m-10-b rm-10-b">
+                        <form:select cssClass="select-subject no-border b-r-5 no-margin m-r-5 filter-input" path="startHour" >
+                            <form:option selected="selected" disabled="true" value="">Desde</form:option>
+                            <c:forEach var="hour" begin="1" end="23" >
+                                <form:option value="${hour}">${hour}:00</form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors cssClass="error-text" path="startHour" element="p"/>
+                    </div>
+                    -
+                    <div class="m-l-5">
+                        <form:select cssClass="select-subject no-border b-r-5 no-margin filter-input" path="endHour">
+                            <form:option selected="selected" disabled="true" value="">Hasta</form:option>
+                            <c:forEach var="hour" begin="2" end="24" >
+                                <form:option value="${hour}">${hour}:00</form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors cssClass="error-text" path="endHour" element="p"/>
+                    </div>
+                </div>
             </div>
             <div>
                 <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
@@ -117,12 +134,12 @@
             <h3 class="r-filter-title"><spring:message code="search.priceHeader"/></h3>
             <div class="row">
                 <div class="m-10-b rm-10-b m-w-80">
-                    <form:input cssClass="input-request-filter first-input no-border b-r-5 m-r-5 filter-input" type="number"  min="0" step="0.01" path="minPrice" placeholder="Minimo"/>
+                    <form:input cssClass="input-request-filter first-input no-border b-r-5 m-r-5 filter-input" type="number"  min="1" step="0.01" path="minPrice" placeholder="Minimo"/>
                     <form:errors cssClass="error-text" path="minPrice" element="p"/>
                 </div>
                 -
                 <div class="m-w-80 m-l-5">
-                    <form:input cssClass="input-request-filter no-border b-r-5 filter-input" type="number" min="0" step="0.01" path="maxPrice" placeholder="Máximo"/>
+                    <form:input cssClass="input-request-filter no-border b-r-5 filter-input" type="number" min="1" step="0.01" path="maxPrice" placeholder="Máximo"/>
                     <form:errors cssClass="error-text" path="maxPrice" element="p"/>
                 </div>
             </div>

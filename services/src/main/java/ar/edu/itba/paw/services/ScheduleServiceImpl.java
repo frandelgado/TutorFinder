@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ScheduleServiceImpl implements ScheduleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleServiceImpl.class);
@@ -65,6 +66,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    @Transactional
     public Schedule getScheduleForProfessor(final Long professorId) {
 
         LOGGER.debug("Getting schedule for professor with id {}", professorId);

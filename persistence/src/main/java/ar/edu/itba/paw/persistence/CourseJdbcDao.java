@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.*;
 
-@Repository
 public class CourseJdbcDao implements CourseDao {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CourseJdbcDao.class);
@@ -31,7 +30,6 @@ public class CourseJdbcDao implements CourseDao {
     
     private final static RowMapper<Course> ROW_MAPPER = (rs, rowNum) -> new Course(
             new Professor(
-                    rs.getLong(1),
                     rs.getString(6),
                     rs.getString(7),
                     rs.getString(8),
@@ -45,7 +43,6 @@ public class CourseJdbcDao implements CourseDao {
                     rs.getString(11),
                     rs.getString(12),
                     new Area(
-                            rs.getLong(15),
                             rs.getString(14),
                             rs.getString(13),
                             rs.getBytes(17)

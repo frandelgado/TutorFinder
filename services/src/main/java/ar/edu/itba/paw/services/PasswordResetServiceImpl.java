@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class PasswordResetServiceImpl implements PasswordResetService {
 
     private static final Integer EXPIRATION = 1;

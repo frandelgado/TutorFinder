@@ -1,8 +1,7 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.persistence.jdbc;
 
-import ar.edu.itba.paw.interfaces.persistence.PasswordResetTokenDao;
 import ar.edu.itba.paw.models.PasswordResetToken;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.persistence.PasswordResetTokenJdbcDao;
 import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -17,13 +16,12 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 import static junit.framework.TestCase.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = JdbcTestConfig.class)
 @Sql("classpath:schema.sql")
 public class PasswordResetTokenJdbcDaoTest {
 

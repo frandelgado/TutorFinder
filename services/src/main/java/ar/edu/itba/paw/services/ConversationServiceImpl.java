@@ -20,6 +20,7 @@ import java.util.List;
 
 
 @Service
+@Transactional
 public class ConversationServiceImpl implements ConversationService {
 
     private static final int PAGE_SIZE = 3;
@@ -112,7 +113,7 @@ public class ConversationServiceImpl implements ConversationService {
         if(message != null) {
             LOGGER.debug("Sending contact email from user with id {} to user with id {} in conversation with id {}",
                     userId, to.getId(), conversationId);
-            emailService.sendContactEmail(from, to, conversation);
+            emailService.sendContactEmail(from, to, conversation, message);
         }
 
         return message != null;
@@ -163,6 +164,14 @@ public class ConversationServiceImpl implements ConversationService {
         }
 
         return conversation;
+    }
+
+    @Transactional
+    @Override
+    public Conversation initializeMessages(final Conversation conversation) {
+        final Conversation ret = conversationDao.merge(conversation);
+        ret.getMessages().size();
+        return ret;
     }
 
 }

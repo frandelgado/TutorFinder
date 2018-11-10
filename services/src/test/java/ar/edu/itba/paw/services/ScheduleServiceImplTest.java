@@ -45,12 +45,12 @@ public class ScheduleServiceImplTest {
         MockitoAnnotations.initMocks(this);
         final Professor professor = new Professor(2L, "username","Carlos","Ramos",
                 "password","carlitos@gmail.com","test description", new byte[1]);
-        when(scheduleDao.reserveTimeSlot(professor,1, 12)).thenReturn( new Timeslot(1,12));
-        when(scheduleDao.reserveTimeSlot(professor,1, 14)).thenReturn( new Timeslot(1,14));
-        when(scheduleDao.reserveTimeSlot(professor,1, 15)).thenReturn( new Timeslot(1,15));
-        when(scheduleDao.reserveTimeSlot(professor,1, 16)).thenReturn( new Timeslot(1,16));
-        when(scheduleDao.reserveTimeSlot(professor,1, -3)).thenReturn( new Timeslot(1,-3));
-        when(scheduleDao.reserveTimeSlot(professor,1, 27)).thenReturn( new Timeslot(1,27));
+        when(scheduleDao.reserveTimeSlot(professor,1, 12)).thenReturn( new Timeslot(1,12, professor));
+        when(scheduleDao.reserveTimeSlot(professor,1, 14)).thenReturn( new Timeslot(1,14, professor));
+        when(scheduleDao.reserveTimeSlot(professor,1, 15)).thenReturn( new Timeslot(1,15, professor));
+        when(scheduleDao.reserveTimeSlot(professor,1, 16)).thenReturn( new Timeslot(1,16, professor));
+        when(scheduleDao.reserveTimeSlot(professor,1, -3)).thenReturn( new Timeslot(1,-3, professor));
+        when(scheduleDao.reserveTimeSlot(professor,1, 27)).thenReturn( new Timeslot(1,27, professor));
         when(ps.findById(2L)).thenReturn(professor);
     }
 

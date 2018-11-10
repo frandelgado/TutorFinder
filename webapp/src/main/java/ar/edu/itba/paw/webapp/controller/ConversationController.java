@@ -52,8 +52,9 @@ public class ConversationController extends BaseController{
         if(conversation == null) {
             redirectToErrorPage("nonExistentConversation");
         }
+        final Conversation ret = conversationService.initializeMessages(conversation);
 
-        mav.addObject("conversation", conversation);
+        mav.addObject("conversation", ret);
         form.setConversationId(id);
         return mav;
     }
