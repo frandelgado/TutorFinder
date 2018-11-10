@@ -194,14 +194,15 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/CreateTimeSlot", method = RequestMethod.POST)
     public ModelAndView createTimeslot(
             @ModelAttribute("currentUser") final User loggedUser,
-            @Valid @ModelAttribute("ScheduleForm") final ScheduleForm form,
+            @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
+            @Valid @ModelAttribute("addScheduleForm") final ScheduleForm form,
             final BindingResult errors
     ) throws NonexistentProfessorException {
         if(errors.hasErrors() || !form.validForm()) {
             if(!form.validForm()) {
                 errors.rejectValue("endHour", "profile.add_schedule.timeError");
             }
-            return profile(loggedUser, form, new ScheduleForm(), 1);
+            return profile(loggedUser, form, deleteScheduleForm, 1);
         }
 
         final List<Timeslot> timeslots;
@@ -226,14 +227,15 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/RemoveTimeSlot", method = RequestMethod.POST)
     public ModelAndView RemoveTimeslot(
             @ModelAttribute("currentUser") final User loggedUser,
-            @Valid @ModelAttribute("ScheduleForm") final ScheduleForm form,
+            @ModelAttribute("addScheduleForm") final ScheduleForm addScheduleForm,
+            @Valid @ModelAttribute("deleteScheduleForm") final ScheduleForm form,
             final BindingResult errors
     ) throws NonexistentProfessorException {
         if(errors.hasErrors() || !form.validForm()) {
             if(!form.validForm()) {
                 errors.rejectValue("endHour", "profile.add_schedule.timeError");
             }
-            return profile(loggedUser, new ScheduleForm(), form, 1);
+            return profile(loggedUser, addScheduleForm, form, 1);
         }
         try {
             ss.removeTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());

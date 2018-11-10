@@ -38,8 +38,13 @@ $(document).ready(function() {
         }
     });
 
-    var error = document.getElementsByClassName("error-text")[0];
+    var error = addModal.getElementsByClassName("error-text")[0];
     if(error != null) {
         addModal.style.display = "block";
+    }
+
+    var error = deleteModal.getElementsByClassName("error-text")[0];
+    if(error != null) {
+        deleteModal.style.display = "block";
     }
 });
