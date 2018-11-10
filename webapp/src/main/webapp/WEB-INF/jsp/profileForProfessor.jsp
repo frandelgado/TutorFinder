@@ -31,7 +31,7 @@
         <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${professor.picture}" />"/>
         <div class="profile-name row">
             <h1 class="m-0-10 fit-content"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
-            <a class="fas fa-pen center" href="<c:url value="/registerAsProfessor" />"></a>
+            <a class="fas fa-pen center" href="<c:url value="/editProfessorProfile" />"></a>
         </div>
         <h3 class="profile-description m-0-10"><c:out value="${professor.description}" escapeXml="true"/></h3>
     </div>
