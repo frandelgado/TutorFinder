@@ -59,6 +59,34 @@
     </form:form>
     </div>
 
+    <div class="comment">
+        <div class="button-container">
+            <h2 class="label"><spring:message code="course.contact"/></h2>
+        </div>
+        <c:url value="/postComment" var="postPath"/>
+        <form:form cssClass="form" modelAttribute="commentForm" action="${postPath}" method="post">
+            <form:hidden path="commentProfessorId" />
+            <form:hidden path="commentSubjectId" />
+            <div>
+                <form:label cssClass="label" path="commentBody"><spring:message code="contact.body"/></form:label>
+                <form:textarea cssClass="input-request chat-box" type="text" path="commentBody" rows="5" cols="5"/>
+                <form:errors cssClass="error-text" path="commentBody" element="p"/>
+            </div>
+            <div>
+                <form:label cssClass="label" path="rating"><spring:message code="contact.body"/></form:label>
+                <form:input cssClass="input-request" type="number" step="1" path="rating"/>
+                <form:errors cssClass="error-text" path="rating" element="p"/>
+            </div>
+            <div>
+                <form:hidden path="commentExtraMessage"/>
+                <form:errors cssClass="success-text" path="commentExtraMessage" element="p"/>
+            </div>
+            <div class="button-container">
+                <input class="button-2" type="submit" value="<spring:message code="send"/>"/>
+            </div>
+        </form:form>
+    </div>
+
     <div class="schedule">
         <h2><spring:message code="schedule.title"/></h2>
         <c:if test="${currentUser == null || (currentUser != null && currentUser.id != course.professor.id)}">

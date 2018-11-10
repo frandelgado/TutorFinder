@@ -2,11 +2,13 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
+import ar.edu.itba.paw.models.Comment;
 import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.ClassReservationForm;
+import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.joda.time.LocalDate;
@@ -52,6 +54,7 @@ public class CourseController extends BaseController{
     @RequestMapping("/Course")
     public ModelAndView course(
             @ModelAttribute("messageForm") final MessageForm messageForm,
+            @ModelAttribute("commentForm") final CommentForm commentForm,
             @RequestParam(value="professor", required=true) final long professorId,
             @RequestParam(value="subject", required=true) final long subjectId,
             @ModelAttribute(value = "SUCCESS_MESSAGE") final String success_message,
@@ -69,17 +72,20 @@ public class CourseController extends BaseController{
         mav.addObject("schedule", schedule);
         messageForm.setProfessorId(professorId);
         messageForm.setSubjectId(subjectId);
+        commentForm.setCommentProfessorId(professorId);
+        commentForm.setCommentSubjectId(subjectId);
         return mav;
     }
 
     @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
     public ModelAndView contact(
+            @ModelAttribute("commentForm") final CommentForm comment,
             @Valid @ModelAttribute("messageForm") final MessageForm form,
             final BindingResult errors,
             @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException, NonexistentConversationException {
 
         if(errors.hasErrors()) {
-            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form,comment, form.getProfessorId(), form.getSubjectId(), null, null);
         }
 
         final boolean sent;
@@ -89,16 +95,38 @@ public class CourseController extends BaseController{
         } catch (SameUserException e) {
             errors.rejectValue("body", "SameUserMessageError");
             form.setBody(null);
-            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form,comment, form.getProfessorId(), form.getSubjectId(), null, null);
         }
         if(sent) {
             errors.rejectValue("extraMessage", "MessageSent");
             form.setBody(null);
-            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form,comment, form.getProfessorId(), form.getSubjectId(), null, null);
         } else {
             errors.rejectValue("body", "SendMessageError");
         }
-        return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+        return course(form,comment, form.getProfessorId(), form.getSubjectId(), null, null);
+    }
+
+    @RequestMapping(value = "/postComment", method = RequestMethod.POST)
+    public ModelAndView comment(
+            @ModelAttribute("messageForm") final MessageForm message,
+            @Valid @ModelAttribute("commentForm") final CommentForm form,
+            final BindingResult errors,
+            @ModelAttribute("currentUser") final User loggedUser) {
+
+        if(errors.hasErrors()) {
+            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), null, null);
+        }
+
+        final boolean sent = courseService.comment(loggedUser.getId(), form.getCommentProfessorId(),
+                    form.getCommentSubjectId(), form.getCommentBody(), form.getRating());
+        if(sent) {
+            return redirectWithNoExposedModalAttributes("/Course/?professor=" +
+                    form.getCommentProfessorId() + "&subject=" + form.getCommentSubjectId());
+        } else {
+            errors.rejectValue("commentBody", "SendMessageError");
+        }
+        return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), null, null);
     }
 
 
