@@ -46,7 +46,7 @@
     <div class="navbar-buttons">
         <c:choose>
             <c:when test="${currentUser != null}">
-                <div class="navbar-button dropdown" id="dropdown">
+                <div class="dropdown navbar-button" id="dropdown">
                     <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
                     <div class="dropdown-content" id="dropdown-content">
                         <c:choose>
@@ -58,6 +58,8 @@
                                 <a href="<c:url value="/registerAsProfessor" />" class="navbar-button"><spring:message code="register.professor"/></a>
                             </c:otherwise>
                         </c:choose>
+                        <a href="<c:url value="/" />" class="navbar-button"><spring:message code="reservations.title"/></a>
+                        <a href="<c:url value="/" />" class="navbar-button"><spring:message code="classes.title"/></a>
                         <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
                         <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="reservation"/></a>
                         <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="myclsases"/></a>
@@ -116,6 +118,16 @@
                         <form:errors cssClass="error-text" path="endHour" element="p"/>
                     </div>
                 </div>
+            </div>
+            <div>
+                <form:label cssClass="label" path="endHour"><spring:message code="schedule.form.endHour"/></form:label>
+                <form:select id="endHourSelect" cssClass="select-subject no-border b-r-5" path="endHour">
+                    <form:option selected="selected" value=""><spring:message code="select.endHour"/></form:option>
+                    <c:forEach var="hour" begin="2" end="24" >
+                        <form:option value="${hour}">${hour}:00</form:option>
+                    </c:forEach>
+                </form:select>
+                <form:errors cssClass="error-text" path="endHour" element="p"/>
             </div>
         </div>
         <div class="responsiveRow">

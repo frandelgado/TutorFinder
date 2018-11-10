@@ -56,6 +56,7 @@
 
     <div class="schedule">
         <h2><spring:message code="schedule.title"/></h2>
+        <input class="button-2" type="button" value="<spring:message code="reservations.action"/>"/>
         <p><spring:message code="schedule.description" /></p>
         <%@ include file="schedule.jsp"%>
     </div>
