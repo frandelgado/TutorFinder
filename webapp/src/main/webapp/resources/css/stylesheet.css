@@ -593,7 +593,7 @@ button {
     display: grid;
     grid-template-rows: 50px auto;
     grid-template-areas:
-            "button"
+            "buttons"
             "schedule"
             ;
 }
