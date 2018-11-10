@@ -9,7 +9,11 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    List<Timeslot> reserveTimeSlot(Long professor_id, Integer day, Integer startTime, Integer endTime) throws TimeslotAllocatedException, NonexistentProfessorException;
+    List<Timeslot> reserveTimeSlot(Long professor_id, Integer day, Integer startTime, Integer endTime)
+            throws TimeslotAllocatedException, NonexistentProfessorException;
+
+    boolean removeTimeSlot(Long professor_id, Integer day, Integer startTime, Integer endTime)
+            throws NonexistentProfessorException;
 
     Schedule getScheduleForProfessor(Long professorId);
 }

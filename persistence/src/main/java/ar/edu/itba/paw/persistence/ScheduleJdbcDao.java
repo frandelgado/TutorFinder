@@ -54,6 +54,11 @@ public class ScheduleJdbcDao implements ScheduleDao {
     }
 
     @Override
+    public boolean removeTimeSlot(Professor professor, Integer day, Integer hour) {
+        return false;
+    }
+
+    @Override
     public List<Timeslot> getTimeslotsForProfessor(Professor professor) {
         LOGGER.trace("Querying for timeslots from professor with id {}", professor.getId());
         List<Timeslot> schedule = jdbcTemplate.query("SELECT schedules.day, schedules.hour FROM schedules WHERE user_id = ?", TIMESLOT_ROW_MAPPER, professor.getId());
