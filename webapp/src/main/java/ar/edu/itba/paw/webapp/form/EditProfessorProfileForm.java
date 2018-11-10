@@ -13,7 +13,7 @@ public class EditProfessorProfileForm {
 
     @FileSize
     @FileType
-    private MultipartFile picture;
+    private MultipartFile pic;
 
     public String getDescription() {
         return description;
@@ -23,11 +23,11 @@ public class EditProfessorProfileForm {
         this.description = description;
     }
 
-    public MultipartFile getPicture() {
-        return picture;
+    public MultipartFile getPic() {
+        return pic;
     }
 
-    public void setPicture(MultipartFile picture) {
-        this.picture = picture;
+    public void setPic(MultipartFile picture) {
+        this.pic = picture;
     }
 }

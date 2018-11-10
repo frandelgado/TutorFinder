@@ -171,14 +171,24 @@ public class ProfessorServiceImpl implements ProfessorService {
 
         if(professor.isPresent()){
             String newDescription = null;
-            if(description.length() > 50 && description.length() < 300){
+            byte[] newPicture = null;
+            if(description.length() > 50 && description.length() < 300) {
                 newDescription = description;
             } else {
-                LOGGER.debug("Attempted to modify {} professor profile with invalid description size {}, " +
+                LOGGER.debug("Attempted to modify profile for professor with id {} with invalid description size {}, " +
                                 "keeping old description",
-                        professor.get().getName(), description.length());
+                        professor.get().getId(), description.length());
             }
-            return professorDao.modify(professor.get(), newDescription, picture);
+
+            if(picture == null || picture.length <= 0) {
+                LOGGER.debug("Attempted to modify profile for professor with id {} with no profile picture, " +
+                                "keeping old one",
+                        professor.get().getId());
+            } else {
+                newPicture = picture;
+            }
+
+            return professorDao.modify(professor.get(), newDescription, newPicture);
 
         } else {
             throw new NonexistentProfessorException();

@@ -65,9 +65,9 @@
             <form:errors cssClass="error-text" path="description" element="p"/>
         </div>
         <div id="pictureDiv">
-            <form:label cssClass="label" path="picture"><spring:message code="profile.modify.picture"/></form:label>
-            <form:input cssClass="input-request" type="file" path="picture" accept="image/jpeg, image/png" id="picture"/>
-            <form:errors cssClass="error-text" path="picture" element="p"/>
+            <form:label cssClass="label" path="pic"><spring:message code="profile.modify.picture"/></form:label>
+            <form:input cssClass="input-request" type="file" path="pic" accept="image/jpeg, image/png" id="pic"/>
+            <form:errors cssClass="error-text" path="pic" element="p"/>
             <p id="pictureError" class="error-text"><spring:message code="FileSize.registerAsProfessorForm.picture" /></p>
         </div>
 

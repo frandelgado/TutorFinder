@@ -202,14 +202,13 @@ public class UserController extends BaseController{
 
         final Professor professor;
         try {
-            professor = ps.modify(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
+            professor = ps.modify(loggedUser.getId(), form.getDescription(), form.getPic().getBytes());
         } catch (IOException e) {
             return redirectToErrorPage("fileUploadError");
         } catch (NonexistentProfessorException | ProfessorWithoutUserException e) {
             return redirectToErrorPage("oops");
         }
-        return redirectWithNoExposedModalAttributes("/");
-//        return profile(loggedUser, new ScheduleForm(), 1);
+        return redirectWithNoExposedModalAttributes("/Profile");
     }
 
     @RequestMapping(value = "/editProfessorProfile", method = RequestMethod.GET)
