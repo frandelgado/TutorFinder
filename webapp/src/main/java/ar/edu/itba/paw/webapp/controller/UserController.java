@@ -196,6 +196,10 @@ public class UserController extends BaseController{
     public ModelAndView editProfessor(@ModelAttribute("currentUser") final User loggedUser,
                                       @Valid @ModelAttribute("editProfessorProfileForm") final EditProfessorProfileForm form,
                                       final BindingResult errors ) throws NonexistentProfessorException {
+        if(errors.hasErrors()) {
+            return editProfessor(form, loggedUser);
+        }
+
         final Professor professor;
         try {
             professor = ps.modify(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
@@ -204,10 +208,11 @@ public class UserController extends BaseController{
         } catch (NonexistentProfessorException | ProfessorWithoutUserException e) {
             return redirectToErrorPage("oops");
         }
-        return profile(loggedUser, new ScheduleForm(), 1);
+        return redirectWithNoExposedModalAttributes("/");
+//        return profile(loggedUser, new ScheduleForm(), 1);
     }
 
-    @RequestMapping(value = "/editProfessorProfile")
+    @RequestMapping(value = "/editProfessorProfile", method = RequestMethod.GET)
     public ModelAndView editProfessor(@ModelAttribute("editProfessorProfileForm") final EditProfessorProfileForm form,
                                       @ModelAttribute("currentUser") final User loggedUser) {
         final Professor professor = ps.findById(loggedUser.getId());

@@ -57,7 +57,7 @@
     <div class="button-container">
         <h2 class="label"><spring:message code="modify.professor" /> </h2>
     </div>
-    <c:url value="/registerAsProfessor" var="postPath" />
+    <c:url value="/editProfessorProfile" var="postPath" />
     <form:form cssClass="form" modelAttribute="editProfessorProfileForm" action="${postPath}" enctype="multipart/form-data" method="post">
         <div>
             <form:label cssClass="label" path="description"><spring:message code="profile.modify.description"/></form:label>
@@ -72,7 +72,7 @@
         </div>
 
         <div class="button-container">
-            <input class="button-2" id="registerAsProfessorSubmit" type="submit" value="<spring:message code="register"/>"/>
+            <input class="button-2" type="submit" value="<spring:message code="modify"/>"/>
         </div>
     </form:form>
 </div>
