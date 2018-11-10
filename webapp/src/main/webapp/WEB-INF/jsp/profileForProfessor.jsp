@@ -10,6 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
+    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/schedule.css" />">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <title>Tu Teoria | <spring:message code="profile.title" /> </title>
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>

@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
     <title>Tu Teoria | <spring:message code="forgotPassword"/></title>
 </head>
 
