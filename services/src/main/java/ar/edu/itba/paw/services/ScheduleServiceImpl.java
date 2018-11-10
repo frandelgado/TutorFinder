@@ -66,6 +66,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    @Transactional
     public boolean removeTimeSlot(Long professor_id, Integer day, Integer startTime, Integer endTime) throws NonexistentProfessorException {
         Professor professor = ps.findById(professor_id);
         if(professor == null)
