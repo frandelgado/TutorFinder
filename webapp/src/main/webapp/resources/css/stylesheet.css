@@ -261,7 +261,7 @@ button {
 
 .staticProfile .content {
     display: grid;
-    grid-template-columns: 50fr 50fr;
+    grid-template-columns: 40fr 60fr;
     grid-column-gap: 10px;
     grid-row-gap: 20px;
     grid-template-areas:
@@ -274,6 +274,7 @@ button {
 .class-content {
     grid-area: class-content;
     display: grid;
+    margin:25px 0;
     grid-template-rows: 50px auto;
     grid-template-areas: 
             "add-class"

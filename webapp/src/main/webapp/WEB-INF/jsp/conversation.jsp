@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/conversations.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>

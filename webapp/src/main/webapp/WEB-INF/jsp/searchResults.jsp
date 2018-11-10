@@ -65,8 +65,6 @@
                         <a href="<c:url value="/" />" class="navbar-button"><spring:message code="reservations.title"/></a>
                         <a href="<c:url value="/" />" class="navbar-button"><spring:message code="classes.title"/></a>
                         <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
-                        <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="reservation"/></a>
-                        <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="myclsases"/></a>
                         <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
                     </div>
                 </div>

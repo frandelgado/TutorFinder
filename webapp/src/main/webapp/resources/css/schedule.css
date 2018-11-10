@@ -13,7 +13,6 @@
     border: 2px solid #dedede;
     border-radius: 5px;
     background-color: #dedede;
-    grid-template-rows: 90px 100px 1fr;
     grid-template-areas:
             "schedule-titulo schedule-boton"
             "schedule-desc   schedule-desc"
@@ -51,19 +50,20 @@
     min-width: 655px;
 }
 
-.time-content-other {
-    display: grid;
-    grid-template-areas:
-            "schedule";
-    grid-template-rows: auto;
-}
-
 .time-content {
     grid-area: time-content;
     display: grid;
+    margin: 25px;
     grid-template-rows: 50px auto;
     grid-template-areas:
             "buttons"
             "schedule"
 ;
+}
+
+.time-content-other {
+    display: grid;
+    grid-template-areas:
+            "schedule";
+    grid-template-rows: auto;
 }
