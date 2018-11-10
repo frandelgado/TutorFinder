@@ -19,4 +19,18 @@ $(document).ready(function(){
 
         });
     });
+
+    var minPriceObj = document.getElementById('minPrice');
+    var maxPriceObj = document.getElementById('maxPrice');
+
+    var minPrice = parseFloat(minPriceObj.value);
+    var maxPrice = parseFloat(maxPriceObj.value);
+
+    if(Number.isInteger(minPrice)) {
+        minPriceObj.value = minPrice | 0;
+    }
+
+    if(Number.isInteger(maxPrice)) {
+        maxPriceObj.value = maxPrice | 0;
+    }
 });

@@ -120,12 +120,12 @@
             <h3 class="r-filter-title"><spring:message code="search.priceHeader"/></h3>
             <div class="row">
                 <div class="m-10-b rm-10-b m-w-80">
-                    <form:input cssClass="input-request-filter first-input no-border b-r-5 m-r-5 filter-input" type="number"  min="0" step="0.01" path="minPrice" placeholder="Minimo"/>
+                    <form:input cssClass="input-request-filter first-input no-border b-r-5 m-r-5 filter-input" type="number"  min="1" step="0.01" path="minPrice" placeholder="Minimo"/>
                     <form:errors cssClass="error-text" path="minPrice" element="p"/>
                 </div>
                 -
                 <div class="m-w-80 m-l-5">
-                    <form:input cssClass="input-request-filter no-border b-r-5 filter-input" type="number" min="0" step="0.01" path="maxPrice" placeholder="Máximo"/>
+                    <form:input cssClass="input-request-filter no-border b-r-5 filter-input" type="number" min="1" step="0.01" path="maxPrice" placeholder="Máximo"/>
                     <form:errors cssClass="error-text" path="maxPrice" element="p"/>
                 </div>
             </div>
