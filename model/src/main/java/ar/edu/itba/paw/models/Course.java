@@ -26,9 +26,6 @@ public class Course {
     @Column(nullable = false)
     private Double price;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<ClassReservation> classReservations;
-
     public Course(){}
 
     public Course(Professor professor, Subject subject, String description, Double price) {
