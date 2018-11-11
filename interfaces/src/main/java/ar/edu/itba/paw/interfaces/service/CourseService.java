@@ -22,4 +22,9 @@ public interface CourseService {
     boolean comment(final Long userId, final Long professorId, final Long subjectId, final String body, final int rating) throws SameUserException, NonAcceptedReservationException;
 
     PagedResults<Comment> getComments(final Course course, final int page);
+
+    Course modify(final Long professorId, final Long subjectId, final String description, final Double price)
+            throws CourseAlreadyExistsException, NonexistentProfessorException, NonexistentSubjectException, NonexistentCourseException;
+
+    boolean deleteCourse(long professorId, long subjectId);
 }
