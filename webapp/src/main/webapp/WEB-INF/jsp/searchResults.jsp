@@ -19,6 +19,7 @@
     <script src="<c:url value="/resources/js/select2.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
     <script src="<c:url value="/resources/js/searchForm.js" />"></script>
+    <script src="<c:url value="/resources/js/fromToRestriction.js" />"></script>
 
     <title>Tu Teoria | <spring:message code="search.results" /> </title>
 </head>
