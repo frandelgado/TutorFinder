@@ -21,5 +21,5 @@ public interface UserService {
 
     boolean changePassword(final Long userId, String password);
 
-    PagedResults<ClassReservation> pagedReservations(final User user, final int page);
+    PagedResults<ClassReservation> pagedReservations(final Long userId, final int page);
 }

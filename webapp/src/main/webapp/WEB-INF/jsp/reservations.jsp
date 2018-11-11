@@ -23,26 +23,13 @@
 
 <body class="body">
 <c:url value="/searchResults" var="postPath"/>
+
 <div class="navbar">
     <a href="<c:url value="/" />" class="logo-box">
         <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
     </a>
 
-    <div class="search-bar">
-        <spring:message code="search" var="searchPlaceholder"/>
-        <form:input class="search-input" type="search" path="search" name="search" placeholder="${searchPlaceholder}"/>
-        <div class="search-dropdown">
-            <form:select class="select-search-type" path="type" name="type">
-                <form:option value="" selected="true" disabled="true"><spring:message code="search.category" /> </form:option>
-                <form:option value="professor"><spring:message code="professor" /> </form:option>
-                <form:option value="course"><spring:message code="course.title" /> </form:option>
-                <form:option value="area"><spring:message code="area" /></form:option>
-            </form:select>
-        </div>
-        <button type="submit" class="search-button">
-            <img class="search-img" src="<c:url value="/resources/images/search.png" />" />
-        </button>
-    </div>
+    <div class="search-bar"></div>
 
     <div class="navbar-buttons">
         <c:choose>
@@ -59,8 +46,6 @@
                                 <a href="<c:url value="/registerAsProfessor" />" class="navbar-button"><spring:message code="register.professor"/></a>
                             </c:otherwise>
                         </c:choose>
-                        <a href="<c:url value="/reservations?page=1" />" class="navbar-button"><spring:message code="reservations.title"/></a>
-                        <a href="<c:url value="/" />" class="navbar-button"><spring:message code="classes.title"/></a>
                         <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
                         <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
                     </div>
@@ -77,10 +62,9 @@
 <div class="content">
     <div class="search-results">
         <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
-        <c:choose>
-            <c:when test="${reservations.size() == 0}">
+            <c:if test="${reservations.size() == 0}">
                 <h1><spring:message code="no.results"/></h1>
-            </c:when>
+            </c:if>
             <c:forEach var="reservation" items="${reservations}">
                 <div class="search-course-result">
                     <a class="conversation-link" href = "<c:url value="/Course/?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
@@ -95,7 +79,6 @@
                     <a class="search-result-rating"><spring:message code="rating.title" arguments="${reservation.course.price}" htmlEscape="true" /></a>
                 </div>
             </c:forEach>
-        </c:choose>
 
         <div class="paged-result-buttons">
             <c:url value="/reservations?page=${page - 1}" var="previous"/>

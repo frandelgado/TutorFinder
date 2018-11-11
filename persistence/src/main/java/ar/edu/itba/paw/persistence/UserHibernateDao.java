@@ -49,10 +49,10 @@ public class UserHibernateDao implements UserDao {
     }
 
     @Override
-    public List<ClassReservation> pagedReservations(User user, Integer limit, Integer offset) {
-        final TypedQuery<ClassReservation> query = em.createQuery("from ClassReservation as c where c.student = :student " +
+    public List<ClassReservation> pagedReservations(Long userId, Integer limit, Integer offset) {
+        final TypedQuery<ClassReservation> query = em.createQuery("from ClassReservation as c where c.student.id= :student_id " +
                 "order by c.classRequestId", ClassReservation.class);
-        query.setParameter("student", user);
+        query.setParameter("student_id", userId);
         query.setFirstResult(offset);
         query.setMaxResults(limit);
         return query.getResultList();

@@ -68,7 +68,7 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public List<ClassReservation> pagedReservations(User user, Integer limit, Integer offset) {
+    public List<ClassReservation> pagedReservations(Long user, Integer limit, Integer offset) {
         return null;
     }
 

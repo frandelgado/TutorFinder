@@ -21,7 +21,7 @@ public interface UserDao {
 
     Optional<User> findByUsername(final String username);
 
-    List<ClassReservation> pagedReservations(final User user, final Integer limit, final Integer offset);
+    List<ClassReservation> pagedReservations(final Long userId, final Integer limit, final Integer offset);
 
     boolean changePasswordById(final Long userId, final String newPassword);
 }

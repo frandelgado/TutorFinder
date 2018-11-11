@@ -138,14 +138,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public PagedResults<ClassReservation> pagedReservations(User user, int page) {
+    public PagedResults<ClassReservation> pagedReservations(Long userId, int page) {
         if(page <= 0) {
             LOGGER.error("Attempted to find 0 or negative page number");
             return null;
         }
 
-        LOGGER.debug("Searching for reservations for user with id {}", user.getId());
-        final List<ClassReservation> reservations = userDao.pagedReservations(user, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
+        LOGGER.debug("Searching for reservations for user with id {}", userId);
+        final List<ClassReservation> reservations = userDao.pagedReservations(userId, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
         final PagedResults<ClassReservation> results;
 
         final int size = reservations.size();
