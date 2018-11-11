@@ -1,70 +1,55 @@
 package ar.edu.itba.paw.webapp.form;
 
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public class ClassReservationForm {
 
-    private Long subjectId;
+    @NotNull
+    @Min(1)
+    @Max(23)
+    private Integer startHour;
 
-    private Long professorId;
-
-    private Long studentId;
+    @NotNull
+    @Min(2)
+    @Max(24)
+    private Integer endHour;
 
     @Future
-    private LocalDateTime startTime;
+    private LocalDate day;
 
-    @Future
-    private LocalDateTime endTime;
 
     public boolean validForm() {
-        if(startTime == null || endTime == null)
+        if(startHour == null || endHour == null)
             return false;
-
-        if (startTime.compareTo(endTime) > 0){
-            return false;
-        }
-        return true;
+        return startHour < endHour;
     }
 
-    public Long getSubjectId() {
-        return subjectId;
+    public Integer getStartHour() {
+        return startHour;
     }
 
-    public void setSubjectId(Long subjectId) {
-        this.subjectId = subjectId;
+    public void setStartHour(Integer startHour) {
+        this.startHour = startHour;
     }
 
-    public Long getProfessorId() {
-        return professorId;
+    public Integer getEndHour() {
+        return endHour;
     }
 
-    public void setProfessorId(Long professorId) {
-        this.professorId = professorId;
+    public void setEndHour(Integer endHour) {
+        this.endHour = endHour;
     }
 
-    public Long getStudentId() {
-        return studentId;
+    public LocalDate getDay() {
+        return day;
     }
 
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
+    public void setDay(LocalDate day) {
+        this.day = day;
     }
 }

@@ -11,6 +11,7 @@
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
@@ -28,32 +29,41 @@
 
 <div class="content">
     <div class="button-container">
-        <h2 class="label"><spring:message code="course.create" /></h2>
+        <h2 class="label"><spring:message code="class.reserve" /></h2>
     </div>
-    <c:url value="/createCourse" var="postPath"/>
+    <c:url value="/reserveClass" var="postPath"/>
     <form:form cssClass="form" modelAttribute="classReservationForm" action="${postPath}" method="post">
         <div>
-            <form:label cssClass="label" path="subjectId"><spring:message code="course.subject"/></form:label>
-            <form:select cssClass="input-request course-select" path="subjectId">
-                <form:option selected="selected" value=""><spring:message code="select.subject"/></form:option>
-                <c:forEach var="subject" items="${subjects}">
-                    <form:option value="${subject.id}">${subject.name}</form:option>
-                </c:forEach>
-            </form:select>
-            <form:errors cssClass="error-text" path="subjectId" element="p"/>
+            <form:label cssClass="label" path="day"><spring:message code="classReservation.dayHeader"/></form:label>
+            <form:input path="day" cssClass="input-request" type="date"/>
+            <form:errors cssClass="error-text" path="day" element="p"/>
         </div>
-        <div>
-            <form:label cssClass="label" path="description"><spring:message code="description"/></form:label>
-            <form:textarea cssClass="input-request" type="text" path="description" rows="5" cols="5"/>
-            <form:errors cssClass="error-text" path="description" element="p"/>
-        </div>
-        <div>
-            <form:label cssClass="label" path="price"><spring:message code="course.price"/></form:label>
-            <form:input cssClass="input-request" type="number" step="0.01" path="price"/>
-            <form:errors cssClass="error-text" path="price" element="p"/>
+        <div class="responsiveRow">
+            <h3><spring:message code="classReservation.hourHeader"/></h3>
+            <div class="row">
+                <div class="m-10-b rm-10-b">
+                    <form:select cssClass="select-subject no-border b-r-5 no-margin m-r-5 filter-input" path="startHour" >
+                        <form:option selected="selected" disabled="true" value="">Desde</form:option>
+                        <c:forEach var="hour" begin="1" end="23" >
+                            <form:option value="${hour}">${hour}:00</form:option>
+                        </c:forEach>
+                    </form:select>
+                    <form:errors cssClass="error-text" path="startHour" element="p"/>
+                </div>
+                -
+                <div class="m-l-5">
+                    <form:select cssClass="select-subject no-border b-r-5 no-margin filter-input" path="endHour">
+                        <form:option selected="selected" disabled="true" value="">Hasta</form:option>
+                        <c:forEach var="hour" begin="2" end="24" >
+                            <form:option value="${hour}">${hour}:00</form:option>
+                        </c:forEach>
+                    </form:select>
+                    <form:errors cssClass="error-text" path="endHour" element="p"/>
+                </div>
+            </div>
         </div>
         <div class="button-container">
-            <input class="button-2" type="submit" value="<spring:message code="create"/>"/>
+            <input class="button-2" type="submit" value="<spring:message code="reserve"/>"/>
         </div>
     </form:form>
 </div>

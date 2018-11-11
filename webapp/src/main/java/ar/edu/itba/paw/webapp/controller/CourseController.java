@@ -6,6 +6,8 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,8 +161,13 @@ public class CourseController extends BaseController{
         if(errors.hasErrors()) {
             return reserveClass(user, form, professorId, subjectId);
         }
+        LocalDateTime startTime = new LocalDateTime(form.getDay().getYear(), form.getDay().getMonthOfYear(),
+                form.getDay().getDayOfMonth(), form.getStartHour(), 0);
 
-        ClassReservation reservation = classReservationService.reserve(form.getStartTime(), form.getEndTime(),
+        LocalDateTime endTime = new LocalDateTime(form.getDay().getYear(), form.getDay().getMonthOfYear(),
+                form.getDay().getDayOfMonth(), form.getEndHour(), 0);
+
+        ClassReservation reservation = classReservationService.reserve(startTime, endTime,
                 course, user.getId());
 
         if(reservation != null){
