@@ -160,7 +160,10 @@ public class CourseController extends BaseController{
         if(course == null) {
             return redirectToErrorPage("nonExistentCourse");
         }
-        if(errors.hasErrors()) {
+        if(errors.hasErrors() || !form.validForm()) {
+            if(!form.validForm()) {
+                errors.rejectValue("endHour", "profile.add_schedule.timeError");
+            }
             return reserveClass(user, form, professorId, subjectId);
         }
 
@@ -177,13 +180,14 @@ public class CourseController extends BaseController{
             reservation = classReservationService.reserve(startTime, endTime,
                     course, user.getId());
         } catch (SameUserException e) {
-            redirectToErrorPage("sameUserReservation");
+            return redirectToErrorPage("sameUserReservation");
         }
 
         if(reservation == null){
-            redirectToErrorPage("");
+            return redirectToErrorPage("");
         }
-        return redirectWithNoExposedModalAttributes("/Course/?professor=");
+        return redirectWithNoExposedModalAttributes("/Course/?professor=" + professorId
+                + "&subject=" + subjectId);
     }
 
     @InitBinder

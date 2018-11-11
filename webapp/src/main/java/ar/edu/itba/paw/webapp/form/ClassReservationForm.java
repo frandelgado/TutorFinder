@@ -22,6 +22,7 @@ public class ClassReservationForm {
 
     @Future
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private Date day;
 
 
