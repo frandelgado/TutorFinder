@@ -33,8 +33,8 @@ public class Course {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Comment> comments;
 
-    @Formula("COALESCE((SELECT AVG(c.rating) FROM comments c WHERE c.course_user_id = user_id AND" +
-            " c.course_subject_id = subject_id), 0)")
+    @Formula("(SELECT AVG(c.rating) FROM comments c WHERE c.course_user_id = user_id AND" +
+            " c.course_subject_id = subject_id)")
     private Double rating;
 
     public Course(){}
