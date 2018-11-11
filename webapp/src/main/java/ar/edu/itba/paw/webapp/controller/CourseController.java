@@ -86,7 +86,7 @@ public class CourseController extends BaseController{
         try {
             sent = conversationService.sendMessage(loggedUser.getId(), form.getProfessorId(),
                     form.getSubjectId(), form.getBody());
-        } catch (SameUserConversationException e) {
+        } catch (SameUserException e) {
             errors.rejectValue("body", "SameUserMessageError");
             form.setBody(null);
             return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
@@ -172,13 +172,17 @@ public class CourseController extends BaseController{
         final LocalDateTime endTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
                 day.getDayOfMonth(), form.getEndHour(), 0);
 
-        final ClassReservation reservation = classReservationService.reserve(startTime, endTime,
-                course, user.getId());
-
-        if(reservation != null){
-            //TODO: handle error
+        ClassReservation reservation = null;
+        try {
+            reservation = classReservationService.reserve(startTime, endTime,
+                    course, user.getId());
+        } catch (SameUserException e) {
+            redirectToErrorPage("sameUserReservation");
         }
 
+        if(reservation == null){
+            redirectToErrorPage("");
+        }
         return redirectWithNoExposedModalAttributes("/Course/?professor=");
     }
 

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
+import ar.edu.itba.paw.exceptions.SameUserException;
 import ar.edu.itba.paw.interfaces.persistence.ClassReservationDao;
 import ar.edu.itba.paw.interfaces.service.ClassReservationService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
@@ -29,8 +30,12 @@ public class ClassReservationServiceImpl implements ClassReservationService {
 
     @Override
     @Transactional
-    public ClassReservation reserve(final LocalDateTime startHour, final LocalDateTime endHour, final Course course, final Long studentId) {
+    public ClassReservation reserve(final LocalDateTime startHour, final LocalDateTime endHour, final Course course, final Long studentId) throws SameUserException {
         final User student = us.findUserById(studentId);
+
+        if(course.getProfessor().getId().equals(studentId)){
+            throw new SameUserException();
+        }
 
         if(student == null) {
              return null;
