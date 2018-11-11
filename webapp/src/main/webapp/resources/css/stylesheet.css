@@ -214,12 +214,15 @@ button {
             "profile-picture profile-description"
 }
 
-.profile {
+.round-background {
     border: 2px solid #dedede;
     border-radius: 5px;
     background-color: #dedede;
-    height: fit-content;
     padding: 5px;
+}
+
+.profile {
+    height: fit-content;
     display: grid;
     grid-template-columns: 80px auto;
     grid-template-rows: 20px auto;
@@ -811,4 +814,35 @@ th, td {
 
 .dropdown-button {
     padding: 0 20px;
+}
+
+.reserve-class {
+    display: grid;
+    grid-column-gap: 10px;
+    grid-template-areas:
+            "title title"
+            "form  table"
+;
+}
+
+.reserve-class .button-container {
+    grid-area: title;
+}
+
+.reserve-class .schedule {
+    margin: 0;
+    grid-area: table;
+}
+
+.reserve-class .form {
+    height: fit-content;
+    grid-area: form;
+}
+
+.reserve-class .form .responsiveRow{
+    margin: 0;
+}
+
+.reserve-class .form .responsiveRow .row{
+    margin: 0;
 }

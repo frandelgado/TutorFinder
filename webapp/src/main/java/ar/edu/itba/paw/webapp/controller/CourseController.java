@@ -145,6 +145,8 @@ public class CourseController extends BaseController{
                                      @RequestParam("professor") final long professorId,
                                      @RequestParam("subject") final long subjectId) {
         final ModelAndView mav = new ModelAndView("reserveClass");
+        final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
+        mav.addObject("schedule", schedule);
         return mav;
     }
 
