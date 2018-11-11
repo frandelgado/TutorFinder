@@ -813,6 +813,7 @@ th, td {
 .reserve-class {
     display: grid;
     grid-column-gap: 10px;
+    grid-row-gap: 30px;
     grid-template-areas:
             "title title"
             "form  table"
@@ -833,10 +834,10 @@ th, td {
     grid-area: form;
 }
 
-.reserve-class .form .responsiveRow{
+.reserve-class .form .responsiveRow {
     margin: 0;
 }
 
-.reserve-class .form .responsiveRow .row{
+.reserve-class .form .responsiveRow .row {
     margin: 0;
 }
