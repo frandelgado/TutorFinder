@@ -363,8 +363,6 @@ public class UserController extends BaseController{
         return redirectWithNoExposedModalAttributes("/");
     }
 
-
-
     @RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
     public ModelAndView deleteCourse(
             @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
@@ -391,4 +389,14 @@ public class UserController extends BaseController{
         return redirectWithNoExposedModalAttributes("/Profile");
     }
 
+    @RequestMapping("/reservations")
+    public ModelAndView userReservations(@ModelAttribute("loggedUser") final User loggedUser,
+                                         @RequestParam("page") final int page) {
+        ModelAndView mav = new ModelAndView("reservations");
+        PagedResults<ClassReservation> classReservations =  us.pagedReservations(loggedUser, page);
+        mav.addObject("reservations", classReservations.getResults());
+        mav.addObject("hasNext", classReservations.isHasNext());
+        mav.addObject("page", page);
+        return mav;
+    }
 }
