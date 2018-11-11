@@ -1,10 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.util.Date;
 
 public class ClassReservationForm {
@@ -19,7 +20,9 @@ public class ClassReservationForm {
     @Max(24)
     private Integer endHour;
 
-    private String day;
+    @Future
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date day;
 
 
     public boolean validForm() {
@@ -44,11 +47,11 @@ public class ClassReservationForm {
         this.endHour = endHour;
     }
 
-    public String getDay() {
+    public Date getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(Date day) {
         this.day = day;
     }
 }

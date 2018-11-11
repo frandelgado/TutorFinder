@@ -2,15 +2,15 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.ClassReservation;
+import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.Schedule;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
-import org.joda.time.DateTime;
-import org.joda.time.Instant;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
@@ -154,9 +152,9 @@ public class CourseController extends BaseController{
     public ModelAndView reserveClass(@ModelAttribute("currentUser") final User user,
                                      @Valid @ModelAttribute("classReservationForm")
                                      final ClassReservationForm form,
+                                     final BindingResult errors,
                                      @RequestParam(value="professor", required=true) final Long professorId,
-                                     @RequestParam(value="subject", required=true) final Long subjectId,
-                                     final BindingResult errors) {
+                                     @RequestParam(value="subject", required=true) final Long subjectId) {
 
         final Course course = courseService.findCourseByIds(professorId, subjectId);
         if(course == null) {
@@ -166,20 +164,15 @@ public class CourseController extends BaseController{
             return reserveClass(user, form, professorId, subjectId);
         }
 
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-        DateTime day = formatter.parseDateTime(form.getDay());
+        final LocalDate day = new LocalDate(form.getDay());
 
-        LocalDateTime startTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
+        final LocalDateTime startTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
                 day.getDayOfMonth(), form.getStartHour(), 0);
 
-        LocalDateTime endTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
+        final LocalDateTime endTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
                 day.getDayOfMonth(), form.getEndHour(), 0);
 
-        if(day.compareTo(Instant.now()) < 0) {
-            //TODO return error to form
-        }
-
-        ClassReservation reservation = classReservationService.reserve(startTime, endTime,
+        final ClassReservation reservation = classReservationService.reserve(startTime, endTime,
                 course, user.getId());
 
         if(reservation != null){
@@ -191,11 +184,8 @@ public class CourseController extends BaseController{
 
     @InitBinder
     private void dateBinder(WebDataBinder binder) {
-        //The date format to parse or output your dates
-        SimpleDateFormat dateFormat = new SimpleDateFormat("mm-dd-yyy");
-        //Create a new CustomDateEditor
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
-        //Register it as custom editor for the Date type
         binder.registerCustomEditor(Date.class, editor);
     }
 
