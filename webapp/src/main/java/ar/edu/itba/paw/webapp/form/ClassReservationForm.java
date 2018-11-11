@@ -1,11 +1,10 @@
 package ar.edu.itba.paw.webapp.form;
 
-import org.joda.time.LocalDate;
-
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 public class ClassReservationForm {
 
@@ -20,7 +19,7 @@ public class ClassReservationForm {
     private Integer endHour;
 
     @Future
-    private LocalDate day;
+    private Date day;
 
 
     public boolean validForm() {
@@ -45,11 +44,11 @@ public class ClassReservationForm {
         this.endHour = endHour;
     }
 
-    public LocalDate getDay() {
+    public Date getDay() {
         return day;
     }
 
-    public void setDay(LocalDate day) {
+    public void setDay(Date day) {
         this.day = day;
     }
 }

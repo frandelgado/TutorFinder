@@ -31,7 +31,7 @@
     <div class="button-container">
         <h2 class="label"><spring:message code="class.reserve" /></h2>
     </div>
-    <c:url value="/reserveClass" var="postPath"/>
+    <c:url value="/reserveClass?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
     <form:form cssClass="form" modelAttribute="classReservationForm" action="${postPath}" method="post">
         <div>
             <form:label cssClass="label" path="day"><spring:message code="classReservation.dayHeader"/></form:label>

@@ -12,17 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @Controller
@@ -161,11 +162,11 @@ public class CourseController extends BaseController{
         if(errors.hasErrors()) {
             return reserveClass(user, form, professorId, subjectId);
         }
-        LocalDateTime startTime = new LocalDateTime(form.getDay().getYear(), form.getDay().getMonthOfYear(),
-                form.getDay().getDayOfMonth(), form.getStartHour(), 0);
+        LocalDateTime startTime = new LocalDateTime(form.getDay().getYear(), form.getDay().getMonth(),
+                form.getDay().getDay(), form.getStartHour(), 0);
 
-        LocalDateTime endTime = new LocalDateTime(form.getDay().getYear(), form.getDay().getMonthOfYear(),
-                form.getDay().getDayOfMonth(), form.getEndHour(), 0);
+        LocalDateTime endTime = new LocalDateTime(form.getDay().getYear(), form.getDay().getMonth(),
+                form.getDay().getDay(), form.getEndHour(), 0);
 
         ClassReservation reservation = classReservationService.reserve(startTime, endTime,
                 course, user.getId());
@@ -175,6 +176,16 @@ public class CourseController extends BaseController{
         }
 
         return redirectWithNoExposedModalAttributes("/Course/?professor=");
+    }
+
+    @InitBinder
+    private void dateBinder(WebDataBinder binder) {
+        //The date format to parse or output your dates
+        SimpleDateFormat dateFormat = new SimpleDateFormat("mm-dd-yyy");
+        //Create a new CustomDateEditor
+        CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
+        //Register it as custom editor for the Date type
+        binder.registerCustomEditor(Date.class, editor);
     }
 
 }
