@@ -13,12 +13,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -44,6 +47,9 @@ public class UserController extends BaseController{
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private HttpSessionRequestCache cache;
+
+    @Autowired
     private ScheduleService ss;
 
     @Autowired
@@ -56,7 +62,7 @@ public class UserController extends BaseController{
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView create(@Valid @ModelAttribute("registerForm") final RegisterForm form,
-                               final BindingResult errors, HttpServletRequest request) {
+                               final BindingResult errors, HttpServletRequest request, HttpServletResponse response) {
         if(errors.hasErrors() || !form.checkRepeatPassword()) {
             if(!form.checkRepeatPassword()) {
                 errors.rejectValue("repeatPassword", "RepeatPassword");
@@ -85,8 +91,11 @@ public class UserController extends BaseController{
 
         LOGGER.debug("Authenticating user with id {}", u.getId());
         authenticateRegistered(request, u.getUsername(), u.getPassword());
+        final SavedRequest savedRequest = cache.getRequest(request, response);
 
-        return redirectWithNoExposedModalAttributes("/");
+        final String redirect = savedRequest == null ? "/" : savedRequest.getRedirectUrl();
+
+        return redirectWithNoExposedModalAttributes(redirect);
     }
 
     @RequestMapping("/login")
