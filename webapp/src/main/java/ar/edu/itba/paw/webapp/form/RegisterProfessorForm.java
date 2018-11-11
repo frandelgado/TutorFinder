@@ -15,7 +15,7 @@ public class RegisterProfessorForm {
     private String description;
 
     @NotNull
-    @FileSize
+    @FileSize(min = 1, max = 81920)
     @FileType
     private MultipartFile picture;
 

@@ -10,8 +10,8 @@ public class FileTypeValidator implements ConstraintValidator<FileType, Multipar
    }
 
    public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
-      if(file == null)
-         return false;
-      return (file.getContentType().equals("image/jpeg")||file.getContentType().equals("image/png"));
+      if(file != null && file.getSize() > 0)
+         return (file.getContentType().equals("image/jpeg")||file.getContentType().equals("image/png"));
+      return true;
    }
 }

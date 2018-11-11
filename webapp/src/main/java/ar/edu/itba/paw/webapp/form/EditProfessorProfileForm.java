@@ -11,7 +11,7 @@ public class EditProfessorProfileForm {
     @Size(min = 50, max = 300)
     private String description;
 
-    @FileSize
+    @FileSize(max = 81920)
     @FileType
     private MultipartFile pic;
 
