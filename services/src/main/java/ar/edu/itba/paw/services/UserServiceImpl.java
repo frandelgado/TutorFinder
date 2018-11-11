@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder encoder;
 
     @Override
-    public User findUserById(long id) {
+    public User findUserById(final long id) {
         LOGGER.debug("Searching for user with id {}", id);
         return userDao.findById(id).orElse(null);
     }
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean changePassword(Long userId, String newPassword) {
+    public boolean changePassword(final Long userId, final String newPassword) {
         if(userId == null || newPassword == null) {
             LOGGER.error("Attempted to change password with invalid parameters");
             return false;

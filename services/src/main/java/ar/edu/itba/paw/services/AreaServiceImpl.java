@@ -24,7 +24,7 @@ public class AreaServiceImpl implements AreaService {
     private AreaDao areaDao;
 
     @Override
-    public Area findAreaById(long id) {
+    public Area findAreaById(final long id) {
         LOGGER.debug("Searching for area with id {}", id);
         return areaDao.findById(id);
     }

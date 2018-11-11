@@ -57,7 +57,7 @@ public class ConversationHibernateDao implements ConversationDao {
     }
 
     @Override
-    public Message create(User sender, String text, Conversation conversation) {
+    public Message create(final User sender, final String text, final Conversation conversation) {
         final LocalDateTime currentTime = LocalDateTime.now();
         final Message message = new Message(sender, text, currentTime);
         message.setConversation(conversation);

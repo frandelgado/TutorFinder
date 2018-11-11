@@ -39,7 +39,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
     }
 
     @Override
-    public Professor modify(Professor professor, String description, byte[] picture) {
+    public Professor modify(final Professor professor, final String description, final byte[] picture) {
         em.merge(professor);
         if(description != null){
             professor.setDescription(description);
@@ -51,7 +51,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
     }
 
     @Override
-    public Optional<Professor> findById(Long professor_id) {
+    public Optional<Professor> findById(final Long professor_id) {
         final Professor professor = em.find(Professor.class, professor_id);
         return Optional.ofNullable(professor);
     }

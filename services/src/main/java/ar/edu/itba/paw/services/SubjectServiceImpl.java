@@ -22,14 +22,14 @@ public class SubjectServiceImpl implements SubjectService {
     private SubjectDao subjectDao;
 
     @Override
-    public Subject findSubjectById(long id) {
+    public Subject findSubjectById(final long id) {
         LOGGER.debug("Searching for subject with id {}", id);
         return subjectDao.findById(id).orElse(null);
     }
 
     @Transactional
     @Override
-    public Subject create(String name, String description, Long area_id) {
+    public Subject create(final String name, final String description, final Long area_id) {
         LOGGER.debug("Creating subject with name {} for area with id {}", name, area_id);
         return subjectDao.create(name,description, area_id);
     }

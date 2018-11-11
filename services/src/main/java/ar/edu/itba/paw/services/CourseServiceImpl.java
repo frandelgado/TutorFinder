@@ -33,14 +33,14 @@ public class CourseServiceImpl implements CourseService {
     private SubjectService subjectService;
 
     @Override
-    public Course findCourseByIds(long professor_id, long subject_id) {
+    public Course findCourseByIds(final long professor_id, final long subject_id) {
         LOGGER.debug("Searching for course taught by professor with id {} about subject with id {}",
                 professor_id, subject_id);
         return courseDao.findByIds(professor_id, subject_id).orElse(null);
     }
 
     @Override
-    public PagedResults<Course> findCourseByProfessorId(long professor_id, final int page) {
+    public PagedResults<Course> findCourseByProfessorId(final long professor_id, final int page) {
         if(page <= 0) {
             LOGGER.error("Attempted to find 0 or negative page number");
             return null;

@@ -18,7 +18,7 @@ public class ScheduleHibernateDao implements ScheduleDao {
     private EntityManager em;
 
     @Override
-    public Timeslot reserveTimeSlot(Professor professor, Integer day, Integer hour) {
+    public Timeslot reserveTimeSlot(final Professor professor, final Integer day, final Integer hour) {
         Timeslot timeslot = em.find(Timeslot.class, new TimeSlotID(day, hour, professor));
         if(timeslot != null) {
             return null;

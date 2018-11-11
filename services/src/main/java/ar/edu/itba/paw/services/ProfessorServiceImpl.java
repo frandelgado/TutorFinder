@@ -130,7 +130,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
 
-    private BufferedImage cropImageSquare(byte[] image) throws IOException {
+    private BufferedImage cropImageSquare(final byte[] image) throws IOException {
         // Get a BufferedImage object from a byte array
         InputStream in = new ByteArrayInputStream(image);
         BufferedImage originalImage = ImageIO.read(in);
@@ -163,7 +163,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Professor modify(Long userId, String description, byte[] picture)
+    public Professor modify(final Long userId, final String description, final byte[] picture)
             throws ProfessorWithoutUserException, NonexistentProfessorException {
         LOGGER.debug("Editing professor with id {}", userId);
 
