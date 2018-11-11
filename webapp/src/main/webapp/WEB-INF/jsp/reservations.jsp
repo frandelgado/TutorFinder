@@ -45,7 +45,7 @@
                             <c:otherwise>
                                 <a href="<c:url value="/registerAsProfessor" />" class="navbar-button"><spring:message code="register.professor"/></a>
                             </c:otherwise>
-                        </c:choose>
+                        </c:choose>:gi
                         <a href="<c:url value="/reservations" />" class="navbar-button"><spring:message code="reservations.title"/></a>
                         <a href="<c:url value="/" />" class="navbar-button"><spring:message code="classes.title"/></a>
                         <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
@@ -64,13 +64,7 @@
 <div class="content">
     <div class="search-results">
         <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
-<<<<<<< HEAD
-
-        <c:choose>
-            <c:when test="${reservations.size() == 0}">
-=======
             <c:if test="${reservations.size() == 0}">
->>>>>>> aeb12fab... Fix endpoint
                 <h1><spring:message code="no.results"/></h1>
             </c:if>
             <c:forEach var="reservation" items="${reservations}">
@@ -87,11 +81,6 @@
                     <a class="search-result-rating"><spring:message code="rating.title" arguments="${reservation.course.price}" htmlEscape="true" /></a>
                 </div>
             </c:forEach>
-<<<<<<< HEAD
-        </c:choose>
-=======
-
->>>>>>> aeb12fab... Fix endpoint
         <div class="paged-result-buttons">
             <c:url value="/reservations?page=${page - 1}" var="previous"/>
             <c:url value="/reservations?page=${page + 1}" var="next"/>
