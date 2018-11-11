@@ -4,9 +4,11 @@ import ar.edu.itba.paw.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -58,5 +60,15 @@ public class ErrorController extends BaseController{
     public ModelAndView handleFileSizeException() {
         final ModelAndView mav = new ModelAndView("registerAsProfessorForm");
         return mav;
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ModelAndView handleMissingParameterException() {
+        return redirectToErrorPage("missingParameter");
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ModelAndView handleargumentTypeException() {
+        return redirectToErrorPage("invalidArgument");
     }
 }

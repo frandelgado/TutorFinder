@@ -52,8 +52,8 @@ public class CourseController extends BaseController{
     @RequestMapping("/Course")
     public ModelAndView course(
             @ModelAttribute("messageForm") final MessageForm messageForm,
-            @RequestParam(value="professor", required=true) final Long professorId,
-            @RequestParam(value="subject", required=true) final Long subjectId,
+            @RequestParam(value="professor", required=true) final long professorId,
+            @RequestParam(value="subject", required=true) final long subjectId,
             @ModelAttribute(value = "SUCCESS_MESSAGE") final String success_message,
             @ModelAttribute(value = "ERROR_MESSAGE") final String error_message
     ){
@@ -142,8 +142,8 @@ public class CourseController extends BaseController{
     @RequestMapping(value = "/reserveClass", method = RequestMethod.GET)
     public ModelAndView reserveClass(@ModelAttribute("currentUser") final User user,
                                      @ModelAttribute("classReservationForm") final ClassReservationForm form,
-                                     @RequestParam(value="professor", required=true) final Long professorId,
-                                     @RequestParam(value="subject", required=true) final Long subjectId) {
+                                     @RequestParam("professor") final long professorId,
+                                     @RequestParam("subject") final long subjectId) {
         final ModelAndView mav = new ModelAndView("reserveClass");
         return mav;
     }
@@ -153,8 +153,8 @@ public class CourseController extends BaseController{
                                      @Valid @ModelAttribute("classReservationForm")
                                      final ClassReservationForm form,
                                      final BindingResult errors,
-                                     @RequestParam(value="professor", required=true) final Long professorId,
-                                     @RequestParam(value="subject", required=true) final Long subjectId) {
+                                     @RequestParam("professor") final long professorId,
+                                     @RequestParam("subject") final long subjectId) {
 
         final Course course = courseService.findCourseByIds(professorId, subjectId);
         if(course == null) {

@@ -41,7 +41,7 @@ public class ConversationController extends BaseController{
     }
 
     @RequestMapping("/Conversation")
-    public ModelAndView conversation(@RequestParam(value="id", required=true) final Long id,
+    public ModelAndView conversation(@RequestParam(value="id", required=true) final long id,
                                      @ModelAttribute("messageForm") final MessageForm form,
                                      @ModelAttribute("currentUser") final User loggedUser)
             throws UserNotInConversationException {
