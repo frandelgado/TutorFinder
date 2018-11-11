@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -29,7 +32,8 @@ public class User {
     @Column(length = 512, unique = true, nullable = false)
     private String email;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student", orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ClassReservation> classRequests;
 
     User(){}
