@@ -363,7 +363,7 @@ public class UserController extends BaseController{
         return redirectWithNoExposedModalAttributes("/");
     }
 
-
+    
     @RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
     public ModelAndView deleteCourse(
             @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
@@ -417,6 +417,5 @@ public class UserController extends BaseController{
         mav.addObject("page", page);
         return mav;
     }
-
 
 }
