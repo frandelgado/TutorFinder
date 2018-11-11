@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.TestCase.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -36,7 +37,13 @@ public class ProfessorServiceImplTest {
     private static final Long INVALID_ID = 666L;
     private static final Long ID = 1L;
     private static final String DESCRIPTION = "Omne duo vim sum nudi uno quod. Latera nullam ad realem passim ii essent ut patere";
-    private static final byte[] TEST_IMAGE = new byte[1];
+    private static final byte[] TEST_IMAGE = {-119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68
+            , 82, 0, 0, 0, 2, 0, 0, 0, 3, 8, 6, 0, 0, 0, -71, -22, -34, -127, 0, 0, 0, 1, 115, 82
+            , 71, 66, 0, -82, -50, 28, -23, 0, 0, 0, 4, 103, 65, 77, 65, 0, 0, -79, -113, 11
+            , -4, 97, 5, 0, 0, 0, 9, 112, 72, 89, 115, 0, 0, 14, -62, 0, 0, 14, -62, 1
+            , 21, 40, 74, -128, 0, 0, 0, 24, 73, 68, 65, 84, 24, 87, 99, -4, -13, -25, -45, 127
+            , 6, 32, 96, 2, 17, 32, 0, 101, 48, 48, 0, 0, 96, 57, 3, -17, 68, 106, -31, 0, 0, 0, 0, 0
+            , 73, 69, 78, 68, -82, 66, 96, -126};
     private static final String USERNAME = "username";
     private static final String LASTNAME = "Ramos";
     private static final String PASSWORD = "password";
@@ -113,7 +120,7 @@ public class ProfessorServiceImplTest {
         final User user = mock(User.class);
         when(user.getId()).thenReturn(ID);
         when(userDao.findById(ID)).thenReturn(Optional.of(user));
-        when(professorDao.create(user, DESCRIPTION, TEST_IMAGE)).thenReturn(mock(Professor.class));
+        when(professorDao.create(any(), eq(DESCRIPTION), any())).thenReturn(mock(Professor.class));
 
         final Professor professor = professorService.create(ID, DESCRIPTION, TEST_IMAGE);
         assertNotNull(professor);
