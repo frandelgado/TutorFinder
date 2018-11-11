@@ -53,6 +53,13 @@ public class Professor extends User{
         return timeslots;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
 
     @Override
     public boolean equals(Object o) {

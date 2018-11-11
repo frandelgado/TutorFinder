@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -159,6 +160,40 @@ public class ProfessorServiceImpl implements ProfessorService {
         );
 
         return croppedImage;
+    }
+
+    @Override
+    public Professor modify(Long userId, String description, byte[] picture)
+            throws ProfessorWithoutUserException, NonexistentProfessorException {
+        LOGGER.debug("Editing professor with id {}", userId);
+
+        Optional<Professor> professor = professorDao.findById(userId);
+
+        if(professor.isPresent()){
+            String newDescription = null;
+            byte[] newPicture = null;
+            if(description.length() > 50 && description.length() < 300) {
+                newDescription = description;
+            } else {
+                LOGGER.debug("Attempted to modify profile for professor with id {} with invalid description size {}, " +
+                                "keeping old description",
+                        professor.get().getId(), description.length());
+            }
+
+            if(picture == null || picture.length <= 0) {
+                LOGGER.debug("Attempted to modify profile for professor with id {} with no profile picture, " +
+                                "keeping old one",
+                        professor.get().getId());
+            } else {
+                newPicture = picture;
+            }
+
+            return professorDao.modify(professor.get(), newDescription, newPicture);
+
+        } else {
+            throw new NonexistentProfessorException();
+        }
+
     }
 
     @Transactional

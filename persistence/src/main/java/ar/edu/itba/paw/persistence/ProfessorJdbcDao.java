@@ -62,6 +62,11 @@ public class ProfessorJdbcDao implements ProfessorDao {
     }
 
     @Override
+    public Professor modify(Professor professor, String description, byte[] picture) {
+        return null;
+    }
+
+    @Override
     public Optional<Professor> findById(final Long id) {
         LOGGER.trace("Querying for professor with id {}", id);
         final List<Professor> professors = jdbcTemplate.query(

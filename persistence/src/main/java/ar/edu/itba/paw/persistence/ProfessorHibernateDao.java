@@ -39,7 +39,23 @@ public class ProfessorHibernateDao implements ProfessorDao {
     }
 
     @Override
+<<<<<<< HEAD
     public Optional<Professor> findById(final Long professor_id) {
+=======
+    public Professor modify(Professor professor, String description, byte[] picture) {
+        em.merge(professor);
+        if(description != null){
+            professor.setDescription(description);
+        }
+        if(picture != null){
+            professor.setPicture(picture);
+        }
+        return professor;
+    }
+
+    @Override
+    public Optional<Professor> findById(Long professor_id) {
+>>>>>>> 184f110... Repurpouse professor creation form for professor profile modification
         final Professor professor = em.find(Professor.class, professor_id);
         return Optional.ofNullable(professor);
     }

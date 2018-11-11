@@ -182,13 +182,41 @@ public class UserController extends BaseController{
         }
 
         authenticateRegistered(request, p.getUsername(), p.getPassword());
-
         return redirectWithNoExposedModalAttributes("/");
     }
 
     @RequestMapping("/registerAsProfessor")
-    public ModelAndView registerProfessor(@ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form) {
+    public ModelAndView registerProfessor(@ModelAttribute("registerAsProfessorForm")
+                                              final RegisterProfessorForm form) {
+
         return new ModelAndView("registerAsProfessorForm");
+    }
+
+    @RequestMapping(value="/editProfessorProfile", method = RequestMethod.POST)
+    public ModelAndView editProfessor(@ModelAttribute("currentUser") final User loggedUser,
+                                      @Valid @ModelAttribute("editProfessorProfileForm") final EditProfessorProfileForm form,
+                                      final BindingResult errors ) throws NonexistentProfessorException {
+        if(errors.hasErrors()) {
+            return editProfessor(form, loggedUser);
+        }
+
+        final Professor professor;
+        try {
+            professor = ps.modify(loggedUser.getId(), form.getDescription(), form.getPic().getBytes());
+        } catch (IOException e) {
+            return redirectToErrorPage("fileUploadError");
+        } catch (NonexistentProfessorException | ProfessorWithoutUserException e) {
+            return redirectToErrorPage("oops");
+        }
+        return redirectWithNoExposedModalAttributes("/Profile");
+    }
+
+    @RequestMapping(value = "/editProfessorProfile", method = RequestMethod.GET)
+    public ModelAndView editProfessor(@ModelAttribute("editProfessorProfileForm") final EditProfessorProfileForm form,
+                                      @ModelAttribute("currentUser") final User loggedUser) {
+        final Professor professor = ps.findById(loggedUser.getId());
+        form.setDescription(professor.getDescription());
+        return new ModelAndView("modifyProfessorProfileForm");
     }
 
     @RequestMapping(value = "/CreateTimeSlot", method = RequestMethod.POST)
