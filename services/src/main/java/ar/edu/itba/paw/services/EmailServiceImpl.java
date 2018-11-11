@@ -9,6 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.ContextResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,6 +28,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +48,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Value("classpath:logo.png")
     private Resource logo;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Autowired
     private JavaMailSender emailSender;
@@ -72,7 +80,7 @@ public class EmailServiceImpl implements EmailService {
         final Context ctx = new Context();
         ctx.setVariable("mail", user.getEmail());
         ctx.setVariable("url", "http://localhost:8080/resetPassword?token=" + token);
-        String SUBJECT = "Restaura tu contraseña";
+        String SUBJECT = messageSource.getMessage("mail.restorepass.subject", null, LocaleContextHolder.getLocale());
 
         final String resource = htmlString(restorePassword);
 
@@ -103,8 +111,9 @@ public class EmailServiceImpl implements EmailService {
         final Context ctx = new Context();
         ctx.setVariable("name", user.getName());
         ctx.setVariable("username", user.getUsername());
-        ctx.setVariable("url", "http://localhost:8080");
-        String REGISTRATION_SUBJECT = "Bienvenido a Tu Teoria!";
+        ctx.setVariable("url", "http://localhost:8080");//
+        Locale locale = LocaleContextHolder.getLocale();
+        String REGISTRATION_SUBJECT = messageSource.getMessage("mail.registration.subject", null, locale);
 
         final String resource = htmlString(registrationMail);
 
@@ -138,7 +147,7 @@ public class EmailServiceImpl implements EmailService {
         ctx.setVariable("subject", conversation.getSubject().getName());
         ctx.setVariable("message", sentMessage.getText());
         ctx.setVariable("url", "http://localhost:8080/Conversation?id=" + conversation.getId());
-        final String SUBJECT = "Se han contactado con vos!";
+        final String SUBJECT = messageSource.getMessage("mail.newmessage.subject", null, LocaleContextHolder.getLocale());
 
         final String resource = htmlString(contactMail);
 
