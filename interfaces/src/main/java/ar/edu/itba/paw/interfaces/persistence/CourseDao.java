@@ -20,4 +20,8 @@ public interface CourseDao {
     Comment create(final User creator, final String text, final Course course, final int rating);
 
     List<Comment> getComments(final Course course, final int limit, final int offset);
+
+    boolean delete(Course course);
+
+    Course modify(Course course, String description, Double price);
 }
