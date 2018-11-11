@@ -19,8 +19,6 @@ public class CommentForm {
     @Max(5)
     private Integer rating;
 
-    private String commentExtraMessage;
-
     public String getCommentBody() {
         return commentBody;
     }
@@ -51,13 +49,5 @@ public class CommentForm {
 
     public void setCommentProfessorId(Long commentProfessorId) {
         this.commentProfessorId = commentProfessorId;
-    }
-
-    public String getCommentExtraMessage() {
-        return commentExtraMessage;
-    }
-
-    public void setCommentExtraMessage(String commentExtraMessage) {
-        this.commentExtraMessage = commentExtraMessage;
     }
 }
