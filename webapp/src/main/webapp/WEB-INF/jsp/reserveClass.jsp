@@ -13,8 +13,10 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/schedule.css" />">
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
+    <script src="<c:url value="/resources/js/fromToRestriction.js" />"></script>
     <title>Tu Teoria | <spring:message code="course.create"/></title>
 
     <link href="<c:url value="/resources/css/select2.min.css" />" rel="stylesheet" />
@@ -27,15 +29,15 @@
 
 <%@ include file="navbar.jsp" %>
 
-<div class="content">
+<div class="content reserve-class">
     <div class="button-container">
         <h2 class="label"><spring:message code="class.reserve" /></h2>
     </div>
     <c:url value="/reserveClass?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
-    <form:form cssClass="form" modelAttribute="classReservationForm" action="${postPath}" method="post">
+    <form:form cssClass="form round-background" modelAttribute="classReservationForm" action="${postPath}" method="post">
         <div>
             <form:label cssClass="label" path="day"><spring:message code="classReservation.dayHeader"/></form:label>
-            <form:input path="day" cssClass="input-request" type="date"/>
+            <form:input path="day" cssClass="input-request" type="date" min="2000-1-1"/>
             <form:errors cssClass="error-text" path="day" element="p"/>
         </div>
         <div class="responsiveRow">
@@ -66,6 +68,14 @@
             <input class="button-2" type="submit" value="<spring:message code="reserve"/>"/>
         </div>
     </form:form>
+    <div class="schedule round-background">
+        <h2><spring:message code="schedule.title"/></h2>
+        <c:if test="${currentUser == null || (currentUser != null && currentUser.id != course.professor.id)}">
+            <input  class="button-2" type="button" value="<spring:message code="reservations.action"/>" onclick="location.href='<c:url value="/reserveClass?professor=${course.professor.id}&subject=${course.subject.id}" />'"/>
+        </c:if>
+        <p><spring:message code="schedule.description" /></p>
+        <%@ include file="schedule.jsp"%>
+    </div>
 </div>
 <div class="footer">
 </div>
