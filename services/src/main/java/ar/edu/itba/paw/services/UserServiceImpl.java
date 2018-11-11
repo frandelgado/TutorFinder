@@ -6,6 +6,8 @@ import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.models.ClassReservation;
+import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final int PAGE_SIZE = 3;
 
     @Autowired
     private UserDao userDao;
@@ -126,5 +131,34 @@ public class UserServiceImpl implements UserService {
         }
         LOGGER.debug("Changing password for user with id {}", userId);
         return userDao.changePasswordById(userId, encoder.encode(newPassword));
+    }
+
+    @Override
+    public PagedResults<ClassReservation> pagedReservations(User user, int page) {
+        if(page <= 0) {
+            LOGGER.error("Attempted to find 0 or negative page number");
+            return null;
+        }
+
+        LOGGER.debug("Searching for reservations for user with id {}", user.getId());
+        final List<ClassReservation> reservations = userDao.pagedReservations(user, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
+        final PagedResults<ClassReservation> results;
+
+        final int size = reservations.size();
+
+        if(size == 0 && page > 1) {
+            LOGGER.error("Page number exceeds total page count");
+            return null;
+        }
+
+        if(size > PAGE_SIZE) {
+            reservations.remove(PAGE_SIZE);
+            LOGGER.trace("The search has more pages, removing extra result");
+            results = new PagedResults<>(reservations, true);
+        } else {
+            LOGGER.trace("The search has no more pages to show");
+            results = new PagedResults<>(reservations, false);
+        }
+        return results;
     }
 }

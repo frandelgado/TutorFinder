@@ -2,7 +2,11 @@ package ar.edu.itba.paw.interfaces.service;
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
+import ar.edu.itba.paw.models.ClassReservation;
+import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.User;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -16,4 +20,6 @@ public interface UserService {
                 final String email, final String name, final String lastName) throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException;
 
     boolean changePassword(final Long userId, String password);
+
+    PagedResults<ClassReservation> pagedReservations(final User user, final int page);
 }

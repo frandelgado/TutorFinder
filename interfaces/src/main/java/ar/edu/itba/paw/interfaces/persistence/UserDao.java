@@ -3,8 +3,10 @@ package ar.edu.itba.paw.interfaces.persistence;
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserDao {
@@ -18,6 +20,8 @@ public interface UserDao {
             throws UsernameAlreadyInUseException, EmailAlreadyInUseException, UsernameAndEmailAlreadyInUseException;
 
     Optional<User> findByUsername(final String username);
+
+    List<ClassReservation> pagedReservations(final User user, final Integer limit, final Integer offset);
 
     boolean changePasswordById(final Long userId, final String newPassword);
 }
