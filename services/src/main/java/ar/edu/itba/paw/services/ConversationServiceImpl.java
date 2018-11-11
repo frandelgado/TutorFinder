@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
-import ar.edu.itba.paw.exceptions.SameUserConversationException;
+import ar.edu.itba.paw.exceptions.SameUserException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
 import ar.edu.itba.paw.interfaces.service.ConversationService;
@@ -44,7 +44,7 @@ public class ConversationServiceImpl implements ConversationService {
     @Transactional
     @Override
     public boolean sendMessage(final Long userId, final Long professorId, final Long subjectId, final String body)
-            throws SameUserConversationException, UserNotInConversationException, NonexistentConversationException {
+            throws SameUserException, UserNotInConversationException, NonexistentConversationException {
 
         final User user = userService.findUserById(userId);
         final Professor professor = professorService.findById(professorId);
@@ -62,7 +62,7 @@ public class ConversationServiceImpl implements ConversationService {
 
         if(user.getId().equals(professor.getId())) {
             LOGGER.error("User attempted to send message to himself");
-            throw new SameUserConversationException();
+            throw new SameUserException();
         }
 
         LOGGER.debug("Searching for conversation belonging to user with id {} and professor with id {} about subject with id {}",

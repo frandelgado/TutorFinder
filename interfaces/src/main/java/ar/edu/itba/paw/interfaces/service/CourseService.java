@@ -6,6 +6,8 @@ import ar.edu.itba.paw.exceptions.NonexistentSubjectException;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.PagedResults;
 
+import java.util.List;
+
 public interface CourseService {
     Course findCourseByIds(final long professor_id, final long subject_id);
 
@@ -16,5 +18,5 @@ public interface CourseService {
     Course create(final Long professorId, final Long subjectId, final String description, final Double price)
             throws CourseAlreadyExistsException, NonexistentProfessorException, NonexistentSubjectException;
 
-    PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page);
+    PagedResults<Course> filterCourses(final List<Integer> days, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page);
 }

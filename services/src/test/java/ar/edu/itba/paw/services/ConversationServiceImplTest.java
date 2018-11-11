@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
-import ar.edu.itba.paw.exceptions.SameUserConversationException;
+import ar.edu.itba.paw.exceptions.SameUserException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
 import ar.edu.itba.paw.interfaces.service.*;
@@ -191,7 +191,7 @@ public class ConversationServiceImplTest {
     }
 
     @Test
-    public void testSendMessageValid() throws NonexistentConversationException, UserNotInConversationException, SameUserConversationException {
+    public void testSendMessageValid() throws NonexistentConversationException, UserNotInConversationException, SameUserException {
         final User user = mock(User.class);
         when(user.getId()).thenReturn(USER_ID);
         when(userService.findUserById(USER_ID)).thenReturn(user);
@@ -215,7 +215,7 @@ public class ConversationServiceImplTest {
     }
 
     @Test
-    public void testSendMessageInvalidUser() throws NonexistentConversationException, UserNotInConversationException, SameUserConversationException {
+    public void testSendMessageInvalidUser() throws NonexistentConversationException, UserNotInConversationException, SameUserException {
         when(userService.findUserById(INVALID_ID)).thenReturn(null);
         when(professorService.findById(PROFESSOR_ID)).thenReturn(mock(Professor.class));
         when(subjectService.findSubjectById(SUBJECT_ID)).thenReturn(mock(Subject.class));
@@ -225,7 +225,7 @@ public class ConversationServiceImplTest {
     }
 
     @Test
-    public void testSendMessageInvalidSubject() throws NonexistentConversationException, UserNotInConversationException, SameUserConversationException {
+    public void testSendMessageInvalidSubject() throws NonexistentConversationException, UserNotInConversationException, SameUserException {
         when(userService.findUserById(USER_ID)).thenReturn(mock(User.class));
         when(professorService.findById(PROFESSOR_ID)).thenReturn(mock(Professor.class));
         when(subjectService.findSubjectById(INVALID_ID)).thenReturn(null);
@@ -235,7 +235,7 @@ public class ConversationServiceImplTest {
     }
 
     @Test
-    public void testSendMessageInvalidProfessor() throws NonexistentConversationException, UserNotInConversationException, SameUserConversationException {
+    public void testSendMessageInvalidProfessor() throws NonexistentConversationException, UserNotInConversationException, SameUserException {
         when(userService.findUserById(USER_ID)).thenReturn(mock(User.class));
         when(professorService.findById(INVALID_ID)).thenReturn(null);
         when(subjectService.findSubjectById(SUBJECT_ID)).thenReturn(mock(Subject.class));
@@ -244,8 +244,8 @@ public class ConversationServiceImplTest {
         assertFalse(sent);
     }
 
-    @Test(expected = SameUserConversationException.class)
-    public void testSendMessageSameUserConversation() throws NonexistentConversationException, UserNotInConversationException, SameUserConversationException {
+    @Test(expected = SameUserException.class)
+    public void testSendMessageSameUserConversation() throws NonexistentConversationException, UserNotInConversationException, SameUserException {
         final User user = mock(User.class);
         when(user.getId()).thenReturn(USER_ID);
         when(userService.findUserById(USER_ID)).thenReturn(user);
@@ -260,7 +260,7 @@ public class ConversationServiceImplTest {
     }
 
     @Test
-    public void testSendMessageCreateConversation() throws NonexistentConversationException, UserNotInConversationException, SameUserConversationException {
+    public void testSendMessageCreateConversation() throws NonexistentConversationException, UserNotInConversationException, SameUserException {
         final User user = mock(User.class);
         when(user.getId()).thenReturn(USER_ID);
         when(userService.findUserById(USER_ID)).thenReturn(user);

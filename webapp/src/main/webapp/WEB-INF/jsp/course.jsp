@@ -61,7 +61,9 @@
 
     <div class="schedule">
         <h2><spring:message code="schedule.title"/></h2>
-        <input class="button-2" type="button" value="<spring:message code="reservations.action"/>"/>
+        <c:if test="${currentUser == null || (currentUser != null && currentUser.id != course.professor.id)}">
+            <input  class="button-2" type="button" value="<spring:message code="reservations.action"/>" onclick="location.href='<c:url value="/reserveClass?professor=${course.professor.id}&subject=${course.subject.id}" />'"/>
+        </c:if>
         <p><spring:message code="schedule.description" /></p>
         <%@ include file="schedule.jsp"%>
     </div>

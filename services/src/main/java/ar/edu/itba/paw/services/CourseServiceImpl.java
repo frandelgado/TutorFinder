@@ -98,7 +98,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PagedResults<Course> filterCourses(final Integer day, final Integer startHour, final Integer endHour,
+    public PagedResults<Course> filterCourses(final List<Integer> days, final Integer startHour, final Integer endHour,
                                               final Double minPrice, final Double maxPrice, final String searchText,
                                               final int page) {
         if(page <= 0){
@@ -108,9 +108,15 @@ public class CourseServiceImpl implements CourseService {
         LOGGER.debug("Creating filter builder");
         FilterBuilder fb = new FilterBuilder();
 
-        if(day != null || startHour != null || endHour != null) {
+        if((days != null && !days.isEmpty()) || startHour != null || endHour != null) {
             LOGGER.debug("Adding filter by timeslot");
-            fb = fb.filterByTimeslot(day, startHour, endHour);
+            if(days != null) {
+                for (Integer day : days) {
+                    fb = fb.filterByTimeslot(day, startHour, endHour);
+                }
+            } else {
+                fb = fb.filterByTimeslot(null, startHour, endHour);
+            }
         }
         if(minPrice != null || maxPrice != null) {
             LOGGER.debug("Adding filter with price");

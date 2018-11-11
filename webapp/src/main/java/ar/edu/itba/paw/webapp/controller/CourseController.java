@@ -1,30 +1,30 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
-import ar.edu.itba.paw.interfaces.service.ConversationService;
-import ar.edu.itba.paw.interfaces.service.CourseService;
-import ar.edu.itba.paw.interfaces.service.ScheduleService;
-import ar.edu.itba.paw.interfaces.service.SubjectService;
+import ar.edu.itba.paw.interfaces.service.*;
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @Controller
@@ -46,9 +46,12 @@ public class CourseController extends BaseController{
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private ClassReservationService classReservationService;
+
     @RequestMapping("/Course")
     public ModelAndView course(
-            @ModelAttribute("messageForm") final MessageForm form,
+            @ModelAttribute("messageForm") final MessageForm messageForm,
             @RequestParam(value="professor", required=true) final Long professorId,
             @RequestParam(value="subject", required=true) final Long subjectId,
             @ModelAttribute(value = "SUCCESS_MESSAGE") final String success_message,
@@ -64,8 +67,8 @@ public class CourseController extends BaseController{
 
         final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
         mav.addObject("schedule", schedule);
-        form.setProfessorId(professorId);
-        form.setSubjectId(subjectId);
+        messageForm.setProfessorId(professorId);
+        messageForm.setSubjectId(subjectId);
         return mav;
     }
 
@@ -83,7 +86,7 @@ public class CourseController extends BaseController{
         try {
             sent = conversationService.sendMessage(loggedUser.getId(), form.getProfessorId(),
                     form.getSubjectId(), form.getBody());
-        } catch (SameUserConversationException e) {
+        } catch (SameUserException e) {
             errors.rejectValue("body", "SameUserMessageError");
             form.setBody(null);
             return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
@@ -134,6 +137,64 @@ public class CourseController extends BaseController{
         LOGGER.debug("Posting request for course creation for professor with id {} in subject with id {}", user.getId(), form.getSubjectId());
         return redirectWithNoExposedModalAttributes("/Course/?professor=" + course.getProfessor().getId()
                 + "&subject=" + course.getSubject().getId());
+    }
+
+    @RequestMapping(value = "/reserveClass", method = RequestMethod.GET)
+    public ModelAndView reserveClass(@ModelAttribute("currentUser") final User user,
+                                     @ModelAttribute("classReservationForm") final ClassReservationForm form,
+                                     @RequestParam(value="professor", required=true) final Long professorId,
+                                     @RequestParam(value="subject", required=true) final Long subjectId) {
+        final ModelAndView mav = new ModelAndView("reserveClass");
+        return mav;
+    }
+
+    @RequestMapping(value = "/reserveClass", method = RequestMethod.POST)
+    public ModelAndView reserveClass(@ModelAttribute("currentUser") final User user,
+                                     @Valid @ModelAttribute("classReservationForm")
+                                     final ClassReservationForm form,
+                                     final BindingResult errors,
+                                     @RequestParam(value="professor", required=true) final Long professorId,
+                                     @RequestParam(value="subject", required=true) final Long subjectId) {
+
+        final Course course = courseService.findCourseByIds(professorId, subjectId);
+        if(course == null) {
+            return redirectToErrorPage("nonExistentCourse");
+        }
+        if(errors.hasErrors() || !form.validForm()) {
+            if(!form.validForm()) {
+                errors.rejectValue("endHour", "profile.add_schedule.timeError");
+            }
+            return reserveClass(user, form, professorId, subjectId);
+        }
+
+        final LocalDate day = new LocalDate(form.getDay());
+
+        final LocalDateTime startTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
+                day.getDayOfMonth(), form.getStartHour(), 0);
+
+        final LocalDateTime endTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
+                day.getDayOfMonth(), form.getEndHour(), 0);
+
+        ClassReservation reservation = null;
+        try {
+            reservation = classReservationService.reserve(startTime, endTime,
+                    course, user.getId());
+        } catch (SameUserException e) {
+            return redirectToErrorPage("sameUserReservation");
+        }
+
+        if(reservation == null){
+            return redirectToErrorPage("");
+        }
+        return redirectWithNoExposedModalAttributes("/Course/?professor=" + professorId
+                + "&subject=" + subjectId);
+    }
+
+    @InitBinder
+    private void dateBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
+        binder.registerCustomEditor(Date.class, editor);
     }
 
 }

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 public class SearchForm {
 
@@ -17,9 +18,7 @@ public class SearchForm {
     @Min(0)
     private Double maxPrice;
 
-    @Min(1)
-    @Max(7)
-    private Integer day;
+    private List<Integer> days;
 
     @Min(1)
     @Max(23)
@@ -43,10 +42,6 @@ public class SearchForm {
 
     public void setMaxPrice(Double maxPrice) {
         this.maxPrice = maxPrice;
-    }
-
-    public void setDay(Integer day) {
-        this.day = day;
     }
 
     public void setStartHour(Integer startHour) {
@@ -73,10 +68,6 @@ public class SearchForm {
         return maxPrice;
     }
 
-    public Integer getDay() {
-        return day;
-    }
-
     public Integer getStartHour() {
         return startHour;
     }
@@ -95,5 +86,13 @@ public class SearchForm {
         if(maxPrice == null || minPrice == null)
             return true;
         return minPrice <= maxPrice;
+    }
+
+    public List<Integer> getDays() {
+        return days;
+    }
+
+    public void setDays(List<Integer> days) {
+        this.days = days;
     }
 }

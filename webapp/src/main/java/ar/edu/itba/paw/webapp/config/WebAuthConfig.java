@@ -49,7 +49,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.userDetailsService(userDetailsService)
                 .authorizeRequests()
                     .antMatchers("/login/**", "/register/**", "/forgotPassword/**", "/resetPassword/**").anonymous()
-                    .antMatchers("/logout/**", "/sendMessage/**", "/Conversations/**", "/Conversation/**").authenticated()
+                    .antMatchers("/logout/**", "/sendMessage/**", "/Conversations/**", "/Conversation/**", "/reserveClass**").authenticated()
                     .antMatchers("/registerAsProfessor/**", "/postComment/**").hasRole("USER")
                     .antMatchers("/createCourse/**", "/Profile/**", "/CreateTimeSlot/**",
                             "/editProfessorProfile/**", "/RemoveTimeSlot/**", "/deleteCourse/**").hasRole("PROFESSOR")

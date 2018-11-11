@@ -79,13 +79,12 @@
 
 <div class="content">
     <div class="filter-panel">
-
         <h2 class="text-center-responsive"><spring:message code="filter" /> </h2>
         <div class="responsiveColumn">
             <div class="responsiveRow">
                 <h3><spring:message code="search.dayHeader"/></h3>
                 <div>
-                    <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input m-w-200" path="day" multiple="multiple">
+                    <form:select cssClass="js-example-basic-multiple select-subject no-border b-r-5 no-margin filter-input m-w-200" path="days" multiple="multiple">
                         <form:option value="1"><spring:message code ="day.monday"/></form:option>
                         <form:option value="2"><spring:message code ="day.tuesday"/></form:option>
                         <form:option value="3"><spring:message code ="day.wednesday"/></form:option>
@@ -94,7 +93,7 @@
                         <form:option value="6"><spring:message code ="day.saturday"/></form:option>
                         <form:option value="7"><spring:message code ="day.sunday"/></form:option>
                     </form:select>
-                    <form:errors cssClass="error-text" path="day" element="p"/>
+                    <form:errors cssClass="error-text" path="days" element="p"/>
                 </div>
             </div>
             <div class="responsiveRow">
@@ -158,8 +157,31 @@
         </c:choose>
 
         <div class="paged-result-buttons">
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page - 1}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}&startHour=${param.startHour}&endHour=${param.endHour}" var="previous"/>
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page + 1}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}&startHour=${param.startHour}&endHour=${param.endHour}" var="next"/>
+            <c:url value ="/searchResults" var="previous">
+                <c:forEach items="${searchForm.days}" var="day">
+                    <c:param name="days"><c:out value="${day}"/></c:param>
+                </c:forEach>
+                <c:param name="page">${page - 1}</c:param>
+                <c:param name="search">${param.search}</c:param>
+                <c:param name="type">${type}</c:param>
+                <c:param name="minPrice">${param.minPrice}</c:param>
+                <c:param name="maxPrice">${param.maxPrice}</c:param>
+                <c:param name="startHour">${param.startHour}</c:param>
+                <c:param name="endHour">${param.endHour}</c:param>
+            </c:url>
+
+            <c:url value ="/searchResults" var="next">
+                <c:forEach items="${searchForm.days}" var="day">
+                    <c:param name="days"><c:out value="${day}"/></c:param>
+                </c:forEach>
+                <c:param name="page">${page + 1}</c:param>
+                <c:param name="search">${param.search}</c:param>
+                <c:param name="type">${type}</c:param>
+                <c:param name="minPrice">${param.minPrice}</c:param>
+                <c:param name="maxPrice">${param.maxPrice}</c:param>
+                <c:param name="startHour">${param.startHour}</c:param>
+                <c:param name="endHour">${param.endHour}</c:param>
+            </c:url>
 
             <c:if test="${page > 1}">
                 <a href="${previous}" class="previous round">&#8249;</a>

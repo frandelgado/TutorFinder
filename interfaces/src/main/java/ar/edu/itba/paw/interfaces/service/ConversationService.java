@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
-import ar.edu.itba.paw.exceptions.SameUserConversationException;
+import ar.edu.itba.paw.exceptions.SameUserException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.models.Conversation;
 import ar.edu.itba.paw.models.PagedResults;
@@ -10,7 +10,7 @@ import ar.edu.itba.paw.models.PagedResults;
 public interface ConversationService {
 
     boolean sendMessage(final Long userId, final Long professorId, final Long subjectId, final String body)
-            throws SameUserConversationException, UserNotInConversationException, NonexistentConversationException;
+            throws SameUserException, UserNotInConversationException, NonexistentConversationException;
 
     boolean sendMessage(final Long userId, final Long conversationId, final String body) throws UserNotInConversationException, NonexistentConversationException;
 
