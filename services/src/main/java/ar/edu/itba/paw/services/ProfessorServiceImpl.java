@@ -4,6 +4,7 @@ import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
+import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
@@ -244,5 +245,12 @@ public class ProfessorServiceImpl implements ProfessorService {
 
         LOGGER.debug("Adding user with id {} as professor", user.getId());
         return professorDao.create(user, description, picture);
+    }
+
+    @Override
+    public Professor initializeCourses(final Professor professor) {
+        final Professor merged = professorDao.merge(professor);
+        merged.getCourses().size();
+        return merged;
     }
 }
