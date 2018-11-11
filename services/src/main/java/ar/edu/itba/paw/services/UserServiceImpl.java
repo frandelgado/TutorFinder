@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User findByUsername(final String username) {
         if(username == null || username.isEmpty()) {
             LOGGER.error("Attempted to find user with empty username");
@@ -51,6 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User findByEmail(final String email) {
         if(email == null || email.isEmpty()) {
             LOGGER.error("Attempted to find user with empty email");
@@ -119,6 +121,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean changePassword(final Long userId, final String newPassword) {
         if(userId == null || newPassword == null) {
             LOGGER.error("Attempted to change password with invalid parameters");
@@ -134,6 +137,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public PagedResults<ClassReservation> pagedReservations(User user, int page) {
         if(page <= 0) {
             LOGGER.error("Attempted to find 0 or negative page number");
