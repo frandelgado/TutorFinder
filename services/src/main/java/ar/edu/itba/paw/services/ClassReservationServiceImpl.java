@@ -29,8 +29,8 @@ public class ClassReservationServiceImpl implements ClassReservationService {
 
     @Override
     @Transactional
-    public ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour, Course course, Long studentId) {
-        User student = us.findUserById(studentId);
+    public ClassReservation reserve(final LocalDateTime startHour, final LocalDateTime endHour, final Course course, final Long studentId) {
+        final User student = us.findUserById(studentId);
 
         if(student == null) {
              return null;
@@ -40,13 +40,13 @@ public class ClassReservationServiceImpl implements ClassReservationService {
 
     @Override
     @Transactional
-    public ClassReservation confirm(ClassReservation classReservation, String comment) {
+    public ClassReservation confirm(final ClassReservation classReservation, final String comment) {
         return crd.confirm(classReservation, comment);
     }
 
     @Override
     @Transactional
-    public ClassReservation deny(ClassReservation classReservation, String comment) {
+    public ClassReservation deny(final ClassReservation classReservation, final String comment) {
         return crd.deny(classReservation, comment);
     }
 }

@@ -19,21 +19,21 @@ public class ClassReservationHibernateDao implements ClassReservationDao {
     private EntityManager em;
 
     @Override
-    public ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour, Course course, User student) {
-        ClassReservation classReservation = new ClassReservation(student, course, startHour, endHour, 2, null);
+    public ClassReservation reserve(final LocalDateTime startHour, final LocalDateTime endHour, final Course course, final User student) {
+        final ClassReservation classReservation = new ClassReservation(student, course, startHour, endHour, 2, null);
         em.persist(classReservation);
         return classReservation;
     }
 
     @Override
-    public ClassReservation confirm(ClassReservation classReservation, String comment) {
+    public ClassReservation confirm(final ClassReservation classReservation, final String comment) {
         em.merge(classReservation);
         classReservation.confirm(comment);
         return classReservation;
     }
 
     @Override
-    public ClassReservation deny(ClassReservation classReservation, String comment) {
+    public ClassReservation deny(final ClassReservation classReservation, final String comment) {
         em.merge(classReservation);
         classReservation.deny(comment);
         return classReservation;
