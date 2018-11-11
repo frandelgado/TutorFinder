@@ -16,3 +16,13 @@
     width: 300px;
     margin: 25px;
 }
+
+.comment {
+    padding: 10px;
+    border: 2px solid #dedede;
+    border-radius: 5px;
+    background-color: #dedede;
+    height: fit-content;
+    width: 600px;
+    margin: 25px;
+}
