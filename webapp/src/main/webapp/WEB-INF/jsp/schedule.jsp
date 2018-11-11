@@ -27,7 +27,7 @@
     <c:forEach var="i" begin="1" end="24">
         <c:if test="${schedule.monday.contains(i) || schedule.tuesday.contains(i) || schedule.wednesday.contains(i) || schedule.thursday.contains(i) || schedule.friday.contains(i) || schedule.saturday.contains(i) || schedule.sunday.contains(i)}">
             <tr>
-                <td>${i}:00</td>
+                <td class="hour">${i}:00 - ${i+1}:00</td>
                 <c:choose>
                     <c:when test="${schedule.monday.contains(i)}">
                         <td class="selected-time" />
