@@ -7,7 +7,10 @@ import ar.edu.itba.paw.webapp.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.joda.time.DateTime;
+import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,11 +165,19 @@ public class CourseController extends BaseController{
         if(errors.hasErrors()) {
             return reserveClass(user, form, professorId, subjectId);
         }
-        LocalDateTime startTime = new LocalDateTime(form.getDay().getYear(), form.getDay().getMonth(),
-                form.getDay().getDay(), form.getStartHour(), 0);
 
-        LocalDateTime endTime = new LocalDateTime(form.getDay().getYear(), form.getDay().getMonth(),
-                form.getDay().getDay(), form.getEndHour(), 0);
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTime day = formatter.parseDateTime(form.getDay());
+
+        LocalDateTime startTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
+                day.getDayOfMonth(), form.getStartHour(), 0);
+
+        LocalDateTime endTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
+                day.getDayOfMonth(), form.getEndHour(), 0);
+
+        if(day.compareTo(Instant.now()) < 0) {
+            //TODO return error to form
+        }
 
         ClassReservation reservation = classReservationService.reserve(startTime, endTime,
                 course, user.getId());

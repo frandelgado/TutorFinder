@@ -4,6 +4,7 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ClassReservationForm {
@@ -18,8 +19,7 @@ public class ClassReservationForm {
     @Max(24)
     private Integer endHour;
 
-    @Future
-    private Date day;
+    private String day;
 
 
     public boolean validForm() {
@@ -44,11 +44,11 @@ public class ClassReservationForm {
         this.endHour = endHour;
     }
 
-    public Date getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(Date day) {
+    public void setDay(String day) {
         this.day = day;
     }
 }
