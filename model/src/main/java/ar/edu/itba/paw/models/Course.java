@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +25,9 @@ public class Course {
 
     @Column(nullable = false)
     private Double price;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<ClassReservation> classReservations;
 
     public Course(){}
 

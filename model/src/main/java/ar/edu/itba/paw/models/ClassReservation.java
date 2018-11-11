@@ -19,8 +19,7 @@ public class ClassReservation {
     private User student;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    private Professor professor;
-
+    private Course course;
 
     @Column(nullable = false)
     @Convert(converter = LocalDateTimeAttributeConverter.class)
@@ -38,15 +37,6 @@ public class ClassReservation {
 
     ClassReservation(){}
 
-    public ClassReservation(User student, Professor professor, LocalDateTime startTime,
-                            LocalDateTime endTime, Integer status) {
-
-        this.student    = student;
-        this.professor  = professor;
-        this.endTime    = endTime;
-        this.startTime  = startTime;
-        this.status     = status;
-    }
 
     public ClassReservation confirm(String comment) {
         this.comment = comment;
@@ -60,6 +50,15 @@ public class ClassReservation {
         return this;
     }
 
+    public ClassReservation(User student, Course course, LocalDateTime startTime, LocalDateTime endTime, Integer status, String comment) {
+        this.student = student;
+        this.course = course;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.status = status;
+        this.comment = comment;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,7 +66,7 @@ public class ClassReservation {
         ClassReservation that = (ClassReservation) o;
         return Objects.equals(classRequestId, that.classRequestId) &&
                 Objects.equals(student, that.student) &&
-                Objects.equals(professor, that.professor) &&
+                Objects.equals(course, that.course) &&
                 Objects.equals(startTime, that.startTime) &&
                 Objects.equals(endTime, that.endTime) &&
                 Objects.equals(status, that.status) &&
@@ -76,6 +75,6 @@ public class ClassReservation {
 
     @Override
     public int hashCode() {
-        return Objects.hash(classRequestId, student, professor, startTime, endTime, status, comment);
+        return Objects.hash(classRequestId, student, course, startTime, endTime, status, comment);
     }
 }

@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.service.ClassReservationService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.ClassReservation;
+import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,13 @@ public class ClassReservationServiceImpl implements ClassReservationService {
 
     @Override
     @Transactional
-    public ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour, Long professorId, Long studentId) {
-        Professor professor = ps.findById(professorId);
+    public ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour, Course course, Long studentId) {
         User student = us.findUserById(studentId);
 
-        if(professor == null || student == null) {
+        if(student == null) {
              return null;
         }
-        return crd.reserve(startHour, endHour, professor, student);
+        return crd.reserve(startHour, endHour, course, student);
     }
 
     @Override

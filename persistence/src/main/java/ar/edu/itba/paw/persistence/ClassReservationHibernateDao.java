@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.ClassReservationDao;
 import ar.edu.itba.paw.models.ClassReservation;
+import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import org.springframework.stereotype.Repository;
@@ -18,8 +19,8 @@ public class ClassReservationHibernateDao implements ClassReservationDao {
     private EntityManager em;
 
     @Override
-    public ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour, Professor professor, User student) {
-        ClassReservation classReservation = new ClassReservation(student, professor, startHour, endHour, 2);
+    public ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour, Course course, User student) {
+        ClassReservation classReservation = new ClassReservation(student, course, startHour, endHour, 2, null);
         em.persist(classReservation);
         return classReservation;
     }
