@@ -74,4 +74,9 @@ public class ProfessorHibernateDao implements ProfessorDao {
         query.setMaxResults(limit);
         return query.getResultList();
     }
+
+    @Override
+    public Professor merge(final Professor professor) {
+        return em.merge(professor);
+    }
 }
