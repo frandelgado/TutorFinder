@@ -102,7 +102,7 @@
                 <div class="row">
                     <div class="m-10-b rm-10-b">
                         <form:select cssClass="select-subject no-border b-r-5 no-margin m-r-5 filter-input" path="startHour" >
-                            <form:option selected="selected" disabled="true" value=""><spring:message code ="from"/>/form:option>
+                            <form:option selected="selected" disabled="true" value=""><spring:message code ="from"/></form:option>
                             <c:forEach var="hour" begin="1" end="23" >
                                 <form:option value="${hour}">${hour}:00</form:option>
                             </c:forEach>
