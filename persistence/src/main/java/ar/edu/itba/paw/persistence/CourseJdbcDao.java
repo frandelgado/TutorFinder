@@ -130,4 +130,9 @@ public class CourseJdbcDao implements CourseDao {
     public Comment create(User creator, String text, Course course, int rating) {
         return null;
     }
+
+    @Override
+    public List<Comment> getComments(Course course, int limit, int offset) {
+        return null;
+    }
 }

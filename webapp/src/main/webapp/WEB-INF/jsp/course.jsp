@@ -83,6 +83,35 @@
         </form:form>
     </div>
 
+    <div class="comments">
+
+        <div>
+            <h2><spring:message code="commentTitle"/></h2>
+        </div>
+        <c:forEach var="comment" items="${comments.results}">
+            <div class="class-profile">
+                <div class="title center-text"><c:out value="${comment.user.username}" escapeXml="true"/></div>
+                <div class="description center-text"><c:out value="${comment.comment}" escapeXml="true"/></div>
+                <h6>
+                    <spring:message code="time.sent" arguments="${comment.day},${comment.month},${comment.year},${comment.hours},${comment.minutes}"/>
+                </h6>
+            </div>
+        </c:forEach>
+
+        <div class="paged-result-buttons">
+            <c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}&page=${page - 1}" var="previous"/>
+            <c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}&page=${page + 1}" var="next"/>
+
+            <c:if test="${page > 1}">
+                <a href="${previous}" class="previous round">&#8249;</a>
+            </c:if>
+            <c:if test="${comments.hasNext}">
+                <a href="${next}" class="next round">&#8250;</a>
+            </c:if>
+        </div>
+    </div>
+    </div>
+
     <div class="schedule">
         <h2><spring:message code="schedule.title"/></h2>
         <c:if test="${currentUser == null || (currentUser != null && currentUser.id != course.professor.id)}">

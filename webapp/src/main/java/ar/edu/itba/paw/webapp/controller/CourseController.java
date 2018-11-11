@@ -2,11 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.Comment;
-import ar.edu.itba.paw.models.ClassReservation;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.Schedule;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
@@ -57,9 +53,7 @@ public class CourseController extends BaseController{
             @ModelAttribute("commentForm") final CommentForm commentForm,
             @RequestParam(value="professor", required=true) final long professorId,
             @RequestParam(value="subject", required=true) final long subjectId,
-            @ModelAttribute(value = "SUCCESS_MESSAGE") final String success_message,
-            @ModelAttribute(value = "ERROR_MESSAGE") final String error_message
-    ){
+            @RequestParam(value = "page", defaultValue = "1") final int page){
         final ModelAndView mav = new ModelAndView("course");
         final Course course = courseService.findCourseByIds(professorId, subjectId);
         if(course == null) {
@@ -69,7 +63,17 @@ public class CourseController extends BaseController{
         LOGGER.debug("Creating view for Course with professor id {} and subject id {}", professorId, subjectId);
 
         final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
+
+        final PagedResults<Comment> comments = courseService.getComments(course, page);
+
+        if(comments == null) {
+            redirectToErrorPage("pageOutOfBounds");
+        }
+
+        mav.addObject("comments", comments);
+
         mav.addObject("schedule", schedule);
+        mav.addObject("page", page);
         messageForm.setProfessorId(professorId);
         messageForm.setSubjectId(subjectId);
         commentForm.setCommentProfessorId(professorId);
@@ -85,7 +89,7 @@ public class CourseController extends BaseController{
             @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException, NonexistentConversationException {
 
         if(errors.hasErrors()) {
-            return course(form,comment, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form,comment, form.getProfessorId(), form.getSubjectId(), 1);
         }
 
         final boolean sent;
@@ -95,16 +99,16 @@ public class CourseController extends BaseController{
         } catch (SameUserException e) {
             errors.rejectValue("body", "SameUserMessageError");
             form.setBody(null);
-            return course(form,comment, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form,comment, form.getProfessorId(), form.getSubjectId(),1);
         }
         if(sent) {
             errors.rejectValue("extraMessage", "MessageSent");
             form.setBody(null);
-            return course(form,comment, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form,comment, form.getProfessorId(), form.getSubjectId(),1);
         } else {
             errors.rejectValue("body", "SendMessageError");
         }
-        return course(form,comment, form.getProfessorId(), form.getSubjectId(), null, null);
+        return course(form,comment, form.getProfessorId(), form.getSubjectId(),1);
     }
 
     @RequestMapping(value = "/postComment", method = RequestMethod.POST)
@@ -115,7 +119,7 @@ public class CourseController extends BaseController{
             @ModelAttribute("currentUser") final User loggedUser) {
 
         if(errors.hasErrors()) {
-            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), null, null);
+            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(),1);
         }
 
         final boolean sent = courseService.comment(loggedUser.getId(), form.getCommentProfessorId(),
@@ -126,7 +130,7 @@ public class CourseController extends BaseController{
         } else {
             errors.rejectValue("commentBody", "SendMessageError");
         }
-        return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), null, null);
+        return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(),1);
     }
 
 

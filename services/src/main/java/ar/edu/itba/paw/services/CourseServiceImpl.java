@@ -228,4 +228,34 @@ public class CourseServiceImpl implements CourseService {
 
         return comment != null;
     }
+
+    @Override
+    public PagedResults<Comment> getComments(final Course course, final int page) {
+
+        if(page <= 0) {
+            LOGGER.error("Attempted to find 0 or negative page number");
+            return null;
+        }
+
+        LOGGER.debug("Searching for comments in course taught by professor with id {} about subject with id {}",
+                course.getProfessor().getId(), course.getSubject().getId());
+        final List<Comment> comments = courseDao.getComments(course, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
+        final PagedResults<Comment> results;
+        final int size = comments.size();
+
+        if(size == 0 && page > 1) {
+            LOGGER.error("Page number exceeds total page count");
+            return null;
+        }
+
+        if(size > PAGE_SIZE) {
+            comments.remove(PAGE_SIZE);
+            results = new PagedResults<>(comments, true);
+            LOGGER.trace("The search has more pages, removing extra result");
+        } else {
+            LOGGER.trace("The search has no more pages to show");
+            results = new PagedResults<>(comments, false);
+        }
+        return results;
+    }
 }

@@ -83,4 +83,14 @@ public class CourseHibernateDao implements CourseDao {
         em.persist(comment);
         return comment;
     }
+
+    @Override
+    public List<Comment> getComments(final Course course, final int limit, final int offset) {
+        final TypedQuery<Comment> query = em.createQuery("from Comment as c where c.course = :course " +
+                "order by c.created", Comment.class);
+        query.setParameter("course", course);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.getResultList();
+    }
 }
