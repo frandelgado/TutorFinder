@@ -46,10 +46,6 @@
     height: 20px;
 }
 
-.staticProfile .schedule {
-    min-width: 655px;
-}
-
 .time-content {
     grid-area: time-content;
     display: grid;
@@ -66,4 +62,9 @@
     grid-template-areas:
             "schedule";
     grid-template-rows: auto;
+}
+
+.hour {
+    text-align: start;
+    width: 80px;
 }

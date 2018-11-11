@@ -64,10 +64,14 @@ body {
 
 .course {
     display: grid;
-    grid-template-columns: 50fr 50fr;
+    grid-template-columns: 40fr 60fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 20px;
     grid-template-areas: "class class" "contact schedule";
 
 }
+
+
 
 .register .content {
     display: grid;
@@ -547,7 +551,9 @@ table {
 
 th, td {
     padding: 15px;
+    width: 60px;
     border-color: #402039;
+    text-align: center;
 }
 
 .selected-time {
