@@ -23,7 +23,6 @@
 
 <body class="body">
 <c:url value="/searchResults" var="postPath"/>
-<form:form cssClass="staticSearchResults" modelAttribute="searchForm" action="${postPath}" method="post">
 <div class="navbar">
     <a href="<c:url value="/" />" class="logo-box">
         <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
@@ -77,36 +76,40 @@
 
 <div class="content">
     <div class="search-results">
-        <c:if test="${search.length() >= 1 }"><h3 class="search-data"><spring:message code="search.message" arguments="${search}" htmlEscape="true"/></h3></c:if>
+        <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
         <c:choose>
-            <c:when test="${pagedResults.results.size() == 0}">
+            <c:when test="${reservations.size() == 0}">
                 <h1><spring:message code="no.results"/></h1>
             </c:when>
-            <c:when test="${type == 'professor'}">
-                <%@ include file="professorSearch.jsp" %>
-            </c:when>
-            <c:when test="${type == 'course'}">
-                <%@ include file="courseSearch.jsp" %>
-            </c:when>
-            <c:when test="${type == 'area'}">
-                <%@ include file="areaSearch.jsp" %>
-            </c:when>
+            <c:forEach var="reservation" items="${reservations}">
+                <div class="search-course-result">
+                    <a class="conversation-link" href = "<c:url value="/Course/?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
+                    <a class="search-result-img"><img class="search-result-picture" src="<c:url value="data:image/jpeg;base64,${reservation.course.subject.area.image}"/>"/></a>
+                    <%--TODO: add buttons--%>
+                    <a class="search-result-title">
+                        <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>
+                    <a class="search-result-professor" >
+                        <c:out value="${reservation.course.professor.name}" escapeXml="true" /></a>
+                    <a class="search-result-specs"><spring:message code="course.specs" arguments="${reservation.course.price}" htmlEscape="true" /></a>
+                    <a class="search-result-description"><c:out value="${reservation.course.description}" escapeXml="true" /></a>
+                    <a class="search-result-rating"><spring:message code="rating.title" arguments="${reservation.course.price}" htmlEscape="true" /></a>
+                </div>
+            </c:forEach>
         </c:choose>
 
         <div class="paged-result-buttons">
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page - 1}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}&startHour=${param.startHour}&endHour=${param.endHour}" var="previous"/>
-            <c:url value="/searchResults?search=${param.search}&type=${type}&page=${page + 1}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&day=${param.day}&startHour=${param.startHour}&endHour=${param.endHour}" var="next"/>
+            <c:url value="/reservations?page=${page - 1}" var="previous"/>
+            <c:url value="/reservations?page=${page + 1}" var="next"/>
 
             <c:if test="${page > 1}">
                 <a href="${previous}" class="previous round">&#8249;</a>
             </c:if>
-            <c:if test="${pagedResults.hasNext}">
+            <c:if test="${hasNext}">
                 <a href="${next}" class="next round">&#8250;</a>
             </c:if>
         </div>
     </div>
 </div>
-</form:form>
 </body>
 
 </html>
