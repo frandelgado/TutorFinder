@@ -62,9 +62,11 @@
 <div class="content">
     <div class="search-results">
         <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
-            <c:if test="${reservations.size() == 0}">
+
+        <c:choose>
+            <c:when test="${reservations.size() == 0}">
                 <h1><spring:message code="no.results"/></h1>
-            </c:if>
+            </c:when>
             <c:forEach var="reservation" items="${reservations}">
                 <div class="search-course-result">
                     <a class="conversation-link" href = "<c:url value="/Course/?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
@@ -79,7 +81,7 @@
                     <a class="search-result-rating"><spring:message code="rating.title" arguments="${reservation.course.price}" htmlEscape="true" /></a>
                 </div>
             </c:forEach>
-
+        </c:choose>
         <div class="paged-result-buttons">
             <c:url value="/reservations?page=${page - 1}" var="previous"/>
             <c:url value="/reservations?page=${page + 1}" var="next"/>
