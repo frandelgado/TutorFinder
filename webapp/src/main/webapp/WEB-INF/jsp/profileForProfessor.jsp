@@ -44,9 +44,6 @@
             <div id="delete-class-modal-button" class="add-class button-2">
                 <spring:message code="deleteClass"/>
             </div>
-            <div class="add-class">
-                <a class="fas fa-pen center" href="<c:url value="/createCourse" />"></a>
-            </div>
         </div>
         <div id="delete-class-modal" class="add-time-modal">
             <div>
@@ -80,6 +77,9 @@
                     <a class="class-button" href="<c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
                     <div class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></div>
                     <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
+                    <div class="add-class">
+                        <a class="fas fa-pen center" href="<c:url value="/modifyCourse/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
+                    </div>
                 </div>
             </c:forEach>
 

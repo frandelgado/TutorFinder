@@ -24,7 +24,7 @@ public interface CourseService {
     PagedResults<Comment> getComments(final Course course, final int page);
 
     Course modify(final Long professorId, final Long subjectId, final String description, final Double price)
-            throws CourseAlreadyExistsException, NonexistentProfessorException, NonexistentSubjectException, NonexistentCourseException;
+            throws NonexistentCourseException;
 
     boolean deleteCourse(long professorId, long subjectId);
 }

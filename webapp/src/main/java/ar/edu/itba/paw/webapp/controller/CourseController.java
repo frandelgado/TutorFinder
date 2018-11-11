@@ -246,4 +246,46 @@ public class CourseController extends BaseController{
         binder.registerCustomEditor(Date.class, editor);
     }
 
+    @RequestMapping("/modifyCourse")
+    public ModelAndView modifyCourse(@ModelAttribute("modifyForm") final CourseForm form,
+                                     @ModelAttribute("currentUser") final User user,
+                                     @RequestParam("subject") final Long subjectId) {
+        final ModelAndView mav = new ModelAndView("modifyCourse");
+
+        final Course course = courseService.findCourseByIds(user.getId(), subjectId);
+
+        if(course == null) {
+            return redirectToErrorPage("nonExistentCourse");
+        }
+
+        form.setDescription(course.getDescription());
+        form.setPrice(course.getPrice());
+        form.setSubjectId(course.getSubject().getId());
+        return mav;
+    }
+
+    @RequestMapping(value = "/modifyCourse", method = RequestMethod.POST)
+    public ModelAndView modify(@Valid @ModelAttribute("modifyForm") final CourseForm form,
+                               final BindingResult errors,
+                               @ModelAttribute("currentUser") final User user) {
+        if(errors.hasErrors()) {
+            return modifyCourse(form, user, form.getSubjectId());
+        }
+
+        final Course course;
+        try {
+            course = courseService.modify(user.getId(), form.getSubjectId(), form.getDescription(), form.getPrice());
+        } catch (NonexistentCourseException e) {
+            return redirectToErrorPage("nonExistentCourse");
+        }
+
+        if(course == null) {
+            return modifyCourse(form, user, form.getSubjectId());
+        }
+
+        LOGGER.debug("Posting request for course modification for professor with id {} in subject with id {}", user.getId(), form.getSubjectId());
+        return redirectWithNoExposedModalAttributes("/Course/?professor=" + course.getProfessor().getId()
+                + "&subject=" + course.getSubject().getId());
+    }
+
 }
