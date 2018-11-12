@@ -39,7 +39,8 @@ public class Course {
             " c.course_subject_id = subject_id)")
     private Double rating;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course", orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<CourseFile> courseFiles = new HashSet<CourseFile>();
 
     public Course(){}
