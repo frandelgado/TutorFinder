@@ -33,9 +33,13 @@
                 <h1><spring:message code="no.reservations"/></h1>
             </c:if>
             <c:forEach var="reservation" items="${reservations}">
-                <div class="search-course-result">
-                    <a class="conversation-link" href = "<c:url value="/" />"></a>
-                    <a class="search-result-img"><img class="search-result-picture" src="<c:url value="data:image/jpeg;base64,${reservation.course.subject.area.image}"/>"/></a>
+                <div class="reservation-course-result">
+                    <div class="search-result-img">
+                        <div class="button-2 relative" type="submit" value="<spring:message code="reserve"/>">
+                            <a class="class-button" href="<c:url value="/createCourse" />"></a>
+                            <spring:message code="files"/>
+                        </div>
+                    </div>
                     <%--TODO: add buttons--%>
                     <a class="search-result-title">
                         <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>
