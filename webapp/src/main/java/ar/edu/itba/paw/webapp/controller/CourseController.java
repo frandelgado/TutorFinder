@@ -242,7 +242,7 @@ public class CourseController extends BaseController{
 
     @RequestMapping("/denyClassRequest")
     public ModelAndView denyClassRequest(@ModelAttribute("currentUser") final User currentUser,
-                                         @RequestParam("classReservation") final Long classReservationId) {
+                                         @RequestParam("classReservation") final long classReservationId) {
 
         try {
             classReservationService.deny(classReservationId, currentUser.getId(), null);
@@ -255,7 +255,7 @@ public class CourseController extends BaseController{
 
     @RequestMapping("/approveClassRequest")
     public ModelAndView approveClassRequest(@ModelAttribute("currentUser") final User currentUser,
-                                         @RequestParam("classReservation") final Long classReservationId) {
+                                            @RequestParam("classReservation") final long classReservationId) {
 
         try {
             classReservationService.confirm(classReservationId, currentUser.getId(), null);
@@ -277,7 +277,7 @@ public class CourseController extends BaseController{
     @RequestMapping("/modifyCourse")
     public ModelAndView modifyCourse(@ModelAttribute("modifyForm") final CourseForm form,
                                      @ModelAttribute("currentUser") final User user,
-                                     @RequestParam("subject") final Long subjectId) {
+                                     @RequestParam("subject") final long subjectId) {
         final ModelAndView mav = new ModelAndView("modifyCourse");
 
         final Course course = courseService.findCourseByIds(user.getId(), subjectId);

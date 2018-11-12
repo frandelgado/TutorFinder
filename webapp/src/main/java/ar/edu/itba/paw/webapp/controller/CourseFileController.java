@@ -33,8 +33,8 @@ public class CourseFileController extends BaseController {
     CourseService cs;
 
     @RequestMapping(value = "/courseFiles", method = RequestMethod.GET)
-    public ModelAndView getCourseFiles(@RequestParam("professor") final Long professorId,
-                               @RequestParam("subject") final Long subjectId,
+    public ModelAndView getCourseFiles(@RequestParam("professor") final long professorId,
+                               @RequestParam("subject") final long subjectId,
                                @ModelAttribute("currentUser") final User currentUser,
                                @ModelAttribute("uploadClassFileForm") final UploadClassFileForm form) {
         Course course = cs.findCourseByIds(professorId, subjectId);
@@ -87,8 +87,8 @@ public class CourseFileController extends BaseController {
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     public ModelAndView uploadFile(@Valid @ModelAttribute("uploadClassFileForm") final UploadClassFileForm form,
                                    BindingResult result,
-                                   @RequestParam("professor") final Long professorId,
-                                   @RequestParam("subject") final Long subjectId,
+                                   @RequestParam("professor") final long professorId,
+                                   @RequestParam("subject") final long subjectId,
                                    @ModelAttribute("currentUser") final User currentUser) {
 
         if(result.hasErrors()) {
@@ -117,16 +117,16 @@ public class CourseFileController extends BaseController {
 
     @RequestMapping("/deleteFile")
     public ModelAndView deleteFile(@ModelAttribute("currentUser") final User currentUser,
-                                   @RequestParam("professor") final Long professorId,
-                                   @RequestParam("subject") final Long subjectId,
-                                   @RequestParam("courseFile") final Long fileId) {
+                                   @RequestParam("professor") final long professorId,
+                                   @RequestParam("subject") final long subjectId,
+                                   @RequestParam("courseFile") final long fileId) {
 
         try {
             cfs.deleteById(fileId, currentUser);
         } catch (UserAuthenticationException e) {
             return redirectToErrorPage("403");
         }
-        return redirectWithNoExposedModalAttributes("/courseFiles?professor=" + professorId.toString()
-                +"&subject=" + subjectId.toString());
+        return redirectWithNoExposedModalAttributes("/courseFiles?professor=" + professorId
+                +"&subject=" + subjectId);
     }
 }
