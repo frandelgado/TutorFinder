@@ -126,6 +126,7 @@ public class CourseFileController extends BaseController {
         } catch (UserAuthenticationException e) {
             return redirectToErrorPage("403");
         }
-        return getCourseFiles(professorId, subjectId, currentUser, new UploadClassFileForm());
+        return redirectWithNoExposedModalAttributes("/courseFiles?professor=" + professorId.toString()
+                +"&subject=" + subjectId.toString());
     }
 }
