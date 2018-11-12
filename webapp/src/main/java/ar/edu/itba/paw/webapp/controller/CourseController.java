@@ -242,7 +242,7 @@ public class CourseController extends BaseController{
 
     @RequestMapping("/denyClassRequest")
     public ModelAndView denyClassRequest(@ModelAttribute("currentUser") final User currentUser,
-                                         @RequestParam("classReservationId") final Long classReservationId) {
+                                         @RequestParam("classReservation") final Long classReservationId) {
 
         try {
             classReservationService.deny(classReservationId, currentUser.getId(), null);
