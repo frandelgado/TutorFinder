@@ -41,7 +41,7 @@
         </div>
         <div>
             <form:label cssClass="label" path="price"><spring:message code="course.price"/></form:label>
-            <form:input cssClass="input-request" type="number" step="0.01" path="price"/>
+            <form:input cssClass="input-request" type="number" step="0.01" min="1" path="price"/>
             <form:errors cssClass="error-text" path="price" element="p"/>
         </div>
         <div class="button-container">
