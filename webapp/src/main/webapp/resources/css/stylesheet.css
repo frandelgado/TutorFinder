@@ -63,8 +63,9 @@ body {
 }
 
 .course {
+    justify-content: center;
     display: grid;
-    grid-template-columns: 40fr 60fr;
+    grid-template-columns: 35% 80%;
     grid-column-gap: 10px;
     grid-row-gap: 20px;
     grid-template-areas: "class class" "contact schedule";
