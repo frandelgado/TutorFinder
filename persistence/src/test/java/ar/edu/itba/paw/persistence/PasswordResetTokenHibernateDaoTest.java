@@ -1,7 +1,6 @@
-package ar.edu.itba.paw.persistence.jdbc;
+package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.PasswordResetToken;
-import ar.edu.itba.paw.persistence.PasswordResetTokenJdbcDao;
 import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -13,7 +12,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.UUID;
@@ -21,9 +23,10 @@ import java.util.UUID;
 import static junit.framework.TestCase.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JdbcTestConfig.class)
+@ContextConfiguration(classes = HibernateTestConfig.class)
 @Sql("classpath:schema.sql")
-public class PasswordResetTokenJdbcDaoTest {
+@Transactional
+public class PasswordResetTokenHibernateDaoTest {
 
     private static final String RANDOM_UUID = UUID.randomUUID().toString();
     private static final String TOKEN = "123e4567-e89b-12d3-a456-556642440000";
@@ -33,17 +36,24 @@ public class PasswordResetTokenJdbcDaoTest {
     private static final Long INVALID_ID = 666L;
     private static final String INVALID_TOKEN = "123e4567-e89b-12d3-a456-666666666666";
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
     private DataSource dataSource;
 
     @Autowired
-    private PasswordResetTokenJdbcDao passwordResetTokenDao;
+    private PasswordResetTokenHibernateDao passwordResetTokenDao;
 
     private JdbcTemplate jdbcTemplate;
 
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    public void cleanDatabase() {
+        jdbcTemplate.execute("TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
     }
 
     @Test
@@ -106,7 +116,6 @@ public class PasswordResetTokenJdbcDaoTest {
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
+        cleanDatabase();
     }
 }

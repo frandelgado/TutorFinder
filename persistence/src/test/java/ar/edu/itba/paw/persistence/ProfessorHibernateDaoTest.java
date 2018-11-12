@@ -1,8 +1,7 @@
-package ar.edu.itba.paw.persistence.jdbc;
+package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.persistence.ProfessorJdbcDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -25,15 +27,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JdbcTestConfig.class)
+@ContextConfiguration(classes = HibernateTestConfig.class)
 @Sql("classpath:schema.sql")
-public class ProfessorJdbcDaoTest {
+@Transactional
+public class ProfessorHibernateDaoTest {
 
     @Autowired
     private DataSource dataSource;
 
     @Autowired
-    private ProfessorJdbcDao professorJdbcDao;
+    private ProfessorHibernateDao professorDao;
+
+    @PersistenceContext
+    private EntityManager em;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -57,8 +63,16 @@ public class ProfessorJdbcDaoTest {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public void cleanDatabase() {
+        jdbcTemplate.execute("TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
+    }
+
     @Test
     public void testCreateValid(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate,"messages");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate,"conversations");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate,"courses");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate,"schedules");
         JdbcTestUtils.deleteFromTables(jdbcTemplate,"professors");
         User mockUser = mock(User.class);
         when(mockUser.getEmail()).thenReturn(EMAIL);
@@ -68,7 +82,7 @@ public class ProfessorJdbcDaoTest {
         when(mockUser.getUsername()).thenReturn(USERNAME);
         when(mockUser.getPassword()).thenReturn(PASSWORD);
 
-        Professor professor = professorJdbcDao.create(mockUser, TEST_DESCRIPTION, TEST_IMAGE);
+        Professor professor = professorDao.create(mockUser, TEST_DESCRIPTION, TEST_IMAGE);
         assertNotNull(professor);
         assertEquals(USERNAME, professor.getUsername());
         assertEquals(NAME, professor.getName());
@@ -81,7 +95,7 @@ public class ProfessorJdbcDaoTest {
 
     @Test
     public void testFindByIdValid() {
-        final Professor professor = professorJdbcDao.findById(ID).orElse(null);
+        final Professor professor = professorDao.findById(ID).orElse(null);
         assertNotNull(professor);
         assertEquals(ID, professor.getId());
         assertEquals(USERNAME, professor.getUsername());
@@ -94,13 +108,13 @@ public class ProfessorJdbcDaoTest {
 
     @Test
     public void testFindByIdInvalid() {
-        final Professor professor = professorJdbcDao.findById(INVALID_ID).orElse(null);
+        final Professor professor = professorDao.findById(INVALID_ID).orElse(null);
         assertNull(professor);
     }
 
     @Test
     public void testFindByUsernameValid() {
-        final Professor professor = professorJdbcDao.findByUsername(USERNAME).orElse(null);
+        final Professor professor = professorDao.findByUsername(USERNAME).orElse(null);
         assertNotNull(professor);
         assertEquals(ID, professor.getId());
         assertEquals(USERNAME, professor.getUsername());
@@ -113,13 +127,13 @@ public class ProfessorJdbcDaoTest {
 
     @Test
     public void testFindByUsernameInvalid() {
-        final Professor professor = professorJdbcDao.findByUsername(INVALID_USERNAME).orElse(null);
+        final Professor professor = professorDao.findByUsername(INVALID_USERNAME).orElse(null);
         assertNull(professor);
     }
 
     @Test
     public void testFilterByFullNameValid() {
-        final List<Professor> professors = professorJdbcDao.filterByFullName(NAME + " " + SURNAME, LIMIT, OFFSET);
+        final List<Professor> professors = professorDao.filterByFullName(NAME + " " + SURNAME, LIMIT, OFFSET);
         assertNotNull(professors);
         assertEquals(1,professors.size());
         final Professor professor = professors.get(0);
@@ -135,7 +149,7 @@ public class ProfessorJdbcDaoTest {
 
     @Test
     public void testFilterByFullNameInvalid() {
-        final List<Professor> professors = professorJdbcDao.filterByFullName(INVALID_FULL_NAME, LIMIT, OFFSET);
+        final List<Professor> professors = professorDao.filterByFullName(INVALID_FULL_NAME, LIMIT, OFFSET);
         assertNotNull(professors);
         assertEquals(0,professors.size());
     }
@@ -143,7 +157,6 @@ public class ProfessorJdbcDaoTest {
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
+        cleanDatabase();
     }
 }

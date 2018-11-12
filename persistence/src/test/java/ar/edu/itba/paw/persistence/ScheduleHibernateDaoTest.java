@@ -1,8 +1,7 @@
-package ar.edu.itba.paw.persistence.jdbc;
+package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Timeslot;
-import ar.edu.itba.paw.persistence.ScheduleJdbcDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -25,59 +28,57 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JdbcTestConfig.class)
+@ContextConfiguration(classes = HibernateTestConfig.class)
 @Sql("classpath:schema.sql")
-public class ScheduleJdbcDaoTest {
+@Transactional
+public class ScheduleHibernateDaoTest {
 
 
     @Autowired
     private DataSource dataSource;
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
-    private ScheduleJdbcDao scheduleJdbcDao;
+    private ScheduleHibernateDao hibernateDao;
 
     private JdbcTemplate jdbcTemplate;
 
     private final String TEST_DESCRIPTION = "test description";
+    private Professor testProfessor;
+    private Professor testProfessorOcupied;
 
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
+        testProfessor = em.find(Professor.class, 2L);
+        testProfessorOcupied = em.find(Professor.class, 5L);
+    }
+
+    public void cleanDatabase() {
+        jdbcTemplate.execute("TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
     }
     
     @Test
     public void testReserveValid() {
-        Professor mockProfessor = mock(Professor.class);
-        when(mockProfessor.getId()).thenReturn(2l);
         Integer DAY = 1;
         Integer HOUR = 4;
 
-        Timeslot reservedTimeSlot = scheduleJdbcDao.reserveTimeSlot(mockProfessor, DAY,HOUR);
+        Timeslot reservedTimeSlot = hibernateDao.reserveTimeSlot(testProfessor, DAY,HOUR);
+        em.flush();
+
         assertEquals(DAY, reservedTimeSlot.getDay());
         assertEquals(HOUR, reservedTimeSlot.getHour());
         assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
     @Test
-    public void testReserveOccupied() {
-        Professor mockProfessor = mock(Professor.class);
-        when(mockProfessor.getId()).thenReturn(5l);
-        Integer DAY = 2;
-        Integer HOUR = 2;
-
-        Timeslot reservedTimeSlot = scheduleJdbcDao.reserveTimeSlot(mockProfessor, DAY,HOUR);
-        assertNull(reservedTimeSlot);
-        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
-    }
-
-    @Test
     public void testGetTimeslotsForProfessor() {
-        final Professor mockProfessor = mock(Professor.class);
-        when(mockProfessor.getId()).thenReturn(5L);
         final Integer DAY = 2;
         final Integer HOUR = 2;
 
-        List<Timeslot> reservedTimeSlots = scheduleJdbcDao.getTimeslotsForProfessor(mockProfessor);
+        List<Timeslot> reservedTimeSlots = hibernateDao.getTimeslotsForProfessor(testProfessorOcupied);
         assertNotNull(reservedTimeSlots);
         assertEquals(1, reservedTimeSlots.size());
         Timeslot reservedTimeSlot = reservedTimeSlots.get(0);
@@ -89,7 +90,6 @@ public class ScheduleJdbcDaoTest {
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "areas");
+        cleanDatabase();
     }
 }
