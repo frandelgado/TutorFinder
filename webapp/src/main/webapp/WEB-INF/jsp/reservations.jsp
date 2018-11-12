@@ -30,7 +30,7 @@
     <div class="search-results">
         <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
             <c:if test="${reservations.size() == 0}">
-                <h1><spring:message code="no.results"/></h1>
+                <h1><spring:message code="no.reservations"/></h1>
             </c:if>
             <c:forEach var="reservation" items="${reservations}">
                 <div class="search-course-result">
