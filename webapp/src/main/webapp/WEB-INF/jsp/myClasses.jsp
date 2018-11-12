@@ -73,8 +73,8 @@
         <c:forEach var="reservation" items="${reservations}">
             <div class="reservation-course-result">
                 <div class="search-result-img">
-                    <input class="button-2" type="submit" value="<spring:message code="reserve"/>"/>
-                    <input class="button-2" type="submit" value="<spring:message code="reserve"/>"/>
+                    <input class="button-2" type="submit" value="<spring:message code="Approve"/>" onclick="location.href='/approveClassRequest?classReservation=${reservation.classRequestId}'"/>
+                    <input class="button-2" type="submit" value="<spring:message code="Deny"/>" onclick="location.href='/approveClassRequest?classReservation=${reservation.classRequestId}'"/>
                 </div>
                     <%--TODO: add buttons--%>
                 <a class="search-result-title">

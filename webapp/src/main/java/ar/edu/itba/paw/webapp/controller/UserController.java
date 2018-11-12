@@ -363,7 +363,7 @@ public class UserController extends BaseController{
         return redirectWithNoExposedModalAttributes("/");
     }
 
-
+    //TODO: esto deberia estar en course controller
     @RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
     public ModelAndView deleteCourse(
             @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,

@@ -255,7 +255,7 @@ public class CourseController extends BaseController{
 
     @RequestMapping("/approveClassRequest")
     public ModelAndView approveClassRequest(@ModelAttribute("currentUser") final User currentUser,
-                                         @RequestParam("classReservationId") final Long classReservationId) {
+                                         @RequestParam("classReservation") final Long classReservationId) {
 
         try {
             classReservationService.confirm(classReservationId, currentUser.getId(), null);
