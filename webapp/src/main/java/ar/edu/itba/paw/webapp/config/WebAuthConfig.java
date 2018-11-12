@@ -53,10 +53,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                             "/Conversation/**", "/reserveClass**", "/reservations/**", "/postComment/**", "/courseFiles**",
                             "/downloadFile**").authenticated()
                     .antMatchers("/registerAsProfessor/**").hasRole("USER")
-
                     .antMatchers("/createCourse/**", "/Profile/**", "/CreateTimeSlot/**",
                             "/editProfessorProfile/**", "/RemoveTimeSlot/**", "/deleteCourse/**", "/classRequests**",
-                            "/denyClassRequest**", "/approveClassRequest**", "/uploadFiles**", "/deleteFile**").hasRole("PROFESSOR")
+                            "/denyClassRequest/**", "/approveClassRequest/**", "/uploadFiles/**", "/deleteFile/**").hasRole("PROFESSOR")
                     .anyRequest().permitAll()
                 .and().formLogin()
                     .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
