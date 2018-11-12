@@ -36,7 +36,7 @@
                         <td>${file.type}</td>
                         <td>${file.description}</td>
                         <td><a href="<c:url value='/downloadFile?courseFile=${file.id}' />" class="btn btn-success custom-width">download</a></td>
-                        <td><a href="<c:url value='/deleteFile?courseFile=${file.id}' />" class="btn btn-danger custom-width">delete</a></td>
+                        <td><a href="<c:url value='/deleteFile?courseFile=${file.id}&professor=${param.professor}&subject=${param.subject}' />" class="btn btn-danger custom-width">delete</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>
