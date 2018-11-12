@@ -22,7 +22,21 @@
     border: 2px solid #dedede;
     border-radius: 5px;
     background-color: #dedede;
+    justify-self: center;
     height: fit-content;
-    width: 600px;
+    width: 300px;
     margin: 25px;
+}
+
+.comments {
+    margin: 25px;
+    padding: 10px;
+    border: 2px solid #dedede;
+    border-radius: 5px;
+    background-color: #dedede;
+}
+
+
+.comment input:disabled {
+    background-color: #dedede
 }

@@ -99,10 +99,10 @@
             <h2><spring:message code="commentTitle"/></h2>
         </div>
         <c:forEach var="comment" items="${comments.results}">
-            <div class="class-profile">
+            <div class="profile round-background">
                 <div class="title center-text"><c:out value="${comment.user.username}" escapeXml="true"/></div>
                 <div class="description center-text"><c:out value="${comment.comment}" escapeXml="true"/></div>
-                <h6>
+                <h6 class="center-text">
                     <spring:message code="time.sent" arguments="${comment.day},${comment.month},${comment.year},${comment.hours},${comment.minutes}"/>
                 </h6>
             </div>
@@ -119,7 +119,6 @@
                 <a href="${next}" class="next round">&#8250;</a>
             </c:if>
         </div>
-    </div>
     </div>
 
     <div class="schedule">
