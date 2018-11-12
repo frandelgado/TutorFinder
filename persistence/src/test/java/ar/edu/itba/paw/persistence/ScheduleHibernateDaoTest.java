@@ -73,18 +73,6 @@ public class ScheduleHibernateDaoTest {
         assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
-    @Test(expected = PersistenceException.class)
-    public void testReserveOccupied() {
-        Integer DAY = 2;
-        Integer HOUR = 2;
-
-        Timeslot reservedTimeSlot = hibernateDao.reserveTimeSlot(testProfessorOcupied, DAY,HOUR);
-        em.flush();
-
-        assertNull(reservedTimeSlot);
-        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
-    }
-
     @Test
     public void testGetTimeslotsForProfessor() {
         final Integer DAY = 2;

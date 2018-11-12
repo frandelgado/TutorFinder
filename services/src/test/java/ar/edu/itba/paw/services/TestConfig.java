@@ -67,4 +67,9 @@ public class TestConfig {
     public UserDao userDao() {
         return Mockito.mock(UserDao.class);
     }
+
+    @Bean
+    public ClassReservationDao classReservationDao() {
+        return Mockito.mock(ClassReservationDao.class);
+    }
 }
