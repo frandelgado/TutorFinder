@@ -15,5 +15,5 @@ public interface CourseFileService {
 
     void save(CourseFile document);
 
-    void deleteById(long id);
+    void deleteById(long id, User user) throws UserAuthenticationException;
 }

@@ -112,7 +112,20 @@ public class CourseFileController extends BaseController {
         }
         document.setCourse(course);
         cfs.save(document);
-        //TODO propperly handle return
-        return new ModelAndView("/");
+        return getCourseFiles(professorId, subjectId, currentUser, form);
+    }
+
+    @RequestMapping("/deleteFile")
+    public ModelAndView deleteFile(@ModelAttribute("currentUser") final User currentUser,
+                                   @RequestParam("professor") final Long professorId,
+                                   @RequestParam("subject") final Long subjectId,
+                                   @RequestParam("file") final Long fileId) {
+
+        try {
+            cfs.deleteById(fileId, currentUser);
+        } catch (UserAuthenticationException e) {
+            return redirectToErrorPage("403");
+        }
+        return getCourseFiles(professorId, subjectId, currentUser, new UploadClassFileForm());
     }
 }

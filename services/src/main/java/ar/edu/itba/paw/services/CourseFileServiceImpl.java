@@ -49,13 +49,27 @@ public class CourseFileServiceImpl implements CourseFileService {
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteById(long id, User user) throws UserAuthenticationException {
+        CourseFile courseFile = cfd.findById(id);
+        if(canWriteFile(courseFile, user)){
+            throw new UserAuthenticationException();
+        }
         cfd.deleteById(id);
     }
 
     private boolean canReadFiles(Course course, User user){
+        if(user == null) {
+            return false;
+        }
         if(crs.hasAcceptedReservation(user, course) || course.getProfessor().getId().compareTo(user.getId()) == 0)
             return true;
+        return false;
+    }
+
+    private boolean canWriteFile(CourseFile courseFile, User user) {
+        if(courseFile.getCourse().getProfessor().getId().compareTo(user.getId()) == 0){
+            return true;
+        }
         return false;
     }
 
