@@ -3,13 +3,13 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.models.*;
+import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -74,5 +74,23 @@ public class CourseHibernateDao implements CourseDao {
         catch (PersistenceException e) {
             throw new CourseAlreadyExistsException();
         }
+    }
+
+    @Override
+    public Comment create(final User creator, final String text, final Course course, final int rating) {
+        final LocalDateTime currentTime = LocalDateTime.now();
+        final Comment comment = new Comment(creator, course, text, currentTime, rating);
+        em.persist(comment);
+        return comment;
+    }
+
+    @Override
+    public List<Comment> getComments(final Course course, final int limit, final int offset) {
+        final TypedQuery<Comment> query = em.createQuery("from Comment as c where c.course = :course " +
+                "order by c.created", Comment.class);
+        query.setParameter("course", course);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.getResultList();
     }
 }

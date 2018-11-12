@@ -59,6 +59,68 @@
     </form:form>
     </div>
 
+    <div class="comment">
+        <div class="button-container">
+            <h2 class="label"><spring:message code="course.comment"/></h2>
+        </div>
+        <c:url value="/postComment" var="postPath"/>
+        <form:form cssClass="form" modelAttribute="commentForm" action="${postPath}" method="post">
+            <form:hidden path="commentProfessorId" />
+            <form:hidden path="commentSubjectId" />
+            <div>
+                <form:label cssClass="label" path="commentBody"><spring:message code="comment.body"/></form:label>
+                <form:textarea cssClass="input-request chat-box" type="text" path="commentBody" rows="5" cols="5"/>
+                <form:errors cssClass="error-text" path="commentBody" element="p"/>
+            </div>
+            <div>
+                <form:label cssClass="label" path="rating"><spring:message code="comment.rating"/></form:label>
+                <form:input cssClass="input-request" type="number" step="1" min="1" max="5" path="rating"/>
+                <form:errors cssClass="error-text" path="rating" element="p"/>
+            </div>
+
+            <c:choose>
+                <c:when test="${canComment == false}">
+                    <c:set var="disabled" value="disabled" />
+                </c:when>
+                <c:otherwise>
+                    <c:set var="disabled" value="" />
+                </c:otherwise>
+            </c:choose>
+
+            <div class="button-container">
+                <input class="button-2" type="submit" ${disabled} value="<spring:message code="send"/>"/>
+            </div>
+        </form:form>
+    </div>
+
+    <div class="comments">
+
+        <div>
+            <h2><spring:message code="commentTitle"/></h2>
+        </div>
+        <c:forEach var="comment" items="${comments.results}">
+            <div class="profile round-background">
+                <div class="title center-text"><c:out value="${comment.user.username}" escapeXml="true"/></div>
+                <div class="description center-text"><c:out value="${comment.comment}" escapeXml="true"/></div>
+                <h6 class="center-text">
+                    <spring:message code="time.sent" arguments="${comment.day},${comment.month},${comment.year},${comment.hours},${comment.minutes}"/>
+                </h6>
+            </div>
+        </c:forEach>
+
+        <div class="paged-result-buttons">
+            <c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}&page=${page - 1}" var="previous"/>
+            <c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}&page=${page + 1}" var="next"/>
+
+            <c:if test="${page > 1}">
+                <a href="${previous}" class="previous round">&#8249;</a>
+            </c:if>
+            <c:if test="${comments.hasNext}">
+                <a href="${next}" class="next round">&#8250;</a>
+            </c:if>
+        </div>
+    </div>
+
     <div class="schedule">
         <h2><spring:message code="schedule.title"/></h2>
         <c:if test="${currentUser == null || (currentUser != null && currentUser.id != course.professor.id)}">

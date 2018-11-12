@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
-import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
-import ar.edu.itba.paw.exceptions.NonexistentSubjectException;
+import ar.edu.itba.paw.exceptions.*;
+import ar.edu.itba.paw.models.Comment;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.PagedResults;
 
@@ -19,4 +18,8 @@ public interface CourseService {
             throws CourseAlreadyExistsException, NonexistentProfessorException, NonexistentSubjectException;
 
     PagedResults<Course> filterCourses(final List<Integer> days, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int page);
+
+    boolean comment(final Long userId, final Long professorId, final Long subjectId, final String body, final int rating) throws SameUserException, NonAcceptedReservationException;
+
+    PagedResults<Comment> getComments(final Course course, final int page);
 }

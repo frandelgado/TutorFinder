@@ -1,12 +1,8 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
-import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
-import ar.edu.itba.paw.exceptions.NonexistentSubjectException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
-import ar.edu.itba.paw.interfaces.service.CourseService;
-import ar.edu.itba.paw.interfaces.service.ProfessorService;
-import ar.edu.itba.paw.interfaces.service.SubjectService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +26,13 @@ public class CourseServiceImpl implements CourseService {
     private ProfessorService professorService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private SubjectService subjectService;
+
+    @Autowired
+    private ClassReservationService classReservationService;
 
     @Override
     public Course findCourseByIds(final long professor_id, final long subject_id) {
@@ -181,5 +183,74 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return courseDao.create(professor, subject, description, price);
+    }
+
+    @Transactional
+    @Override
+    public boolean comment(final Long userId, final Long professorId, final Long subjectId, final String body,
+                           final int rating) throws SameUserException, NonAcceptedReservationException {
+
+        final User user = userService.findUserById(userId);
+        final Course course = findCourseByIds(professorId, subjectId);
+
+        if(user == null || course == null) {
+            LOGGER.error("Attempted to post comment with invalid parameters");
+            return false;
+        }
+
+        if(rating > 5 || rating < 1) {
+            LOGGER.error("Attempted to post comment invalid rating");
+            return false;
+        }
+
+        if(body == null || body.length() < 1 || body.length() > 1024) {
+            LOGGER.error("Attempted to post comment invalid body size");
+            return false;
+        }
+
+        if(user.getId().equals(professorId)) {
+            LOGGER.error("User attempted to post comment in his own course");
+            throw new SameUserException();
+        }
+
+        if(classReservationService.hasAcceptedReservation(user, course)) {
+            LOGGER.error("User attempted to post comment in a course to which he has not attended to");
+            throw new NonAcceptedReservationException();
+        }
+        LOGGER.debug("Posting comment from user with id {} in course of subject with id {} and professor with id {}",
+                userId, subjectId, professorId);
+        final Comment comment = courseDao.create(user, body, course, rating);
+
+        return comment != null;
+    }
+
+    @Override
+    public PagedResults<Comment> getComments(final Course course, final int page) {
+
+        if(page <= 0) {
+            LOGGER.error("Attempted to find 0 or negative page number");
+            return null;
+        }
+
+        LOGGER.debug("Searching for comments in course taught by professor with id {} about subject with id {}",
+                course.getProfessor().getId(), course.getSubject().getId());
+        final List<Comment> comments = courseDao.getComments(course, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
+        final PagedResults<Comment> results;
+        final int size = comments.size();
+
+        if(size == 0 && page > 1) {
+            LOGGER.error("Page number exceeds total page count");
+            return null;
+        }
+
+        if(size > PAGE_SIZE) {
+            comments.remove(PAGE_SIZE);
+            results = new PagedResults<>(comments, true);
+            LOGGER.trace("The search has more pages, removing extra result");
+        } else {
+            LOGGER.trace("The search has no more pages to show");
+            results = new PagedResults<>(comments, false);
+        }
+        return results;
     }
 }

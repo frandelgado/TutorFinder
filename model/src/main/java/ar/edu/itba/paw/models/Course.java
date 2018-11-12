@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +13,6 @@ import java.util.Objects;
 @IdClass(CourseID.class)
 public class Course {
 
-    //TODO: no estoy seguro si el schema refleja que el profesor no deberia ser nullable.
     @Id
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name="user_id", foreignKey = @ForeignKey(name = "courses_user_id_fkey"))
@@ -25,6 +28,14 @@ public class Course {
 
     @Column(nullable = false)
     private Double price;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course", orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Comment> comments;
+
+    @Formula("(SELECT AVG(c.rating) FROM comments c WHERE c.course_user_id = user_id AND" +
+            " c.course_subject_id = subject_id)")
+    private Double rating;
 
     public Course(){}
 
@@ -51,6 +62,17 @@ public class Course {
         return price;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
 
     @Override
     public boolean equals(Object o) {

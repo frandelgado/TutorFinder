@@ -16,5 +16,7 @@ public interface ClassReservationService {
     ClassReservation confirm(ClassReservation classReservation, String comment);
 
     ClassReservation deny(ClassReservation classReservation, String comment);
+
+    boolean hasAcceptedReservation(User student, Course course);
 }
 

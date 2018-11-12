@@ -2,11 +2,9 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.ClassReservation;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.Schedule;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.form.ClassReservationForm;
+import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
 import org.joda.time.LocalDate;
@@ -52,11 +50,12 @@ public class CourseController extends BaseController{
     @RequestMapping("/Course")
     public ModelAndView course(
             @ModelAttribute("messageForm") final MessageForm messageForm,
+            @ModelAttribute("commentForm") final CommentForm commentForm,
             @RequestParam(value="professor", required=true) final long professorId,
             @RequestParam(value="subject", required=true) final long subjectId,
-            @ModelAttribute(value = "SUCCESS_MESSAGE") final String success_message,
-            @ModelAttribute(value = "ERROR_MESSAGE") final String error_message
-    ){
+            @ModelAttribute("currentUser") final User loggedUser,
+            @RequestParam(value = "page", defaultValue = "1") final int page){
+
         final ModelAndView mav = new ModelAndView("course");
         final Course course = courseService.findCourseByIds(professorId, subjectId);
         if(course == null) {
@@ -66,20 +65,36 @@ public class CourseController extends BaseController{
         LOGGER.debug("Creating view for Course with professor id {} and subject id {}", professorId, subjectId);
 
         final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
+
+        final PagedResults<Comment> comments = courseService.getComments(course, page);
+
+        if(comments == null) {
+            redirectToErrorPage("pageOutOfBounds");
+        }
+
+        final boolean canComment = classReservationService.hasAcceptedReservation(loggedUser, course);
+
+        mav.addObject("comments", comments);
+
         mav.addObject("schedule", schedule);
+        mav.addObject("page", page);
+        mav.addObject("canComment", canComment);
         messageForm.setProfessorId(professorId);
         messageForm.setSubjectId(subjectId);
+        commentForm.setCommentProfessorId(professorId);
+        commentForm.setCommentSubjectId(subjectId);
         return mav;
     }
 
     @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
     public ModelAndView contact(
+            @ModelAttribute("commentForm") final CommentForm comment,
             @Valid @ModelAttribute("messageForm") final MessageForm form,
             final BindingResult errors,
             @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException, NonexistentConversationException {
 
         if(errors.hasErrors()) {
-            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser, 1);
         }
 
         final boolean sent;
@@ -89,16 +104,48 @@ public class CourseController extends BaseController{
         } catch (SameUserException e) {
             errors.rejectValue("body", "SameUserMessageError");
             form.setBody(null);
-            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
         }
         if(sent) {
             errors.rejectValue("extraMessage", "MessageSent");
             form.setBody(null);
-            return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+            return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
         } else {
             errors.rejectValue("body", "SendMessageError");
         }
-        return course(form, form.getProfessorId(), form.getSubjectId(), null, null);
+        return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
+    }
+
+    @RequestMapping(value = "/postComment", method = RequestMethod.POST)
+    public ModelAndView comment(
+            @ModelAttribute("messageForm") final MessageForm message,
+            @Valid @ModelAttribute("commentForm") final CommentForm form,
+            final BindingResult errors,
+            @ModelAttribute("currentUser") final User loggedUser) {
+
+        if(errors.hasErrors()) {
+            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
+        }
+
+        final boolean sent;
+        try {
+            sent = courseService.comment(loggedUser.getId(), form.getCommentProfessorId(),
+                        form.getCommentSubjectId(), form.getCommentBody(), form.getRating());
+        } catch (SameUserException e) {
+            errors.rejectValue("rating", "sameUserComment");
+            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
+        } catch (NonAcceptedReservationException e) {
+            errors.rejectValue("rating", "nonAcceptedReservation");
+            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
+        }
+
+        if(sent) {
+            return redirectWithNoExposedModalAttributes("/Course/?professor=" +
+                    form.getCommentProfessorId() + "&subject=" + form.getCommentSubjectId());
+        } else {
+            errors.rejectValue("commentBody", "SendMessageError");
+        }
+        return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
     }
 
 

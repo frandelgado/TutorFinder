@@ -38,4 +38,13 @@ public class ClassReservationHibernateDao implements ClassReservationDao {
         classReservation.deny(comment);
         return classReservation;
     }
+
+    @Override
+    public boolean hasAcceptedReservation(final User student, final Course course) {
+        final TypedQuery<ClassReservation> query = em.createQuery("from ClassReservation as c " +
+                "where c.student = :student and c.course = :course and c.status = 0", ClassReservation.class);
+        query.setParameter("student", student);
+        query.setParameter("course", course);
+        return query.getResultList().size() > 0;
+    }
 }
