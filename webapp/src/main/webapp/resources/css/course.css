@@ -40,5 +40,6 @@
 
 
 .comment input:disabled {
-    background-color: #F7AA88
+    background-color: #F7AA88;
+    cursor: default;
 }
