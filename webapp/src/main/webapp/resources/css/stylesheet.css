@@ -847,3 +847,10 @@ th, td {
 .reserve-class .form .responsiveRow .row {
     margin: 0;
 }
+
+.register .content {
+    display: grid;
+    width: fit-content;
+    padding: 10px;
+    justify-self: center;
+}
