@@ -239,6 +239,34 @@ public class CourseController extends BaseController{
                 + "&subject=" + subjectId);
     }
 
+
+    @RequestMapping("/denyClassRequest")
+    public ModelAndView denyClassRequest(@ModelAttribute("currentUser") final User currentUser,
+                                         @RequestParam("classReservationId") final Long classReservationId) {
+
+        try {
+            classReservationService.deny(classReservationId, currentUser.getId(), null);
+        } catch (UserAuthenticationException e) {
+            return redirectToErrorPage("403");
+        }
+
+        return redirectWithNoExposedModalAttributes("/classRequests");
+    }
+
+    @RequestMapping("/approveClassRequest")
+    public ModelAndView approveClassRequest(@ModelAttribute("currentUser") final User currentUser,
+                                         @RequestParam("classReservationId") final Long classReservationId) {
+
+        try {
+            classReservationService.confirm(classReservationId, currentUser.getId(), null);
+        } catch (UserAuthenticationException e) {
+            return redirectToErrorPage("403");
+        }
+
+        return redirectWithNoExposedModalAttributes("/classRequests");
+    }
+
+
     @InitBinder
     private void dateBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

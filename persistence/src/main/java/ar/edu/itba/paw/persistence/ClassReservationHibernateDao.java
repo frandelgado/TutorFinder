@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import org.joda.time.LocalDateTime;
@@ -46,5 +47,10 @@ public class ClassReservationHibernateDao implements ClassReservationDao {
         query.setParameter("student", student);
         query.setParameter("course", course);
         return query.getResultList().size() > 0;
+    }
+
+    @Override
+    public ClassReservation findById(Long classReservationId) {
+        return em.find(ClassReservation.class, classReservationId);
     }
 }

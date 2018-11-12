@@ -364,7 +364,6 @@ public class UserController extends BaseController{
     }
 
 
-
     @RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
     public ModelAndView deleteCourse(
             @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
@@ -390,5 +389,34 @@ public class UserController extends BaseController{
 
         return redirectWithNoExposedModalAttributes("/Profile");
     }
+
+    @RequestMapping("/reservations")
+    public ModelAndView userReservations(@ModelAttribute("currentUser") final User loggedUser,
+                                         @RequestParam("page") final int page) {
+        ModelAndView mav = new ModelAndView("reservations");
+        PagedResults<ClassReservation> classReservations =  us.pagedReservations(loggedUser.getId(), page);
+        mav.addObject("reservations", classReservations.getResults());
+        mav.addObject("hasNext", classReservations.isHasNext());
+        mav.addObject("page", page);
+        return mav;
+    }
+
+    @RequestMapping("/classRequests")
+    public ModelAndView classReservations(@ModelAttribute("currentUser") final User loggedUser,
+                                         @RequestParam("page") final int page) {
+        ModelAndView mav = new ModelAndView("myClasses");
+
+        PagedResults<ClassReservation> classReservations;
+        try {
+            classReservations = ps.getPagedClassRequests(loggedUser.getId(), page);
+        } catch (NonexistentProfessorException e) {
+            return redirectToErrorPage("nonExistentProfessor");
+        }
+        mav.addObject("reservations", classReservations.getResults());
+        mav.addObject("hasNext", classReservations.isHasNext());
+        mav.addObject("page", page);
+        return mav;
+    }
+
 
 }

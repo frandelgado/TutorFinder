@@ -4,6 +4,7 @@ import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,11 @@ public class UserJdbcDao implements UserDao {
                         "email FROM users WHERE username = ?", ROW_MAPPER, username
         );
         return users.stream().findFirst();
+    }
+
+    @Override
+    public List<ClassReservation> pagedReservations(Long user, Integer limit, Integer offset) {
+        return null;
     }
 
     @Override

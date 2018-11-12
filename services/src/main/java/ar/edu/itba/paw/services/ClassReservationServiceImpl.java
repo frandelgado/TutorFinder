@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
 import ar.edu.itba.paw.exceptions.SameUserException;
+import ar.edu.itba.paw.exceptions.UserAuthenticationException;
 import ar.edu.itba.paw.interfaces.persistence.ClassReservationDao;
 import ar.edu.itba.paw.interfaces.service.ClassReservationService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
@@ -46,13 +47,29 @@ public class ClassReservationServiceImpl implements ClassReservationService {
 
     @Override
     @Transactional
-    public ClassReservation confirm(final ClassReservation classReservation, final String comment) {
+    public ClassReservation confirm(final Long classReservationId, final Long professorId, final String comment) throws UserAuthenticationException {
+        ClassReservation classReservation = findById(classReservationId);
+        if(classReservation == null) {
+            return null;
+        }
+
+        if(!classReservation.getCourse().getProfessor().getId().equals(professorId)) {
+            throw new UserAuthenticationException();
+        }
         return crd.confirm(classReservation, comment);
     }
 
     @Override
     @Transactional
-    public ClassReservation deny(final ClassReservation classReservation, final String comment) {
+    public ClassReservation deny(final Long classReservationId, final Long professorId, final String comment) throws UserAuthenticationException {
+        ClassReservation classReservation = findById(classReservationId);
+        if(classReservation == null) {
+            return null;
+        }
+
+        if(!classReservation.getCourse().getProfessor().getId().equals(professorId)) {
+            throw new UserAuthenticationException();
+        }
         return crd.deny(classReservation, comment);
     }
 
@@ -60,4 +77,10 @@ public class ClassReservationServiceImpl implements ClassReservationService {
     public boolean hasAcceptedReservation(final User student, final Course course) {
         return crd.hasAcceptedReservation(student, course);
     }
+
+    @Override
+    public ClassReservation findById(Long classReservationId) {
+        return crd.findById(classReservationId);
+    }
+
 }

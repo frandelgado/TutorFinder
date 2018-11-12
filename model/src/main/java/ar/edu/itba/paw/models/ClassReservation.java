@@ -54,6 +54,14 @@ public class ClassReservation {
         return this;
     }
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
     public ClassReservation(User student, Course course, LocalDateTime startTime, LocalDateTime endTime, Integer status, String comment) {
         this.student = student;
         this.course = course;

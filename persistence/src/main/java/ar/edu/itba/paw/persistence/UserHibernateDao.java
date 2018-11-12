@@ -4,6 +4,7 @@ import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.User;
 import org.springframework.stereotype.Repository;
 
@@ -45,6 +46,16 @@ public class UserHibernateDao implements UserDao {
         final TypedQuery<User> query = em.createQuery("from User as u where u.username = :username", User.class);
         query.setParameter("username", username);
         return query.getResultList().stream().findFirst();
+    }
+
+    @Override
+    public List<ClassReservation> pagedReservations(Long userId, Integer limit, Integer offset) {
+        final TypedQuery<ClassReservation> query = em.createQuery("from ClassReservation as c where c.student.id= :student_id " +
+                "order by c.classRequestId", ClassReservation.class);
+        query.setParameter("student_id", userId);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.getResultList();
     }
 
     @Override

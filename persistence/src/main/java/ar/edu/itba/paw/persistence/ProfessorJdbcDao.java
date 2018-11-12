@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import org.slf4j.Logger;
@@ -105,6 +106,11 @@ public class ProfessorJdbcDao implements ProfessorDao {
 
     @Override
     public Professor merge(Professor professor) {
+        return null;
+    }
+
+    @Override
+    public List<ClassReservation> getPagedClassRequests(Long professorId, int limit, int offset) {
         return null;
     }
 }
