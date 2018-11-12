@@ -89,7 +89,7 @@ public class CourseFileController extends BaseController {
                                    BindingResult result,
                                    @RequestParam("professor") final Long professorId,
                                    @RequestParam("subject") final Long subjectId,
-                                   @RequestParam("currentUser") final User currentUser) {
+                                   @ModelAttribute("currentUser") final User currentUser) {
 
         if(result.hasErrors()) {
             return getCourseFiles(professorId, subjectId, currentUser, form);
