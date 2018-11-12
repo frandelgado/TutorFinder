@@ -409,7 +409,6 @@ button {
 
 .add-class {
     grid-area: add-class;
-    position: relative;
     align-self: center;
     justify-self: center;
 }
@@ -854,4 +853,10 @@ th, td {
     width: fit-content;
     padding: 10px;
     justify-self: center;
+}
+
+.edit-class {
+    position: absolute;
+    top: 90px;
+    right: 10px;
 }
