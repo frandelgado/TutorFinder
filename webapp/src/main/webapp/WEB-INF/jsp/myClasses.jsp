@@ -84,7 +84,7 @@
                         </c:when>
                         <c:otherwise>
                             <div class="button-2 relative" type="submit">
-                                <a class="class-button" href="<c:url value="/createCourse" />"></a>
+                                <a class="class-button" href="<c:url value="/courseFiles?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
                                 <spring:message code="files"/>
                             </div>
                         </c:otherwise>
