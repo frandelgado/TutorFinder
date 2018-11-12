@@ -404,10 +404,9 @@ public class UserController extends BaseController{
     @RequestMapping("/classRequests")
     public ModelAndView classReservations(@ModelAttribute("currentUser") final User loggedUser,
                                          @RequestParam("page") final int page) {
-        ModelAndView mav = new ModelAndView("reservations");
+        ModelAndView mav = new ModelAndView("myClasses");
 
-        //TODO: if he is not professor?
-        PagedResults<ClassReservation> classReservations = null;
+        PagedResults<ClassReservation> classReservations;
         try {
             classReservations = ps.getPagedClassRequests(loggedUser.getId(), page);
         } catch (NonexistentProfessorException e) {
