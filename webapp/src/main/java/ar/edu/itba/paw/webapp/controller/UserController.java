@@ -389,7 +389,7 @@ public class UserController extends BaseController{
 
         return redirectWithNoExposedModalAttributes("/Profile");
     }
-    
+
     @RequestMapping("/reservations")
     public ModelAndView userReservations(@ModelAttribute("currentUser") final User loggedUser,
                                          @RequestParam("page") final int page) {
