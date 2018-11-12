@@ -46,7 +46,7 @@
                     <a class="search-result-title">
                         <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>
                     <a class="search-result-professor" >
-                        <c:out value="${reservation.course.professor.name}" escapeXml="true" /></a>
+                        <spring:message code="reservation.professor" arguments="${reservation.course.professor.name}" htmlEscape="true" /></a>
                     <a class="search-result-specs"><spring:message code="course.specs" arguments="${reservation.course.price}" htmlEscape="true" /></a>
                     <a class="search-result-description"><spring:message code="reservation.day" arguments="${reservation.startDay},${reservation.startMonth},${reservation.startYear}" htmlEscape="true" /><br/><spring:message code="reservation.from" arguments="${reservation.startHour},${reservation.startMinutes}" htmlEscape="true" /><spring:message code="reservation.to"  arguments="${reservation.endHour},${reservation.endMinutes}" htmlEscape="true" /></a>
                     <a class="search-result-status">
