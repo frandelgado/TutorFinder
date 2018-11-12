@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 public class UploadClassFileForm {
 
     @NotNull
+    @FileSize(min = 1, max = 10 * 1024 * 1024)
     private MultipartFile file;
 
     @NotNull
