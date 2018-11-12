@@ -365,13 +365,14 @@ button {
     display: grid;
     grid-column-gap: 10px;
     justify-content: center;
-    grid-template-areas: "class-title class-description";
+    grid-template-areas: "class-title" "class-description";
     min-width: 300px;
 }
 
 .class-button {
     grid-area: button;
     position: absolute;
+    z-index: 20;
     top: 0;
     left: 0;;
     width: 100%;
@@ -381,22 +382,12 @@ button {
 .class-title {
     grid-area: class-title;
     position: relative;
-    justify-self: center;
+    justify-self: left;
     align-self: center;
-}
-
-.class-title::after {
-    position: absolute;
-    content: "";
-    margin-left: 5px;
-    height: 40px;
-    top: -10px;
-    border-right: 1px solid rgba(200,200,200,0.7);
 }
 
 .class-description {
     grid-area: class-description;
-    margin-left: 5px;
     align-self: center;
     word-break: break-word;
     text-align: justify;
