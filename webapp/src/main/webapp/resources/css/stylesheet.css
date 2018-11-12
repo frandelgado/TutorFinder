@@ -358,7 +358,7 @@ button {
 
 .class {
     position: relative;
-    height: 100px;
+    min-height: 100px;
     min-width: 300px;
     margin-bottom: 10px;
     padding: 10px;
@@ -366,7 +366,6 @@ button {
     grid-column-gap: 10px;
     justify-content: center;
     grid-template-areas: "class-title" "class-description";
-    min-width: 300px;
 }
 
 .class-button {
