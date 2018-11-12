@@ -43,7 +43,19 @@
                         <c:out value="${reservation.course.professor.name}" escapeXml="true" /></a>
                     <a class="search-result-specs"><spring:message code="course.specs" arguments="${reservation.course.price}" htmlEscape="true" /></a>
                     <a class="search-result-description"><c:out value="${reservation.course.description}" escapeXml="true" /></a>
-                    <a class="search-result-rating"><spring:message code="rating.title" arguments="${reservation.course.price}" htmlEscape="true" /></a>
+                    <a class="search-result-status">
+                        <c:choose>
+                            <c:when test="${reservation.status == 0}">
+                                <spring:message code="reservation.accepted" arguments="${reservation.status}" htmlEscape="true" />
+                            </c:when>
+                            <c:when test="${reservation.status == 1}">
+                                <spring:message code="reservation.canceled" arguments="${reservation.status}" htmlEscape="true" />
+                            </c:when>
+                            <c:otherwise>
+                                <spring:message code="reservation.pending" arguments="${reservation.status}" htmlEscape="true" />
+                            </c:otherwise>
+                        </c:choose>
+                    </a>
                 </div>
             </c:forEach>
         <div class="paged-result-buttons">

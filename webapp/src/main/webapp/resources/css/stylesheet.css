@@ -870,3 +870,11 @@ th, td {
     grid-template-columns: 25fr 50fr 25fr;
     grid-template-areas: "------- search-results ....";
 }
+
+.search-result-status {
+    grid-area: search-result-rating;
+    font-weight: 700;
+    color: #29303b;
+    font-size: 25px;
+    text-align: right;
+}
