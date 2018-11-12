@@ -1,13 +1,8 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
-import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
-import ar.edu.itba.paw.exceptions.NonexistentSubjectException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
-import ar.edu.itba.paw.interfaces.service.CourseService;
-import ar.edu.itba.paw.interfaces.service.ProfessorService;
-import ar.edu.itba.paw.interfaces.service.SubjectService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +30,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private SubjectService subjectService;
+
+    @Autowired
+    private ClassReservationService classReservationService;
 
     @Override
     public Course findCourseByIds(final long professor_id, final long subject_id) {
@@ -190,7 +188,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     public boolean comment(final Long userId, final Long professorId, final Long subjectId, final String body,
-                           final int rating) {
+                           final int rating) throws SameUserException, NonAcceptedReservationException {
 
         final User user = userService.findUserById(userId);
         final Course course = findCourseByIds(professorId, subjectId);
@@ -212,16 +210,13 @@ public class CourseServiceImpl implements CourseService {
 
         if(user.getId().equals(professorId)) {
             LOGGER.error("User attempted to post comment in his own course");
-            //throw new Exception();
-            return false;
+            throw new SameUserException();
         }
 
-        /*TODO: Class reservation check*/
-
-//        if(user.getId().equals(professorId)) {
-//            LOGGER.error("User attempted to post comment in his own course");
-//            throw new Exception();
-//        }
+        if(classReservationService.hasAcceptedReservation(user, course)) {
+            LOGGER.error("User attempted to post comment in a course to which he has not attended to");
+            throw new NonAcceptedReservationException();
+        }
         LOGGER.debug("Posting comment from user with id {} in course of subject with id {} and professor with id {}",
                 userId, subjectId, professorId);
         final Comment comment = courseDao.create(user, body, course, rating);

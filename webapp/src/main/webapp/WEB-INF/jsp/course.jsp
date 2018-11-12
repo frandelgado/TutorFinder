@@ -77,8 +77,18 @@
                 <form:input cssClass="input-request" type="number" step="1" min="1" max="5" path="rating"/>
                 <form:errors cssClass="error-text" path="rating" element="p"/>
             </div>
+
+            <c:choose>
+                <c:when test="${canComment == false}">
+                    <c:set var="disabled" value="disabled" />
+                </c:when>
+                <c:otherwise>
+                    <c:set var="disabled" value="" />
+                </c:otherwise>
+            </c:choose>
+
             <div class="button-container">
-                <input class="button-2" type="submit" value="<spring:message code="send"/>"/>
+                <input class="button-2" type="submit" ${disabled} value="<spring:message code="send"/>"/>
             </div>
         </form:form>
     </div>
