@@ -78,7 +78,8 @@
                     <div class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></div>
                     <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
                     <div class="edit-class">
-                        <a class="fas fa-pen center" href="<c:url value="/modifyCourse/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
+                        <a title="<spring:message code="course.modify"/>" class="fas fa-pen center profile-course-button" href="<c:url value="/modifyCourse/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
+                        <a title="<spring:message code="files"/>" class="fas fa-file center profile-course-button" href="<c:url value="/courseFiles?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
                     </div>
                 </div>
             </c:forEach>
