@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri ="http://java.sun.com/jstl/core_rt" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
 <html>
@@ -9,65 +9,89 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
-    <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
+    <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
     <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
-    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
-    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
-    <title>Tu Teoria | <spring:message code="course.create"/></title>
-
     <link href="<c:url value="/resources/css/select2.min.css" />" rel="stylesheet" />
+    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/select2.min.js" />"></script>
-    <script src="<c:url value="/resources/js/courseForm.js" />"></script>
+    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
+    <script src="<c:url value="/resources/js/searchForm.js" />"></script>
 
+    <title>Tu Teoria | <spring:message code="search.results" /> </title>
 </head>
 
-<body class="register">
+<body class="body">
+<c:url value="/searchResults" var="postPath"/>
 
-<%@ include file="navbar.jsp" %>
+<div class="navbar">
+    <a href="<c:url value="/" />" class="logo-box">
+        <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
+    </a>
+
+    <div class="search-bar"></div>
+
+    <div class="navbar-buttons">
+        <c:choose>
+            <c:when test="${currentUser != null}">
+                <div class="navbar-button dropdown" id="dropdown">
+                    <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
+                    <div class="dropdown-content" id="dropdown-content">
+                        <c:choose>
+                            <c:when test="${currentUserIsProfessor == true}">
+                                <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
+                                <!--<a>Modificar</a>-->
+                            </c:when>
+                            <c:otherwise>
+                                <a href="<c:url value="/registerAsProfessor" />" class="navbar-button"><spring:message code="register.professor"/></a>
+                            </c:otherwise>
+                        </c:choose>
+                        <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
+                        <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <a href="<c:url value="/register" />" class="navbar-button"><spring:message code="register"/></a>
+                <a href="<c:url value="/login" />" class="navbar-button"><spring:message code="login"/></a>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</div>
 
 <div class="content">
-    <div class="button-container">
-        <h2 class="label"><spring:message code="class.reserve" /></h2>
-    </div>
-    <c:url value="/reserveClass?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
-    <form:form cssClass="form" modelAttribute="classReservationForm" action="${postPath}" method="post">
-        <div>
-            <form:label cssClass="label" path="day"><spring:message code="classReservation.dayHeader"/></form:label>
-            <form:input path="day" cssClass="input-request" type="date"/>
-            <form:errors cssClass="error-text" path="day" element="p"/>
-        </div>
-        <div class="responsiveRow">
-            <h3><spring:message code="classReservation.hourHeader"/></h3>
-            <div class="row">
-                <div class="m-10-b rm-10-b">
-                    <form:select cssClass="select-subject no-border b-r-5 no-margin m-r-5 filter-input" path="startHour" >
-                        <form:option selected="selected" disabled="true" value=""><spring:message code="from"/></form:option>
-                        <c:forEach var="hour" begin="1" end="23" >
-                            <form:option value="${hour}">${hour}:00</form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors cssClass="error-text" path="startHour" element="p"/>
-                </div>
-                -
-                <div class="m-l-5">
-                    <form:select cssClass="select-subject no-border b-r-5 no-margin filter-input" path="endHour">
-                        <form:option selected="selected" disabled="true" value=""><spring:message code="until"/></form:option>
-                        <c:forEach var="hour" begin="2" end="24" >
-                            <form:option value="${hour}">${hour}:00</form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors cssClass="error-text" path="endHour" element="p"/>
-                </div>
+    <div class="search-results">
+        <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
+        <c:if test="${reservations.size() == 0}">
+            <h1><spring:message code="no.results"/></h1>
+        </c:if>
+        <c:forEach var="reservation" items="${reservations}">
+            <div class="search-course-result">
+                <a class="conversation-link" href = "<c:url value="/Course/?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
+                <a class="search-result-img"><img class="search-result-picture" src="<c:url value="data:image/jpeg;base64,${reservation.course.subject.area.image}"/>"/></a>
+                    <%--TODO: add buttons--%>
+                <a class="search-result-title">
+                    <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>
+                <a class="search-result-professor" >
+                    <c:out value="${reservation.course.professor.name}" escapeXml="true" /></a>
+                <a class="search-result-specs"><spring:message code="course.specs" arguments="${reservation.course.price}" htmlEscape="true" /></a>
+                <a class="search-result-description"><c:out value="${reservation.course.description}" escapeXml="true" /></a>
+                <a class="search-result-rating"><spring:message code="rating.title" arguments="${reservation.course.price}" htmlEscape="true" /></a>
             </div>
+        </c:forEach>
+
+        <div class="paged-result-buttons">
+            <c:url value="/reservations?page=${page - 1}" var="previous"/>
+            <c:url value="/reservations?page=${page + 1}" var="next"/>
+
+            <c:if test="${page > 1}">
+                <a href="${previous}" class="previous round">&#8249;</a>
+            </c:if>
+            <c:if test="${hasNext}">
+                <a href="${next}" class="next round">&#8250;</a>
+            </c:if>
         </div>
-        <div class="button-container">
-            <input class="button-2" type="submit" value="<spring:message code="reserve"/>"/>
-        </div>
-    </form:form>
-</div>
-<div class="footer">
+    </div>
 </div>
 </body>
 
