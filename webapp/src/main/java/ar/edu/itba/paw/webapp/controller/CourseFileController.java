@@ -41,8 +41,12 @@ public class CourseFileController extends BaseController {
         if(course == null) {
             return  redirectToErrorPage("nonExistentCourse");
         }
-        List<CourseFile> courseFiles = cfs.findForCourse(course);
-        //TODO: no mostrar si no tiene accesso.
+        List<CourseFile> courseFiles = null;
+        try {
+            courseFiles = cfs.findForCourse(course, currentUser);
+        } catch (UserAuthenticationException e) {
+            return redirectToErrorPage("403");
+        }
         ModelAndView mav = new ModelAndView("courseFiles");
         mav.addObject("courseFiles", courseFiles);
         return mav;

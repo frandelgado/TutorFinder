@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CourseFileService {
 
-    List<CourseFile> findForCourse(Course course);
+    List<CourseFile> findForCourse(Course course, User user) throws UserAuthenticationException;
 
     CourseFile findByIdForUser(long id, User user) throws UserAuthenticationException;
 

@@ -26,14 +26,18 @@ public class CourseFileServiceImpl implements CourseFileService {
 
 
     @Override
-    public List<CourseFile> findForCourse(Course course) {
+    public List<CourseFile> findForCourse(Course course, User user) throws UserAuthenticationException {
+        if(!canReadFiles(course, user)) {
+            throw new UserAuthenticationException();
+        }
+
         return cfd.findForCourse(course);
     }
 
     @Override
     public CourseFile findByIdForUser(long id, User user) throws UserAuthenticationException {
         CourseFile courseFile = cfd.findById(id);
-        if(!canReadFile(courseFile,user)){
+        if(!canReadFiles(courseFile.getCourse(), user)){
             throw new UserAuthenticationException();
         }
         return courseFile;
@@ -49,8 +53,8 @@ public class CourseFileServiceImpl implements CourseFileService {
         cfd.deleteById(id);
     }
 
-    private boolean canReadFile(CourseFile courseFile, User user){
-        if(crs.hasAcceptedReservation(user, courseFile.getCourse()) || courseFile.getCourse().getProfessor().getId().compareTo(user.getId()) == 0)
+    private boolean canReadFiles(Course course, User user){
+        if(crs.hasAcceptedReservation(user, course) || course.getProfessor().getId().compareTo(user.getId()) == 0)
             return true;
         return false;
     }
