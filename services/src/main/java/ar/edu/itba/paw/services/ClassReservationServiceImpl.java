@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.joda.time.LocalDateTime;
 
 @Service
+@Transactional
 public class ClassReservationServiceImpl implements ClassReservationService {
 
     @Autowired
@@ -53,5 +54,10 @@ public class ClassReservationServiceImpl implements ClassReservationService {
     @Transactional
     public ClassReservation deny(final ClassReservation classReservation, final String comment) {
         return crd.deny(classReservation, comment);
+    }
+
+    @Override
+    public boolean hasAcceptedReservation(final User student, final Course course) {
+        return crd.hasAcceptedReservation(student, course);
     }
 }

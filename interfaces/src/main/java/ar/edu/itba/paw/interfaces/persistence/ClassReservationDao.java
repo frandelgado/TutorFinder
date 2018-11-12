@@ -14,4 +14,5 @@ public interface ClassReservationDao {
 
     ClassReservation deny(ClassReservation classReservation, String comment);
 
+    boolean hasAcceptedReservation(User student, Course course);
 }
