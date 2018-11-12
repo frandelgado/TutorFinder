@@ -42,6 +42,8 @@ public class ClassReservation {
     ClassReservation(){}
 
 
+
+
     public ClassReservation confirm(String comment) {
         this.comment = comment;
         this.status = 0;
@@ -68,6 +70,54 @@ public class ClassReservation {
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
+        this.comment = comment;
+    }
+
+    public Long getClassRequestId() {
+        return classRequestId;
+    }
+
+    public void setClassRequestId(Long classRequestId) {
+        this.classRequestId = classRequestId;
+    }
+
+    public User getStudent() {
+        return student;
+    }
+
+    public void setStudent(User student) {
+        this.student = student;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
         this.comment = comment;
     }
 
