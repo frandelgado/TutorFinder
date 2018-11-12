@@ -93,6 +93,7 @@
     border-radius: 5px;
     height: fit-content;
     justify-self: center;
+    width: 100%;
 }
 
 .search-bar {

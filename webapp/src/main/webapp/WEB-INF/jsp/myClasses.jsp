@@ -80,9 +80,9 @@
                 <a class="search-result-title">
                     <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>
                 <a class="search-result-professor" >
-                    <c:out value="${reservation.course.professor.name}" escapeXml="true" /></a>
+                    <spring:message code="reservation.student" htmlEscape="true" /><c:out value="${reservation.student.name}" escapeXml="true" /></a>
                 <a class="search-result-specs"><spring:message code="course.specs" arguments="${reservation.course.price}" htmlEscape="true" /></a>
-                <a class="search-result-description">Day:<joda:format value="${reservation.startTime}" style="L-" locale="${localeCode}"/>, startHour:<joda:format value="${reservation.startTime}" style="-S" locale="${localeCode}"/>, startHour:<joda:format value="${reservation.endTime}" style="-S" locale="${localeCode}"/></a>
+                <a class="search-result-description"><spring:message code="reservation.day" htmlEscape="true" /><joda:format value="${reservation.startTime}" style="L-" locale="${localeCode}"/><br/><spring:message code="reservation.from" htmlEscape="true" /><joda:format value="${reservation.startTime}" style="-S" locale="${localeCode}"/> <spring:message code="reservation.to" htmlEscape="true" /><joda:format value="${reservation.endTime}" style="-S" locale="${localeCode}"/></a>
                 <a class="search-result-rating"><spring:message code="rating.title" arguments="${reservation.course.price}" htmlEscape="true" /></a>
             </div>
         </c:forEach>
