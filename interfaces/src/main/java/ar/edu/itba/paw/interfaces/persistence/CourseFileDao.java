@@ -9,10 +9,10 @@ public interface CourseFileDao {
 
     List<CourseFile> findForCourse(Course course);
 
-    CourseFile findById(int id);
+    CourseFile findById(long id);
 
     void save(CourseFile document);
 
-    void deleteById(int id);
+    void deleteById(long id);
 }
 

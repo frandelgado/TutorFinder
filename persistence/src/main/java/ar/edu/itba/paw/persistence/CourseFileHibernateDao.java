@@ -4,11 +4,14 @@ import ar.edu.itba.paw.interfaces.persistence.CourseFileDao;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.CourseFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+
+@Repository
 public class CourseFileHibernateDao implements CourseFileDao {
 
     @Autowired
@@ -23,7 +26,7 @@ public class CourseFileHibernateDao implements CourseFileDao {
     }
 
     @Override
-    public CourseFile findById(int id) {
+    public CourseFile findById(long id) {
         return em.find(CourseFile.class, id);
     }
 
@@ -35,7 +38,7 @@ public class CourseFileHibernateDao implements CourseFileDao {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         CourseFile courseFile = em.find(CourseFile.class, id);
         if(courseFile != null) {
             em.remove(courseFile);
