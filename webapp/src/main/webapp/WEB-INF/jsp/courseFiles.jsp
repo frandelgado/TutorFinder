@@ -43,43 +43,45 @@
             </table>
         </div>
     </div>
-    <div class="panel panel-default">
+    <c:if test="${param.professor == currentUser.id}">
+        <div class="panel panel-default">
 
-        <div class="panel-heading"><span class="lead">Upload New Document</span></div>
-        <div class="uploadcontainer">
-            <c:url value="/uploadFile?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
-            <form:form method="POST" modelAttribute="uploadClassFileForm" enctype="multipart/form-data" class="form-horizontal" action="${postPath}">
+            <div class="panel-heading"><span class="lead">Upload New Document</span></div>
+            <div class="uploadcontainer">
+                <c:url value="/uploadFile?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
+                <form:form method="POST" modelAttribute="uploadClassFileForm" enctype="multipart/form-data" class="form-horizontal" action="${postPath}">
 
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="col-md-3 control-lable" for="file">Upload a document</label>
-                        <div class="col-md-7">
-                            <form:input type="file" path="file" id="file" class="form-control input-sm"/>
-                            <div class="has-error">
-                                <form:errors path="file" class="help-inline"/>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-3 control-lable" for="file">Upload a document</label>
+                            <div class="col-md-7">
+                                <form:input type="file" path="file" id="file" class="form-control input-sm"/>
+                                <div class="has-error">
+                                    <form:errors path="file" class="help-inline"/>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="col-md-3 control-lable" for="description">Description</label>
-                        <div class="col-md-7">
-                            <form:input type="text" path="description" id="description" class="form-control input-sm"/>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-3 control-lable" for="description">Description</label>
+                            <div class="col-md-7">
+                                <form:input type="text" path="description" id="description" class="form-control input-sm"/>
+                            </div>
+
                         </div>
-
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="button-container">
-                        <input class="button-2" type="submit" value="<spring:message code="upload"/>"/>
+                    <div class="row">
+                        <div class="button-container">
+                            <input class="button-2" type="submit" value="<spring:message code="upload"/>"/>
+                        </div>
                     </div>
-                </div>
 
-            </form:form>
+                </form:form>
+            </div>
         </div>
-    </div>
+    </c:if>
     <div class="well">
         <%--Go to <a href="<c:url value='/list' />">Users List</a>--%>
     </div>
