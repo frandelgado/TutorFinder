@@ -851,6 +851,7 @@ th, td {
     position: absolute;
     top: 90px;
     right: 10px;
+    z-index: 30;
 }
 
 .relative {
