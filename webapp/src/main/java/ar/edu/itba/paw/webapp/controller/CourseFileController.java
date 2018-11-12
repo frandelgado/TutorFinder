@@ -119,7 +119,7 @@ public class CourseFileController extends BaseController {
     public ModelAndView deleteFile(@ModelAttribute("currentUser") final User currentUser,
                                    @RequestParam("professor") final Long professorId,
                                    @RequestParam("subject") final Long subjectId,
-                                   @RequestParam("file") final Long fileId) {
+                                   @RequestParam("courseFile") final Long fileId) {
 
         try {
             cfs.deleteById(fileId, currentUser);

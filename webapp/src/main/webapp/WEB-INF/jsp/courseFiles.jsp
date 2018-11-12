@@ -35,8 +35,8 @@
                         <td>${file.name}</td>
                         <td>${file.type}</td>
                         <td>${file.description}</td>
-                        <td><a href="<c:url value='/downloadFile?courseFileId=${file.id}' />" class="btn btn-success custom-width">download</a></td>
-                        <td><a href="<c:url value='/delete-document-${file.id}' />" class="btn btn-danger custom-width">delete</a></td>
+                        <td><a href="<c:url value='/downloadFile?courseFile=${file.id}' />" class="btn btn-success custom-width">download</a></td>
+                        <td><a href="<c:url value='/deleteFile?courseFile=${file.id}' />" class="btn btn-danger custom-width">delete</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -47,7 +47,8 @@
 
         <div class="panel-heading"><span class="lead">Upload New Document</span></div>
         <div class="uploadcontainer">
-            <form:form method="POST" modelAttribute="uploadClassFileForm" enctype="multipart/form-data" class="form-horizontal">
+            <c:url value="/uploadFile?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
+            <form:form method="POST" modelAttribute="uploadClassFileForm" enctype="multipart/form-data" class="form-horizontal" action="${postPath}">
 
                 <div class="row">
                     <div class="form-group col-md-12">
@@ -71,8 +72,8 @@
                 </div>
 
                 <div class="row">
-                    <div class="form-actions floatRight">
-                        <input type="submit" value="Upload" class="btn btn-primary btn-sm">
+                    <div class="button-container">
+                        <input class="button-2" type="submit" value="<spring:message code="upload"/>"/>
                     </div>
                 </div>
 
