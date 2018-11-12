@@ -5,8 +5,10 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "courses")
@@ -36,6 +38,10 @@ public class Course {
     @Formula("(SELECT AVG(c.rating) FROM comments c WHERE c.course_user_id = user_id AND" +
             " c.course_subject_id = subject_id)")
     private Double rating;
+
+    @OneToMany(mappedBy = "course", orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<CourseFile> courseFiles = new HashSet<CourseFile>();
 
     public Course(){}
 

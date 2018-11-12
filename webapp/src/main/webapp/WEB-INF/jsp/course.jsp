@@ -65,7 +65,7 @@
             <h2 class="label"><spring:message code="course.comment"/></h2>
         </div>
         <c:url value="/postComment" var="postPath"/>
-        <form:form cssClass="form" modelAttribute="commentForm" action="${postPath}" method="post">
+            <form:form cssClass="form" modelAttribute="commentForm" action="${postPath}" method="post">
             <form:hidden path="commentProfessorId" />
             <form:hidden path="commentSubjectId" />
             <div>

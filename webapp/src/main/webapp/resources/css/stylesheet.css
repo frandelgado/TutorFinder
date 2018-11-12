@@ -870,3 +870,16 @@ th, td {
     font-size: 25px;
     text-align: right;
 }
+
+.profile-course-button:link {
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #F47C48;
+}
+
+
+.profile-course-button:visited {
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #F47C48;
+}
