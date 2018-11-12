@@ -36,7 +36,7 @@
                 <div class="reservation-course-result">
                     <div class="search-result-img">
                         <c:if test="${reservation.status == 0}">
-                            <div class="button-2 relative" type="submit"/>">
+                            <div class="button-2 relative" type="submit">
                                 <a class="class-button" href="<c:url value="/createCourse" />"></a>
                                 <spring:message code="files"/>
                             </div>
