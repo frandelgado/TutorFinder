@@ -33,8 +33,8 @@ public class CourseFileController extends BaseController {
     CourseService cs;
 
     @RequestMapping(value = "/courseFiles", method = RequestMethod.GET)
-    public ModelAndView getCourseFiles(@RequestParam("professorId") final Long professorId,
-                               @RequestParam("subjectId") final Long subjectId,
+    public ModelAndView getCourseFiles(@RequestParam("professor") final Long professorId,
+                               @RequestParam("subject") final Long subjectId,
                                @ModelAttribute("currentUser") final User currentUser,
                                @ModelAttribute("uploadClassFileForm") final UploadClassFileForm form) {
         Course course = cs.findCourseByIds(professorId, subjectId);
@@ -50,7 +50,7 @@ public class CourseFileController extends BaseController {
 
 
     @RequestMapping(value = "/downloadFile", method = RequestMethod.GET)
-    public void downloadFile(@RequestParam("courseFileId")final long courseFileId,
+    public void downloadFile(@RequestParam("courseFile")final long courseFileId,
                                      @ModelAttribute("currentUser") final User currentUser,
                                      HttpServletResponse response,
                                      HttpServletRequest request) {
@@ -83,8 +83,8 @@ public class CourseFileController extends BaseController {
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     public ModelAndView uploadFile(@Valid @ModelAttribute("uploadClassFileForm") final UploadClassFileForm form,
                                    BindingResult result,
-                                   @RequestParam("professorId") final Long professorId,
-                                   @RequestParam("subjectId") final Long subjectId,
+                                   @RequestParam("professor") final Long professorId,
+                                   @RequestParam("subject") final Long subjectId,
                                    @RequestParam("currentUser") final User currentUser) {
 
         if(result.hasErrors()) {
