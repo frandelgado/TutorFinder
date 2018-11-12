@@ -2,6 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
+<c:set var="localeCode" value="es-AR" />
 
 <html>
 
@@ -81,7 +82,7 @@
                 <a class="search-result-professor" >
                     <c:out value="${reservation.course.professor.name}" escapeXml="true" /></a>
                 <a class="search-result-specs"><spring:message code="course.specs" arguments="${reservation.course.price}" htmlEscape="true" /></a>
-                <a class="search-result-description"><c:out value="${reservation.course.description}" escapeXml="true" /></a>
+                <a class="search-result-description">Day:<joda:format value="${reservation.startTime}" style="L-" locale="${localeCode}"/>, startHour:<joda:format value="${reservation.startTime}" style="-S" locale="${localeCode}"/>, startHour:<joda:format value="${reservation.endTime}" style="-S" locale="${localeCode}"/></a>
                 <a class="search-result-rating"><spring:message code="rating.title" arguments="${reservation.course.price}" htmlEscape="true" /></a>
             </div>
         </c:forEach>
