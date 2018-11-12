@@ -13,22 +13,24 @@
     background-color: #dedede;
     justify-self: center;
     height: fit-content;
-    width: 300px;
-    margin: 25px;
+    width: 92%;
+    margin:0 25px;
 }
 
 .comment {
+    grid-area: coment-form;
     padding: 10px;
     border: 2px solid #dedede;
     border-radius: 5px;
     background-color: #dedede;
     justify-self: center;
     height: fit-content;
-    width: 300px;
+    width: 92%;
     margin: 25px;
 }
 
 .comments {
+    grid-area: coments;
     margin: 25px;
     padding: 10px;
     border: 2px solid #dedede;

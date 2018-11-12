@@ -51,10 +51,10 @@
         </div>
         <div>
             <form:hidden path="extraMessage"/>
-            <form:errors cssClass="success-text" path="extraMessage" element="p"/>
+            <form:errors cssClass="success-text no-margin" path="extraMessage" element="p"/>
         </div>
         <div class="button-container">
-            <input class="button-2" type="submit" value="<spring:message code="send"/>"/>
+            <input class="button-2 no-margin" type="submit" value="<spring:message code="send"/>"/>
         </div>
     </form:form>
     </div>
