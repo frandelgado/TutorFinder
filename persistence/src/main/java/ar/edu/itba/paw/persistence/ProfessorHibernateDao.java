@@ -85,7 +85,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
     public List<ClassReservation> getPagedClassRequests(Long professorId, int limit, int offset) {
         //TODO sort first pending, then accepted and then declined.
         final TypedQuery<ClassReservation> query = em.createQuery("from ClassReservation as c where c.course.professor.id= :professor_id " +
-                "order by desc c.status", ClassReservation.class);
+                "order by c.status desc", ClassReservation.class);
         query.setParameter("professor_id", professorId);
         query.setFirstResult(offset);
         query.setMaxResults(limit);
