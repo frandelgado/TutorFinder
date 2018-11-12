@@ -51,7 +51,7 @@ public class CourseFileServiceImpl implements CourseFileService {
     @Override
     public void deleteById(long id, User user) throws UserAuthenticationException {
         CourseFile courseFile = cfd.findById(id);
-        if(canWriteFile(courseFile, user)){
+        if(!canWriteFile(courseFile, user)){
             throw new UserAuthenticationException();
         }
         cfd.deleteById(id);
@@ -67,6 +67,9 @@ public class CourseFileServiceImpl implements CourseFileService {
     }
 
     private boolean canWriteFile(CourseFile courseFile, User user) {
+        if(user == null) {
+            return false;
+        }
         if(courseFile.getCourse().getProfessor().getId().compareTo(user.getId()) == 0){
             return true;
         }
