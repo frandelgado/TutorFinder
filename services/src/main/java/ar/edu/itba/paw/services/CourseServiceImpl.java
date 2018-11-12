@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -252,5 +253,43 @@ public class CourseServiceImpl implements CourseService {
             results = new PagedResults<>(comments, false);
         }
         return results;
+    }
+
+    @Override
+    public Course modify(final Long professorId, final Long subjectId, final String description, final Double price)
+            throws NonexistentCourseException {
+
+        if(price < 1){
+            LOGGER.error("Attempted to modify course with price lower than 1");
+            return null;
+        }
+
+        if(description.length() < 50 || description.length() > 300) {
+            LOGGER.error("Attempted to modify course with invalid description of size {}", description.length());
+            return null;
+        }
+
+        final Optional<Course> course = courseDao.findByIds(professorId, subjectId);
+        if(!course.isPresent()) {
+            LOGGER.error("Attempted to modify non existent course");
+            throw new NonexistentCourseException();
+        }
+
+        LOGGER.debug("Modifying course taught by professor with id {} about subject with id {}", professorId, subjectId);
+
+        return courseDao.modify(course.get(), description, price);
+    }
+
+
+    @Override
+    public boolean deleteCourse(final long professorId, final long subjectId) {
+        final Optional<Course> course = courseDao.findByIds(professorId, subjectId);
+
+        if(!course.isPresent()) {
+            LOGGER.error("Attempted to delete non existent course");
+            return false;
+        }
+
+        return courseDao.delete(course.get());
     }
 }

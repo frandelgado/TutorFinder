@@ -135,4 +135,14 @@ public class CourseJdbcDao implements CourseDao {
     public List<Comment> getComments(Course course, int limit, int offset) {
         return null;
     }
+
+    @Override
+    public boolean delete(Course course) {
+        return false;
+    }
+
+    @Override
+    public Course modify(Course course, String description, Double price) {
+        return null;
+    }
 }

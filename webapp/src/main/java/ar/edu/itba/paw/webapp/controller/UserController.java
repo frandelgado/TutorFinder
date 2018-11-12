@@ -135,6 +135,7 @@ public class UserController extends BaseController{
 
     @RequestMapping("/Profile")
     public ModelAndView profile(
+            @ModelAttribute("deleteCourseForm") final DeleteCourseForm deleteCourseForm,
             @ModelAttribute("currentUser") final User loggedUser,
             @ModelAttribute("addScheduleForm") final ScheduleForm addScheduleForm,
             @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
@@ -151,11 +152,14 @@ public class UserController extends BaseController{
 
         final PagedResults<Course> courses = cs.findCourseByProfessorId(professor.getId(), page);
 
+        final List<Course> deletable = ps.initializeCourses(professor).getCourses();
+
         if(courses == null) {
             redirectToErrorPage("pageOutOfBounds");
         }
 
         mav.addObject("courses", courses);
+        mav.addObject("subjects", deletable);
         mav.addObject("professor", professor);
         mav.addObject("schedule", schedule);
         mav.addObject("page", page);
@@ -230,6 +234,7 @@ public class UserController extends BaseController{
 
     @RequestMapping(value = "/CreateTimeSlot", method = RequestMethod.POST)
     public ModelAndView createTimeslot(
+            @ModelAttribute("deleteCourseForm") final DeleteCourseForm deleteCourseForm,
             @ModelAttribute("currentUser") final User loggedUser,
             @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
             @Valid @ModelAttribute("addScheduleForm") final ScheduleForm form,
@@ -239,7 +244,7 @@ public class UserController extends BaseController{
             if(!form.validForm()) {
                 errors.rejectValue("endHour", "profile.add_schedule.timeError");
             }
-            return profile(loggedUser, form, deleteScheduleForm, 1);
+            return profile(deleteCourseForm, loggedUser, form, deleteScheduleForm, 1);
         }
 
         final List<Timeslot> timeslots;
@@ -250,11 +255,11 @@ public class UserController extends BaseController{
             return redirectToErrorPage("nonExistentUser");
         } catch (TimeslotAllocatedException e) {
             errors.rejectValue("endHour", "TimeslotAllocatedError");
-            return profile(loggedUser, form, new ScheduleForm(),1);
+            return profile(deleteCourseForm, loggedUser, form, new ScheduleForm(),1);
         }
 
         if(timeslots == null) {
-            return profile(loggedUser, form, new ScheduleForm(), 1);
+            return profile(deleteCourseForm, loggedUser, form, new ScheduleForm(), 1);
         }
 
         return redirectWithNoExposedModalAttributes("/Profile");
@@ -263,6 +268,7 @@ public class UserController extends BaseController{
 
     @RequestMapping(value = "/RemoveTimeSlot", method = RequestMethod.POST)
     public ModelAndView RemoveTimeslot(
+            @ModelAttribute("deleteCourseForm") final DeleteCourseForm deleteCourseForm,
             @ModelAttribute("currentUser") final User loggedUser,
             @ModelAttribute("addScheduleForm") final ScheduleForm addScheduleForm,
             @Valid @ModelAttribute("deleteScheduleForm") final ScheduleForm form,
@@ -272,7 +278,7 @@ public class UserController extends BaseController{
             if(!form.validForm()) {
                 errors.rejectValue("endHour", "profile.add_schedule.timeError");
             }
-            return profile(loggedUser, addScheduleForm, form, 1);
+            return profile(deleteCourseForm, loggedUser, addScheduleForm, form, 1);
         }
         try {
             ss.removeTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
@@ -357,5 +363,32 @@ public class UserController extends BaseController{
         return redirectWithNoExposedModalAttributes("/");
     }
 
+
+
+    @RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
+    public ModelAndView deleteCourse(
+            @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
+            @ModelAttribute("addScheduleForm") final ScheduleForm addScheduleForm,
+            @ModelAttribute("currentUser") final User loggedUser,
+            @Valid @ModelAttribute("deleteCourseForm") final DeleteCourseForm form,
+            final BindingResult errors) throws NonexistentProfessorException{
+
+        if(errors.hasErrors()) {
+            return profile(form, loggedUser, addScheduleForm, deleteScheduleForm, 1);
+        }
+
+        final Professor professor = ps.findById(loggedUser.getId());
+        if(professor == null) {
+            return redirectToErrorPage("nonExistentUser");
+        }
+
+        final boolean deleted = cs.deleteCourse(professor.getId(), form.getSubject());
+
+        if(!deleted) {
+            return redirectToErrorPage("nonExistentCourse");
+        }
+
+        return redirectWithNoExposedModalAttributes("/Profile");
+    }
 
 }

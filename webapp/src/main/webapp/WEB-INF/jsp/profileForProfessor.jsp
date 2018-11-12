@@ -41,8 +41,30 @@
                 <a class="class-button" href="<c:url value="/createCourse" />"></a>
                 <spring:message code="addClass"/>
             </div>
-            <div class="add-class">
-                <a class="fas fa-pen center" href="<c:url value="/createCourse" />"></a>
+            <div id="delete-class-modal-button" class="add-class button-2">
+                <spring:message code="deleteClass"/>
+            </div>
+        </div>
+        <div id="delete-class-modal" class="add-time-modal">
+            <div>
+                <span class="modal-close">&times;</span>
+                <h1 class="center-text"><spring:message code="deleteClass"/></h1>
+                <c:url value="/deleteCourse" var="postPath"/>
+                <form:form cssClass="form" modelAttribute="deleteCourseForm" action="${postPath}" method="post">
+                    <div>
+                        <form:label cssClass="label" path="subject"><spring:message code="course.subject"/></form:label>
+                        <form:select cssClass="select-subject" path="subject">
+                            <form:option selected="disabled" value=""><spring:message code="select.subject"/></form:option>
+                            <c:forEach var="course" items="${subjects}">
+                                <form:option value="${course.subject.id}"><c:out value="${course.subject.name}" escapeXml="true"/></form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors cssClass="error-text" path="subject" element="p"/>
+                    </div>
+                    <div class="button-container">
+                        <input class="button-2" type="submit" value="<spring:message code="deleteClass"/>"/>
+                    </div>
+                </form:form>
             </div>
         </div>
         <div class="classes">
@@ -55,6 +77,9 @@
                     <a class="class-button" href="<c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
                     <div class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></div>
                     <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
+                    <div class="add-class">
+                        <a class="fas fa-pen center" href="<c:url value="/modifyCourse/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
+                    </div>
                 </div>
             </c:forEach>
 

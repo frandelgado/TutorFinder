@@ -93,4 +93,19 @@ public class CourseHibernateDao implements CourseDao {
         query.setMaxResults(limit);
         return query.getResultList();
     }
+
+    @Override
+    public boolean delete(final Course course) {
+        final Course toDelete = em.merge(course);
+        em.remove(toDelete);
+
+        return toDelete != null;
+    }
+
+    @Override
+    public Course modify(final Course course, final String description, final Double price) {
+        course.setDescription(description);
+        course.setPrice(price);
+        return em.merge(course);
+    }
 }

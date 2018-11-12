@@ -17,4 +17,6 @@ public interface ProfessorDao {
     Optional<Professor> findByUsername(final String username);
 
     List<Professor> filterByFullName(final String fullName, final int limit, final int offset);
+
+    Professor merge(Professor professor);
 }

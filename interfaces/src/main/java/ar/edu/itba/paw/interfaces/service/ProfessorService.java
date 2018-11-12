@@ -21,4 +21,6 @@ public interface ProfessorService {
     Professor createWithUser(final Long id, final String username, final String name, final String lastname,
                              final String password, final String email, final String description, final byte[] picture)
             throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException;
+
+    Professor initializeCourses(Professor professor);
 }

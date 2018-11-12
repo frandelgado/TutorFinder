@@ -65,6 +65,9 @@ public class Course {
     public List<Comment> getComments() {
         return comments;
     }
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
@@ -72,6 +75,18 @@ public class Course {
 
     public Double getRating() {
         return rating;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override

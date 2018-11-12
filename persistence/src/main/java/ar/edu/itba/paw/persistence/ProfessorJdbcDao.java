@@ -102,4 +102,9 @@ public class ProfessorJdbcDao implements ProfessorDao {
         );
         return professors;
     }
+
+    @Override
+    public Professor merge(Professor professor) {
+        return null;
+    }
 }
