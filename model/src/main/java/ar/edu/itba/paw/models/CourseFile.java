@@ -98,4 +98,16 @@ public class CourseFile {
         result = 31 * result + Arrays.hashCode(content);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "CourseFile{" +
+                "ID=" + ID +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", course=" + course +
+                ", content=" + Arrays.toString(content) +
+                '}';
+    }
 }
