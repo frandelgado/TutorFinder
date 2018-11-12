@@ -125,6 +125,22 @@
     background-color: #dedede;
 }
 
+.reservation-course-result {
+    grid-area: search-data;
+    position: relative;
+    margin-bottom: 20px;
+    padding: 20px;
+    display: grid;
+    background-color: white;
+    height: 100%;
+    align-content: center;
+    grid-template-columns: 170px auto;
+    grid-template-areas: "search-result-img search-result-title       search-result-specs"
+    "search-result-img search-result-professor   search-result-specs"
+    "search-result-img search-result-description search-result-specs"
+    "search-result-img search-result-description search-result-rating"
+}
+
 .search-area-result {
     position: relative;
     margin-bottom: 20px;

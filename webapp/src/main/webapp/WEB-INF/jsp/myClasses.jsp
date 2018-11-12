@@ -70,8 +70,7 @@
             <h1><spring:message code="no.results"/></h1>
         </c:if>
         <c:forEach var="reservation" items="${reservations}">
-            <div class="search-course-result">
-                <a class="conversation-link" href = "<c:url value="/Course/?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
+            <div class="reservation-course-result">
                 <div class="search-result-img">
                     <input class="button-2" type="submit" value="<spring:message code="reserve"/>"/>
                     <input class="button-2" type="submit" value="<spring:message code="reserve"/>"/>
