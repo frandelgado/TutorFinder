@@ -388,6 +388,7 @@ button {
 
 .class-description {
     grid-area: class-description;
+    margin-bottom: 20px;
     align-self: center;
     word-break: break-word;
     text-align: justify;
