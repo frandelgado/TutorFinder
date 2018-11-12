@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -14,13 +15,13 @@ import java.util.List;
 @Repository
 public class CourseFileHibernateDao implements CourseFileDao {
 
-    @Autowired
+    @PersistenceContext
     EntityManager em;
 
     @Override
     public List<CourseFile> findForCourse(Course course) {
         em.merge(course);
-        TypedQuery<CourseFile> query = em.createQuery("from CourseFile as c where c.course :=course", CourseFile.class);
+        TypedQuery<CourseFile> query = em.createQuery("from CourseFile as c where c.course = :course", CourseFile.class);
         query.setParameter("course", course);
         return query.getResultList();
     }
