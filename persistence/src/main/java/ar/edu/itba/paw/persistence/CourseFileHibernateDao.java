@@ -33,8 +33,6 @@ public class CourseFileHibernateDao implements CourseFileDao {
 
     @Override
     public void save(CourseFile document) {
-        //TODO: se necesita el merge?
-        em.merge(document);
         em.persist(document);
     }
 
