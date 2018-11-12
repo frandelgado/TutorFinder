@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.persistence;
 
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 
@@ -19,4 +20,6 @@ public interface ProfessorDao {
     List<Professor> filterByFullName(final String fullName, final int limit, final int offset);
 
     Professor merge(Professor professor);
+
+    List<ClassReservation> getPagedClassRequests(final Long professorId, final int limit, final int offset);
 }

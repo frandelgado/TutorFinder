@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
+import ar.edu.itba.paw.models.ClassReservation;
+import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import org.springframework.stereotype.Repository;
@@ -78,5 +80,16 @@ public class ProfessorHibernateDao implements ProfessorDao {
     @Override
     public Professor merge(final Professor professor) {
         return em.merge(professor);
+    }
+
+    public List<ClassReservation> getPagedClassRequests(Long professorId, int limit, int offset) {
+        //TODO sort first pending, then accepted and then declined.
+        final TypedQuery<ClassReservation> query = em.createQuery("from ClassReservation as c where c.course.professor.id= :professor_id " +
+                "order by desc c.status", ClassReservation.class);
+        query.setParameter("professor_id", professorId);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.getResultList();
+
     }
 }
