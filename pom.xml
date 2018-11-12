@@ -38,6 +38,7 @@
     <thymeleaf.version>3.0.2.RELEASE</thymeleaf.version>
     <org.hibernate.version>5.1.0.Final</org.hibernate.version>
     <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
+    <org.joda-time-jsptags.version>1.1.1</org.joda-time-jsptags.version>
   </properties>
 
   <dependencyManagement>
@@ -205,6 +206,11 @@
         <groupId>org.hibernate.javax.persistence</groupId>
         <artifactId>hibernate-jpa-2.1-api</artifactId>
         <version>${org.hibernate.jpa.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>joda-time</groupId>
+        <artifactId>joda-time-jsptags</artifactId>
+        <version>${org.joda-time-jsptags.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
