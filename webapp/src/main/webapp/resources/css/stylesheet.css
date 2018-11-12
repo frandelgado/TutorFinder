@@ -46,12 +46,17 @@ body {
     display: block;
 }
 
-.staticHome, .register, .staticProfile, .staticClass {
+.staticHome, .register, .staticProfile, .staticClass, .reservations {
     grid-template-areas: "navbar navbar  navbar"
                          "...... ....... ......"
                          "...... content ......"
                          "...... ....... ......"
                         ;
+}
+
+.reservations {
+    display: grid;
+    grid-template-columns: 25fr 50fr 25fr;
 }
 
 .staticProfile {
