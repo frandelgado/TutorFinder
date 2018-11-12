@@ -392,7 +392,7 @@ public class UserController extends BaseController{
 
     @RequestMapping("/reservations")
     public ModelAndView userReservations(@ModelAttribute("currentUser") final User loggedUser,
-                                         @RequestParam("page") final int page) {
+                                         @RequestParam(value = "page", defaultValue = "1") final int page) {
         ModelAndView mav = new ModelAndView("reservations");
         PagedResults<ClassReservation> classReservations =  us.pagedReservations(loggedUser.getId(), page);
         mav.addObject("reservations", classReservations.getResults());
@@ -403,7 +403,7 @@ public class UserController extends BaseController{
 
     @RequestMapping("/classRequests")
     public ModelAndView classReservations(@ModelAttribute("currentUser") final User loggedUser,
-                                         @RequestParam("page") final int page) {
+                                         @RequestParam(value = "page", defaultValue = "1") final int page) {
         ModelAndView mav = new ModelAndView("myClasses");
 
         PagedResults<ClassReservation> classReservations;
