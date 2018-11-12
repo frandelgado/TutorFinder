@@ -75,7 +75,7 @@
         </div>
 
         <div class="button-container">
-            <input class="button-2" type="submit" value="<spring:message code="modify"/>"/>
+            <input class="button-2" type="submit" id="modifyProfessorSubmit" value="<spring:message code="modify"/>"/>
         </div>
     </form:form>
 </div>
