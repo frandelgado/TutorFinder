@@ -5,12 +5,24 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Upload/Download/Delete Documents</title>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
+    <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/course.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/conversations.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/schedule.css" />">
+    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
+    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
+    <title>Tu Teoria | <spring:message code="course.title"/></title>
 </head>
 
 <body>
+<%@ include file="navbar.jsp" %>
+
 <div class="generic-container">
     <div class="panel panel-default">
         <!-- Default panel contents -->
