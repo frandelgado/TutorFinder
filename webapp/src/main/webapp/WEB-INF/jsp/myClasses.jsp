@@ -12,6 +12,7 @@
     <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
     <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
     <link href="<c:url value="/resources/css/select2.min.css" />" rel="stylesheet" />
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/select2.min.js" />"></script>
@@ -62,7 +63,7 @@
     </div>
 </div>
 
-<div class="content">
+<div class="content my-reservation">
     <div class="search-results">
         <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
         <c:if test="${reservations.size() == 0}">
@@ -71,7 +72,10 @@
         <c:forEach var="reservation" items="${reservations}">
             <div class="search-course-result">
                 <a class="conversation-link" href = "<c:url value="/Course/?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
-                <a class="search-result-img"><img class="search-result-picture" src="<c:url value="data:image/jpeg;base64,${reservation.course.subject.area.image}"/>"/></a>
+                <div class="search-result-img">
+                    <input class="button-2" type="submit" value="<spring:message code="reserve"/>"/>
+                    <input class="button-2" type="submit" value="<spring:message code="reserve"/>"/>
+                </div>
                     <%--TODO: add buttons--%>
                 <a class="search-result-title">
                     <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>

@@ -37,11 +37,11 @@
     </div>
     <div class="class-content">
         <div class="row r-center">
-            <div class="add-class button-2">
+            <div class="add-class button-2 relative">
                 <a class="class-button" href="<c:url value="/createCourse" />"></a>
                 <spring:message code="addClass"/>
             </div>
-            <div id="delete-class-modal-button" class="add-class button-2">
+            <div id="delete-class-modal-button" class="add-class button-2 relative">
                 <spring:message code="deleteClass"/>
             </div>
         </div>
