@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.exceptions.*;
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 
@@ -23,4 +24,7 @@ public interface ProfessorService {
             throws EmailAlreadyInUseException, UsernameAlreadyInUseException, UsernameAndEmailAlreadyInUseException;
 
     Professor initializeCourses(Professor professor);
+
+    PagedResults<ClassReservation> getPagedClassRequests(final Long professorId, final Integer page) throws NonexistentProfessorException;
+
 }

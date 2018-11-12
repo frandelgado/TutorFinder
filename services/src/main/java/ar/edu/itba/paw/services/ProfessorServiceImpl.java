@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
@@ -248,9 +249,43 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
+    @Transactional
     public Professor initializeCourses(final Professor professor) {
         final Professor merged = professorDao.merge(professor);
         merged.getCourses().size();
         return merged;
+    }
+
+    @Transactional
+    public PagedResults<ClassReservation> getPagedClassRequests(Long professorId, Integer page) throws NonexistentProfessorException {
+        if(page <= 0) {
+            LOGGER.error("Attempted to find 0 or negative page number");
+            return null;
+        }
+        if(findById(professorId) == null){
+            LOGGER.error("attempted to get class requests for an invalid professor id");
+            throw new NonexistentProfessorException();
+        }
+
+        LOGGER.debug("Searching for reservations for user with id {}", professorId);
+        final List<ClassReservation> reservations = professorDao.getPagedClassRequests(professorId, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
+        final PagedResults<ClassReservation> results;
+
+        final int size = reservations.size();
+
+        if(size == 0 && page > 1) {
+            LOGGER.error("Page number exceeds total page count");
+            return null;
+        }
+
+        if(size > PAGE_SIZE) {
+            reservations.remove(PAGE_SIZE);
+            LOGGER.trace("The search has more pages, removing extra result");
+            results = new PagedResults<>(reservations, true);
+        } else {
+            LOGGER.trace("The search has no more pages to show");
+            results = new PagedResults<>(reservations, false);
+        }
+        return results;
     }
 }
