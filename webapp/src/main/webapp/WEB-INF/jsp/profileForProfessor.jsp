@@ -31,7 +31,7 @@
         <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${professor.picture}" />"/>
         <div class="profile-name row">
             <h1 class="m-0-10 fit-content"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
-            <a class="fas fa-pen center" href="<c:url value="/editProfessorProfile" />"></a>
+            <a class="fas fa-pen center profile-course-button"  href="<c:url value="/editProfessorProfile" />"></a>
         </div>
         <h3 class="profile-description m-0-10"><c:out value="${professor.description}" escapeXml="true"/></h3>
     </div>
@@ -78,7 +78,8 @@
                     <div class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></div>
                     <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
                     <div class="edit-class">
-                        <a class="fas fa-pen center" href="<c:url value="/modifyCourse/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
+                        <a title="<spring:message code="course.modify"/>" class="fas fa-pen center profile-course-button" href="<c:url value="/modifyCourse/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
+                        <a title="<spring:message code="files"/>" class="fas fa-file center profile-course-button" href="<c:url value="/courseFiles?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
                     </div>
                 </div>
             </c:forEach>

@@ -358,20 +358,20 @@ button {
 
 .class {
     position: relative;
-    height: 100px;
+    min-height: 100px;
     min-width: 300px;
     margin-bottom: 10px;
     padding: 10px;
     display: grid;
     grid-column-gap: 10px;
     justify-content: center;
-    grid-template-areas: "class-title class-description";
-    min-width: 300px;
+    grid-template-areas: "class-title" "class-description";
 }
 
 .class-button {
     grid-area: button;
     position: absolute;
+    z-index: 20;
     top: 0;
     left: 0;;
     width: 100%;
@@ -381,22 +381,13 @@ button {
 .class-title {
     grid-area: class-title;
     position: relative;
-    justify-self: center;
+    justify-self: left;
     align-self: center;
-}
-
-.class-title::after {
-    position: absolute;
-    content: "";
-    margin-left: 5px;
-    height: 40px;
-    top: -10px;
-    border-right: 1px solid rgba(200,200,200,0.7);
 }
 
 .class-description {
     grid-area: class-description;
-    margin-left: 5px;
+    margin-bottom: 20px;
     align-self: center;
     word-break: break-word;
     text-align: justify;
@@ -858,8 +849,9 @@ th, td {
 
 .edit-class {
     position: absolute;
-    top: 90px;
+    bottom: 10px;
     right: 10px;
+    z-index: 30;
 }
 
 .relative {
@@ -878,4 +870,17 @@ th, td {
     color: #29303b;
     font-size: 25px;
     text-align: right;
+}
+
+.profile-course-button:link {
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #F47C48;
+}
+
+
+.profile-course-button:visited {
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #F47C48;
 }

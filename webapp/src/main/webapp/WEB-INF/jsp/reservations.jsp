@@ -1,8 +1,6 @@
 <%@ taglib prefix="c" uri ="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
-<c:set var="localeCode" value="es-AR" />
 
 <html>
 
@@ -37,28 +35,30 @@
             <c:forEach var="reservation" items="${reservations}">
                 <div class="reservation-course-result">
                     <div class="search-result-img">
-                        <div class="button-2 relative" type="submit" value="<spring:message code="reserve"/>">
-                            <a class="class-button" href="<c:url value="/createCourse" />"></a>
-                            <spring:message code="files"/>
-                        </div>
+                        <c:if test="${reservation.status == 0}">
+                            <div class="button-2 relative" type="submit">
+                                <a class="class-button" href="<c:url value="/courseFiles?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
+                                <spring:message code="files"/>
+                            </div>
+                        </c:if>
                     </div>
                     <%--TODO: add buttons--%>
                     <a class="search-result-title">
                         <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>
                     <a class="search-result-professor" >
-                        <c:out value="${reservation.course.professor.name}" escapeXml="true" /></a>
+                        <spring:message code="reservation.professor" arguments="${reservation.course.professor.name}" htmlEscape="true" /></a>
                     <a class="search-result-specs"><spring:message code="course.specs" arguments="${reservation.course.price}" htmlEscape="true" /></a>
-                    <a class="search-result-description"><spring:message code="reservation.day" htmlEscape="true" /><joda:format value="${reservation.startTime}" style="L-" locale="${localeCode}"/><br/><spring:message code="reservation.from" htmlEscape="true" /><joda:format value="${reservation.startTime}" style="-S" locale="${localeCode}"/> <spring:message code="reservation.to" htmlEscape="true" /><joda:format value="${reservation.endTime}" style="-S" locale="${localeCode}"/></a>
+                    <a class="search-result-description"><spring:message code="reservation.day" arguments="${reservation.startDay},${reservation.startMonth},${reservation.startYear}" htmlEscape="true" /><br/><spring:message code="reservation.from" arguments="${reservation.startHour},${reservation.startMinutes}" htmlEscape="true" /><spring:message code="reservation.to"  arguments="${reservation.endHour},${reservation.endMinutes}" htmlEscape="true" /></a>
                     <a class="search-result-status">
                         <c:choose>
                             <c:when test="${reservation.status == 0}">
-                                <spring:message code="reservation.accepted" arguments="${reservation.status}" htmlEscape="true" />
+                                <spring:message code="reservation.accepted" htmlEscape="true" />
                             </c:when>
                             <c:when test="${reservation.status == 1}">
-                                <spring:message code="reservation.canceled" arguments="${reservation.status}" htmlEscape="true" />
+                                <spring:message code="reservation.canceled" htmlEscape="true" />
                             </c:when>
                             <c:otherwise>
-                                <spring:message code="reservation.pending" arguments="${reservation.status}" htmlEscape="true" />
+                                <spring:message code="reservation.pending" htmlEscape="true" />
                             </c:otherwise>
                         </c:choose>
                     </a>

@@ -214,7 +214,7 @@ public class CourseServiceImpl implements CourseService {
             throw new SameUserException();
         }
 
-        if(classReservationService.hasAcceptedReservation(user, course)) {
+        if(!classReservationService.hasAcceptedReservation(user, course)) {
             LOGGER.error("User attempted to post comment in a course to which he has not attended to");
             throw new NonAcceptedReservationException();
         }

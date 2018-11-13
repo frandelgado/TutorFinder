@@ -52,7 +52,7 @@ public class ClassReservation {
 
     public ClassReservation deny(String comment) {
         this.comment = comment;
-        this.status = 2;
+        this.status = 1;
         return this;
     }
 
@@ -120,6 +120,37 @@ public class ClassReservation {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public String getStartHour() {
+        return String.format("%02d", startTime.getHourOfDay());
+    }
+
+    public String getStartMinutes() {
+        return String.format("%02d", startTime.getMinuteOfHour());
+    }
+
+    public String getEndHour() {
+        return String.format("%02d", endTime.getHourOfDay());
+    }
+
+    public String getEndMinutes() {
+        return String.format("%02d", endTime.getMinuteOfHour());
+    }
+
+    public String getStartDay() {
+        return String.format("%02d", startTime.getDayOfMonth());
+    }
+
+    public String getStartMonth() {
+        return String.format("%02d", startTime.getMonthOfYear());
+    }
+
+    public int getStartYear() {
+        return startTime.getYear();
+    }
+
+
+
 
     @Override
     public boolean equals(Object o) {

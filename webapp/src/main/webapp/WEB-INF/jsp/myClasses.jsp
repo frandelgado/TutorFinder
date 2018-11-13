@@ -1,8 +1,6 @@
 <%@ taglib prefix="c" uri ="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
-<c:set var="localeCode" value="es-AR" />
 
 <html>
 
@@ -66,24 +64,52 @@
 
 <div class="content my-reservation">
     <div class="search-results">
-        <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
+        <h3 class="search-data"><spring:message code="yourclassRequests" htmlEscape="true"/></h3>
         <c:if test="${reservations.size() == 0}">
             <h1><spring:message code="no.classRequests"/></h1>
         </c:if>
         <c:forEach var="reservation" items="${reservations}">
             <div class="reservation-course-result">
                 <div class="search-result-img">
-                    <input class="button-2" type="submit" value="<spring:message code="Approve"/>" onclick="location.href='/approveClassRequest?classReservation=${reservation.classRequestId}'"/>
-                    <input class="button-2" type="submit" value="<spring:message code="Deny"/>" onclick="location.href='/approveClassRequest?classReservation=${reservation.classRequestId}'"/>
+                    <c:choose>
+                        <c:when test="${reservation.status == 2}">
+                            <div class="button-2 relative" type="submit">
+                                <a class="class-button" href="<c:url value="/approveClassRequest?classReservation=${reservation.classRequestId}" />"></a>
+                                <spring:message code="Approve"/>
+                            </div>
+                            <div class="button-2 relative" type="submit">
+                                <a class="class-button" href="<c:url value="/denyClassRequest?classReservation=${reservation.classRequestId}" />"></a>
+                                <spring:message code="Deny"/>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="button-2 relative" type="submit">
+                                <a class="class-button" href="<c:url value="/courseFiles?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
+                                <spring:message code="files"/>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                     <%--TODO: add buttons--%>
                 <a class="search-result-title">
                     <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>
                 <a class="search-result-professor" >
-                    <spring:message code="reservation.student" htmlEscape="true" /><c:out value="${reservation.student.name}" escapeXml="true" /></a>
+                    <spring:message code="reservation.student" arguments="${reservation.student.name}" htmlEscape="true" /></a>
                 <a class="search-result-specs"><spring:message code="course.specs" arguments="${reservation.course.price}" htmlEscape="true" /></a>
-                <a class="search-result-description"><spring:message code="reservation.day" htmlEscape="true" /><joda:format value="${reservation.startTime}" style="L-" locale="${localeCode}"/><br/><spring:message code="reservation.from" htmlEscape="true" /><joda:format value="${reservation.startTime}" style="-S" locale="${localeCode}"/> <spring:message code="reservation.to" htmlEscape="true" /><joda:format value="${reservation.endTime}" style="-S" locale="${localeCode}"/></a>
-                <a class="search-result-rating"><spring:message code="rating.title" arguments="${reservation.course.price}" htmlEscape="true" /></a>
+                <a class="search-result-description"><spring:message code="reservation.day" arguments="${reservation.startDay},${reservation.startMonth},${reservation.startYear}" htmlEscape="true" /><br/><spring:message code="reservation.from" arguments="${reservation.startHour},${reservation.startMinutes}" htmlEscape="true" /><spring:message code="reservation.to"  arguments="${reservation.endHour},${reservation.endMinutes}" htmlEscape="true" /></a>
+                <a class="search-result-status">
+                    <c:choose>
+                        <c:when test="${reservation.status == 0}">
+                            <spring:message code="reservation.accepted" htmlEscape="true" />
+                        </c:when>
+                        <c:when test="${reservation.status == 1}">
+                            <spring:message code="reservation.canceled" htmlEscape="true" />
+                        </c:when>
+                        <c:otherwise>
+                            <spring:message code="reservation.pending" htmlEscape="true" />
+                        </c:otherwise>
+                    </c:choose>
+                </a>
             </div>
         </c:forEach>
 

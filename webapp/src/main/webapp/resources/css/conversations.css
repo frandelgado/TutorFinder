@@ -155,3 +155,17 @@ and (min-resolution:.001dpcm) {
     grid-template-columns: 100fr;
     grid-template-areas: "navbar " "....." "content" "......";
 }
+
+.message-comment {
+    grid-template-areas:
+            "message-text .... message-time";
+    background-color: white;
+    border: solid 1px black;
+    max-width: 98%;
+    width: 100%;
+}
+
+.message-comment-time {
+    grid-area: message-time;
+    text-align: right;
+}

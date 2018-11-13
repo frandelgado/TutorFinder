@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/conversations.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/schedule.css" />">
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
@@ -64,7 +65,7 @@
             <h2 class="label"><spring:message code="course.comment"/></h2>
         </div>
         <c:url value="/postComment" var="postPath"/>
-        <form:form cssClass="form" modelAttribute="commentForm" action="${postPath}" method="post">
+            <form:form cssClass="form" modelAttribute="commentForm" action="${postPath}" method="post">
             <form:hidden path="commentProfessorId" />
             <form:hidden path="commentSubjectId" />
             <div>
@@ -99,10 +100,9 @@
             <h2><spring:message code="commentTitle"/></h2>
         </div>
         <c:forEach var="comment" items="${comments.results}">
-            <div class="profile round-background">
-                <div class="title center-text"><c:out value="${comment.user.username}" escapeXml="true"/></div>
-                <div class="description center-text"><c:out value="${comment.comment}" escapeXml="true"/></div>
-                <h6 class="center-text">
+            <div class="message message-comment">
+                <h5 class="message-text"><c:out value="${comment.user.username}: ${comment.comment}" escapeXml="true"/></h5>
+                <h6 class="conversation-last-time message-comment-time">
                     <spring:message code="time.sent" arguments="${comment.day},${comment.month},${comment.year},${comment.hours},${comment.minutes}"/>
                 </h6>
             </div>
