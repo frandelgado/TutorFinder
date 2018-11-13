@@ -8,13 +8,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
-    <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
+
     <link rel="stylesheet" href="<c:url value="/resources/css/course.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/conversations.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/schedule.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
     <title>Tu Teoria | <spring:message code="course.title"/></title>
@@ -24,7 +25,7 @@
 <%@ include file="navbar.jsp" %>
 
 <div class="content my-reservation">
-    <div class="search-results">
+    <div class="search-results w-98">
         <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
         <c:if test="${courseFiles.size() == 0}">
             <h1><spring:message code="no.reservations"/></h1>
@@ -55,7 +56,7 @@
         </c:forEach>
     </div>
     <c:if test="${param.professor == currentUser.id}">
-        <div class="comment">
+        <div class="comment w-100">
             <div class="button-container">
                 <h2 class="label"><spring:message code="course.fileUploadTitle"/></h2>
             </div>
