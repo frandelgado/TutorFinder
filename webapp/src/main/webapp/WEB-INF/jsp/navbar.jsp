@@ -31,6 +31,7 @@
                         <c:choose>
                             <c:when test="${currentUserIsProfessor == true}">
                                 <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
+                                <a href="<c:url value="/classRequests?page=1" />" class="navbar-button"><spring:message code="classes.title"/></a>
                                 <!--<a>Modificar</a>-->
                             </c:when>
                             <c:otherwise>
@@ -38,7 +39,6 @@
                             </c:otherwise>
                         </c:choose>
                         <a href="<c:url value="/reservations?page=1" />" class="navbar-button"><spring:message code="reservations.title"/></a>
-                        <a href="<c:url value="/classRequests?page=1" />" class="navbar-button"><spring:message code="classes.title"/></a>
                         <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
                         <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
                     </div>
