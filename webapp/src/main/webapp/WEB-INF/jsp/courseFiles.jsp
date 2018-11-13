@@ -20,43 +20,42 @@
     <title>Tu Teoria | <spring:message code="course.title"/></title>
 </head>
 
-<body>
+<body class="body">
 <%@ include file="navbar.jsp" %>
 
-<div class="generic-container">
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading"><span class="lead">List of Documents </span></div>
-        <div class="tablecontainer">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>File Name</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th width="100"></th>
-                    <th width="100"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${courseFiles}" var="file" varStatus="counter">
-                    <tr>
-                        <td>${counter.index + 1}</td>
-                        <td>${file.name}</td>
-                        <td>${file.type}</td>
-                        <td>${file.description}</td>
-                        <td><a href="<c:url value='/downloadFile?courseFile=${file.id}' />" class="btn btn-success custom-width">download</a></td>
-                        <td><a href="<c:url value='/deleteFile?courseFile=${file.id}&professor=${param.professor}&subject=${param.subject}' />" class="btn btn-danger custom-width">delete</a></td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
+<div class="content my-reservation">
+    <div class="search-results">
+        <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
+        <c:if test="${courseFiles.size() == 0}">
+            <h1><spring:message code="no.reservations"/></h1>
+        </c:if>
+        <c:forEach var="file" items="${courseFiles}">
+            <div class="reservation-course-result">
+                <div class="search-result-img">
+                    <div class="button-2 relative" type="submit">
+                        <a class="class-button" href="<c:url value="/downloadFile?courseFile=${file.id}" />"></a>
+                        <spring:message code="download"/>
+                    </div>
+                    <c:if test="${param.professor == currentUser.id}">
+                        <div class="button-2 relative" type="submit">
+                            <a class="class-button" href="<c:url value="/deleteFile?courseFile=${file.id}&professor=${param.professor}&subject=${param.subject}" />"></a>
+                            <spring:message code="delete"/>
+                        </div>
+                    </c:if>
+                </div>
+                <a class="search-result-title">
+                    <c:out value="${file.name}" escapeXml="true" /></a>
+                <a class="search-result-professor" >
+                    <spring:message code="reservation.professor" arguments="${file.type}" htmlEscape="true" /></a>
+                <a class="search-result-specs"></a>
+                <a class="search-result-description"><spring:message code="reservation.day" arguments="${file.description}" htmlEscape="true" /></a>
+                <a class="search-result-status"></a>
+
+            </div>
+        </c:forEach>
     </div>
     <c:if test="${param.professor == currentUser.id}">
         <div class="panel panel-default">
-
             <div class="panel-heading"><span class="lead">Upload New Document</span></div>
             <div class="uploadcontainer">
                 <c:url value="/uploadFile?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
@@ -93,9 +92,7 @@
             </div>
         </div>
     </c:if>
-    <div class="well">
-        <%--Go to <a href="<c:url value='/list' />">Users List</a>--%>
-    </div>
+</div>
 </div>
 </body>
 </html>
