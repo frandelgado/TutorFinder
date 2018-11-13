@@ -26,8 +26,8 @@
         max-width: 550px;
     }
 
-    table, td, th {
-        font-size: 15px;
+    * /*table, td, th*/ {
+        font-size: 20px;
     }
 
     th, td {
@@ -73,6 +73,11 @@
         width: 100%;
         justify-content: center;
     }
+
+    .responsiveRow h3 {
+        margin-right: 10px;
+    }
+
     .responsiveColumn {
         display: flex;
         flex-direction: column;
@@ -110,7 +115,7 @@
         grid-template-rows: auto auto auto;
     }
     .dropdown-button{
-        padding: 20px;
+        padding: 0 20px;
     }
 
     .select-search-type {
@@ -119,4 +124,11 @@
     .r-filter-title {
         width: fit-content;
     }
+}
+
+@media only screen and (max-width: 400px) {
+    * {
+        font-size: 25px;
+    }
+
 }
