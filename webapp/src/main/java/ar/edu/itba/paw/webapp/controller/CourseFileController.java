@@ -112,7 +112,8 @@ public class CourseFileController extends BaseController {
         }
         document.setCourse(course);
         cfs.save(document);
-        return getCourseFiles(professorId, subjectId, currentUser, form);
+        return redirectWithNoExposedModalAttributes("/courseFiles?professor=" + professorId
+                +"&subject=" + subjectId);
     }
 
     @RequestMapping("/deleteFile")

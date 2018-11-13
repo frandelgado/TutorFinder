@@ -26,9 +26,9 @@
 
 <div class="content my-reservation">
     <div class="search-results w-98">
-        <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
+        <h3 class="search-data"><spring:message code="contents" htmlEscape="true"/></h3>
         <c:if test="${courseFiles.size() == 0}">
-            <h1><spring:message code="no.reservations"/></h1>
+            <h1><spring:message code="no.contents"/></h1>
         </c:if>
         <c:forEach var="file" items="${courseFiles}">
             <div class="reservation-course-result">
@@ -46,10 +46,10 @@
                 </div>
                 <a class="search-result-title">
                     <c:out value="${file.name}" escapeXml="true" /></a>
-                <a class="search-result-professor" >
-                    <spring:message code="reservation.professor" arguments="${file.type}" htmlEscape="true" /></a>
+                <a class="search-result-professor" ></a>
+                    <%--<spring:message code="reservation.professor" arguments="${file.type}" htmlEscape="true" /></a>--%>
                 <a class="search-result-specs"></a>
-                <a class="search-result-description"><spring:message code="reservation.day" arguments="${file.description}" htmlEscape="true" /></a>
+                <a class="search-result-description"><spring:message code="description"/><c:out value="${file.description}" escapeXml="true" /></a>
                 <a class="search-result-status"></a>
 
             </div>
