@@ -12,7 +12,7 @@
 
 .navbar-buttons {
     display: grid;
-    align-content: center;
+    align-items: center;
     grid-auto-flow: column;
     height: 100%;
     justify-content: end;
@@ -29,8 +29,8 @@
     color: white;
     font-size: 14px;
     width: fit-content;
-    padding: 0;
-    margin-left: 20px;
+    height: 100%;
+    padding: 0 10px;
 }
 
 .navbar .search-img {
