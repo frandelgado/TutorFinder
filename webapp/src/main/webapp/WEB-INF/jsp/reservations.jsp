@@ -26,8 +26,8 @@
 
 <%@ include file="navbar.jsp" %>
 
-<div class="content">
-    <div class="search-results">
+<div class="content justify-center">
+    <div class="search-results w-100">
         <h3 class="search-data"><spring:message code="yourReservations" htmlEscape="true"/></h3>
             <c:if test="${reservations.size() == 0}">
                 <h1><spring:message code="no.reservations"/></h1>
@@ -35,12 +35,16 @@
             <c:forEach var="reservation" items="${reservations}">
                 <div class="reservation-course-result">
                     <div class="search-result-img">
-                        <c:if test="${reservation.status == 0}">
-                            <div class="button-2 relative" type="submit">
-                                <a class="class-button" href="<c:url value="/courseFiles?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
-                                <spring:message code="files"/>
-                            </div>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="${reservation.status == 0}">
+                                <div class="button-2 relative" type="submit">
+                                    <a class="class-button" href="<c:url value="/courseFiles?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="search-result-img"><img class="search-result-picture" src="<c:url value="data:image/jpeg;base64,${reservation.course.subject.area.image}"/>"/></a>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                     <%--TODO: add buttons--%>
                     <a class="search-result-title">

@@ -76,7 +76,7 @@
             <c:forEach var="course" items="${courses.results}">
                 <div class="class">
                     <a class="class-button" href="<c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
-                    <div class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></div>
+                    <h3 class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></h3>
                     <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
                     <div class="edit-class">
                         <a title="<spring:message code="course.modify"/>" class="fas fa-pen center profile-course-button" href="<c:url value="/modifyCourse/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>

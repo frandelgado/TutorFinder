@@ -8,7 +8,7 @@
     .course {
         padding: 10px;
         grid-template-columns: 100fr;
-        grid-template-areas: "class" "contact" "schedule";
+        grid-template-areas: "class" "contact" "schedule" "coments" "coment-form";
     }
 
     .contact {
@@ -23,7 +23,6 @@
 
     .staticProfile .schedule {
         min-width: 550px;
-        max-width: 550px;
     }
 
 /*

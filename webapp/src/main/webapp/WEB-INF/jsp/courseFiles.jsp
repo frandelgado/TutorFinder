@@ -25,7 +25,7 @@
 <%@ include file="navbar.jsp" %>
 
 <div class="content my-reservation">
-    <div class="search-results w-98">
+    <div class="search-results w-98 rm-10-b m-t-20">
         <h3 class="search-data"><spring:message code="contents" htmlEscape="true"/></h3>
         <c:if test="${courseFiles.size() == 0}">
             <h1><spring:message code="no.contents"/></h1>

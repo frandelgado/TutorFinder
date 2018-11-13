@@ -25,7 +25,7 @@
     <div class="navbar-buttons" id="navbar-buttons">
         <c:choose>
             <c:when test="${currentUser != null}">
-                <div class="navbar-button dropdown" id="dropdown">
+                <div class="navbar-button dropdown relative" id="dropdown">
                     <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
                     <div class="dropdown-content" id="dropdown-content">
                         <c:choose>

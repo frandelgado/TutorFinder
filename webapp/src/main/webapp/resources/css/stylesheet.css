@@ -128,7 +128,7 @@ body {
     display: none;
     position: absolute;
     top: 65px;
-    right: 32px;
+    right: 22px;
     left: auto;
     background-color: #f9f9f9;
     min-width: 160px;
@@ -892,7 +892,24 @@ th, td {
     width: 98%;
 }
 
+.w-92 {
+    width: 92%;
+}
+
+
 .w-100 {
     width: 100%;
 }
 
+.justify-center {
+    display: flex;
+    justify-content: center;
+}
+
+.navbar-button .dropdown {
+    position: relative;
+}
+
+.m-t-20 {
+    margin-top: 20px;
+}

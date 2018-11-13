@@ -24,46 +24,10 @@
 <body class="body">
 <c:url value="/searchResults" var="postPath"/>
 
-<div class="navbar">
-    <a href="<c:url value="/" />" class="logo-box">
-        <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
-    </a>
-
-    <div class="search-bar"></div>
-
-    <div class="navbar-buttons">
-        <c:choose>
-            <c:when test="${currentUser != null}">
-                <div class="navbar-button dropdown" id="dropdown">
-                    <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
-                    <div class="dropdown-content" id="dropdown-content">
-                        <c:choose>
-                            <c:when test="${currentUserIsProfessor == true}">
-                                <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
-                                <a href="<c:url value="/classRequests?page=1" />" class="navbar-button"><spring:message code="classes.title"/></a>
-                                <!--<a>Modificar</a>-->
-                            </c:when>
-                            <c:otherwise>
-                                <a href="<c:url value="/registerAsProfessor" />" class="navbar-button"><spring:message code="register.professor"/></a>
-                            </c:otherwise>
-                        </c:choose>
-
-                        <a href="<c:url value="/reservations?page=1" />" class="navbar-button"><spring:message code="reservations.title"/></a>
-                        <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
-                        <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
-                    </div>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <a href="<c:url value="/register" />" class="navbar-button"><spring:message code="register"/></a>
-                <a href="<c:url value="/login" />" class="navbar-button"><spring:message code="login"/></a>
-            </c:otherwise>
-        </c:choose>
-    </div>
-</div>
+<%@ include file="navbar.jsp" %>
 
 <div class="content my-reservation">
-    <div class="search-results">
+    <div class="search-results w-100">
         <h3 class="search-data"><spring:message code="yourclassRequests" htmlEscape="true"/></h3>
         <c:if test="${reservations.size() == 0}">
             <h1><spring:message code="no.classRequests"/></h1>

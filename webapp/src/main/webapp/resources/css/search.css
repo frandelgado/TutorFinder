@@ -13,8 +13,8 @@
 .staticSearchResults .content {
     display: grid;
     grid-column-gap: 20px;
-    grid-template-columns: 25fr 75fr;
-    grid-template-areas: "filter-panel search-results"
+    grid-template-columns: 25fr 75fr 25fr;
+    grid-template-areas: "filter-panel search-results -----"
 }
 
 .search-box {
@@ -89,7 +89,6 @@
     display: flex;
     flex-direction: column;
     background-color: #dedede;
-    max-width: 700px;
     justify-self: center;
     padding: 20px;
     margin-top: 50px;
