@@ -913,3 +913,7 @@ th, td {
 .m-t-20 {
     margin-top: 20px;
 }
+
+.schedule h4 {
+    grid-area: schedule-tabla;
+}
