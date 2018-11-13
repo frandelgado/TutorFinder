@@ -7,6 +7,7 @@ import ar.edu.itba.paw.webapp.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.CourseForm;
 import ar.edu.itba.paw.webapp.form.MessageForm;
+import org.joda.time.Instant;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
@@ -223,6 +224,11 @@ public class CourseController extends BaseController{
 
         final LocalDateTime endTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
                 day.getDayOfMonth(), form.getEndHour(), 0);
+
+        if(!startTime.isAfter(LocalDateTime.now())) {
+            errors.rejectValue("endHour", "futureDateError");
+            return reserveClass(user, form, professorId, subjectId);
+        }
 
         ClassReservation reservation = null;
         try {
