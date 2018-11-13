@@ -9,10 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.io.ContextResource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -28,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -58,6 +58,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private TemplateEngine resourceTemplateEngine;
 
+    @Autowired
+    private Environment env;
+
     @Override
     public void sendEmail(String to, String subject, String text) {
         LOGGER.debug("Sending email to {} with subject {}", to, subject);
@@ -79,7 +82,7 @@ public class EmailServiceImpl implements EmailService {
         LOGGER.debug("Creating Password Restore Email for user with id {} and token {}", user.getId(), token);
         final Context ctx = new Context();
         ctx.setVariable("mail", user.getEmail());
-        ctx.setVariable("url", "http://localhost:8080/resetPassword?token=" + token);
+        ctx.setVariable("url", getContextUri() + "/resetPassword?token=" + token);
         String SUBJECT = messageSource.getMessage("mail.restorepass.subject", null, LocaleContextHolder.getLocale());
 
         final String resource = htmlString(restorePassword);
@@ -111,7 +114,7 @@ public class EmailServiceImpl implements EmailService {
         final Context ctx = new Context();
         ctx.setVariable("name", user.getName());
         ctx.setVariable("username", user.getUsername());
-        ctx.setVariable("url", "http://localhost:8080");//
+        ctx.setVariable("url", getContextUri());
         Locale locale = LocaleContextHolder.getLocale();
         String REGISTRATION_SUBJECT = messageSource.getMessage("mail.registration.subject", null, locale);
 
@@ -146,7 +149,7 @@ public class EmailServiceImpl implements EmailService {
         ctx.setVariable("lastname", from.getLastname());
         ctx.setVariable("subject", conversation.getSubject().getName());
         ctx.setVariable("message", sentMessage.getText());
-        ctx.setVariable("url", "http://localhost:8080/Conversation?id=" + conversation.getId());
+        ctx.setVariable("url", getContextUri() + "Conversation?id=" + conversation.getId());
         final String SUBJECT = messageSource.getMessage("mail.newmessage.subject", null, LocaleContextHolder.getLocale());
 
         final String resource = htmlString(contactMail);
@@ -195,5 +198,16 @@ public class EmailServiceImpl implements EmailService {
             return null;
         }
         return html;
+    }
+
+    private String getContextUri() {
+        final String contextUri;
+        if(Arrays.stream(env.getActiveProfiles()).anyMatch(
+                env -> (env.equalsIgnoreCase("dev")))) {
+            contextUri = "http://localhost:8080/";
+        } else {
+            contextUri = "http://pawserver.it.itba.edu.ar/paw-2018b-09/";
+        }
+        return contextUri;
     }
 }
