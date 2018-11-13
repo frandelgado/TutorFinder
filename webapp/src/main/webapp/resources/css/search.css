@@ -119,6 +119,7 @@
     height: 100%;
     align-content: center;
     grid-template-columns: 170px auto;
+    grid-column-gap: 20px;
     grid-template-areas: "search-result-img search-result-title       search-result-specs"
     "search-result-img search-result-professor   search-result-specs"
     "search-result-img search-result-description search-result-specs"
