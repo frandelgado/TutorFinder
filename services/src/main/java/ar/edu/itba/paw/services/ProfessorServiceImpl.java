@@ -252,6 +252,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Transactional
     public Professor initializeCourses(final Professor professor) {
         final Professor merged = professorDao.merge(professor);
+        LOGGER.debug("Initializing courses for professor with id {} ", merged.getId());
         merged.getCourses().size();
         return merged;
     }

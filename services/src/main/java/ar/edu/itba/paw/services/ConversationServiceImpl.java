@@ -170,6 +170,7 @@ public class ConversationServiceImpl implements ConversationService {
     @Override
     public Conversation initializeMessages(final Conversation conversation) {
         final Conversation ret = conversationDao.merge(conversation);
+        LOGGER.debug("Initializing messages for conversation with  id {}", ret.getId());
         ret.getMessages().size();
         return ret;
     }

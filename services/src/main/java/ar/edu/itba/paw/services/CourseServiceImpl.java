@@ -65,8 +65,8 @@ public class CourseServiceImpl implements CourseService {
             LOGGER.trace("The search has more pages, removing extra result");
             results = new PagedResults<>(courses, true);
         } else {
-            LOGGER.trace("The search has no more pages to show");
             results = new PagedResults<>(courses, false);
+            LOGGER.trace("The search has no more pages to show");
         }
         return results;
     }
@@ -284,6 +284,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public boolean deleteCourse(final long professorId, final long subjectId) {
         final Optional<Course> course = courseDao.findByIds(professorId, subjectId);
+        LOGGER.debug("Deleting course taught by professor with id {} about subject with id {}", professorId, subjectId);
 
         if(!course.isPresent()) {
             LOGGER.error("Attempted to delete non existent course");
