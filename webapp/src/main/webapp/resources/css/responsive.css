@@ -26,16 +26,21 @@
         max-width: 550px;
     }
 
-    * /*table, td, th*/ {
+/*
+    * {
         font-size: 20px;
     }
-
+*/
     th, td {
         padding: 2px;
     }
 
     .staticProfile {
-        grid-template-areas: "navbar" "......" "content";
+        /*grid-template-areas:
+                "navbar  navbar  navbar "
+                "......  ......  ...... "
+                "content content content"
+                "......  ......  ...... ";*/
         grid-template-columns: 100fr;
 
     }
@@ -57,12 +62,13 @@
     }
 
     .staticSearchResults .content {
+        grid-template-columns: auto;
         grid-template-areas: "filter-panel" "search-results";
         padding: 5px;
     }
 
     .filter-panel {
-        width: 550px;
+        max-width: 550px;
         margin: 0;
         margin-top: 25px;
     }
@@ -89,31 +95,40 @@
     .responsiveDelete {
         display: none;
     }
+
     .rm-10-b {
         margin: 0;
     }
+
     .r-filter-title{
         width: 180px;
     }
+
     .input-request-filter {
         width:100px;
     }
+
     .search-results {
-        width: 550px;
+        max-width: 550px;
     }
+
     .conversation-messages {
         max-height: 200px;
     }
+
     .conversations {
         grid-template-columns: 100fr;
         grid-template-areas: "navbar " "....." "content" "......";
     }
+
     .register-form {
         grid-template-columns: auto 312px auto;
     }
+
     .class-content {
         grid-template-rows: auto auto auto;
     }
+
     .dropdown-button{
         padding: 0 20px;
     }
@@ -121,6 +136,7 @@
     .select-search-type {
         max-width: 80px;
     }
+
     .r-filter-title {
         width: fit-content;
     }
@@ -128,7 +144,7 @@
 
 @media only screen and (max-width: 400px) {
     * {
-        font-size: 25px;
+        /*font-size: 25px;*/
     }
 
 }
