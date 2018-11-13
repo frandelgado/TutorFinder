@@ -55,43 +55,28 @@
         </c:forEach>
     </div>
     <c:if test="${param.professor == currentUser.id}">
-        <div class="panel panel-default">
-            <div class="panel-heading"><span class="lead">Upload New Document</span></div>
-            <div class="uploadcontainer">
-                <c:url value="/uploadFile?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
-                <form:form method="POST" modelAttribute="uploadClassFileForm" enctype="multipart/form-data" class="form-horizontal" action="${postPath}">
-
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label class="col-md-3 control-lable" for="file">Upload a document</label>
-                            <div class="col-md-7">
-                                <form:input type="file" path="file" id="file" class="form-control input-sm"/>
-                                <div class="has-error">
-                                    <form:errors path="file" class="help-inline"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label class="col-md-3 control-lable" for="description">Description</label>
-                            <div class="col-md-7">
-                                <form:input type="text" path="description" id="description" class="form-control input-sm"/>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="button-container">
-                            <input class="button-2" type="submit" value="<spring:message code="upload"/>"/>
-                        </div>
-                    </div>
-
-                </form:form>
+        <div class="comment">
+            <div class="button-container">
+                <h2 class="label"><spring:message code="course.fileUploadTitle"/></h2>
             </div>
+            <c:url value="/uploadFile?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
+            <form:form method="POST" modelAttribute="uploadClassFileForm" enctype="multipart/form-data" class="form-horizontal" action="${postPath}">
+                <div>
+                    <form:label cssClass="label" path="file"><spring:message code="course.fileUpload"/></form:label>
+                    <form:input type="file" path="file" id="file" class="input-request"/>
+                    <form:errors path="file" class="help-inline"/>
+                </div>
+                <div>
+                    <form:label cssClass="label" path="description"><spring:message code="course.description"/></form:label>
+                    <form:textarea type="text" path="description" id="description" class="input-request chat-box" rows="5" cols="5"/>
+                </div>
+                <div class="button-container">
+                    <input class="button-2" type="submit" ${disabled} value="<spring:message code="upload"/>"/>
+                </div>
+            </form:form>
         </div>
     </c:if>
+
 </div>
 </div>
 </body>

@@ -861,7 +861,8 @@ th, td {
 .my-reservation {
     display: grid;
     grid-template-columns: 25fr 50fr 25fr;
-    grid-template-areas: "------- search-results ....";
+    grid-template-areas: "------- search-results ...."
+                        "------- coment-form ------";
 }
 
 .search-result-status {
