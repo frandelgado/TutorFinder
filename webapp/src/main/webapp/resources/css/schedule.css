@@ -11,6 +11,7 @@
     margin: 25px;
     padding: 10px;
     border: 2px solid #dedede;
+    justify-self: center;
     border-radius: 5px;
     background-color: #dedede;
     grid-template-areas:
@@ -35,6 +36,7 @@
 }
 
 .schedule table {
+    overflow-x: auto;
     grid-area: schedule-tabla;
 }
 
