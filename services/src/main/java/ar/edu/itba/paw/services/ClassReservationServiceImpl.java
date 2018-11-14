@@ -1,22 +1,19 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.exceptions.NonExistentUserException;
-import ar.edu.itba.paw.exceptions.NonexistentCourseException;
-import ar.edu.itba.paw.exceptions.SameUserException;
-import ar.edu.itba.paw.exceptions.UserAuthenticationException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.ClassReservationDao;
 import ar.edu.itba.paw.interfaces.service.ClassReservationService;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.models.ClassReservation;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.joda.time.LocalDateTime;
+
+import java.util.stream.IntStream;
 
 @Service
 @Transactional
@@ -38,7 +35,7 @@ public class ClassReservationServiceImpl implements ClassReservationService {
     @Transactional
     public ClassReservation reserve(final LocalDateTime startHour, final LocalDateTime endHour,
                                     final Long professorId, final Long subjectId,
-                                    final Long studentId) throws SameUserException, NonexistentCourseException, NonExistentUserException {
+                                    final Long studentId) throws SameUserException, NonexistentCourseException, NonExistentUserException, ReservationTimeOutOfRange {
         final User student = us.findUserById(studentId);
         final Course course = cs.findCourseByIds(professorId, subjectId);
 
@@ -61,6 +58,22 @@ public class ClassReservationServiceImpl implements ClassReservationService {
             LOGGER.error("NonExistent student attempted to reserve class");
             throw new NonExistentUserException();
         }
+
+        final Professor professor = course.getProfessor();
+
+        final int start = startHour.getHourOfDay();
+        final int end = endHour.getHourOfDay();
+        final Integer day = startHour.getDayOfWeek();
+
+        final boolean inRange = IntStream.range(start, end)
+                .allMatch(i -> professorHasTimeslot(professor, day, i));
+
+        if(!inRange) {
+            LOGGER.error("Student attempted to reserve a time range not allowed by professor");
+            throw new ReservationTimeOutOfRange();
+        }
+
+
         LOGGER.debug("Making reservation for course taught by professor with id {} of subject {} by student {}",
                 course.getProfessor().getId(), course.getSubject().getId(), studentId);
         return crd.reserve(startHour, endHour, course, student);
@@ -115,6 +128,16 @@ public class ClassReservationServiceImpl implements ClassReservationService {
     public ClassReservation findById(final Long classReservationId) {
         LOGGER.debug("Finding reservation with id {}", classReservationId);
         return crd.findById(classReservationId);
+    }
+
+    private boolean professorHasTimeslot(final Professor professor, final int day, final int hour) {
+
+        if(professor == null) {
+            return false;
+        }
+
+        return professor.getTimeslots().stream()
+                .anyMatch(timeslot -> timeslot.getDay().equals(day) && timeslot.getHour().equals(hour));
     }
 
 }

@@ -12,7 +12,7 @@ public interface ClassReservationService {
 
     ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour,
                              Long professorId, Long subjectId,
-                             Long studentId) throws SameUserException, NonexistentCourseException, NonExistentUserException;
+                             Long studentId) throws SameUserException, NonexistentCourseException, NonExistentUserException, ReservationTimeOutOfRange;
 
     ClassReservation confirm(final Long classReservationId, final Long professorId, final String comment) throws UserAuthenticationException;
 

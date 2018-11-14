@@ -236,6 +236,9 @@ public class CourseController extends BaseController{
             return redirectToErrorPage("nonExistentCourse");
         } catch (NonExistentUserException e) {
             return redirectToErrorPage("nonExistentUser");
+        } catch (ReservationTimeOutOfRange reservationTimeOutOfRange) {
+            errors.rejectValue("day", "notAvailableTime");
+            return reserveClass(user, form, professorId, subjectId);
         }
 
         if(reservation == null) {
