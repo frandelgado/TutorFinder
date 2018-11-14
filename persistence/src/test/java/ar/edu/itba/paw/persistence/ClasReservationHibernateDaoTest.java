@@ -29,11 +29,11 @@ import static org.mockito.Mockito.when;
 @Transactional
 public class ClasReservationHibernateDaoTest {
 
-    private static final Long ACCEPTED_RESERVATION_USER_ID      = 1L;
-    private static final Long NO_RESERVATION_USER_ID            = 5L;
+    private static final Long ACCEPTED_RESERVATION_USER_ID      = 2L;
+    private static final Long NO_RESERVATION_USER_ID            = 1L;
     private static final Long DENIED_RESERVATION_USER_ID        = 3L;
     private static final Long UNSPECIFIED_RESERVATION_USER_ID   = 4L;
-    private static final Long PROFESSOR_ID                      = 2L;
+    private static final Long PROFESSOR_ID                      = 5L;
     private static final Long SUBJECT_ID                        = 1L;
 
 
@@ -59,33 +59,29 @@ public class ClasReservationHibernateDaoTest {
 
     @Test
     public void hasAcceptedReservationTest() {
-        User student = mock(User.class);
-        Course course  = mock(Course.class);
-        when(student.getId()).thenReturn(ACCEPTED_RESERVATION_USER_ID);
+        User student = em.find(User.class, ACCEPTED_RESERVATION_USER_ID);
+        Course course  = em.find(Course.class, new CourseID(em.find(Professor.class, PROFESSOR_ID), em.find(Subject.class, SUBJECT_ID)));
         assertTrue(crd.hasAcceptedReservation(student, course));
     }
 
     @Test
     public void hasDeniedReservationTest() {
-        User student = mock(User.class);
-        Course course  = mock(Course.class);
-        when(student.getId()).thenReturn(DENIED_RESERVATION_USER_ID);
+        User student = em.find(User.class, DENIED_RESERVATION_USER_ID);
+        Course course  = em.find(Course.class, new CourseID(em.find(Professor.class, PROFESSOR_ID), em.find(Subject.class, SUBJECT_ID)));
         assertFalse(crd.hasAcceptedReservation(student, course));
     }
 
     @Test
     public void hasUnspecifiedReservationTest() {
-        User student = mock(User.class);
-        Course course  = mock(Course.class);
-        when(student.getId()).thenReturn(UNSPECIFIED_RESERVATION_USER_ID);
+        User student = em.find(User.class, UNSPECIFIED_RESERVATION_USER_ID);
+        Course course  = em.find(Course.class, new CourseID(em.find(Professor.class, PROFESSOR_ID), em.find(Subject.class, SUBJECT_ID)));
         assertFalse(crd.hasAcceptedReservation(student, course));
     }
 
     @Test
     public void noReservationTest() {
-        User student = mock(User.class);
-        Course course  = mock(Course.class);
-        when(student.getId()).thenReturn(NO_RESERVATION_USER_ID);
+        User student = em.find(User.class, NO_RESERVATION_USER_ID);
+        Course course  = em.find(Course.class, new CourseID(em.find(Professor.class, PROFESSOR_ID), em.find(Subject.class, SUBJECT_ID)));
         assertFalse(crd.hasAcceptedReservation(student, course));
     }
 
