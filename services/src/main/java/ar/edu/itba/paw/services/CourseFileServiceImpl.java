@@ -49,7 +49,7 @@ public class CourseFileServiceImpl implements CourseFileService {
 
     @Override
     public CourseFile findByIdForUser(final long id, final User user) throws UserAuthenticationException {
-        CourseFile courseFile = cfd.findById(id);
+        final CourseFile courseFile = cfd.findById(id);
         if(!canReadFiles(courseFile.getCourse(), user)){
             LOGGER.error("User with id {} attempted to access file with id {} with no read permission", user.getId());
             throw new UserAuthenticationException();
@@ -63,19 +63,22 @@ public class CourseFileServiceImpl implements CourseFileService {
                            final String fileName, final String description, final String contentType,
                            final byte[] file) throws UserAuthenticationException {
 
-            LOGGER.debug("Saving file with name {}", fileName);
-        Course course = cs.findCourseByIds(professorId, subjectId);
+        LOGGER.debug("Saving file with name {} for profesor with id {} and subject id {}", fileName, professorId, subjectId);
+        final Course course = cs.findCourseByIds(professorId, subjectId);
 
         if(course.getProfessor().getId().compareTo(currentUser.getId()) != 0) {
+            LOGGER.error("User attempted to save file without permission");
             throw new UserAuthenticationException();
         }
 
         if(fileName == null || fileName.length() < 1 || description == null ||
-                contentType == null || file == null || file.length < 1){
+                contentType == null || file == null || file.length < 1) {
+            LOGGER.error("User attempted to save file with invalid parameters");
             return null;
         }
 
         if(description.length() > 255 || description.length() < 5){
+            LOGGER.error("User attempted to save file with invalid description");
             return null;
         }
         return cfd.save(course, fileName, description, contentType, file);
@@ -83,7 +86,7 @@ public class CourseFileServiceImpl implements CourseFileService {
 
     @Override
     public void deleteById(final long id, final User user) throws UserAuthenticationException {
-        CourseFile courseFile = cfd.findById(id);
+        final CourseFile courseFile = cfd.findById(id);
         if(!canWriteFile(courseFile, user)){
             LOGGER.error("User with id {} attempted to delete file with id {} with no permission", user.getId());
             throw new UserAuthenticationException();
