@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
+import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.User;
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +21,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
+
+import java.util.List;
 
 import static junit.framework.TestCase.*;
 
@@ -39,6 +42,8 @@ public class UserHibernateDaoTest {
     private static final Long INVALID_ID = 666L;
     private static final String INVALID_USERNAME = "InvalidTestUsername";
     private static final String INVALID_EMAIL = "InvalidTestEmail";
+    private static final Long SUBJECT_ID = 1L;
+    private static final Long PROFESSOR_ID = 5L;
 
     @Autowired
     private DataSource dataSource;
@@ -166,6 +171,25 @@ public class UserHibernateDaoTest {
     public void testChangePasswordByIdInvalid() {
         final boolean changed = userDao.changePasswordById(INVALID_ID, NEW_PASSWORD);
         assertFalse(changed);
+    }
+
+    @Test
+    public void testPagedReservationsValid() {
+        final List<ClassReservation> classReservations = userDao.pagedReservations(ID, 3, 0);
+        assertNotNull(classReservations);
+        assertEquals(1, classReservations.size());
+        final ClassReservation classReservation = classReservations.get(0);
+
+        assertEquals(USERNAME, classReservation.getStudent().getUsername());
+        assertEquals(SUBJECT_ID, classReservation.getCourse().getSubject().getId());
+        assertEquals(PROFESSOR_ID, classReservation.getCourse().getProfessor().getId());
+    }
+
+    @Test
+    public void testPagedReservationsInvalid() {
+        final List<ClassReservation> classReservations = userDao.pagedReservations(INVALID_ID, 3, 0);
+        assertNotNull(classReservations);
+        assertEquals(0, classReservations.size());
     }
 
     @After

@@ -21,9 +21,7 @@ import javax.sql.DataSource;
 
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -85,6 +83,30 @@ public class ScheduleHibernateDaoTest {
 
         assertEquals(DAY, reservedTimeSlot.getDay());
         assertEquals(HOUR, reservedTimeSlot.getHour());
+    }
+
+    @Test
+    public void testDeleteValid() {
+        final int DAY = 2;
+        final int HOUR = 2;
+
+        final boolean removed = hibernateDao.removeTimeSlot(testProfessorOcupied, DAY,HOUR);
+        em.flush();
+
+        assertTrue(removed);
+        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
+    }
+
+    @Test
+    public void testDeleteInvalid() {
+        Integer DAY = 1;
+        Integer HOUR = 4;
+
+        final boolean removed = hibernateDao.removeTimeSlot(testProfessorOcupied, DAY,HOUR);
+        em.flush();
+
+        assertFalse(removed);
+        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedules"));
     }
 
 

@@ -187,9 +187,10 @@ public class UserController extends BaseController{
         final Professor p;
         try {
             p = ps.create(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
-        } catch (IOException e) {
+        } catch (IOException | DownloadFileException e) {
             return redirectToErrorPage("fileUploadError");
         }
+
         if(p == null) {
             return registerProfessor(form);
         }
@@ -216,7 +217,7 @@ public class UserController extends BaseController{
         final Professor professor;
         try {
             professor = ps.modify(loggedUser.getId(), form.getDescription(), form.getPic().getBytes());
-        } catch (IOException e) {
+        } catch (IOException | DownloadFileException e) {
             return redirectToErrorPage("fileUploadError");
         } catch (NonexistentProfessorException | ProfessorWithoutUserException e) {
             return redirectToErrorPage("oops");
@@ -363,7 +364,6 @@ public class UserController extends BaseController{
         return redirectWithNoExposedModalAttributes("/");
     }
 
-    //TODO: esto deberia estar en course controller
     @RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
     public ModelAndView deleteCourse(
             @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,

@@ -506,6 +506,10 @@ button {
     display: none;
 }
 
+#fileError {
+    display: none;
+}
+
 .success-text {
     color: #228B22;
 }

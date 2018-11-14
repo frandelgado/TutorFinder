@@ -17,14 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
-
+import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.*;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HibernateTestConfig.class)
@@ -34,7 +31,10 @@ public class CourseHibernateDaoTest {
 
     private static final String DESCRIPTION = "Curso de algebra";
     private static final Double PRICE = 240.0;
+    private static final String NEW_DESCRIPTION = "No Curso de algebra";
+    private static final Double NEW_PRICE = 340.0;
     private static final Long SUBJECT_ID = 1L;
+    private static final Long USER_ID = 3L;
     private static final Long PROFESSOR_ID = 5L;
     private static final Long AREA_ID = 1L;
     private static final Long INVALID_ID = 666L;
@@ -45,6 +45,7 @@ public class CourseHibernateDaoTest {
     private static final Integer DAY = 2;
     private static final Integer STARTHOUR = 2;
     private static final Integer ENDHOUR = 3;
+    private static final int RATING = 4;
 
     @PersistenceContext
     private EntityManager em;
@@ -61,11 +62,16 @@ public class CourseHibernateDaoTest {
 
     private Subject subjectTest;
 
+    private Course courseTest;
+
+    private User userTest;
+
     @Before
     public void setUp(){
         jdbcTemplate = new JdbcTemplate(dataSource);
         subjectTest = em.find(Subject.class, SUBJECT_ID);
         professorTest = em.find(Professor.class, PROFESSOR_ID);
+        userTest = em.find(User.class, USER_ID);
     }
 
     public void cleanDatabase() {
@@ -210,6 +216,49 @@ public class CourseHibernateDaoTest {
         final List<Course> courses = courseDao.filterByAreaId(INVALID_ID, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(0, courses.size());
+    }
+
+    @Test
+    public void testDeleteValid() {
+
+        courseTest = new Course(professorTest, subjectTest, DESCRIPTION, PRICE);
+
+        final boolean deleted = courseDao.delete(courseTest);
+        em.flush();
+
+        assertTrue(deleted);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "courses",
+                "user_id = " + PROFESSOR_ID + " AND subject_id = " + SUBJECT_ID));
+
+    }
+
+    @Test
+    public void testModifyValid() {
+
+        courseTest = new Course(professorTest, subjectTest, DESCRIPTION, PRICE);
+        courseTest.setComments(new LinkedList<>());
+
+        final Course modified = courseDao.modify(courseTest, NEW_DESCRIPTION, NEW_PRICE);
+        em.flush();
+
+        assertNotNull(modified);
+        assertEquals(NEW_DESCRIPTION, modified.getDescription());
+        assertEquals(NEW_PRICE, modified.getPrice());
+    }
+
+    @Test
+    public void testCommentValid() {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "comments");
+        courseTest = new Course(professorTest, subjectTest, DESCRIPTION, PRICE);
+
+        final Comment comment = courseDao.create(userTest, DESCRIPTION, courseTest, RATING);
+        em.flush();
+
+        assertNotNull(comment);
+        assertEquals(DESCRIPTION, comment.getComment());
+        assertEquals(RATING, comment.getRating().intValue());
+        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "comments"));
+
     }
 
     @After
