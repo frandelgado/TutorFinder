@@ -43,6 +43,7 @@ public class ProfessorHibernateDaoTest {
 
     private JdbcTemplate jdbcTemplate;
 
+    private Professor modifyTest;
 
     private static final String NAME = "Juan";
     private static final String SURNAME = "lopez";
@@ -51,7 +52,9 @@ public class ProfessorHibernateDaoTest {
     private static final String PASSWORD = "dontbecruel";
     private static final Long ID = 2L;
     private static final String TEST_DESCRIPTION = "Juan es un profesor dedicado";
+    private static final String NEW_TEST_DESCRIPTION = "Juan no es un profesor dedicado";
     private static final byte[] TEST_IMAGE = new byte[1];
+    private static final byte[] NEW_TEST_IMAGE = {1};
     private static final Long INVALID_ID = 666L;
     private static final String INVALID_USERNAME = "InvalidTestUsername";
     private static final String INVALID_FULL_NAME = "InvalidTestFullName";
@@ -152,6 +155,17 @@ public class ProfessorHibernateDaoTest {
         final List<Professor> professors = professorDao.filterByFullName(INVALID_FULL_NAME, LIMIT, OFFSET);
         assertNotNull(professors);
         assertEquals(0,professors.size());
+    }
+
+    @Test
+    public void testModifyDescription() {
+
+        modifyTest = new Professor(ID, USERNAME, NAME, SURNAME, PASSWORD, EMAIL, TEST_DESCRIPTION, TEST_IMAGE);
+
+        Professor professor = professorDao.modify(modifyTest, NEW_TEST_DESCRIPTION, null);
+        assertNotNull(professor);
+        assertEquals(USERNAME, professor.getUsername());
+        assertEquals(NEW_TEST_DESCRIPTION, professor.getDescription());
     }
 
 
