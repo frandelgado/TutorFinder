@@ -2,6 +2,10 @@ package ar.edu.itba.paw.models;
 
 import java.util.List;
 
+/**
+ * No se puede cambiar a generic el tipo de los parametros porque algunos son de tipo Double, otros String
+ */
+
 public class Filter {
 
     final String query;

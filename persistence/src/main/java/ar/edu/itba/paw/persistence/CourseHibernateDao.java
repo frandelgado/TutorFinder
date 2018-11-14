@@ -87,6 +87,8 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public Comment create(final User creator, final String text, final Course course, final int rating) {
+        LOGGER.trace("Creating comment for course taught by professor with id {} and subject {}, from user with id {}",
+                course.getProfessor().getId(), course.getSubject().getId(), creator.getId());
         final LocalDateTime currentTime = LocalDateTime.now();
         final Comment comment = new Comment(creator, course, text, currentTime, rating);
         em.persist(comment);
@@ -95,6 +97,8 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public List<Comment> getComments(final Course course, final int limit, final int offset) {
+        LOGGER.trace("Getting comments for course taught by professor with id {} and subject {}",
+                course.getProfessor().getId(), course.getSubject().getId());
         final TypedQuery<Comment> query = em.createQuery("from Comment as c where c.course = :course " +
                 "order by c.created", Comment.class);
         query.setParameter("course", course);
@@ -105,6 +109,8 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public boolean delete(final Course course) {
+        LOGGER.trace("Deleting course taught by professor with id {} and subject {}",
+                course.getProfessor().getId(), course.getSubject().getId());
         final Course toDelete = em.merge(course);
         em.remove(toDelete);
 
@@ -113,6 +119,8 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public Course modify(final Course course, final String description, final Double price) {
+        LOGGER.trace("Modifying course taught by professor with id {} and subject {}",
+                course.getProfessor().getId(), course.getSubject().getId());
         course.setDescription(description);
         course.setPrice(price);
         return em.merge(course);

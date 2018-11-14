@@ -5,6 +5,8 @@ import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,6 +18,8 @@ import java.util.Optional;
 @Repository
 public class ProfessorHibernateDao implements ProfessorDao {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfessorHibernateDao.class);
+
     @PersistenceContext
     private EntityManager em;
 
@@ -23,6 +27,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
     public Professor create(final User user, final String description, final byte[] picture) {
 
         final boolean exists = em.find(User.class, user.getId()) != null;
+        LOGGER.trace("Adding user with id {} as professor", user.getId());
 
         final Professor professor = new Professor(user.getId(), user.getUsername(), user.getName(),
                 user.getLastname(), user.getPassword(), user.getEmail(), description, picture);
@@ -42,6 +47,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
 
     @Override
     public Professor modify(final Professor professor, final String description, final byte[] picture) {
+        LOGGER.trace("Modifying professor with id {}", professor.getId());
         em.merge(professor);
         if(description != null){
             professor.setDescription(description);
@@ -54,12 +60,14 @@ public class ProfessorHibernateDao implements ProfessorDao {
 
     @Override
     public Optional<Professor> findById(final Long professor_id) {
+        LOGGER.trace("Querying for professor with id {}", professor_id);
         final Professor professor = em.find(Professor.class, professor_id);
         return Optional.ofNullable(professor);
     }
 
     @Override
     public Optional<Professor> findByUsername(final String username) {
+        LOGGER.trace("Querying for professor with username {}", username);
         final TypedQuery<Professor> query = em.createQuery("from Professor as p where p.username = :username",
                 Professor.class);
         query.setParameter("username", username);
@@ -69,6 +77,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
     @Override
     public List<Professor> filterByFullName(final String fullName, final int limit, final int offset) {
         final String search = "%" + fullName + "%";
+        LOGGER.trace("Querying for professor with full name containing {}", fullName);
         final TypedQuery<Professor> query = em.createQuery("from Professor as p where upper(concat(p.name, ' ', p.lastname)) like upper(:name)" +
                 "order by p.id", Professor.class);
         query.setParameter("name", search);
@@ -82,8 +91,8 @@ public class ProfessorHibernateDao implements ProfessorDao {
         return em.merge(professor);
     }
 
-    public List<ClassReservation> getPagedClassRequests(Long professorId, int limit, int offset) {
-        //TODO sort first pending, then accepted and then declined.
+    public List<ClassReservation> getPagedClassRequests(final Long professorId, final int limit, final int offset) {
+        LOGGER.trace("Getting class requests for professor with id {}", professorId);
         final TypedQuery<ClassReservation> query = em.createQuery("from ClassReservation as c where c.course.professor.id= :professor_id " +
                 "order by c.status desc", ClassReservation.class);
         query.setParameter("professor_id", professorId);
