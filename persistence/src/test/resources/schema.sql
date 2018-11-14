@@ -98,3 +98,8 @@ INSERT into reset_password_tokens (id, user_id, token, expires) values (1,5,'123
 INSERT into reset_password_tokens (id, user_id, token, expires) values (2,2,'123e4567-e89b-10d1-a112-131415161718', '2017-09-21 05:08:26.793');
 INSERT into course_requests (id, comment, endtime, starttime, status, course_user_id, course_subject_id, student_user_id)
             values (1, '', '2018-09-21 05:00:00.000', '2018-09-21 06:00:00.000', 2, 5, 1, 2);
+
+INSERT into course_requests (id, endtime, starttime, status, course_user_id, course_subject_id, student_user_id) values
+(1, 2018-01-24 17:00:00, 2018-01-24 12:00:00, 0, 2, 2, 1),
+(1, 2018-01-24 17:00:00, 2018-01-24 12:00:00, 1, 2, 2, 1),
+(1, 2018-01-24 17:00:00, 2018-01-24 12:00:00, 2, 2, 2, 1);
