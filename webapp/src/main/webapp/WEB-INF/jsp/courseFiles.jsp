@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
+    <script src="<c:url value="/resources/js/courseFile.js" />"></script>
     <title>Tu Teoria | <spring:message code="course.files.title"/></title>
 </head>
 
@@ -47,7 +48,6 @@
                 <a class="search-result-title">
                     <c:out value="${file.name}" escapeXml="true" /></a>
                 <a class="search-result-professor" ></a>
-                    <%--<spring:message code="reservation.professor" arguments="${file.type}" htmlEscape="true" /></a>--%>
                 <a class="search-result-specs"></a>
                 <a class="search-result-description"><spring:message code="description"/><c:out value="${file.description}" escapeXml="true" /></a>
                 <a class="search-result-status"></a>
@@ -65,14 +65,16 @@
                 <div>
                     <form:label cssClass="label" path="file"><spring:message code="course.fileUpload"/></form:label>
                     <form:input type="file" path="file" id="file" class="input-request"/>
-                    <form:errors path="file" class="help-inline"/>
+                    <form:errors cssClass="error-text" path="file" element="p"/>
+                    <p id="fileError" class="error-text"><spring:message code="FileSize.uploadClassFileForm.file" /></p>
                 </div>
                 <div>
                     <form:label cssClass="label" path="description"><spring:message code="course.description"/></form:label>
                     <form:textarea type="text" path="description" id="description" class="input-request chat-box" rows="5" cols="5"/>
+                    <form:errors cssClass="error-text" path="description" element="p"/>
                 </div>
                 <div class="button-container">
-                    <input class="button-2" type="submit" ${disabled} value="<spring:message code="upload"/>"/>
+                    <input class="button-2" type="submit" id="uploadSubmit" value="<spring:message code="upload"/>"/>
                 </div>
             </form:form>
         </div>

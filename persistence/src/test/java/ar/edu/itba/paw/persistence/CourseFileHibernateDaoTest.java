@@ -39,7 +39,6 @@ public class CourseFileHibernateDaoTest {
     private static final String TYPE = "xml";
     private static final byte[] TEST_FILE = {1};
     private static final Double PRICE = 240.0;
-    private static final long ID = 1L;
 
     @PersistenceContext
     private EntityManager em;
@@ -81,15 +80,6 @@ public class CourseFileHibernateDaoTest {
         assertEquals(FILENAME, file.getName());
         assertEquals(DESCRIPTION, file.getDescription());
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "course_files"));
-    }
-
-    @Test
-    public void testDelete() {
-
-        cfd.deleteById(ID);
-        em.flush();
-
-        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "course_files"));
     }
 
     @After
