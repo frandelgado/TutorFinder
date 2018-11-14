@@ -33,9 +33,6 @@ public class CourseFileServiceImpl implements CourseFileService {
     @Autowired
     private CourseService cs;
 
-
-
-
     @Override
     public List<CourseFile> findForCourse(final Course course, final User user) throws UserAuthenticationException {
         if(!canReadFiles(course, user)) {
@@ -62,9 +59,10 @@ public class CourseFileServiceImpl implements CourseFileService {
     public CourseFile save(final Long professorId, final Long subjectId, final User currentUser,
                            final String fileName, final String description, final String contentType,
                            final byte[] file) throws UserAuthenticationException {
-
+        
         LOGGER.debug("Saving file with name {} for profesor with id {} and subject id {}", fileName, professorId, subjectId);
         final Course course = cs.findCourseByIds(professorId, subjectId);
+
 
         if(course.getProfessor().getId().compareTo(currentUser.getId()) != 0) {
             LOGGER.error("User attempted to save file without permission");
