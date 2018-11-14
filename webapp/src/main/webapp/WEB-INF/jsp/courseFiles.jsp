@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
-    <title>Tu Teoria | <spring:message code="course.title"/></title>
+    <title>Tu Teoria | <spring:message code="course.files.title"/></title>
 </head>
 
 <body class="body">

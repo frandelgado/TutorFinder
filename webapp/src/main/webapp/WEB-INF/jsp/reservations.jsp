@@ -18,7 +18,7 @@
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
     <script src="<c:url value="/resources/js/searchForm.js" />"></script>
 
-    <title>Tu Teoria | <spring:message code="search.results" /> </title>
+    <title>Tu Teoria | <spring:message code="reservations.title" /> </title>
 </head>
 
 <body class="body reservations">
@@ -39,6 +39,7 @@
                             <c:when test="${reservation.status == 0}">
                                 <div class="button-2 relative" type="submit">
                                     <a class="class-button" href="<c:url value="/courseFiles?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
+                                    <spring:message code="files"/>
                                 </div>
                             </c:when>
                             <c:otherwise>

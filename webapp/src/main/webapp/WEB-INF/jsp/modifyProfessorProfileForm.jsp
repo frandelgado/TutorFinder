@@ -16,7 +16,7 @@
     <script src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>" ></script>
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
     <script src="<c:url value="/resources/js/registerAsProfessor.js"/>" ></script>
-    <title>Tu Teoria | <spring:message code="register"/></title>
+    <title>Tu Teoria | <spring:message code="modify.professor"/></title>
 </head>
 
 <body class="register">

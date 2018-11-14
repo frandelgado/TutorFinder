@@ -18,7 +18,7 @@
     <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
     <script src="<c:url value="/resources/js/searchForm.js" />"></script>
 
-    <title>Tu Teoria | <spring:message code="search.results" /> </title>
+    <title>Tu Teoria | <spring:message code="classRequests.title" /> </title>
 </head>
 
 <body class="body">
