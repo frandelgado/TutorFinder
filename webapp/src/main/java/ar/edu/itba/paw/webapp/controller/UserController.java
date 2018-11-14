@@ -217,7 +217,7 @@ public class UserController extends BaseController{
         final Professor professor;
         try {
             professor = ps.modify(loggedUser.getId(), form.getDescription(), form.getPic().getBytes());
-        } catch (IOException e) {
+        } catch (IOException | DownloadFileException e) {
             return redirectToErrorPage("fileUploadError");
         } catch (NonexistentProfessorException | ProfessorWithoutUserException e) {
             return redirectToErrorPage("oops");

@@ -178,7 +178,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Professor modify(final Long userId, final String description, final byte[] picture)
-            throws ProfessorWithoutUserException, NonexistentProfessorException {
+            throws ProfessorWithoutUserException, NonexistentProfessorException, DownloadFileException {
         LOGGER.debug("Editing professor with id {}", userId);
 
         Optional<Professor> professor = professorDao.findById(userId);
@@ -194,12 +194,20 @@ public class ProfessorServiceImpl implements ProfessorService {
                         professor.get().getId(), description.length());
             }
 
-            if(picture == null || picture.length <= 0) {
+            if(picture == null || picture.length < 1) {
                 LOGGER.debug("Attempted to modify profile for professor with id {} with no profile picture, " +
                                 "keeping old one",
                         professor.get().getId());
             } else {
-                newPicture = picture;
+                try {
+                    newPicture = cropImageSquare(picture);
+                } catch (IOException e) {
+                    throw new DownloadFileException();
+                }
+
+                if(newPicture == null) {
+                    throw new DownloadFileException();
+                }
             }
 
             return professorDao.modify(professor.get(), newDescription, newPicture);
