@@ -102,6 +102,9 @@ public class ClassReservationServiceImpl implements ClassReservationService {
 
     @Override
     public boolean hasAcceptedReservation(final User student, final Course course) {
+        if(student == null) {
+            return false;
+        }
         LOGGER.debug("Verifying if user with id {} has an accepted reservation for course" +
                         " taught by professor with id {} of subject {}", course.getProfessor().getId(),
                 course.getSubject().getId(), student.getId());
