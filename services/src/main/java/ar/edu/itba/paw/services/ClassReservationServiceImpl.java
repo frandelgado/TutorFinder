@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.joda.time.LocalDateTime;
 
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -61,12 +62,8 @@ public class ClassReservationServiceImpl implements ClassReservationService {
 
         final Professor professor = course.getProfessor();
 
-        final int start = startHour.getHourOfDay();
-        final int end = endHour.getHourOfDay();
-        final Integer day = startHour.getDayOfWeek();
-
-        final boolean inRange = IntStream.range(start, end)
-                .allMatch(i -> professorHasTimeslot(professor, day, i));
+        final boolean inRange = professorHasRange(professor,
+                startHour.getDayOfWeek(), startHour.getHourOfDay(), endHour.getHourOfDay());
 
         if(!inRange) {
             LOGGER.error("Student attempted to reserve a time range not allowed by professor");
@@ -130,14 +127,13 @@ public class ClassReservationServiceImpl implements ClassReservationService {
         return crd.findById(classReservationId);
     }
 
-    private boolean professorHasTimeslot(final Professor professor, final int day, final int hour) {
+    private boolean professorHasRange(final Professor professor, final int day,
+                                      final int start, final int end) {
 
-        if(professor == null) {
-            return false;
-        }
-
-        return professor.getTimeslots().stream()
-                .anyMatch(timeslot -> timeslot.getDay().equals(day) && timeslot.getHour().equals(hour));
+        return IntStream.range(start, end)
+                .allMatch(i -> professor.getTimeslots().stream()
+                        .anyMatch(timeslot -> timeslot.getDay().equals(day)
+                                && timeslot.getHour().equals(i)));
     }
 
 }
