@@ -17,15 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
-
+import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.*;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HibernateTestConfig.class)
@@ -234,6 +230,20 @@ public class CourseHibernateDaoTest {
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "courses",
                 "user_id = " + PROFESSOR_ID + " AND subject_id = " + SUBJECT_ID));
 
+    }
+
+    @Test
+    public void testModifyValid() {
+
+        courseTest = new Course(professorTest, subjectTest, DESCRIPTION, PRICE);
+        courseTest.setComments(new LinkedList<>());
+
+        final Course modified = courseDao.modify(courseTest, NEW_DESCRIPTION, NEW_PRICE);
+        em.flush();
+
+        assertNotNull(modified);
+        assertEquals(NEW_DESCRIPTION, modified.getDescription());
+        assertEquals(NEW_PRICE, modified.getPrice());
     }
 
     @Test
