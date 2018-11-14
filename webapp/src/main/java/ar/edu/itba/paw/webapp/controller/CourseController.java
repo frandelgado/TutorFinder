@@ -222,7 +222,7 @@ public class CourseController extends BaseController{
                 day.getDayOfMonth(), form.getEndHour(), 0);
 
         if(!startTime.isAfter(LocalDateTime.now())) {
-            errors.rejectValue("endHour", "futureDateError");
+            errors.rejectValue("day", "futureDateError");
             return reserveClass(user, form, professorId, subjectId);
         }
 

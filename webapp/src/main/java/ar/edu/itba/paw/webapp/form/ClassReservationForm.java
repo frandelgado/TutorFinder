@@ -20,7 +20,6 @@ public class ClassReservationForm {
     @Max(24)
     private Integer endHour;
 
-    @Future
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
     private Date day;
