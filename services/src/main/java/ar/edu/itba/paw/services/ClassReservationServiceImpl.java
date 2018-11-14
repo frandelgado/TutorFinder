@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.exceptions.NonExistentUserException;
+import ar.edu.itba.paw.exceptions.NonexistentCourseException;
 import ar.edu.itba.paw.exceptions.SameUserException;
 import ar.edu.itba.paw.exceptions.UserAuthenticationException;
 import ar.edu.itba.paw.interfaces.persistence.ClassReservationDao;
 import ar.edu.itba.paw.interfaces.service.ClassReservationService;
-import ar.edu.itba.paw.interfaces.service.ProfessorService;
+import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.Course;
@@ -28,11 +30,27 @@ public class ClassReservationServiceImpl implements ClassReservationService {
     @Autowired
     private UserService us;
 
+    @Autowired
+    private CourseService cs;
+
 
     @Override
     @Transactional
-    public ClassReservation reserve(final LocalDateTime startHour, final LocalDateTime endHour, final Course course, final Long studentId) throws SameUserException {
+    public ClassReservation reserve(final LocalDateTime startHour, final LocalDateTime endHour,
+                                    final Long professorId, final Long subjectId,
+                                    final Long studentId) throws SameUserException, NonexistentCourseException, NonExistentUserException {
         final User student = us.findUserById(studentId);
+        final Course course = cs.findCourseByIds(professorId, subjectId);
+
+        if(!startHour.isAfter(LocalDateTime.now()) || !endHour.isAfter(startHour)) {
+            LOGGER.error("Attempted to reserve class with invalid times");
+            return null;
+        }
+
+        if(course == null) {
+            LOGGER.error("Attempted to reserve class for nonExistentCourse");
+            throw new NonexistentCourseException();
+        }
 
         if(course.getProfessor().getId().equals(studentId)){
             LOGGER.error("Professor with id {} attempted to reserve his own class", studentId);
@@ -41,7 +59,7 @@ public class ClassReservationServiceImpl implements ClassReservationService {
 
         if(student == null) {
             LOGGER.error("NonExistent student attempted to reserve class");
-            return null;
+            throw new NonExistentUserException();
         }
         LOGGER.debug("Making reservation for course taught by professor with id {} of subject {} by student {}",
                 course.getProfessor().getId(), course.getSubject().getId(), studentId);
@@ -51,7 +69,7 @@ public class ClassReservationServiceImpl implements ClassReservationService {
     @Override
     @Transactional
     public ClassReservation confirm(final Long classReservationId, final Long professorId, final String comment) throws UserAuthenticationException {
-        ClassReservation classReservation = findById(classReservationId);
+        final ClassReservation classReservation = findById(classReservationId);
         if(classReservation == null) {
             LOGGER.error("Attempted to confirm non existent class reservation");
             return null;

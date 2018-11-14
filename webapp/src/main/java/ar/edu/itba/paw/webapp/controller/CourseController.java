@@ -206,10 +206,6 @@ public class CourseController extends BaseController{
                                      @RequestParam("professor") final long professorId,
                                      @RequestParam("subject") final long subjectId) {
 
-        final Course course = courseService.findCourseByIds(professorId, subjectId);
-        if(course == null) {
-            return redirectToErrorPage("nonExistentCourse");
-        }
         if(errors.hasErrors() || !form.validForm()) {
             if(!form.validForm()) {
                 errors.rejectValue("endHour", "profile.add_schedule.timeError");
@@ -230,19 +226,23 @@ public class CourseController extends BaseController{
             return reserveClass(user, form, professorId, subjectId);
         }
 
-        ClassReservation reservation = null;
+        final ClassReservation reservation;
         try {
             reservation = classReservationService.reserve(startTime, endTime,
-                    course, user.getId());
+                    professorId, subjectId, user.getId());
         } catch (SameUserException e) {
             return redirectToErrorPage("sameUserReservation");
+        } catch (NonexistentCourseException e) {
+            return redirectToErrorPage("nonExistentCourse");
+        } catch (NonExistentUserException e) {
+            return redirectToErrorPage("nonExistentUser");
         }
 
-        if(reservation == null){
-            return redirectToErrorPage("");
+        if(reservation == null) {
+            return reserveClass(user, form, professorId, subjectId);
         }
-        return redirectWithNoExposedModalAttributes("/Course/?professor=" + professorId
-                + "&subject=" + subjectId);
+
+        return redirectWithNoExposedModalAttributes("/reservations");
     }
 
 
@@ -250,10 +250,15 @@ public class CourseController extends BaseController{
     public ModelAndView denyClassRequest(@ModelAttribute("currentUser") final User currentUser,
                                          @RequestParam("classReservation") final long classReservationId) {
 
+        final ClassReservation classReservation;
         try {
-            classReservationService.deny(classReservationId, currentUser.getId(), null);
+            classReservation = classReservationService.deny(classReservationId, currentUser.getId(), null);
         } catch (UserAuthenticationException e) {
             return redirectToErrorPage("403");
+        }
+
+        if(classReservation == null) {
+            return redirectToErrorPage("nonExistentClassReservation");
         }
 
         return redirectWithNoExposedModalAttributes("/classRequests");
@@ -263,10 +268,15 @@ public class CourseController extends BaseController{
     public ModelAndView approveClassRequest(@ModelAttribute("currentUser") final User currentUser,
                                             @RequestParam("classReservation") final long classReservationId) {
 
+        final ClassReservation classReservation;
         try {
-            classReservationService.confirm(classReservationId, currentUser.getId(), null);
+            classReservation = classReservationService.confirm(classReservationId, currentUser.getId(), null);
         } catch (UserAuthenticationException e) {
             return redirectToErrorPage("403");
+        }
+
+        if(classReservation == null) {
+            return redirectToErrorPage("nonExistentClassReservation");
         }
 
         return redirectWithNoExposedModalAttributes("/classRequests");

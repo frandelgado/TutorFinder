@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
-import ar.edu.itba.paw.exceptions.SameUserException;
-import ar.edu.itba.paw.exceptions.UserAuthenticationException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Professor;
@@ -12,8 +10,9 @@ import org.joda.time.LocalDateTime;
 
 public interface ClassReservationService {
 
-    ClassReservation reserve(final LocalDateTime startTime, final LocalDateTime endTime,
-                             final Course course, final Long studentId) throws SameUserException;
+    ClassReservation reserve(LocalDateTime startHour, LocalDateTime endHour,
+                             Long professorId, Long subjectId,
+                             Long studentId) throws SameUserException, NonexistentCourseException, NonExistentUserException;
 
     ClassReservation confirm(final Long classReservationId, final Long professorId, final String comment) throws UserAuthenticationException;
 
