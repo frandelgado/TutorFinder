@@ -4,6 +4,7 @@ import ar.edu.itba.paw.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -71,6 +72,12 @@ public class ErrorController extends BaseController{
     public ModelAndView handleargumentTypeException() {
         return redirectToErrorPage("invalidArgument");
     }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ModelAndView handleMethodNotSupportedException() {
+        return redirectToErrorPage("methodNotSupported");
+    }
+
 
     @ExceptionHandler(DownloadFileException.class)
     public ModelAndView handleDownloadFileException() {
