@@ -13,7 +13,8 @@ public interface CourseFileService {
 
     CourseFile findByIdForUser(long id, User user) throws UserAuthenticationException;
 
-    void save(CourseFile document);
+    CourseFile save(final Long professorId, final Long subjectId, final User currentUser, final String fileName,
+                    final String description, final String contentType, final byte[] file) throws UserAuthenticationException;
 
     void deleteById(long id, User user) throws UserAuthenticationException;
 }

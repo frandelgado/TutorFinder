@@ -4,6 +4,7 @@ import ar.edu.itba.paw.exceptions.UserAuthenticationException;
 import ar.edu.itba.paw.interfaces.persistence.CourseFileDao;
 import ar.edu.itba.paw.interfaces.service.ClassReservationService;
 import ar.edu.itba.paw.interfaces.service.CourseFileService;
+import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.CourseFile;
 import ar.edu.itba.paw.models.User;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -27,6 +29,11 @@ public class CourseFileServiceImpl implements CourseFileService {
 
     @Autowired
     private ClassReservationService crs;
+
+    @Autowired
+    private CourseService cs;
+
+
 
 
     @Override
@@ -52,9 +59,26 @@ public class CourseFileServiceImpl implements CourseFileService {
     }
 
     @Override
-    public void save(final CourseFile document) {
-        LOGGER.debug("Saving file with name {}", document.getName());
-        cfd.save(document);
+    public CourseFile save(final Long professorId, final Long subjectId, final User currentUser,
+                           final String fileName, final String description, final String contentType,
+                           final byte[] file) throws UserAuthenticationException {
+
+            LOGGER.debug("Saving file with name {}", fileName);
+        Course course = cs.findCourseByIds(professorId, subjectId);
+
+        if(course.getProfessor().getId().compareTo(currentUser.getId()) != 0) {
+            throw new UserAuthenticationException();
+        }
+
+        if(fileName == null || fileName.length() < 1 || description == null ||
+                contentType == null || file == null || file.length < 1){
+            return null;
+        }
+
+        if(description.length() > 255 || description.length() < 5){
+            return null;
+        }
+        return cfd.save(course, fileName, description, contentType, file);
     }
 
     @Override

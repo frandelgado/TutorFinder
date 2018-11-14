@@ -11,7 +11,7 @@ public interface CourseFileDao {
 
     CourseFile findById(long id);
 
-    void save(CourseFile document);
+    CourseFile save(final Course course, final String fileName, final String description, final String contentType, final byte[] file);
 
     void deleteById(long id);
 }

@@ -32,8 +32,20 @@ public class CourseFileHibernateDao implements CourseFileDao {
     }
 
     @Override
-    public void save(CourseFile document) {
+    public CourseFile save(final Course course, final String fileName, final String description, final String contentType, final byte[] file) {
+
+        em.merge(course);
+        CourseFile document = new CourseFile();
+
+        document.setName(fileName);
+        document.setDescription(description);
+        document.setType(contentType);
+        document.setContent(file);
+        document.setCourse(course);
+
         em.persist(document);
+
+        return document;
     }
 
     @Override

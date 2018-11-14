@@ -91,28 +91,24 @@ public class CourseFileController extends BaseController {
                                    @RequestParam("subject") final long subjectId,
                                    @ModelAttribute("currentUser") final User currentUser) {
 
+        CourseFile courseFile = null;
         if(result.hasErrors()) {
             return getCourseFiles(professorId, subjectId, currentUser, form);
         }
-        
-        final Course course = cs.findCourseByIds(professorId, subjectId);
 
-        if(course.getProfessor().getId().compareTo(currentUser.getId()) != 0) {
+        try {
+            courseFile = cfs.save(professorId, subjectId, currentUser, form.getFile().getOriginalFilename(),
+                    form.getDescription(), form.getFile().getContentType(), form.getFile().getBytes());
+        } catch (IOException e) {
+            return redirectToErrorPage("oops");
+        } catch (UserAuthenticationException e) {
             return redirectToErrorPage("403");
         }
 
-        CourseFile document = new CourseFile();
-
-        document.setName(form.getFile().getOriginalFilename());
-        document.setDescription(form.getDescription());
-        document.setType(form.getFile().getContentType());
-        try {
-            document.setContent(form.getFile().getBytes());
-        } catch (IOException e) {
-            return redirectToErrorPage("somethingWentWrong");
+        if(courseFile == null) {
+            return getCourseFiles(professorId, subjectId, currentUser, form);
         }
-        document.setCourse(course);
-        cfs.save(document);
+
         return redirectWithNoExposedModalAttributes("/courseFiles?professor=" + professorId
                 +"&subject=" + subjectId);
     }

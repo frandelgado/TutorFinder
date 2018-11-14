@@ -105,7 +105,7 @@ public class ProfessorServiceImpl implements ProfessorService {
             LOGGER.error("Attempted to create professor with invalid description of size {}", description.length());
             return null;
         }
-        if(picture == null) {
+        if(picture == null || picture.length < 1) {
             LOGGER.error("Attempted to create professor without profile picture");
             return null;
         }
