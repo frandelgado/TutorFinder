@@ -116,7 +116,7 @@ public class ProfessorServiceImplTest {
     }
 
     @Test
-    public void testCreateValid() throws ProfessorWithoutUserException {
+    public void testCreateValid() throws ProfessorWithoutUserException, DownloadFileException {
         final User user = mock(User.class);
         when(user.getId()).thenReturn(ID);
         when(userDao.findById(ID)).thenReturn(Optional.of(user));
@@ -127,7 +127,7 @@ public class ProfessorServiceImplTest {
     }
 
     @Test(expected = ProfessorWithoutUserException.class)
-    public void testCreateInvalidUser() throws ProfessorWithoutUserException {
+    public void testCreateInvalidUser() throws ProfessorWithoutUserException, DownloadFileException {
         when(userDao.findById(INVALID_ID)).thenReturn(Optional.empty());
 
         final Professor professor = professorService.create(INVALID_ID, DESCRIPTION, TEST_IMAGE);

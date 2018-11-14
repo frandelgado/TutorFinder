@@ -187,9 +187,10 @@ public class UserController extends BaseController{
         final Professor p;
         try {
             p = ps.create(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
-        } catch (IOException e) {
+        } catch (IOException | DownloadFileException e) {
             return redirectToErrorPage("fileUploadError");
         }
+
         if(p == null) {
             return registerProfessor(form);
         }

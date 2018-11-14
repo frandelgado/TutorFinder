@@ -88,7 +88,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     @Transactional
     public Professor create(final Long userId, final String description, final byte[] picture)
-            throws ProfessorWithoutUserException {
+            throws ProfessorWithoutUserException, DownloadFileException {
         LOGGER.debug("Adding user with id {} as professor", userId);
         final User user = userDao.findById(userId).orElse(null);
         if(user == null) {
@@ -110,18 +110,17 @@ public class ProfessorServiceImpl implements ProfessorService {
             return null;
         }
 
-        byte[] newPicture = null;
+        final byte[] newPicture;
         try {
-            BufferedImage croppedImage = cropImageSquare(picture);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(croppedImage,"png", baos);
-            baos.flush();
-            newPicture = baos.toByteArray();
-            baos.close();
+            newPicture = cropImageSquare(picture);
+        } catch (IOException e) {
+            throw new DownloadFileException();
         }
-        catch (IOException e){
-            //TODO handle crop errors
+
+        if(newPicture == null) {
+            throw new DownloadFileException();
         }
+
 
         final Professor professor = professorDao.create(user, description, newPicture);
         if(professor == null) {
@@ -132,10 +131,17 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
 
-    private BufferedImage cropImageSquare(final byte[] image) throws IOException {
+    private byte[] cropImageSquare(final byte[] image) throws IOException {
+
         // Get a BufferedImage object from a byte array
         InputStream in = new ByteArrayInputStream(image);
         BufferedImage originalImage = ImageIO.read(in);
+
+        if(originalImage == null) {
+            return null;
+        }
+
+        final byte[] newPicture;
 
         // Get image dimensions
         int height = originalImage.getHeight();
@@ -143,7 +149,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
         // The image is already a square
         if (height == width) {
-            return originalImage;
+            return image;
         }
 
         // Compute the size of the square
@@ -161,7 +167,13 @@ public class ProfessorServiceImpl implements ProfessorService {
                 squareSize             // height
         );
 
-        return croppedImage;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(croppedImage,"png", baos);
+        baos.flush();
+        newPicture = baos.toByteArray();
+        baos.close();
+
+        return newPicture;
     }
 
     @Override
