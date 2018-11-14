@@ -4,6 +4,8 @@ import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.models.*;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -17,11 +19,14 @@ import java.util.stream.IntStream;
 @Repository
 public class CourseHibernateDao implements CourseDao {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(CourseHibernateDao.class);
+
     @PersistenceContext
     private EntityManager em;
 
     @Override
     public Optional<Course> findByIds(final long professor_id, final long subject_id) {
+        LOGGER.trace("Querying for course with professor_id {} and subject_id {}", professor_id, subject_id);
         final TypedQuery<Course> query = em.createQuery("from Course as c " +
                 "where c.professor.id = :professor and c.subject.id = :subject", Course.class);
         query.setParameter("professor", professor_id);
@@ -31,6 +36,7 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public List<Course> findByProfessorId(final long professor_id, final int limit, final int offset) {
+        LOGGER.trace("Querying for courses belonging to a professor with id {}", professor_id);
         final TypedQuery<Course> query = em.createQuery("from Course as c where c.professor.id = :id " +
                 "order by c.professor.id, c.subject.id", Course.class);
         query.setParameter("id", professor_id);
@@ -41,6 +47,7 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public List<Course> filterByAreaId(final long areaId, final int limit, final int offset) {
+        LOGGER.trace("Querying for courses from area with id {}", areaId);
         final TypedQuery<Course> query = em.createQuery("from Course as c where c.subject.area.id = :id " +
                 "order by c.professor.id, c.subject.id", Course.class);
         query.setParameter("id", areaId);
@@ -64,6 +71,7 @@ public class CourseHibernateDao implements CourseDao {
 
     @Override
     public Course create(final Professor professor, final Subject subject, final String description, final Double price) throws CourseAlreadyExistsException {
+        LOGGER.trace("Inserting course with user_id {} and subject_id {}", professor.getId(), subject.getId());
         final Course course = new Course(professor, subject, description, price);
         try {
             em.persist(course);
@@ -72,6 +80,7 @@ public class CourseHibernateDao implements CourseDao {
         }
         //TODO specify exception
         catch (PersistenceException e) {
+            LOGGER.error("Course with user_id {} and subject_id {} already exists", professor.getId(), subject.getId());
             throw new CourseAlreadyExistsException();
         }
     }
