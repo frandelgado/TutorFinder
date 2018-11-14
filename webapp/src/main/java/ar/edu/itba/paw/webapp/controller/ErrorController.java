@@ -71,4 +71,9 @@ public class ErrorController extends BaseController{
     public ModelAndView handleargumentTypeException() {
         return redirectToErrorPage("invalidArgument");
     }
+
+    @ExceptionHandler(DownloadFileException.class)
+    public ModelAndView handleDownloadFileException() {
+        return redirectToErrorPage("downloadFile");
+    }
 }

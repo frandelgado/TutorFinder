@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.DownloadFileException;
 import ar.edu.itba.paw.exceptions.UserAuthenticationException;
 import ar.edu.itba.paw.interfaces.service.CourseFileService;
 import ar.edu.itba.paw.interfaces.service.CourseService;
@@ -37,11 +38,11 @@ public class CourseFileController extends BaseController {
                                @RequestParam("subject") final long subjectId,
                                @ModelAttribute("currentUser") final User currentUser,
                                @ModelAttribute("uploadClassFileForm") final UploadClassFileForm form) {
-        Course course = cs.findCourseByIds(professorId, subjectId);
+        final Course course = cs.findCourseByIds(professorId, subjectId);
         if(course == null) {
             return  redirectToErrorPage("nonExistentCourse");
         }
-        List<CourseFile> courseFiles = null;
+        final List<CourseFile> courseFiles;
         try {
             courseFiles = cfs.findForCourse(course, currentUser);
         } catch (UserAuthenticationException e) {
@@ -56,10 +57,9 @@ public class CourseFileController extends BaseController {
     @RequestMapping(value = "/downloadFile", method = RequestMethod.GET)
     public void downloadFile(@RequestParam("courseFile")final long courseFileId,
                                      @ModelAttribute("currentUser") final User currentUser,
-                                     HttpServletResponse response,
-                                     HttpServletRequest request) {
+                                     HttpServletResponse response) throws DownloadFileException {
 
-        CourseFile courseFile;
+        final CourseFile courseFile;
         try {
             courseFile = cfs.findByIdForUser(courseFileId, currentUser);
         } catch (UserAuthenticationException e) {
@@ -78,7 +78,7 @@ public class CourseFileController extends BaseController {
         try {
             FileCopyUtils.copy(courseFile.getContent(), response.getOutputStream());
         } catch (IOException e) {
-            //TODO: handle error
+            throw new DownloadFileException();
         }
 
     }
@@ -94,7 +94,8 @@ public class CourseFileController extends BaseController {
         if(result.hasErrors()) {
             return getCourseFiles(professorId, subjectId, currentUser, form);
         }
-        Course course = cs.findCourseByIds(professorId, subjectId);
+        
+        final Course course = cs.findCourseByIds(professorId, subjectId);
 
         if(course.getProfessor().getId().compareTo(currentUser.getId()) != 0) {
             return redirectToErrorPage("403");
