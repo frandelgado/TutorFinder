@@ -83,7 +83,7 @@ public class EmailServiceImpl implements EmailService {
         final Context ctx = new Context();
         ctx.setVariable("mail", user.getEmail());
         ctx.setVariable("url", getContextUri() + "/resetPassword?token=" + token);
-        String SUBJECT = messageSource.getMessage("mail.restorepass.subject", null, LocaleContextHolder.getLocale());
+        final String subject = messageSource.getMessage("mail.restorepass.subject", null, LocaleContextHolder.getLocale());
 
         final String resource = htmlString(restorePassword);
 
@@ -94,7 +94,7 @@ public class EmailServiceImpl implements EmailService {
 
         final String html = resourceTemplateEngine.process(resource ,ctx);
         final MimeMessage mimeMessage = emailSender.createMimeMessage();
-        final MimeMessageHelper message = prepareMail(mimeMessage, SUBJECT, user.getEmail(), html);
+        final MimeMessageHelper message = prepareMail(mimeMessage, subject, user.getEmail(), html);
 
         if(message == null) {
             LOGGER.debug("Error creating Password Restore Email for user with id {}", user.getId());
@@ -116,7 +116,7 @@ public class EmailServiceImpl implements EmailService {
         ctx.setVariable("username", user.getUsername());
         ctx.setVariable("url", getContextUri());
         Locale locale = LocaleContextHolder.getLocale();
-        String REGISTRATION_SUBJECT = messageSource.getMessage("mail.registration.subject", null, locale);
+        final String subject = messageSource.getMessage("mail.registration.subject", null, locale);
 
         final String resource = htmlString(registrationMail);
 
@@ -127,7 +127,7 @@ public class EmailServiceImpl implements EmailService {
 
         final String html = resourceTemplateEngine.process(resource ,ctx);
         final MimeMessage mimeMessage = emailSender.createMimeMessage();
-        final MimeMessageHelper message = prepareMail(mimeMessage, REGISTRATION_SUBJECT, user.getEmail(), html);
+        final MimeMessageHelper message = prepareMail(mimeMessage, subject, user.getEmail(), html);
 
         if(message == null) {
             LOGGER.debug("Error creating Registration Email for user with id {}", user.getId());
@@ -150,7 +150,7 @@ public class EmailServiceImpl implements EmailService {
         ctx.setVariable("subject", conversation.getSubject().getName());
         ctx.setVariable("message", sentMessage.getText());
         ctx.setVariable("url", getContextUri() + "Conversation?id=" + conversation.getId());
-        final String SUBJECT = messageSource.getMessage("mail.newmessage.subject", null, LocaleContextHolder.getLocale());
+        final String subject = messageSource.getMessage("mail.newmessage.subject", null, LocaleContextHolder.getLocale());
 
         final String resource = htmlString(contactMail);
 
@@ -161,7 +161,7 @@ public class EmailServiceImpl implements EmailService {
 
         final String html = resourceTemplateEngine.process(resource ,ctx);
         final MimeMessage mimeMessage = emailSender.createMimeMessage();
-        final MimeMessageHelper message = prepareMail(mimeMessage, SUBJECT, to.getEmail(), html);
+        final MimeMessageHelper message = prepareMail(mimeMessage, subject, to.getEmail(), html);
 
         if(message == null) {
             LOGGER.debug("Error creating Contact Email for user with id {} from conversation with id {}", to.getId(), conversation.getId());

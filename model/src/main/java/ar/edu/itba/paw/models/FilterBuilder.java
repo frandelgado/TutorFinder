@@ -24,29 +24,29 @@ public class FilterBuilder {
             "AND areas.area_id = subjects.area_id ";
 
 
-    private  final String SELECT;
+    private final String select;
 
-    private final String FROM;
+    private final String from;
 
-    private final String WHERE;
+    private final String where;
 
-    private final String TIME_FILTERS;
+    private final String timeFilters;
 
     private final List<Object> params;
 
-    private FilterBuilder(String SELECT, String FROM, String WHERE, String TIME_FILTERS, List<Object> params) {
-        this.SELECT = SELECT;
-        this.FROM = FROM;
-        this.WHERE = WHERE;
-        this.TIME_FILTERS = TIME_FILTERS;
+    private FilterBuilder(String select, String from, String where, String timeFilters, List<Object> params) {
+        this.select = select;
+        this.from = from;
+        this.where = where;
+        this.timeFilters = timeFilters;
         this.params = params;
     }
 
     public FilterBuilder(){
-        this.SELECT = BASE_HIBERNATE_SELECT;
-        this.FROM = BASE_HIBERNATE_FROM;
-        this.WHERE = BASE_HIBERNATE_WHERE;
-        this.TIME_FILTERS = null;
+        this.select = BASE_HIBERNATE_SELECT;
+        this.from = BASE_HIBERNATE_FROM;
+        this.where = BASE_HIBERNATE_WHERE;
+        this.timeFilters = null;
         this.params = new ArrayList<>();
     }
 
@@ -75,11 +75,11 @@ public class FilterBuilder {
             sb.append(endHour.toString());
         }
 
-        if(this.TIME_FILTERS != null)
-            sb.insert(0,"or ").insert(0, this.TIME_FILTERS);
+        if(this.timeFilters != null)
+            sb.insert(0,"or ").insert(0, this.timeFilters);
 
         sb.append(") ");
-        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE, sb.toString(), this.params);
+        return new FilterBuilder(this.select, this.from, this.where, sb.toString(), this.params);
 
     }
 
@@ -96,25 +96,25 @@ public class FilterBuilder {
             sb.append(maxPrice.toString());
             sb.append(" ");
         }
-        if(this.WHERE == null){
+        if(this.where == null){
             sb.delete(0, 3);
             sb.insert(0, "where");
-            return new FilterBuilder(this.SELECT, this.FROM, sb.toString(),
-                    this.TIME_FILTERS, this.params);
+            return new FilterBuilder(this.select, this.from, sb.toString(),
+                    this.timeFilters, this.params);
         }
-        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE + sb.toString(),
-                this.TIME_FILTERS, this.params);
+        return new FilterBuilder(this.select, this.from, this.where + sb.toString(),
+                this.timeFilters, this.params);
     }
 
     public FilterBuilder filterByName(String name){
         if(name != null) {
             this.params.add("%" + name + "%");
-            if(this.WHERE == null) {
-                return new FilterBuilder(this.SELECT, this.FROM, "where upper(c.subject.name) like upper(?) ",
-                        this.TIME_FILTERS, this.params);
+            if(this.where == null) {
+                return new FilterBuilder(this.select, this.from, "where upper(c.subject.name) like upper(?) ",
+                        this.timeFilters, this.params);
             }
-            return new FilterBuilder(this.SELECT, this.FROM, this.WHERE + "and upper(c.subject.name) like upper(?) ",
-                    this.TIME_FILTERS, this.params);
+            return new FilterBuilder(this.select, this.from, this.where + "and upper(c.subject.name) like upper(?) ",
+                    this.timeFilters, this.params);
         }
         else{
             return this.clone();
@@ -122,22 +122,22 @@ public class FilterBuilder {
     }
 
     public Filter getFilter(){
-        if(TIME_FILTERS == null){
-            if(this.WHERE == null) {
-                return new Filter(SELECT + FROM, params);
+        if(timeFilters == null){
+            if(this.where == null) {
+                return new Filter(select + from, params);
             } else {
-                return new Filter(SELECT + FROM + WHERE, params);
+                return new Filter(select + from + where, params);
             }
         } else {
-            if(this.WHERE == null){
-                return new Filter(SELECT+FROM+ " where ( " + TIME_FILTERS + " ) ", params);
+            if(this.where == null){
+                return new Filter(select + from + " where ( " + timeFilters + " ) ", params);
             }
-            return new Filter(SELECT+FROM+WHERE+ " and ( " + TIME_FILTERS + " ) ", params);
+            return new Filter(select + from + where + " and ( " + timeFilters + " ) ", params);
         }
     }
 
     @Override
     public FilterBuilder clone(){
-        return new FilterBuilder(this.SELECT, this.FROM, this.WHERE, this.TIME_FILTERS, this.params);
+        return new FilterBuilder(this.select, this.from, this.where, this.timeFilters, this.params);
     }
 }
