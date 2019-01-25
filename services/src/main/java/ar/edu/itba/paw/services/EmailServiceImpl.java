@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
@@ -32,6 +33,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
+@PropertySource("classpath:${spring.profiles.active}-email.properties")
 public class EmailServiceImpl implements EmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
@@ -201,13 +203,6 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private String getContextUri() {
-        final String contextUri;
-        if(Arrays.stream(env.getActiveProfiles()).anyMatch(
-                env -> (env.equalsIgnoreCase("dev")))) {
-            contextUri = "http://localhost:8080/";
-        } else {
-            contextUri = "http://pawserver.it.itba.edu.ar/paw-2018b-09/";
-        }
-        return contextUri;
+        return env.getProperty("base.url");
     }
 }
