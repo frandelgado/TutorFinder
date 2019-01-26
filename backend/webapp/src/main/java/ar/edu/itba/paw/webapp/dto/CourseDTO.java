@@ -25,10 +25,9 @@ public class CourseDTO {
         this.price = course.getPrice();
         this.rating = course.getRating();
 
-        this.url = baseUri.resolve("/courses?professor=" + course.getProfessor().getId() +
-                "&subject=" + course.getSubject().getId());
-//        this.courseCommentsUrl = this.url.resolve("/comments"); //TODO: Vamos a tener problemas con estas urls
-//        this.courseFilesUrl = this.url.resolve("/files");
+        this.url = baseUri.resolve("/courses/" + course.getProfessor().getId() + "-" + course.getSubject().getId());
+        this.courseCommentsUrl = this.url.resolve("/comments");
+        this.courseFilesUrl = this.url.resolve("/files");
     }
 
     public String getDescription() {
