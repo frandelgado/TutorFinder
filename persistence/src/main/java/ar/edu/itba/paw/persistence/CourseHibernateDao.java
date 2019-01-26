@@ -12,6 +12,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -57,16 +61,28 @@ public class CourseHibernateDao implements CourseDao {
     }
 
     @Override
-    public List<Course> filter(final Filter filter, final int limit, final int offset) {
-        TypedQuery<Course> query = em.createQuery(filter.getQuery(), Course.class);
-        List<Object> params = filter.getQueryParams();
-        IntStream.range(0, params.size())
-                .forEach(i-> query.setParameter(i+1, params.get(i)));
+    public List<Course> filter(final List<Integer> days, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int offset) {
 
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Course> criteria = builder.createQuery(Course.class);
+        Root<Course> courseRoot = criteria.from(Course.class);
+        criteria.select(courseRoot);
+        EntityType<Course> Couse_ = courseRoot.getModel();
 
-        return query.getResultList();
+        for(int i = 0; i < days.size(); i++){
+            criteria.where(builder.equal(courseRoot.get(""), days[i]);
+        }
+
+//        TypedQuery<Course> query = em.createQuery(filter.getQuery(), Course.class);
+//        List<Object> params = filter.getQueryParams();
+//        IntStream.range(0, params.size())
+//                .forEach(i-> query.setParameter(i+1, params.get(i)));
+//
+//        query.setFirstResult(offset);
+//        query.setMaxResults(limit);
+//
+//        return query.getResultList();
+        
     }
 
     @Override

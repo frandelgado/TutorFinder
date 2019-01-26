@@ -13,7 +13,7 @@ public interface CourseDao {
 
     List<Course> filterByAreaId(final long areaId, final int limit, final int offset);
 
-    List<Course>  filter(final Filter filter, final int limit, final int offset);
+    List<Course>  filter(final List<Integer> days, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int limit, final int offset);
 
     Course create(final Professor professor, final Subject subject, final String description, final Double price) throws CourseAlreadyExistsException;
 
