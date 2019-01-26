@@ -19,9 +19,7 @@ public class AreaListDTO {
 
     public AreaListDTO(final List<Area> areas, final URI uri) {
         this.areas = new LinkedList<>();
-        for (Area area: areas) {
-            this.areas.add(new AreaDTO(area, uri));
-        }
+        areas.forEach(area -> this.areas.add(new AreaDTO(area, uri)));
         this.count = areas.size();
     }
 

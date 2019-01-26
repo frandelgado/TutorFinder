@@ -20,9 +20,7 @@ public class CourseListDTO {
 
     public CourseListDTO(final List<Course> courses, final URI baseUri) {
         this.courses = new LinkedList<>();
-        for (Course course: courses) {
-            this.courses.add(new CourseDTO(course, baseUri));
-        }
+        courses.forEach(course -> this.courses.add(new CourseDTO(course, baseUri)));
         this.count = courses.size();
     }
 

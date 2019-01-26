@@ -19,9 +19,7 @@ public class MessageListDTO {
 
     public MessageListDTO(final List<Message> messages, final URI uri) {
         this.messages = new LinkedList<>();
-        for (Message message: messages) {
-            this.messages.add(new MessageDTO(message, uri));
-        }
+        messages.forEach(message -> this.messages.add(new MessageDTO(message, uri)));
         this.count = messages.size();
     }
 

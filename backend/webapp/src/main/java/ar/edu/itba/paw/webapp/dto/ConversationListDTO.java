@@ -19,9 +19,7 @@ public class ConversationListDTO {
 
     public ConversationListDTO(final List<Conversation> conversations, final URI uri) {
         this.conversations = new LinkedList<>();
-        for (Conversation conversation: conversations) {
-            this.conversations.add(new ConversationDTO(conversation, uri));
-        }
+        conversations.forEach(conversation -> this.conversations.add(new ConversationDTO(conversation, uri)));
         this.count = conversations.size();
     }
 
