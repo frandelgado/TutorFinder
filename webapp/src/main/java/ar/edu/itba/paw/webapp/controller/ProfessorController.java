@@ -85,4 +85,22 @@ public class ProfessorController extends BaseController{
         return Response.ok(new ProfessorDTO(professor, uriInfo.getBaseUri())).build();
 
     }
+
+
+    @GET
+    @Path("/{username}/courses")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response professorCourses(@PathParam("username") final String username,
+                                     @RequestParam(value = "page", defaultValue = "1")final int page){
+        final Professor professor = ps.findByUsername(username);
+        final PagedResults<Course> results = cs.findCourseByProfessorId(professor.getId(), page);
+
+        if(results == null) {
+            return Response.noContent().build(); //FIXME: Cuando cambie paginacion sacar chequeo.
+        }
+
+        return Response.ok(new CourseListDTO(results.getResults(), uriInfo.getBaseUri())).build();
+    }
+
+
 }
