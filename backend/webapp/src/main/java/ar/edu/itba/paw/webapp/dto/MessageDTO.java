@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.dto;
 
-import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.Message;
 import org.joda.time.LocalDateTime;
 

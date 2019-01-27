@@ -25,7 +25,7 @@ public class CourseDTO {
         this.price = course.getPrice();
         this.rating = course.getRating();
 
-        this.url = baseUri.resolve("/courses/" + course.getProfessor().getId() + "-" + course.getSubject().getId());
+        this.url = baseUri.resolve("/courses/" + course.getProfessor().getId() + "_" + course.getSubject().getId());
         this.courseCommentsUrl = this.url.resolve("/comments");
         this.courseFilesUrl = this.url.resolve("/files");
     }
