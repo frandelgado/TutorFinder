@@ -55,7 +55,7 @@ public class CourseFileController extends BaseController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.MEDIA_TYPE_WILDCARD, })
     public Response downloadFile(@PathParam("professor") final long professorId,
                                  @PathParam("subject") final long subjectId,
                                  @PathParam("id") final long id) {
