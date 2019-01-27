@@ -74,11 +74,11 @@ public class ProfessorController extends BaseController{
     @GET
     @Path("/{username}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response professor(@PathParam("username") final String username,
-                              @ModelAttribute("currentUser") final User loggedUser,
-                              @ModelAttribute("currentUserIsProfessor") final boolean isProfessor){
+    public Response professor(@PathParam("username") final String username){
         final Professor professor = ps.findByUsername(username);
-
+        //TODO: define behaviour for when professor is the person who is makeing the request.
+        final User loggedUser = loggedUser();
+        final boolean isProfessor = isProfessor();
         if(professor == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -91,7 +91,7 @@ public class ProfessorController extends BaseController{
     @Path("/{username}/courses")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response professorCourses(@PathParam("username") final String username,
-                                     @RequestParam(value = "page", defaultValue = "1")final int page){
+                                     @DefaultValue("1") @QueryParam("page") final int page){
         final Professor professor = ps.findByUsername(username);
         final PagedResults<Course> results = cs.findCourseByProfessorId(professor.getId(), page);
 
