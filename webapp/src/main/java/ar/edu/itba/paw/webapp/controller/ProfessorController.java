@@ -103,4 +103,11 @@ public class ProfessorController extends BaseController{
     }
 
 
+    @GET
+    @Path("/{username}/schedule")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response professorSchedule(@PathParam("username") final String username){
+        //TODO fill in when schedule model is revised.
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    }
 }
