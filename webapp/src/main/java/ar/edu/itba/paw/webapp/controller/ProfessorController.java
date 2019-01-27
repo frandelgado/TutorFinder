@@ -71,4 +71,18 @@ public class ProfessorController extends BaseController{
     }
 
 
+    @GET
+    @Path("/{username}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response professor(@PathParam("username") final String username,
+                              @ModelAttribute("currentUser") final User loggedUser,
+                              @ModelAttribute("currentUserIsProfessor") final boolean isProfessor){
+        final Professor professor = ps.findByUsername(username);
+
+        if(professor == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(new ProfessorDTO(professor, uriInfo.getBaseUri())).build();
+
+    }
 }
