@@ -35,12 +35,13 @@ public class AreaController extends BaseController {
 
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response listAreas(@DefaultValue("1") @QueryParam("page") final int page) {
-        final PagedResults<Area> allAreas = as.filterAreasByName("", page);
+    public Response areas(@QueryParam("q") final String query,
+                          @DefaultValue("1") @QueryParam("page") final int page) {
+        final PagedResults<Area> areas = as.filterAreasByName(query, page);
 
         final Link[] links = new Link[1];
 
-        return Response.ok(new AreaListDTO(allAreas.getResults(), uriInfo.getBaseUri())).links(links).build();
+        return Response.ok(new AreaListDTO(areas.getResults(), uriInfo.getBaseUri())).links(links).build();
     }
 
     @GET

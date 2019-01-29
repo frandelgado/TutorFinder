@@ -62,12 +62,13 @@ public class ProfessorController extends BaseController{
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response listProfessors(@DefaultValue("1") @QueryParam("page") final int page) {
-        final PagedResults<Professor> allProfessors = ps.filterByFullName("", page);
+    public Response professors(@QueryParam("q") final String query,
+                               @DefaultValue("1") @QueryParam("page") final int page) {
+        final PagedResults<Professor> professors = ps.filterByFullName(query, page);
 
         final Link[] links= new Link[1];
 
-        return Response.ok(new ProfessorListDTO(allProfessors.getResults(), uriInfo.getBaseUri())).links(links).build();
+        return Response.ok(new ProfessorListDTO(professors.getResults(), uriInfo.getBaseUri())).links(links).build();
     }
 
 
