@@ -27,7 +27,7 @@ public class CourseFileDTO {
 
         this.courseUrl = baseUri.resolve("/courses/" + course.getProfessor().getId() + "_" +
                 course.getSubject().getId());
-        this.contentUri = courseUrl.resolve("/files/" + id);
+        this.contentUri = baseUri.resolve(this.courseUrl + "/files/" + id);
     }
 
     public long getId() {

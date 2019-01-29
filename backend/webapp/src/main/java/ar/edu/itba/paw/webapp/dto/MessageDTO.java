@@ -26,7 +26,7 @@ public class MessageDTO {
         this.text = message.getText();
 
         this.conversationUrl = baseUri.resolve("/conversations/" + message.getConversation().getId());
-        this.url = conversationUrl.resolve("/messages");
+        this.url = baseUri.resolve(this.conversationUrl + "/messages");
     }
 
     public long getId() {
