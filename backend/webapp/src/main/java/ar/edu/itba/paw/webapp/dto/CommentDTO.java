@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Comment;
 import ar.edu.itba.paw.models.Course;
 import org.joda.time.LocalDateTime;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 
@@ -16,6 +17,7 @@ public class CommentDTO {
     private LocalDateTime created;
     private int rating;
 
+    @XmlElement(name = "course_url")
     private URI courseUrl;
     private URI url;
 

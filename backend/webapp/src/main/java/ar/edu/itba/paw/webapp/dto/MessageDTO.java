@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.models.Message;
 import org.joda.time.LocalDateTime;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 
@@ -14,6 +15,7 @@ public class MessageDTO {
     private String text;
     private LocalDateTime created;
 
+    @XmlElement(name = "conversation_url")
     private URI conversationUrl;
     private URI url;
 

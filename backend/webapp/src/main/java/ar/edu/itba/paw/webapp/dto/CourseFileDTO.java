@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.CourseFile;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 
@@ -12,7 +13,11 @@ public class CourseFileDTO {
     private long id;
     private String name;
     private String description;
+
+    @XmlElement(name = "course_url")
     private URI courseUrl;
+
+    @XmlElement(name = "content_url")
     private URI contentUri;
 
     public CourseFileDTO() {

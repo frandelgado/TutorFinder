@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Course;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 
@@ -12,9 +13,14 @@ public class CourseDTO {
 //    private SubjectDTO subject;
     private String description;
     private Double price;
-    private URI courseCommentsUrl;
     private Double rating;
+
+    @XmlElement(name = "course_comments_url")
+    private URI courseCommentsUrl;
+
+    @XmlElement(name = "course_files_url")
     private URI courseFilesUrl;
+
     private URI url;
 
     public CourseDTO() {

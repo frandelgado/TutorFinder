@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Area;
 import ar.edu.itba.paw.models.Conversation;
 import org.joda.time.LocalDateTime;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 
@@ -14,7 +15,11 @@ public class ConversationDTO {
 //    private UserDTO user;
 //    private ProfessorDTO professor;
 //    private SubjectDTO subject;
+
+    @XmlElement(name = "messages_url")
     private URI messagesUrl;
+
+    @XmlElement(name = "latest_message")
     private LocalDateTime latestMessage;
 
     public ConversationDTO() {

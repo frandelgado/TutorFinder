@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Area;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 
@@ -12,6 +13,8 @@ public class AreaDTO {
     private String name;
     private String description;
     private URI url;
+
+    @XmlElement(name = "area_courses_url")
     private URI areaCoursesUrl;
     //TODO: Imagen
 
