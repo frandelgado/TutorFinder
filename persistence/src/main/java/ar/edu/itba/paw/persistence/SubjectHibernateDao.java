@@ -3,6 +3,8 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.persistence.SubjectDao;
 import ar.edu.itba.paw.models.Area;
 import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.persistence.utils.InputSanitizer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,6 +18,9 @@ public class SubjectHibernateDao implements SubjectDao {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private InputSanitizer inputSanitizer;
 
     @Override
     public Optional<Subject> findById(final long id) {
@@ -33,7 +38,7 @@ public class SubjectHibernateDao implements SubjectDao {
 
     @Override
     public List<Subject> filterSubjectsByName(final String name) {
-        final String search = "%" + name + "%";
+        final String search = "%" + inputSanitizer.sanitizeWildcards(name) + "%";
         final TypedQuery<Subject> query = em.createQuery("from Subject as s where upper(s.name) like upper(:name)"
                 , Subject.class);
         query.setParameter("name", search);

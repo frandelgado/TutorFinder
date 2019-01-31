@@ -5,8 +5,10 @@ import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.persistence.utils.InputSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -22,6 +24,9 @@ public class ProfessorHibernateDao implements ProfessorDao {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private InputSanitizer inputSanitizer;
 
     @Override
     public Professor create(final User user, final String description, final byte[] picture) {
@@ -76,7 +81,7 @@ public class ProfessorHibernateDao implements ProfessorDao {
 
     @Override
     public List<Professor> filterByFullName(final String fullName, final int limit, final int offset) {
-        final String search = "%" + fullName + "%";
+        final String search = "%" + inputSanitizer.sanitizeWildcards(fullName) + "%";
         LOGGER.trace("Querying for professor with full name containing {}", fullName);
         final TypedQuery<Professor> query = em.createQuery("from Professor as p where upper(concat(p.name, ' ', p.lastname)) like upper(:name)" +
                 "order by p.id", Professor.class);

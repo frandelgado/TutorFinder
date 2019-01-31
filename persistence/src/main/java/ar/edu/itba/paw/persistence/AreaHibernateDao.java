@@ -2,8 +2,10 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.AreaDao;
 import ar.edu.itba.paw.models.Area;
+import ar.edu.itba.paw.persistence.utils.InputSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,6 +20,9 @@ public class AreaHibernateDao implements AreaDao {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private InputSanitizer inputSanitizer;
 
     @Override
     public Area findById(final long id) {
@@ -34,7 +39,7 @@ public class AreaHibernateDao implements AreaDao {
 
     @Override
     public List<Area> filterAreasByName(final String name, final int limit, final int offset) {
-        final String search = "%" + name + "%";
+        final String search = "%" + inputSanitizer.sanitizeWildcards(name) + "%";
         LOGGER.trace("Querying for areas with name containing {}", name);
         final TypedQuery<Area> query = em.createQuery("from Area as a where upper(a.name) like upper(:name)" +
                 "order by a.id", Area.class);
