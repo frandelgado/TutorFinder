@@ -1,19 +1,22 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
@@ -32,7 +35,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private Resource rememberMeKey;
 
     @Autowired
-    private PawUserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private AuthenticationEntryPoint entryPoint;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -47,7 +53,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)
-                .authorizeRequests()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().exceptionHandling()
+                    .authenticationEntryPoint(entryPoint)
+                .and().authorizeRequests()
                     .antMatchers("/login/**", "/register/**", "/forgotPassword/**", "/resetPassword/**").anonymous()
                     .antMatchers("/logout/**", "/sendMessage/**", "/Conversations/**",
                             "/Conversation/**", "/reserveClass/**", "/reservations/**", "/postComment/**", "/courseFiles/**",
@@ -61,18 +70,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
                     .usernameParameter("username")
                     .passwordParameter("password")
-                    .defaultSuccessUrl("/", false)
-                    .loginPage("/login")
-                .and().rememberMe()
-                    .rememberMeParameter("rememberme")
-                    .userDetailsService(userDetailsService)
-                    .key(getRememberMeKey())
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/")
-                .and().exceptionHandling()
-                    .accessDeniedPage("/403")
+                    .loginProcessingUrl("/login")
                 .and().csrf().disable();
     }
 
