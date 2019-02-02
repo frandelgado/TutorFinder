@@ -12,9 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
 import java.util.Optional;
@@ -61,18 +59,39 @@ public class CourseHibernateDao implements CourseDao {
     }
 
     @Override
-    public List<Course> filter(final List<Integer> days, final Integer startHour, final Integer endHour, final Double minPrice, final Double maxPrice, final String searchText, final int offset) {
+    public List<Course> filter(final List<Integer> days, final Integer startHour, final Integer endHour,
+                               final Double minPrice, final Double maxPrice, final String searchText, final int limit, final int offset) {
 
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Course> criteria = builder.createQuery(Course.class);
-        Root<Course> courseRoot = criteria.from(Course.class);
-        criteria.select(courseRoot);
-        EntityType<Course> Couse_ = courseRoot.getModel();
+        Root<Course> root = criteria.from(Course.class);
+        Join<Course, Subject> subject = root.join("courses");
+        Join<Course, Professor> professors = root.join("courses");
+        Join<Professor, Timeslot> timeslots = professors.join("professor");
+        criteria.select(root);
 
+        Predicate dayPredicate = null;
         for(int i = 0; i < days.size(); i++){
-            criteria.where(builder.equal(courseRoot.get(""), days[i]);
+            dayPredicate = builder.or(dayPredicate, builder.equal(timeslots.get("day"), days.get(i)));
         }
 
+        Predicate searchPredicate = builder.like(root.get("name"), searchText);
+
+        Predicate hourPredicate = builder.and(builder.greaterThanOrEqualTo(timeslots.get("hour"), startHour),
+                                                builder.lessThan(timeslots.get("hour"), endHour));
+
+        Predicate pricePredicate = builder.and(builder.greaterThanOrEqualTo(timeslots.get("price"), minPrice),
+                                                builder.lessThanOrEqualTo(root.get("price"), maxPrice));
+
+        criteria.where(builder.and(searchPredicate, hourPredicate, pricePredicate));
+
+        List<Course> results = em.createQuery(criteria.select(root))
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+
+        return results;
+        
 //        TypedQuery<Course> query = em.createQuery(filter.getQuery(), Course.class);
 //        List<Object> params = filter.getQueryParams();
 //        IntStream.range(0, params.size())
