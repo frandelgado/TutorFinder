@@ -80,12 +80,15 @@ public class CourseHibernateDao implements CourseDao {
 
         Predicate searchPredicate = builder.like(subject.get("name"), "%" + searchText + "%");
 
+        //TODO: Chequear start y end por null. Si alguno es null no hacer el and.
         Predicate hourPredicate = builder.and(builder.greaterThanOrEqualTo(timeslots.get("hour"), startHour),
                                                 builder.lessThan(timeslots.get("hour"), endHour));
 
+        //TODO: Chequear max y min por null. Si alguno es null no hacer el and.
         Predicate pricePredicate = builder.and(builder.greaterThanOrEqualTo(root.get("price"), minPrice),
                                                 builder.lessThanOrEqualTo(root.get("price"), maxPrice));
 
+        //Todo: Chequear que todos los predicados existan, si no sacarlos del and.
         criteria.where(builder.and(searchPredicate, hourPredicate, pricePredicate, dayPredicate));
 
         List<Course> results = em.createQuery(criteria.select(root))
