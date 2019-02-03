@@ -65,25 +65,28 @@ public class CourseHibernateDao implements CourseDao {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Course> criteria = builder.createQuery(Course.class);
         Root<Course> root = criteria.from(Course.class);
-        Join<Course, Subject> subject = root.join("courses");
-        Join<Course, Professor> professors = root.join("courses");
-        Join<Professor, Timeslot> timeslots = professors.join("professor");
-        criteria.select(root);
+        Join<Course, Subject> subject = root.join("subject");
+        Join<Course, Professor> professors = root.join("professor");
+        Join<Professor, Timeslot> timeslots = professors.join("timeslots");
+        criteria.select(root).distinct(true);
 
         Predicate dayPredicate = null;
-        for(int i = 0; i < days.size(); i++){
-            dayPredicate = builder.or(dayPredicate, builder.equal(timeslots.get("day"), days.get(i)));
+        if(days != null) {
+            dayPredicate = builder.equal(timeslots.get("day"), days.get(0));
+            for(int i = 1; i < days.size(); i++){
+                dayPredicate = builder.or(dayPredicate, builder.equal(timeslots.get("day"), days.get(i)));
+            }
         }
 
-        Predicate searchPredicate = builder.like(root.get("name"), searchText);
+        Predicate searchPredicate = builder.like(subject.get("name"), "%" + searchText + "%");
 
         Predicate hourPredicate = builder.and(builder.greaterThanOrEqualTo(timeslots.get("hour"), startHour),
                                                 builder.lessThan(timeslots.get("hour"), endHour));
 
-        Predicate pricePredicate = builder.and(builder.greaterThanOrEqualTo(timeslots.get("price"), minPrice),
+        Predicate pricePredicate = builder.and(builder.greaterThanOrEqualTo(root.get("price"), minPrice),
                                                 builder.lessThanOrEqualTo(root.get("price"), maxPrice));
 
-        criteria.where(builder.and(searchPredicate, hourPredicate, pricePredicate));
+        criteria.where(builder.and(searchPredicate, hourPredicate, pricePredicate, dayPredicate));
 
         List<Course> results = em.createQuery(criteria.select(root))
                 .setFirstResult(offset)
