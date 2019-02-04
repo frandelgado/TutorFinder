@@ -6,27 +6,19 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.dto.CommentListDTO;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
 import ar.edu.itba.paw.webapp.dto.CourseListDTO;
-import ar.edu.itba.paw.webapp.form.ClassReservationForm;
-import ar.edu.itba.paw.webapp.form.CommentForm;
-import ar.edu.itba.paw.webapp.form.CourseForm;
-import ar.edu.itba.paw.webapp.form.MessageForm;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
+import ar.edu.itba.paw.webapp.dto.form.CommentForm;
+import ar.edu.itba.paw.webapp.dto.form.CourseForm;
+import ar.edu.itba.paw.webapp.dto.form.MessageForm;
+import ar.edu.itba.paw.webapp.validator.DTOConstraintValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.net.URI;
 import java.util.List;
 
 
@@ -50,6 +42,9 @@ public class CourseController extends BaseController{
 
     @Autowired
     private ClassReservationService classReservationService;
+
+    @Autowired
+    private DTOConstraintValidator validator;
 
     @Context
     private UriInfo uriInfo;
@@ -109,96 +104,102 @@ public class CourseController extends BaseController{
         return Response.ok(new CourseListDTO(courses.getResults(), uriInfo.getBaseUri())).links(links).build();
     }
 
-//    @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-//    public ModelAndView contact(
-//            @ModelAttribute("commentForm") final CommentForm comment,
-//            @Valid @ModelAttribute("messageForm") final MessageForm form,
-//            final BindingResult errors,
-//            @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException, NonexistentConversationException {
+//    @POST
+//    @Path("{professor}_{subject}/contact")
+//    @Consumes(value = { MediaType.APPLICATION_JSON, })
+//    public Response contact(@PathParam("professor") final long professorId,
+//                            @PathParam("subject") final long subjectId,
+//                            final MessageForm message) throws DTOConstraintException {
 //
-//        if(errors.hasErrors()) {
-//            return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser, 1);
-//        }
+//        validator.validate(message);
 //
+//        final User loggedUser = loggedUser();
 //        final boolean sent;
+//
 //        try {
-//            sent = conversationService.sendMessage(loggedUser.getId(), form.getProfessorId(),
-//                    form.getSubjectId(), form.getBody());
+//            sent = conversationService.sendMessage(loggedUser.getId(), professorId, subjectId, message.getMessage());
 //        } catch (SameUserException e) {
-//            errors.rejectValue("body", "SameUserMessageError");
-//            form.setBody(null);
-//            return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
+//            //TODO
+//            return Response.status(Response.Status.FORBIDDEN).build();
+//        } catch (UserNotInConversationException e) {
+//            return Response.status(Response.Status.FORBIDDEN).build();
+//        } catch (NonexistentConversationException e) {
+//            return Response.status(Response.Status.NOT_FOUND).build();
 //        }
-//        if(sent) {
-//            errors.rejectValue("extraMessage", "MessageSent");
-//            form.setBody(null);
-//            return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
-//        } else {
-//            errors.rejectValue("body", "SendMessageError");
+//
+//        if(!sent) {
+//            final ValidationErrorDTO errors = new ValidationErrorDTO();
+//            errors.addError("message", "Error sending message");
+//            return Response.status(Response.Status.BAD_REQUEST)
+//                    .entity(errors).build();
 //        }
-//        return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
+//
+//        final URI uri = uriInfo.getBaseUriBuilder().path("/conversations/").build();
+//        return Response.created(uri).build();
 //    }
 
-//    @RequestMapping(value = "/postComment", method = RequestMethod.POST)
-//    public ModelAndView comment(
-//            @ModelAttribute("messageForm") final MessageForm message,
-//            @Valid @ModelAttribute("commentForm") final CommentForm form,
-//            final BindingResult errors,
-//            @ModelAttribute("currentUser") final User loggedUser) {
-//
-//        if(errors.hasErrors()) {
-//            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
-//        }
-//
-//        final boolean sent;
-//        try {
-//            sent = courseService.comment(loggedUser.getId(), form.getCommentProfessorId(),
-//                        form.getCommentSubjectId(), form.getCommentBody(), form.getRating());
-//        } catch (SameUserException e) {
-//            errors.rejectValue("rating", "sameUserComment");
-//            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
-//        } catch (NonAcceptedReservationException e) {
-//            errors.rejectValue("rating", "nonAcceptedReservation");
-//            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
-//        }
-//
-//        if(sent) {
-//            return redirectWithNoExposedModalAttributes("/Course/?professor=" +
-//                    form.getCommentProfessorId() + "&subject=" + form.getCommentSubjectId());
-//        } else {
-//            errors.rejectValue("commentBody", "SendMessageError");
-//        }
-//        return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
-//    }
+    @POST
+    @Path("{professor}_{subject}/comments")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response comment(final CommentForm comment,
+                            @PathParam("professor") final long professorId,
+                            @PathParam("subject") final long subjectId) throws DTOConstraintException {
 
-//    @RequestMapping(value = "/createCourse", method = RequestMethod.POST)
-//    public ModelAndView create(@Valid @ModelAttribute("CourseForm") final CourseForm form,
-//                               final BindingResult errors,
-//                               @ModelAttribute("currentUser") final User user) {
-//        if(errors.hasErrors()) {
-//            return createCourse(form, user);
-//        }
-//
-//        final Course course;
-//        try {
-//            course = courseService.create(user.getId(), form.getSubjectId(), form.getDescription(), form.getPrice());
-//        } catch (CourseAlreadyExistsException e) {
-//            return redirectToErrorPage("courseAlreadyExists");
-//        } catch (NonexistentProfessorException e) {
-//            return redirectToErrorPage("nonExistentUser");
-//        } catch (NonexistentSubjectException e) {
-//            errors.rejectValue("subjectId", "subjectDoesNotExist");
-//            return createCourse(form, user);
-//        }
-//
-//        if(course == null) {
-//            return createCourse(form, user);
-//        }
-//
-//        LOGGER.debug("Posting request for course creation for professor with id {} in subject with id {}", user.getId(), form.getSubjectId());
-//        return redirectWithNoExposedModalAttributes("/Course/?professor=" + course.getProfessor().getId()
-//                + "&subject=" + course.getSubject().getId());
-//    }
+        validator.validate(comment);
+        final User loggedUser = loggedUser();
+
+        final boolean sent;
+        try {
+            sent = courseService.comment(loggedUser.getId(), professorId, subjectId,
+                    comment.getCommentBody(), comment.getRating());
+        } catch (SameUserException e) {
+            //TODO
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (NonAcceptedReservationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(!sent) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO("Error commenting");
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errors).build();
+        }
+
+        //TODO: Ver si agregar page
+        final URI uri = uriInfo.getAbsolutePathBuilder().build();
+        return Response.created(uri).build();
+    }
+
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response create(final CourseForm form) throws DTOConstraintException {
+
+        validator.validate(form);
+        final User user = loggedUser();
+
+        final Course course;
+        try {
+            course = courseService.create(user.getId(), form.getSubject(), form.getDescription(), form.getPrice());
+        } catch (CourseAlreadyExistsException e) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO("Course already exists");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
+        } catch (NonexistentProfessorException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (NonexistentSubjectException e) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO("Nonexistent Subject");
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errors).build();
+        }
+
+        if(course == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        LOGGER.debug("Posting request for course creation for professor with id {} in subject with id {}", user.getId(), form.getSubject());
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId()) +
+                "_" + String.valueOf(form.getSubject())).build();
+        return Response.created(uri).build();
+    }
 
 //    @RequestMapping(value = "/reserveClass", method = RequestMethod.POST)
 //    public ModelAndView reserveClass(@ModelAttribute("currentUser") final User user,
