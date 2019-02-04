@@ -1,13 +1,15 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.DTOConstraintException;
+import ar.edu.itba.paw.exceptions.NonexistentConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.service.ConversationService;
 import ar.edu.itba.paw.models.Conversation;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.webapp.dto.ConversationDTO;
-import ar.edu.itba.paw.webapp.dto.ConversationListDTO;
-import ar.edu.itba.paw.webapp.dto.MessageListDTO;
+import ar.edu.itba.paw.webapp.dto.*;
+import ar.edu.itba.paw.webapp.dto.form.MessageForm;
+import ar.edu.itba.paw.webapp.validator.DTOConstraintValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 
 @Path("conversations")
@@ -24,6 +27,9 @@ public class ConversationController extends BaseController {
 
     @Autowired
     private ConversationService conversationService;
+
+    @Autowired
+    private DTOConstraintValidator validator;
 
     @Context
     private UriInfo uriInfo;
@@ -83,22 +89,33 @@ public class ConversationController extends BaseController {
         return Response.ok(new MessageListDTO(ret.getMessages(), uriInfo.getBaseUri())).build();
     }
 
-//    @RequestMapping(value = "/Conversation", method = RequestMethod.POST)
-//    public ModelAndView sendMessage(@Valid @ModelAttribute("messageForm") final MessageForm form,
-//                                     final BindingResult errors,
-//                                     @ModelAttribute("currentUser") final User loggedUser)
-//            throws UserNotInConversationException, NonexistentConversationException {
-//
-//        if(errors.hasErrors()) {
-//            return conversation(form.getConversationId(), form, loggedUser);
-//        }
-//
-//        final boolean sent = conversationService.sendMessage(loggedUser.getId(), form.getConversationId(), form.getBody());
-//        if(sent) {
-//            return redirectWithNoExposedModalAttributes("/Conversation?id=" + form.getConversationId());
-//        }
-//        errors.rejectValue("body", "SendMessageError");
-//        return conversation(form.getConversationId(), form, loggedUser);
-//    }
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Path("/{id}")
+    public Response sendMessage(@PathParam("id") final long id, final MessageForm message)
+            throws DTOConstraintException {
+
+        validator.validate(message);
+
+        final User loggedUser = loggedUser();
+
+        final boolean sent;
+        try {
+            sent = conversationService.sendMessage(loggedUser.getId(), id, message.getMessage());
+        } catch (UserNotInConversationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (NonexistentConversationException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if(!sent) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO("Error sending message");
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errors).build();
+        }
+
+        final URI uri = uriInfo.getAbsolutePathBuilder().path("/messages").build();
+        return Response.created(uri).build();
+    }
 
 }
