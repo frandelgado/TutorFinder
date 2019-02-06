@@ -119,8 +119,7 @@ public class CourseController extends BaseController{
 //        try {
 //            sent = conversationService.sendMessage(loggedUser.getId(), professorId, subjectId, message.getMessage());
 //        } catch (SameUserException e) {
-//            //TODO
-//            return Response.status(Response.Status.FORBIDDEN).build();
+//            return badRequest("Can not contact yourself");
 //        } catch (UserNotInConversationException e) {
 //            return Response.status(Response.Status.FORBIDDEN).build();
 //        } catch (NonexistentConversationException e) {
@@ -128,10 +127,7 @@ public class CourseController extends BaseController{
 //        }
 //
 //        if(!sent) {
-//            final ValidationErrorDTO errors = new ValidationErrorDTO();
-//            errors.addError("message", "Error sending message");
-//            return Response.status(Response.Status.BAD_REQUEST)
-//                    .entity(errors).build();
+//            return badRequest("Error sending message");
 //        }
 //
 //        final URI uri = uriInfo.getBaseUriBuilder().path("/conversations/").build();
@@ -153,16 +149,13 @@ public class CourseController extends BaseController{
             sent = courseService.comment(loggedUser.getId(), professorId, subjectId,
                     comment.getCommentBody(), comment.getRating());
         } catch (SameUserException e) {
-            //TODO
-            return Response.status(Response.Status.FORBIDDEN).build();
+            return badRequest("Cannot comment on your course");
         } catch (NonAcceptedReservationException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
         if(!sent) {
-            final ValidationErrorDTO errors = new ValidationErrorDTO("Error commenting");
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(errors).build();
+            return badRequest("Error commenting");
         }
 
         //TODO: Ver si agregar page
@@ -186,9 +179,7 @@ public class CourseController extends BaseController{
         } catch (NonexistentProfessorException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
         } catch (NonexistentSubjectException e) {
-            final ValidationErrorDTO errors = new ValidationErrorDTO("Nonexistent Subject");
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(errors).build();
+            return badRequest("Nonexistent Subject");
         }
 
         if(course == null) {
@@ -201,8 +192,10 @@ public class CourseController extends BaseController{
         return Response.created(uri).build();
     }
 
-//    @RequestMapping(value = "/reserveClass", method = RequestMethod.POST)
-//    public ModelAndView reserveClass(@ModelAttribute("currentUser") final User user,
+//    @POST
+//    @Path("{professor}_{subject}/reservations")
+//    @Consumes(value = { MediaType.APPLICATION_JSON, })
+//    public Response reserveClass(@ModelAttribute("currentUser") final User user,
 //                                     @Valid @ModelAttribute("classReservationForm")
 //                                     final ClassReservationForm form,
 //                                     final BindingResult errors,
@@ -252,42 +245,27 @@ public class CourseController extends BaseController{
 //    }
 
 
-//    @RequestMapping("/denyClassRequest")
-//    public ModelAndView denyClassRequest(@ModelAttribute("currentUser") final User currentUser,
-//                                         @RequestParam("classReservation") final long classReservationId) {
-//
-//        final ClassReservation classReservation;
-//        try {
-//            classReservation = classReservationService.deny(classReservationId, currentUser.getId(), null);
-//        } catch (UserAuthenticationException e) {
-//            return redirectToErrorPage("403");
-//        }
-//
-//        if(classReservation == null) {
-//            return redirectToErrorPage("nonExistentClassReservation");
-//        }
-//
-//        return redirectWithNoExposedModalAttributes("/classRequests");
-//    }
-//
-//    @RequestMapping("/approveClassRequest")
-//    public ModelAndView approveClassRequest(@ModelAttribute("currentUser") final User currentUser,
-//                                            @RequestParam("classReservation") final long classReservationId) {
-//
-//        final ClassReservation classReservation;
-//        try {
-//            classReservation = classReservationService.confirm(classReservationId, currentUser.getId(), null);
-//        } catch (UserAuthenticationException e) {
-//            return redirectToErrorPage("403");
-//        }
-//
-//        if(classReservation == null) {
-//            return redirectToErrorPage("nonExistentClassReservation");
-//        }
-//
-//        return redirectWithNoExposedModalAttributes("/classRequests");
-//    }
+    //TODO: Approve or deny (Ideas: put y delete / form with comment + status)
+    @POST
+    @Path("/requests/{id}")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response answerClassRequest(@PathParam("id") final long classReservationId) {
 
+        final User currentUser = loggedUser();
+
+        final ClassReservation classReservation;
+        try {
+            classReservation = classReservationService.deny(classReservationId, currentUser.getId(), null);
+        } catch (UserAuthenticationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(classReservation == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.noContent().build();
+    }
 
 //    @InitBinder
 //    private void dateBinder(WebDataBinder binder) {
@@ -296,28 +274,29 @@ public class CourseController extends BaseController{
 //        binder.registerCustomEditor(Date.class, editor);
 //    }
 
-//    @RequestMapping(value = "/modifyCourse", method = RequestMethod.POST)
-//    public ModelAndView modify(@Valid @ModelAttribute("modifyForm") final CourseForm form,
-//                               final BindingResult errors,
-//                               @ModelAttribute("currentUser") final User user) {
-//        if(errors.hasErrors()) {
-//            return modifyCourse(form, user, form.getSubjectId());
-//        }
-//
-//        final Course course;
-//        try {
-//            course = courseService.modify(user.getId(), form.getSubjectId(), form.getDescription(), form.getPrice());
-//        } catch (NonexistentCourseException e) {
-//            return redirectToErrorPage("nonExistentCourse");
-//        }
-//
-//        if(course == null) {
-//            return modifyCourse(form, user, form.getSubjectId());
-//        }
-//
-//        LOGGER.debug("Posting request for course modification for professor with id {} in subject with id {}", user.getId(), form.getSubjectId());
-//        return redirectWithNoExposedModalAttributes("/Course/?professor=" + course.getProfessor().getId()
-//                + "&subject=" + course.getSubject().getId());
-//    }
+    @PUT
+    @Path("{professor}_{subject}")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response modify(final CourseForm form,
+                           @PathParam("professor") final long professorId,
+                           @PathParam("subject") final long subjectId) throws DTOConstraintException {
+
+        validator.validate(form);
+        final User user = loggedUser();
+
+        final Course course;
+        try {
+            course = courseService.modify(user.getId(), subjectId, form.getDescription(), form.getPrice());
+        } catch (NonexistentCourseException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if(course == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        LOGGER.debug("Posting request for course modification for professor with id {} in subject with id {}", user.getId(), subjectId);
+        return Response.noContent().build();
+    }
 
 }

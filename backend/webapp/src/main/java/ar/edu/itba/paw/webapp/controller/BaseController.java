@@ -2,13 +2,18 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
+import javax.ws.rs.core.Response;
+
+@Component
 public class BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
@@ -42,5 +47,11 @@ public class BaseController {
                 return true;
         }
         return false;
+    }
+
+    public Response badRequest(final String error) {
+        final ValidationErrorDTO errors = new ValidationErrorDTO(error);
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(errors).build();
     }
 }
