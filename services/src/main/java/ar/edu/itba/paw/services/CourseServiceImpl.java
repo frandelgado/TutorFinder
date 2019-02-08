@@ -129,7 +129,7 @@ public class CourseServiceImpl implements CourseService {
             LOGGER.debug("Adding filter by search text containing {}", searchText);
             fb = fb.filterByName(searchText);
         }
-        final List<Course> courses = courseDao.filter(fb.getFilter(), PAGE_SIZE+1, PAGE_SIZE * (page -1));
+        final List<Course> courses = courseDao.filter(days, startHour, endHour, minPrice, maxPrice, searchText, PAGE_SIZE+1, PAGE_SIZE * (page -1));
         final PagedResults<Course> results;
         final int size = courses.size();
         if(size == 0 && page > 1){

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class CourseHibernateDaoTest {
     private static final Long AREA_ID = 1L;
     private static final Long INVALID_ID = 666L;
     private static final String INVALID_NAME = "InvalidTestName";
+    private static final String EMPTY_STRING = "";
     private static final String SUBJECT_NAME = "Alge";
     private static final Integer LIMIT = 10;
     private static final Integer OFFSET = 0;
@@ -141,8 +143,7 @@ public class CourseHibernateDaoTest {
 
     @Test
     public void testFilterCoursesByNameValid() {
-        FilterBuilder filterBuilder = new FilterBuilder();
-        final List<Course> courses = courseDao.filter(filterBuilder.filterByName(SUBJECT_NAME).getFilter(), LIMIT, OFFSET);
+        final List<Course> courses = courseDao.filter(null, null, null, null, null, SUBJECT_NAME, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(1, courses.size());
 
@@ -157,16 +158,16 @@ public class CourseHibernateDaoTest {
 
     @Test
     public void testFilterCoursesByNameInvalid() {
-        FilterBuilder filterBuilder = new FilterBuilder();
-        final List<Course> courses = courseDao.filter(filterBuilder.filterByName(INVALID_NAME).getFilter(), LIMIT, OFFSET);
+        final List<Course> courses = courseDao.filter(null, null, null, null, null, INVALID_NAME, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(0, courses.size());
     }
 
     @Test
     public void testFilterByTimeslotValid(){
-        FilterBuilder filterBuilder = new FilterBuilder();
-        final List<Course> courses = courseDao.filter(filterBuilder.filterByTimeslot(DAY, STARTHOUR, ENDHOUR).getFilter(), LIMIT, OFFSET);
+        final List<Integer> days = new ArrayList<>();
+        days.add(DAY);
+        final List<Course> courses = courseDao.filter(days, STARTHOUR, ENDHOUR, null, null, EMPTY_STRING, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(1, courses.size());
 
@@ -182,8 +183,7 @@ public class CourseHibernateDaoTest {
 
     @Test
     public void testFilerByPriceValid(){
-        FilterBuilder filterBuilder = new FilterBuilder();
-        final List<Course> courses = courseDao.filter(filterBuilder.filterByPrice(PRICE,PRICE).getFilter(), LIMIT, OFFSET);
+        final List<Course> courses = courseDao.filter(null, null, null, PRICE, PRICE, EMPTY_STRING, LIMIT, OFFSET);
         assertNotNull(courses);
         assertEquals(1, courses.size());
 

@@ -93,8 +93,12 @@ public class CourseJdbcDao implements CourseDao {
         return courses;
     }
 
-
     @Override
+    public List<Course> filter(List<Integer> days, Integer startHour, Integer endHour, Double minPrice, Double maxPrice, String searchText, int limit, int offset) {
+        return null;
+    }
+
+
     public List<Course> filter(Filter filter, int limit, int offset) {
         List<Object> params = filter.getQueryParams();
         params.add(limit);
