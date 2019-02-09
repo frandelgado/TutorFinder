@@ -33,7 +33,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
-@PropertySource("classpath:${spring.profiles.active}-email.properties")
+@PropertySource(value = "classpath:${spring.profiles.active}-email.properties", ignoreResourceNotFound = true)
 public class EmailServiceImpl implements EmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);

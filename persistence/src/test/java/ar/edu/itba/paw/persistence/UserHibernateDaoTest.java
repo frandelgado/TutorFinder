@@ -177,7 +177,7 @@ public class UserHibernateDaoTest {
     public void testPagedReservationsValid() {
         final List<ClassReservation> classReservations = userDao.pagedReservations(ID, 3, 0);
         assertNotNull(classReservations);
-        assertEquals(1, classReservations.size());
+        assertEquals(2, classReservations.size());
         final ClassReservation classReservation = classReservations.get(0);
 
         assertEquals(USERNAME, classReservation.getStudent().getUsername());
