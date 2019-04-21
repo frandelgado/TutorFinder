@@ -1,7 +1,7 @@
 'use strict';
-define(['tutor-finder'], function(tutor-finder) {
+define(['tutorFinder'], function(tutorFinder) {
 
-	tutor-finder.controller('HomeCtrl', function($scope) {
+	tutorFinder.controller('HomeCtrl', function($scope) {
 		$scope.homePageText = 'This is your homepage';
 	});
 });

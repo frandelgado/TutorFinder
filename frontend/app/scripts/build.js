@@ -71,10 +71,10 @@ if (paths) {
 
 require([
         'angular',
-        'tutor-finder',
+        'tutorFinder',
         'controllers/IndexCtrl'
     ],
     function() {
-        angular.bootstrap(document, ['tutor-finder']);
+        angular.bootstrap(document, ['tutorFinder']);
     }
 );

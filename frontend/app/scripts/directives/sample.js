@@ -1,7 +1,7 @@
 'use strict';
-define(['tutor-finder'], function(tutor-finder) {
+define(['tutorFinder'], function(tutorFinder) {
 
-	tutor-finder.directive('sample', function() {
+	tutorFinder.directive('sample', function() {
 		return {
 			restrict: 'E',
 			template: '<span>Sample</span>'

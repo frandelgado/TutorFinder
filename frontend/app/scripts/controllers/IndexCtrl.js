@@ -1,7 +1,7 @@
 'use strict';
-define(['tutor-finder'], function(tutor-finder) {
+define(['tutorFinder'], function(tutorFinder) {
 
-	tutor-finder.controller('IndexCtrl', function($scope) {
-		$scope.welcomeText = 'Welcome to your tutor-finder page';
+	tutorFinder.controller('IndexCtrl', function($scope) {
+		$scope.welcomeText = 'Welcome to your tutorFinder page';
 	});
 });

@@ -7,11 +7,11 @@ define(['routes',
 	'bootstrap',
 	'angular-translate'],
 	function(config, dependencyResolverFor, i18n) {
-		var tutor-finder = angular.module('tutor-finder', [
+		var tutorFinder = angular.module('tutorFinder', [
 			'ngRoute',
 			'pascalprecht.translate'
 		]);
-		tutor-finder
+		tutorFinder
 			.config(
 				['$routeProvider',
 				'$controllerProvider',
@@ -21,11 +21,11 @@ define(['routes',
 				'$translateProvider',
 				function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider) {
 
-					tutor-finder.controller = $controllerProvider.register;
-					tutor-finder.directive = $compileProvider.directive;
-					tutor-finder.filter = $filterProvider.register;
-					tutor-finder.factory = $provide.factory;
-					tutor-finder.service = $provide.service;
+					tutorFinder.controller = $controllerProvider.register;
+					tutorFinder.directive = $compileProvider.directive;
+					tutorFinder.filter = $filterProvider.register;
+					tutorFinder.factory = $provide.factory;
+					tutorFinder.service = $provide.service;
 
 					if (config.routes !== undefined) {
 						angular.forEach(config.routes, function(route, path) {
@@ -39,6 +39,6 @@ define(['routes',
 					$translateProvider.translations('preferredLanguage', i18n);
 					$translateProvider.preferredLanguage('preferredLanguage');
 				}]);
-		return tutor-finder;
+		return tutorFinder;
 	}
 );

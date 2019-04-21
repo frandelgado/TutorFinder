@@ -1,7 +1,7 @@
 'use strict';
-define(['tutor-finder'], function(tutor-finder) {
+define(['tutorFinder'], function(tutorFinder) {
 
-	tutor-finder.service('SampleService', function() {
+	tutorFinder.service('SampleService', function() {
 
 	});
 });
