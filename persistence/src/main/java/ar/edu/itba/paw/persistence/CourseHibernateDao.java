@@ -12,9 +12,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Repository
 public class CourseHibernateDao implements CourseDao {
@@ -57,14 +59,56 @@ public class CourseHibernateDao implements CourseDao {
     }
 
     @Override
-    public List<Course> filter(final Filter filter, final int limit, final int offset) {
-        TypedQuery<Course> query = em.createQuery(filter.getQuery(), Course.class);
-        List<Object> params = filter.getQueryParams();
-        IntStream.range(0, params.size())
-                .forEach(i-> query.setParameter(i+1, params.get(i)));
+    public List<Course> filter(final List<Integer> days, final Integer startHour, final Integer endHour,
+                               final Double minPrice, final Double maxPrice, final String searchText, final int limit, final int offset) {
 
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        final CriteriaBuilder builder = em.getCriteriaBuilder();
+        final CriteriaQuery<Course> criteria = builder.createQuery(Course.class);
+        final Root<Course> root = criteria.from(Course.class);
+        final Join<Course, Subject> subject = root.join("subject");
+        final Join<Course, Professor> professors = root.join("professor");
+        final Join<Professor, Timeslot> timeslots = professors.join("timeslots");
+        criteria.select(root).distinct(true);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if(days != null) {
+            final Stream<Predicate> dayPredicates = days.stream().map(day -> builder.equal(timeslots.get("day"), day));
+            final Predicate dayPredicate = builder.or(dayPredicates.toArray(Predicate[]::new));
+            predicates.add(dayPredicate);
+        }
+
+        final String search;
+        if(searchText == null) {
+            search = "";
+        } else {
+            search = searchText.toLowerCase();
+        }
+
+        predicates.add(builder.like(builder.lower(subject.get("name")),
+                "%" + search + "%"));
+
+        if(startHour != null) {
+            predicates.add(builder.greaterThanOrEqualTo(timeslots.get("hour"), startHour));
+        }
+
+        if(endHour != null) {
+            predicates.add(builder.lessThan(timeslots.get("hour"), endHour));
+        }
+
+        if(minPrice != null) {
+            predicates.add(builder.greaterThanOrEqualTo(root.get("price"), minPrice));
+        }
+
+        if(maxPrice != null) {
+            predicates.add(builder.lessThanOrEqualTo(root.get("price"), maxPrice));
+        }
+
+        criteria.where(builder.and(predicates.toArray(new Predicate[] {})));
+
+        TypedQuery<Course> query = em.createQuery(criteria.select(root))
+                .setFirstResult(offset)
+                .setMaxResults(limit);
 
         return query.getResultList();
     }

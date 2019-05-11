@@ -23,9 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -71,7 +69,7 @@ public class CourseServiceImplTest {
         for (int i = 0; i < PAGE_SIZE + 1; i++) {
             courses.add(mock(Course.class));
         }
-        when(courseDao.filter(any(), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.filter(anyListOf(Integer.class), anyInt(), anyInt(), anyDouble(), anyDouble(), anyString(), anyInt(), anyInt())).thenReturn(courses);
 
         final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, PAGE);
         assertTrue(results.isHasNext());
@@ -87,7 +85,7 @@ public class CourseServiceImplTest {
             courses.add(mock(Course.class));
         }
 
-        when(courseDao.filter(any(), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.filter(anyListOf(Integer.class), anyInt(), anyInt(), anyDouble(), anyDouble(), anyString(), anyInt(), anyInt())).thenReturn(courses);
 
         final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, PAGE);
         assertFalse(results.isHasNext());
@@ -99,8 +97,7 @@ public class CourseServiceImplTest {
         final List<Course> courses = mock(List.class);
         when(courses.size()).thenReturn(0);
 
-        FilterBuilder filterBuilder = new FilterBuilder();
-        when(courseDao.filter(filterBuilder.filterByName(eq(NAME)).getFilter(), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.filter(anyListOf(Integer.class), anyInt(), anyInt(), anyDouble(), anyDouble(), eq(NAME), anyInt(), anyInt())).thenReturn(courses);
 
         final Integer INVALID_PAGE = 999;
 

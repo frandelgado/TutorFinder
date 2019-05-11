@@ -2,6 +2,7 @@ package ar.edu.itba.paw.models;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "subjects")
@@ -22,6 +23,9 @@ public class Subject {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name="area_id", foreignKey = @ForeignKey(name = "subjects_area_id_fkey"))
     private Area area;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject")
+    private List<Course> courses;
 
     /* default */ Subject() {
         // Just for Hibernate
