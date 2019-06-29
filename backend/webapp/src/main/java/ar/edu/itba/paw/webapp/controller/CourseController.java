@@ -10,12 +10,13 @@ import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.CourseForm;
 import ar.edu.itba.paw.webapp.dto.form.MessageForm;
-import ar.edu.itba.paw.webapp.validator.DTOConstraintValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -43,8 +44,6 @@ public class CourseController extends BaseController{
     @Autowired
     private ClassReservationService classReservationService;
 
-    @Autowired
-    private DTOConstraintValidator validator;
 
     @Context
     private UriInfo uriInfo;
@@ -137,11 +136,10 @@ public class CourseController extends BaseController{
     @POST
     @Path("{professor}_{subject}/comments")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
-    public Response comment(final CommentForm comment,
+    public Response comment(@Valid final CommentForm comment,
                             @PathParam("professor") final long professorId,
-                            @PathParam("subject") final long subjectId) throws DTOConstraintException {
+                            @PathParam("subject") final long subjectId) throws ConstraintViolationException {
 
-        validator.validate(comment);
         final User loggedUser = loggedUser();
 
         final boolean sent;
@@ -165,9 +163,8 @@ public class CourseController extends BaseController{
 
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON, })
-    public Response create(final CourseForm form) throws DTOConstraintException {
+    public Response create(@Valid final CourseForm form) throws ConstraintViolationException {
 
-        validator.validate(form);
         final User user = loggedUser();
 
         final Course course;
@@ -277,11 +274,10 @@ public class CourseController extends BaseController{
     @PUT
     @Path("{professor}_{subject}")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
-    public Response modify(final CourseForm form,
+    public Response modify(@Valid final CourseForm form,
                            @PathParam("professor") final long professorId,
-                           @PathParam("subject") final long subjectId) throws DTOConstraintException {
+                           @PathParam("subject") final long subjectId) throws ConstraintViolationException {
 
-        validator.validate(form);
         final User user = loggedUser();
 
         final Course course;

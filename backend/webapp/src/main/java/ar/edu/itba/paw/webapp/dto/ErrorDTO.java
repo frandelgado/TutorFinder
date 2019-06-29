@@ -22,7 +22,8 @@ public class ErrorDTO {
     }
 
     public ErrorDTO(final ConstraintViolation<?> violation) {
-        this.field = violation.getPropertyPath().toString();
+        final String[] path = violation.getPropertyPath().toString().split("\\.");
+        this.field = path[path.length - 1];
         this.error = violation.getMessage();
     }
 }

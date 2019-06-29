@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.DTOConstraintException;
 import ar.edu.itba.paw.exceptions.NonexistentConversationException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.service.ConversationService;
@@ -9,10 +8,11 @@ import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.dto.form.MessageForm;
-import ar.edu.itba.paw.webapp.validator.DTOConstraintValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -28,8 +28,6 @@ public class ConversationController extends BaseController {
     @Autowired
     private ConversationService conversationService;
 
-    @Autowired
-    private DTOConstraintValidator validator;
 
     @Context
     private UriInfo uriInfo;
@@ -92,10 +90,8 @@ public class ConversationController extends BaseController {
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON, })
     @Path("/{id}")
-    public Response sendMessage(@PathParam("id") final long id, final MessageForm message)
-            throws DTOConstraintException {
-
-        validator.validate(message);
+    public Response sendMessage(@PathParam("id") final long id, @Valid final MessageForm message)
+            throws ConstraintViolationException {
 
         final User loggedUser = loggedUser();
 

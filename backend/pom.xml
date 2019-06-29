@@ -20,8 +20,8 @@
     <servlet-api.version>2.5</servlet-api.version>
     <jstl.version>1.2</jstl.version>
     <org.hsqldb.version>2.3.1</org.hsqldb.version>
-    <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
-    <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
+    <javax.validation-api.version>1.1.0.Final</javax.validation-api.version>
+    <org.hibernate.validator>5.0.3.Final</org.hibernate.validator>
     <spring-security.version>4.0.4.RELEASE</spring-security.version>
     <org.slf4j.version>1.7.5</org.slf4j.version>
     <logback.version>1.1.2</logback.version>
@@ -248,6 +248,11 @@
       <dependency>
         <groupId>org.glassfish.jersey.media</groupId>
         <artifactId>jersey-media-jaxb</artifactId>
+        <version>${jersey.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.jersey.ext</groupId>
+        <artifactId>jersey-bean-validation</artifactId>
         <version>${jersey.version}</version>
       </dependency>
     </dependencies>
