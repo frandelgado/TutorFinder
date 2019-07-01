@@ -62,7 +62,7 @@ public class ProfessorController extends BaseController{
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response professors(@QueryParam("q") final String query,
+    public Response professors(@DefaultValue("") @QueryParam("q") final String query,
                                @DefaultValue("1") @QueryParam("page") final int page) {
         final PagedResults<Professor> professors = ps.filterByFullName(query, page);
 

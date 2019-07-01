@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-@Path("/courses/{professor}_{subject}/files")
+@Path("courses/{professor}_{subject}/files")
 @Component
 public class CourseFileController extends BaseController {
 
@@ -55,7 +55,7 @@ public class CourseFileController extends BaseController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = { MediaType.MEDIA_TYPE_WILDCARD, })
+    @Produces(value = { MediaType.APPLICATION_OCTET_STREAM, })
     public Response downloadFile(@PathParam("professor") final long professorId,
                                  @PathParam("subject") final long subjectId,
                                  @PathParam("id") final long id) {

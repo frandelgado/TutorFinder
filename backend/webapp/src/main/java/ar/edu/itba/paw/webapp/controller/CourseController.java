@@ -88,7 +88,7 @@ public class CourseController extends BaseController{
 
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response courses(@QueryParam("q") final String query,
+    public Response courses(@DefaultValue("") @QueryParam("q") final String query,
                             @QueryParam("start") final Integer startHour,
                             @QueryParam("end") final Integer endHour,
                             @QueryParam("min") final Double minPrice,

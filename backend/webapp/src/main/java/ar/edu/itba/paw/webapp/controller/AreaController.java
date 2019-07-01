@@ -35,7 +35,7 @@ public class AreaController extends BaseController {
 
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response areas(@QueryParam("q") final String query,
+    public Response areas(@DefaultValue("") @QueryParam("q") final String query,
                           @DefaultValue("1") @QueryParam("page") final int page) {
         final PagedResults<Area> areas = as.filterAreasByName(query, page);
 
