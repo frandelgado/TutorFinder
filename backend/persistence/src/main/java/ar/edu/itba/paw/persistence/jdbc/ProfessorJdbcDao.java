@@ -104,6 +104,11 @@ public class ProfessorJdbcDao implements ProfessorDao {
     }
 
     @Override
+    public long totalProfessorsByFullName(String fullName) {
+        return 0;
+    }
+
+    @Override
     public Professor merge(Professor professor) {
         return null;
     }
@@ -111,5 +116,10 @@ public class ProfessorJdbcDao implements ProfessorDao {
     @Override
     public List<ClassReservation> getPagedClassRequests(Long professorId, int limit, int offset) {
         return null;
+    }
+
+    @Override
+    public long totalClassRequests(Long professorId) {
+        return 0;
     }
 }

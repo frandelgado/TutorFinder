@@ -92,6 +92,18 @@ public class ProfessorHibernateDao implements ProfessorDao {
     }
 
     @Override
+    public long totalProfessorsByFullName(final String fullName) {
+        final String search = "%" + inputSanitizer.sanitizeWildcards(fullName) + "%";
+        LOGGER.trace("Counting professors with full name containing {}", fullName);
+        final TypedQuery<Long> query = em.createQuery("select count(p.id) from Professor as p" +
+                " where upper(concat(p.name, ' ', p.lastname)) like upper(:name)", Long.class);
+        query.setParameter("name", search);
+        final Long result = query.getSingleResult();
+
+        return result == null ? 0 : result;
+    }
+
+    @Override
     public Professor merge(final Professor professor) {
         return em.merge(professor);
     }
@@ -105,5 +117,16 @@ public class ProfessorHibernateDao implements ProfessorDao {
         query.setMaxResults(limit);
         return query.getResultList();
 
+    }
+
+    @Override
+    public long totalClassRequests(final Long professorId) {
+        LOGGER.trace("Counting  class requests for professor with id {}", professorId);
+        final TypedQuery<Long> query = em.createQuery("select count(c.classRequestId) from ClassReservation as c where" +
+                " c.course.professor.id= :professor_id", Long.class);
+        query.setParameter("professor_id", professorId);
+        final Long result = query.getSingleResult();
+
+        return result == null ? 0 : result;
     }
 }

@@ -48,4 +48,16 @@ public class AreaHibernateDao implements AreaDao {
         query.setMaxResults(limit);
         return query.getResultList();
     }
+
+    @Override
+    public long totalAreasByName(final String name) {
+        final String search = "%" + inputSanitizer.sanitizeWildcards(name) + "%";
+        LOGGER.trace("Counting areas with name containing {}", name);
+        final TypedQuery<Long> query = em.createQuery("select count(a.id) from Area as a where upper(a.name)" +
+                " like upper(:name)", Long.class);
+        query.setParameter("name", search);
+        final Long result = query.getSingleResult();
+
+        return result == null ? 0 : result;
+    }
 }

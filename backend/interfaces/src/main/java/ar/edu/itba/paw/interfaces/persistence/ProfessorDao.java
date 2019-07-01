@@ -19,7 +19,11 @@ public interface ProfessorDao {
 
     List<Professor> filterByFullName(final String fullName, final int limit, final int offset);
 
+    long totalProfessorsByFullName(String fullName);
+
     Professor merge(Professor professor);
 
     List<ClassReservation> getPagedClassRequests(final Long professorId, final int limit, final int offset);
+
+    long totalClassRequests(Long professorId);
 }

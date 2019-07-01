@@ -67,6 +67,17 @@ public class UserHibernateDao implements UserDao {
     }
 
     @Override
+    public long totalReservations(final Long userId) {
+        LOGGER.trace("Counting reservations for user with id {}", userId);
+        final TypedQuery<Long> query = em.createQuery("select count(c.classRequestId) from ClassReservation" +
+                " as c where c.student.id= :student_id", Long.class);
+        query.setParameter("student_id", userId);
+        final Long result = query.getSingleResult();
+
+        return result == null ? 0 : result;
+    }
+
+    @Override
     public boolean changePasswordById(final Long userId, final String newPassword) {
         final User user = em.find(User.class, userId);
 

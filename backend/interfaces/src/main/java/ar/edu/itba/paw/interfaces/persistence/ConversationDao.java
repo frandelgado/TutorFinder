@@ -12,6 +12,8 @@ public interface ConversationDao {
 
     List<Conversation> findByUserId(final Long user_id, final int limit, final int offset);
 
+    long totalConversationsByUserId(Long userId);
+
     Conversation findByIds(final Long user_id, final Long professor_id, final Long subject_id);
 
     Conversation merge(Conversation conversation);

@@ -48,6 +48,17 @@ public class ConversationHibernateDao implements ConversationDao {
     }
 
     @Override
+    public long totalConversationsByUserId(final Long userId) {
+        LOGGER.trace("Counting conversations belonging to a user with id {}", userId);
+        final TypedQuery<Long> query = em.createQuery("select count(c.id) from Conversation as c where" +
+                " c.professor.id = :id or c.user.id = :id", Long.class);
+        query.setParameter("id", userId);
+        final Long result = query.getSingleResult();
+
+        return result == null ? 0 : result;
+    }
+
+    @Override
     public Conversation findByIds(final Long user_id, final Long professor_id, final Long subject_id) {
         LOGGER.trace("Querying for conversation belonging to the users with id {} and {} for subject with id {}",
                 user_id, professor_id, subject_id);

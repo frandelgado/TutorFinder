@@ -72,6 +72,11 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public long totalReservations(Long userId) {
+        return 0;
+    }
+
+    @Override
     public boolean changePasswordById(Long userId, String newPassword) {
         LOGGER.trace("Changing password for user with id {}", userId);
         final int updated = jdbcTemplate.update("UPDATE users SET password = ? WHERE user_id = ?",

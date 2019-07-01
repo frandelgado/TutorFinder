@@ -3,9 +3,11 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.exceptions.CourseAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.persistence.utils.InputSanitizer;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -25,6 +27,9 @@ public class CourseHibernateDao implements CourseDao {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private InputSanitizer inputSanitizer;
 
     @Override
     public Optional<Course> findByIds(final long professor_id, final long subject_id) {
@@ -48,6 +53,17 @@ public class CourseHibernateDao implements CourseDao {
     }
 
     @Override
+    public long totalByProfessorId(final Long professor_id) {
+        LOGGER.trace("Counting for courses belonging to a professor with id {}", professor_id);
+        final TypedQuery<Long> query = em.createQuery("select count(*) from Course as c where" +
+                " c.professor.id = :id", Long.class);
+        query.setParameter("id", professor_id);
+        final Long result = query.getSingleResult();
+
+        return result == null ? 0 : result;
+    }
+
+    @Override
     public List<Course> filterByAreaId(final long areaId, final int limit, final int offset) {
         LOGGER.trace("Querying for courses from area with id {}", areaId);
         final TypedQuery<Course> query = em.createQuery("from Course as c where c.subject.area.id = :id " +
@@ -56,6 +72,17 @@ public class CourseHibernateDao implements CourseDao {
         query.setFirstResult(offset);
         query.setMaxResults(limit);
         return query.getResultList();
+    }
+
+    @Override
+    public long totalByAreaId(final Long areaId) {
+        LOGGER.trace("Counting for courses from area with id {}", areaId);
+        final TypedQuery<Long> query = em.createQuery("select count(*) from Course as c where" +
+                " c.subject.area.id = :id", Long.class);
+        query.setParameter("id", areaId);
+        final Long result = query.getSingleResult();
+
+        return result == null ? 0 : result;
     }
 
     @Override
@@ -82,7 +109,7 @@ public class CourseHibernateDao implements CourseDao {
         if(searchText == null) {
             search = "";
         } else {
-            search = searchText.toLowerCase();
+            search = inputSanitizer.sanitizeWildcards(searchText.toLowerCase());
         }
 
         predicates.add(builder.like(builder.lower(subject.get("name")),
@@ -111,6 +138,60 @@ public class CourseHibernateDao implements CourseDao {
                 .setMaxResults(limit);
 
         return query.getResultList();
+    }
+
+    @Override
+    public long totalByFilter(final List<Integer> days, final Integer startHour, final Integer endHour,
+                               final Double minPrice, final Double maxPrice, final String searchText) {
+
+        final CriteriaBuilder builder = em.getCriteriaBuilder();
+        final CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        final Root<Course> root = criteria.from(Course.class);
+        final Join<Course, Subject> subject = root.join("subject");
+        final Join<Course, Professor> professors = root.join("professor");
+        final Join<Professor, Timeslot> timeslots = professors.join("timeslots");
+        criteria.select(builder.countDistinct(root));
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if(days != null) {
+            final Stream<Predicate> dayPredicates = days.stream().map(day -> builder.equal(timeslots.get("day"), day));
+            final Predicate dayPredicate = builder.or(dayPredicates.toArray(Predicate[]::new));
+            predicates.add(dayPredicate);
+        }
+
+        final String search;
+        if(searchText == null) {
+            search = "";
+        } else {
+            search = inputSanitizer.sanitizeWildcards(searchText.toLowerCase());
+        }
+
+        predicates.add(builder.like(builder.lower(subject.get("name")),
+                "%" + search + "%"));
+
+        if(startHour != null) {
+            predicates.add(builder.greaterThanOrEqualTo(timeslots.get("hour"), startHour));
+        }
+
+        if(endHour != null) {
+            predicates.add(builder.lessThan(timeslots.get("hour"), endHour));
+        }
+
+        if(minPrice != null) {
+            predicates.add(builder.greaterThanOrEqualTo(root.get("price"), minPrice));
+        }
+
+        if(maxPrice != null) {
+            predicates.add(builder.lessThanOrEqualTo(root.get("price"), maxPrice));
+        }
+
+        criteria.where(builder.and(predicates.toArray(new Predicate[] {})));
+
+        TypedQuery<Long> query = em.createQuery(criteria.select(builder.countDistinct(root)));
+        final Long result = query.getSingleResult();
+
+        return result == null ? 0 : result;
     }
 
     @Override
@@ -149,6 +230,18 @@ public class CourseHibernateDao implements CourseDao {
         query.setFirstResult(offset);
         query.setMaxResults(limit);
         return query.getResultList();
+    }
+
+    @Override
+    public long totalComments(final Course course) {
+        LOGGER.trace("Counting comments for course taught by professor with id {} and subject {}",
+                course.getProfessor().getId(), course.getSubject().getId());
+        final TypedQuery<Long> query = em.createQuery("select count(c.id) from Comment as c where c.course = :course",
+                Long.class);
+        query.setParameter("course", course);
+        final Long result = query.getSingleResult();
+
+        return result == null ? 0 : result;
     }
 
     @Override

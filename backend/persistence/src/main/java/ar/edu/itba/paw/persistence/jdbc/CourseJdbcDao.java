@@ -82,6 +82,11 @@ public class CourseJdbcDao implements CourseDao {
     }
 
     @Override
+    public long totalByProfessorId(Long professor_id) {
+        return 0;
+    }
+
+    @Override
     public List<Course> filterByAreaId(final long areaId, final int limit, final int offset) {
         LOGGER.trace("Querying for courses from area with id {}", areaId);
         final List<Course> courses = jdbcTemplate.query(
@@ -94,8 +99,18 @@ public class CourseJdbcDao implements CourseDao {
     }
 
     @Override
+    public long totalByAreaId(Long areaId) {
+        return 0;
+    }
+
+    @Override
     public List<Course> filter(List<Integer> days, Integer startHour, Integer endHour, Double minPrice, Double maxPrice, String searchText, int limit, int offset) {
         return null;
+    }
+
+    @Override
+    public long totalByFilter(List<Integer> days, Integer startHour, Integer endHour, Double minPrice, Double maxPrice, String searchText) {
+        return 0;
     }
 
 
@@ -137,6 +152,11 @@ public class CourseJdbcDao implements CourseDao {
     @Override
     public List<Comment> getComments(Course course, int limit, int offset) {
         return null;
+    }
+
+    @Override
+    public long totalComments(Course course) {
+        return 0;
     }
 
     @Override

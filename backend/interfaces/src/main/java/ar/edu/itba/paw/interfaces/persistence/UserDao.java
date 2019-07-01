@@ -23,5 +23,7 @@ public interface UserDao {
 
     List<ClassReservation> pagedReservations(final Long userId, final Integer limit, final Integer offset);
 
+    long totalReservations(Long userId);
+
     boolean changePasswordById(final Long userId, final String newPassword);
 }

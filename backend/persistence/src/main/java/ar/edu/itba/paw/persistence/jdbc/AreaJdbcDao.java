@@ -64,4 +64,9 @@ public class AreaJdbcDao implements AreaDao {
         );
         return list;
     }
+
+    @Override
+    public long totalAreasByName(String name) {
+        return 0;
+    }
 }
