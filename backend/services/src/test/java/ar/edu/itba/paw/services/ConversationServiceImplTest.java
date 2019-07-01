@@ -67,10 +67,11 @@ public class ConversationServiceImplTest {
     public void testFindByUserIdHasNext() {
         final List<Conversation> conversations = new LinkedList<>();
         final Integer PAGE = 1;
-        for (int i = 0; i < PAGE_SIZE + 1; i++) {
+        for (int i = 0; i < PAGE_SIZE; i++) {
             conversations.add(mock(Conversation.class));
         }
         when(conversationDao.findByUserId(eq(ID), anyInt(), anyInt())).thenReturn(conversations);
+        when(conversationDao.totalConversationsByUserId(eq(ID))).thenReturn((long) PAGE_SIZE + 1);
 
         final PagedResults<Conversation> results = conversationService.findByUserId(ID, PAGE);
         assertTrue(results.isHasNext());
@@ -86,6 +87,7 @@ public class ConversationServiceImplTest {
             conversations.add(mock(Conversation.class));
         }
         when(conversationDao.findByUserId(eq(ID), anyInt(), anyInt())).thenReturn(conversations);
+        when(conversationDao.totalConversationsByUserId(eq(ID))).thenReturn((long) RESULT_NUMBER);
 
         final PagedResults<Conversation> results = conversationService.findByUserId(ID, PAGE);
         assertFalse(results.isHasNext());
@@ -97,6 +99,7 @@ public class ConversationServiceImplTest {
         final List<Conversation> conversations = mock(List.class);
         when(conversations.size()).thenReturn(0);
         when(conversationDao.findByUserId(eq(ID), anyInt(), anyInt())).thenReturn(conversations);
+        when(conversationDao.totalConversationsByUserId(eq(ID))).thenReturn(0L);
 
         final Integer INVALID_PAGE = 999;
 

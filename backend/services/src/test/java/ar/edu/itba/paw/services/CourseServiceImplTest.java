@@ -66,10 +66,11 @@ public class CourseServiceImplTest {
     public void testFilterCoursesByNameHasNext() {
         final List<Course> courses = new LinkedList<>();
         final Integer PAGE = 1;
-        for (int i = 0; i < PAGE_SIZE + 1; i++) {
+        for (int i = 0; i < PAGE_SIZE; i++) {
             courses.add(mock(Course.class));
         }
         when(courseDao.filter(anyListOf(Integer.class), anyInt(), anyInt(), anyDouble(), anyDouble(), anyString(), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.totalByFilter(anyListOf(Integer.class), anyInt(), anyInt(), anyDouble(), anyDouble(), anyString())).thenReturn((long) PAGE_SIZE + 1);
 
         final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, PAGE);
         assertTrue(results.isHasNext());
@@ -86,6 +87,7 @@ public class CourseServiceImplTest {
         }
 
         when(courseDao.filter(anyListOf(Integer.class), anyInt(), anyInt(), anyDouble(), anyDouble(), anyString(), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.totalByFilter(anyListOf(Integer.class), anyInt(), anyInt(), anyDouble(), anyDouble(), anyString())).thenReturn((long) RESULT_NUMBER);
 
         final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, PAGE);
         assertFalse(results.isHasNext());
@@ -98,6 +100,7 @@ public class CourseServiceImplTest {
         when(courses.size()).thenReturn(0);
 
         when(courseDao.filter(anyListOf(Integer.class), anyInt(), anyInt(), anyDouble(), anyDouble(), eq(NAME), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.totalByFilter(anyListOf(Integer.class), anyInt(), anyInt(), anyDouble(), anyDouble(), anyString())).thenReturn(0L);
 
         final Integer INVALID_PAGE = 999;
 
@@ -199,10 +202,11 @@ public class CourseServiceImplTest {
     public void testFindCoursesByProfessorIdHasNext() {
         final List<Course> courses = new LinkedList<>();
         final Integer PAGE = 1;
-        for (int i = 0; i < PAGE_SIZE + 1; i++) {
+        for (int i = 0; i < PAGE_SIZE; i++) {
             courses.add(mock(Course.class));
         }
         when(courseDao.findByProfessorId(eq(PROFESSOR_ID), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.totalByProfessorId(eq(PROFESSOR_ID))).thenReturn((long) PAGE_SIZE + 1);
 
         final PagedResults<Course> results = courseService.findCourseByProfessorId(PROFESSOR_ID, PAGE);
         assertTrue(results.isHasNext());
@@ -218,6 +222,7 @@ public class CourseServiceImplTest {
             courses.add(mock(Course.class));
         }
         when(courseDao.findByProfessorId(eq(PROFESSOR_ID), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.totalByProfessorId(eq(PROFESSOR_ID))).thenReturn((long) RESULT_NUMBER);
 
         final PagedResults<Course> results = courseService.findCourseByProfessorId(PROFESSOR_ID, PAGE);
         assertFalse(results.isHasNext());
@@ -229,6 +234,7 @@ public class CourseServiceImplTest {
         final List<Course> courses = mock(List.class);
         when(courses.size()).thenReturn(0);
         when(courseDao.findByProfessorId(eq(PROFESSOR_ID), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.totalByProfessorId(eq(PROFESSOR_ID))).thenReturn(0L);
 
         final Integer INVALID_PAGE = 999;
 
@@ -249,10 +255,11 @@ public class CourseServiceImplTest {
     public void testFilterByAreaIdHasNext() {
         final List<Course> courses = new LinkedList<>();
         final Integer PAGE = 1;
-        for (int i = 0; i < PAGE_SIZE + 1; i++) {
+        for (int i = 0; i < PAGE_SIZE; i++) {
             courses.add(mock(Course.class));
         }
         when(courseDao.filterByAreaId(eq(AREA_ID), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.totalByAreaId(eq(AREA_ID))).thenReturn((long) PAGE_SIZE + 1);
 
         final PagedResults<Course> results = courseService.filterByAreaId(AREA_ID, PAGE);
         assertTrue(results.isHasNext());
@@ -268,6 +275,7 @@ public class CourseServiceImplTest {
             courses.add(mock(Course.class));
         }
         when(courseDao.filterByAreaId(eq(AREA_ID), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.totalByAreaId(eq(AREA_ID))).thenReturn((long) RESULT_NUMBER);
 
         final PagedResults<Course> results = courseService.filterByAreaId(AREA_ID, PAGE);
         assertFalse(results.isHasNext());
@@ -279,6 +287,7 @@ public class CourseServiceImplTest {
         final List<Course> courses = mock(List.class);
         when(courses.size()).thenReturn(0);
         when(courseDao.filterByAreaId(eq(AREA_ID), anyInt(), anyInt())).thenReturn(courses);
+        when(courseDao.totalByAreaId(eq(AREA_ID))).thenReturn(0L);
 
         final Integer INVALID_PAGE = 999;
 

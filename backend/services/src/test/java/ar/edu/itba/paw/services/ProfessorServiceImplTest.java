@@ -69,10 +69,11 @@ public class ProfessorServiceImplTest {
     public void testFilterByFullNameHasNext() {
         final List<Professor> professors = new LinkedList<>();
         final Integer PAGE = 1;
-        for (int i = 0; i < PAGE_SIZE + 1; i++) {
+        for (int i = 0; i < PAGE_SIZE; i++) {
             professors.add(mock(Professor.class));
         }
         when(professorDao.filterByFullName(eq(NAME), anyInt(), anyInt())).thenReturn(professors);
+        when(professorDao.totalProfessorsByFullName(eq(NAME))).thenReturn((long) PAGE_SIZE + 1);
 
         final PagedResults<Professor> results = professorService.filterByFullName(NAME, PAGE);
         assertTrue(results.isHasNext());
@@ -88,6 +89,7 @@ public class ProfessorServiceImplTest {
             professors.add(mock(Professor.class));
         }
         when(professorDao.filterByFullName(eq(NAME), anyInt(), anyInt())).thenReturn(professors);
+        when(professorDao.totalProfessorsByFullName(eq(NAME))).thenReturn((long) RESULT_NUMBER);
 
         final PagedResults<Professor> results = professorService.filterByFullName(NAME, PAGE);
         assertFalse(results.isHasNext());
@@ -99,6 +101,7 @@ public class ProfessorServiceImplTest {
         final List<Professor> professors = mock(List.class);
         when(professors.size()).thenReturn(0);
         when(professorDao.filterByFullName(eq(NAME), anyInt(), anyInt())).thenReturn(professors);
+        when(professorDao.totalProfessorsByFullName(eq(NAME))).thenReturn(0L);
 
         final Integer INVALID_PAGE = 666;
 

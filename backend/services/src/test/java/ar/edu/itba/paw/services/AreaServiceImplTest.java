@@ -47,10 +47,11 @@ public class AreaServiceImplTest {
     public void testFilterAreasByNameHasNext() {
         final List<Area> areas = new LinkedList<>();
         final Integer PAGE = 1;
-        for (int i = 0; i < PAGE_SIZE + 1; i++) {
+        for (int i = 0; i < PAGE_SIZE; i++) {
             areas.add(mock(Area.class));
         }
         when(areaDao.filterAreasByName(eq(NAME), anyInt(), anyInt())).thenReturn(areas);
+        when(areaDao.totalAreasByName(eq(NAME))).thenReturn((long) PAGE_SIZE + 1);
 
         final PagedResults<Area> results = areaService.filterAreasByName(NAME, PAGE);
         assertTrue(results.isHasNext());
@@ -66,6 +67,7 @@ public class AreaServiceImplTest {
             areas.add(mock(Area.class));
         }
         when(areaDao.filterAreasByName(eq(NAME), anyInt(), anyInt())).thenReturn(areas);
+        when(areaDao.totalAreasByName(eq(NAME))).thenReturn((long) RESULT_NUMBER);
 
         final PagedResults<Area> results = areaService.filterAreasByName(NAME, PAGE);
         assertFalse(results.isHasNext());
@@ -77,6 +79,7 @@ public class AreaServiceImplTest {
         final List<Area> areas = mock(List.class);
         when(areas.size()).thenReturn(0);
         when(areaDao.filterAreasByName(eq(NAME), anyInt(), anyInt())).thenReturn(areas);
+        when(areaDao.totalAreasByName(eq(NAME))).thenReturn(0L);
 
         final Integer INVALID_PAGE = 999;
 
