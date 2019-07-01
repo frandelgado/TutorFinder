@@ -9,6 +9,7 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.services.utils.PaginationResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    @Autowired
+    private PaginationResultBuilder pagedResultBuilder;
 
     @Override
     public User findUserById(final long id) {
@@ -145,24 +149,17 @@ public class UserServiceImpl implements UserService {
         }
 
         LOGGER.debug("Searching for reservations for user with id {}", userId);
-        final List<ClassReservation> reservations = userDao.pagedReservations(userId, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
-        final PagedResults<ClassReservation> results;
+        final List<ClassReservation> reservations = userDao.pagedReservations(userId, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final long total = userDao.totalReservations(userId);
 
-        final int size = reservations.size();
+        final PagedResults<ClassReservation> pagedResults =
+                pagedResultBuilder.getPagedResults(reservations, total, page, PAGE_SIZE);
 
-        if(size == 0 && page > 1) {
+        if(pagedResults == null) {
             LOGGER.error("Page number exceeds total page count");
             return null;
         }
 
-        if(size > PAGE_SIZE) {
-            reservations.remove(PAGE_SIZE);
-            LOGGER.trace("The search has more pages, removing extra result");
-            results = new PagedResults<>(reservations, true);
-        } else {
-            LOGGER.trace("The search has no more pages to show");
-            results = new PagedResults<>(reservations, false);
-        }
-        return results;
+        return pagedResults;
     }
 }

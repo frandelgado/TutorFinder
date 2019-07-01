@@ -4,6 +4,7 @@ import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.services.utils.PaginationResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private ClassReservationService classReservationService;
 
+    @Autowired
+    private PaginationResultBuilder pagedResultBuilder;
+
     @Override
     public Course findCourseByIds(final long professor_id, final long subject_id) {
         LOGGER.debug("Searching for course taught by professor with id {} about subject with id {}",
@@ -50,25 +54,18 @@ public class CourseServiceImpl implements CourseService {
         }
 
         LOGGER.debug("Searching for courses taught by professor with id {}", professor_id);
-        final List<Course> courses = courseDao.findByProfessorId(professor_id, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
-        final PagedResults<Course> results;
+        final List<Course> courses = courseDao.findByProfessorId(professor_id, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final long total = courseDao.totalByProfessorId(professor_id);
 
-        final int size = courses.size();
+        final PagedResults<Course> pagedResults =
+                pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
 
-        if(size == 0 && page > 1) {
+        if(pagedResults == null) {
             LOGGER.error("Page number exceeds total page count");
             return null;
         }
 
-        if(size > PAGE_SIZE) {
-            courses.remove(PAGE_SIZE);
-            LOGGER.trace("The search has more pages, removing extra result");
-            results = new PagedResults<>(courses, true);
-        } else {
-            results = new PagedResults<>(courses, false);
-            LOGGER.trace("The search has no more pages to show");
-        }
-        return results;
+        return pagedResults;
     }
 
     @Override
@@ -79,24 +76,18 @@ public class CourseServiceImpl implements CourseService {
         }
 
         LOGGER.debug("Searching for courses from area with id {}", areaId);
-        final List<Course> courses = courseDao.filterByAreaId(areaId, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
-        final PagedResults<Course> results;
-        final int size = courses.size();
+        final List<Course> courses = courseDao.filterByAreaId(areaId, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final long total = courseDao.totalByAreaId(areaId);
 
-        if(size == 0 && page > 1) {
+        final PagedResults<Course> pagedResults =
+                pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
+
+        if(pagedResults == null) {
             LOGGER.error("Page number exceeds total page count");
             return null;
         }
 
-        if(size > PAGE_SIZE) {
-            LOGGER.trace("The search has more results to show, removing extra result");
-            courses.remove(PAGE_SIZE);
-            results = new PagedResults<>(courses, true);
-        } else {
-            LOGGER.trace("The search has no more pages to show");
-            results = new PagedResults<>(courses, false);
-        }
-        return results;
+        return pagedResults;
 
     }
 
@@ -129,23 +120,18 @@ public class CourseServiceImpl implements CourseService {
             LOGGER.debug("Adding filter by search text containing {}", searchText);
             fb = fb.filterByName(searchText);
         }
-        final List<Course> courses = courseDao.filter(days, startHour, endHour, minPrice, maxPrice, searchText, PAGE_SIZE+1, PAGE_SIZE * (page -1));
-        final PagedResults<Course> results;
-        final int size = courses.size();
-        if(size == 0 && page > 1){
+        final List<Course> courses = courseDao.filter(days, startHour, endHour, minPrice, maxPrice, searchText, PAGE_SIZE, PAGE_SIZE * (page -1));
+        final long total = courseDao.totalByFilter(days, startHour, endHour, minPrice, maxPrice, searchText);
+
+        final PagedResults<Course> pagedResults =
+                pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
+
+        if(pagedResults == null) {
             LOGGER.error("Page number exceeds total page count");
             return null;
         }
-        if(size > PAGE_SIZE) {
-            LOGGER.trace("Search has more results to show, removing extra result");
-            courses.remove(PAGE_SIZE);
-            results = new PagedResults<>(courses, true);
-        } else {
-            LOGGER.trace("Search has no more pages to show");
-            results = new PagedResults<>(courses, false);
-        }
 
-        return results;
+        return pagedResults;
     }
 
     @Override
@@ -235,24 +221,18 @@ public class CourseServiceImpl implements CourseService {
 
         LOGGER.debug("Searching for comments in course taught by professor with id {} about subject with id {}",
                 course.getProfessor().getId(), course.getSubject().getId());
-        final List<Comment> comments = courseDao.getComments(course, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
-        final PagedResults<Comment> results;
-        final int size = comments.size();
+        final List<Comment> comments = courseDao.getComments(course, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final long total = courseDao.totalComments(course);
 
-        if(size == 0 && page > 1) {
+        final PagedResults<Comment> pagedResults =
+                pagedResultBuilder.getPagedResults(comments, total, page, PAGE_SIZE);
+
+        if(pagedResults == null) {
             LOGGER.error("Page number exceeds total page count");
             return null;
         }
 
-        if(size > PAGE_SIZE) {
-            comments.remove(PAGE_SIZE);
-            results = new PagedResults<>(comments, true);
-            LOGGER.trace("The search has more pages, removing extra result");
-        } else {
-            LOGGER.trace("The search has no more pages to show");
-            results = new PagedResults<>(comments, false);
-        }
-        return results;
+        return pagedResults;
     }
 
     @Override

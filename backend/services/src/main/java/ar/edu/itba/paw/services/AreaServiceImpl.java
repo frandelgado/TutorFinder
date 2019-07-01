@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.persistence.AreaDao;
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.models.Area;
 import ar.edu.itba.paw.models.PagedResults;
+import ar.edu.itba.paw.services.utils.PaginationResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class AreaServiceImpl implements AreaService {
 
     @Autowired
     private AreaDao areaDao;
+
+    @Autowired
+    private PaginationResultBuilder pagedResultBuilder;
 
     @Override
     public Area findAreaById(final long id) {
@@ -44,25 +48,17 @@ public class AreaServiceImpl implements AreaService {
         }
 
         LOGGER.debug("Searching for areas with name containing {}", name);
-        final List<Area> areas = areaDao.filterAreasByName(name, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
-        final PagedResults<Area> results;
-        final int size = areas.size();
+        final List<Area> areas = areaDao.filterAreasByName(name, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final long total = areaDao.totalAreasByName(name);
 
-        if(size == 0 && page > 1) {
+        final PagedResults<Area> pagedResults = pagedResultBuilder.getPagedResults(areas, total, page, PAGE_SIZE);
+
+        if(pagedResults == null) {
             LOGGER.error("Page number exceeds total page count");
             return null;
         }
 
-        if(size > PAGE_SIZE) {
-            LOGGER.trace("The search has more pages, removing extra result");
-            areas.remove(PAGE_SIZE);
-            results = new PagedResults<>(areas, true);
-        } else {
-            LOGGER.trace("The search has no more pages to show");
-            results = new PagedResults<>(areas, false);
-        }
-        return results;
-
+        return pagedResults;
     }
 
 }

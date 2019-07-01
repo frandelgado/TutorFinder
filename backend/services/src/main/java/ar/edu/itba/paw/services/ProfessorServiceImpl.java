@@ -10,6 +10,7 @@ import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.exceptions.ProfessorWithoutUserException;
+import ar.edu.itba.paw.services.utils.PaginationResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private PaginationResultBuilder pagedResultBuilder;
+
     @Override
     @Transactional
     public Professor findById(final Long id) {
@@ -65,24 +69,18 @@ public class ProfessorServiceImpl implements ProfessorService {
         }
 
         LOGGER.debug("Searching for professors with full name containing {}", fullName);
-        final List<Professor> professors = professorDao.filterByFullName(fullName, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
-        final PagedResults<Professor> results;
-        final int size = professors.size();
+        final List<Professor> professors = professorDao.filterByFullName(fullName, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final long total = professorDao.totalProfessorsByFullName(fullName);
 
-        if(size == 0 && page > 1) {
+        final PagedResults<Professor> pagedResults =
+                pagedResultBuilder.getPagedResults(professors, total, page, PAGE_SIZE);
+
+        if(pagedResults == null) {
             LOGGER.error("Page number exceeds total page count");
             return null;
         }
 
-        if(size > PAGE_SIZE) {
-            LOGGER.trace("The search has more pages to show, removing extra result");
-            professors.remove(PAGE_SIZE);
-            results = new PagedResults<>(professors, true);
-        } else {
-            LOGGER.trace("The search has no more pages to show");
-            results = new PagedResults<>(professors, false);
-        }
-        return results;
+        return pagedResults;
     }
 
     @Override
@@ -283,24 +281,17 @@ public class ProfessorServiceImpl implements ProfessorService {
         }
 
         LOGGER.debug("Searching for reservations for user with id {}", professorId);
-        final List<ClassReservation> reservations = professorDao.getPagedClassRequests(professorId, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
-        final PagedResults<ClassReservation> results;
+        final List<ClassReservation> reservations = professorDao.getPagedClassRequests(professorId, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final long total = professorDao.totalClassRequests(professorId);
 
-        final int size = reservations.size();
+        final PagedResults<ClassReservation> pagedResults =
+                pagedResultBuilder.getPagedResults(reservations, total, page, PAGE_SIZE);
 
-        if(size == 0 && page > 1) {
+        if(pagedResults == null) {
             LOGGER.error("Page number exceeds total page count");
             return null;
         }
 
-        if(size > PAGE_SIZE) {
-            reservations.remove(PAGE_SIZE);
-            LOGGER.trace("The search has more pages, removing extra result");
-            results = new PagedResults<>(reservations, true);
-        } else {
-            LOGGER.trace("The search has no more pages to show");
-            results = new PagedResults<>(reservations, false);
-        }
-        return results;
+        return pagedResults;
     }
 }

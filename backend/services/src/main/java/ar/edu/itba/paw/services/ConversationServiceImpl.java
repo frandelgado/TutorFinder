@@ -10,6 +10,7 @@ import ar.edu.itba.paw.interfaces.service.SubjectService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.services.utils.PaginationResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PaginationResultBuilder pagedResultBuilder;
 
     @Transactional
     @Override
@@ -128,22 +132,18 @@ public class ConversationServiceImpl implements ConversationService {
         }
 
         LOGGER.debug("Searching for conversations belonging to user with id {}", userId);
-        final List<Conversation> conversations = conversationDao.findByUserId(userId, PAGE_SIZE + 1, PAGE_SIZE * (page - 1));
-        final PagedResults<Conversation> results;
-        final int size = conversations.size();
+        final List<Conversation> conversations = conversationDao.findByUserId(userId, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        final long total = conversationDao.totalConversationsByUserId(userId);
 
-        if(size == 0 && page > 1) {
+        final PagedResults<Conversation> pagedResults =
+                pagedResultBuilder.getPagedResults(conversations, total, page, PAGE_SIZE);
+
+        if(pagedResults == null) {
             LOGGER.error("Page number exceeds total page count");
             return null;
         }
 
-        if(size > PAGE_SIZE) {
-            conversations.remove(PAGE_SIZE);
-            results = new PagedResults<>(conversations, true);
-        } else {
-            results = new PagedResults<>(conversations, false);
-        }
-        return results;
+        return pagedResults;
     }
 
     @Transactional
