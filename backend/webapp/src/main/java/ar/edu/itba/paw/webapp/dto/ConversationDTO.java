@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.dto;
 
-import ar.edu.itba.paw.models.Area;
 import ar.edu.itba.paw.models.Conversation;
-import org.joda.time.LocalDateTime;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,7 +19,7 @@ public class ConversationDTO {
     private URI messagesUrl;
 
     @XmlElement(name = "latest_message")
-    private LocalDateTime latestMessage;
+    private String latestMessage;
 
     public ConversationDTO() {
     }
@@ -29,6 +27,7 @@ public class ConversationDTO {
     public ConversationDTO(final Conversation conversation, final URI baseUri) {
         this.id = conversation.getId();
         this.latestMessage = conversation.getLatestMessage();
+        this.latestMessage = conversation.getLatestMessage().toString();
         this.messagesUrl = baseUri.resolve("conversations/" + id +"/messages");
     }
 
@@ -48,11 +47,11 @@ public class ConversationDTO {
         this.messagesUrl = messagesUrl;
     }
 
-    public LocalDateTime getLatestMessage() {
+    public String getLatestMessage() {
         return latestMessage;
     }
 
-    public void setLatestMessage(LocalDateTime latestMessage) {
+    public void setLatestMessage(String latestMessage) {
         this.latestMessage = latestMessage;
     }
 }

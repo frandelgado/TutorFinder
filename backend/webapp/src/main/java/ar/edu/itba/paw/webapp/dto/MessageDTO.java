@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Message;
-import org.joda.time.LocalDateTime;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,7 +13,7 @@ public class MessageDTO {
 //    private UserDTO sender;
     private String text;
     //TODO: Check created data type
-    private LocalDateTime created;
+    private String created;
 
     @XmlElement(name = "conversation_url")
     private URI conversationUrl;
@@ -25,7 +24,7 @@ public class MessageDTO {
 
     public MessageDTO(final Message message, final URI baseUri) {
         this.id = message.getId();
-        this.created = message.getCreated();
+        this.created = message.getCreated().toString();
         this.text = message.getText();
 
         this.conversationUrl = baseUri.resolve("/conversations/" + message.getConversation().getId());
@@ -48,11 +47,11 @@ public class MessageDTO {
         this.text = text;
     }
 
-    public LocalDateTime getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 

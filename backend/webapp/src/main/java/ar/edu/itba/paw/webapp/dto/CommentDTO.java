@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Comment;
 import ar.edu.itba.paw.models.Course;
-import org.joda.time.LocalDateTime;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,7 +13,8 @@ public class CommentDTO {
     private long id;
 //    private UserDTO sender;
     private String comment;
-    private LocalDateTime created;
+    //TODO: Check created data type
+    private String created;
     private int rating;
 
     @XmlElement(name = "course_url")
@@ -26,7 +26,7 @@ public class CommentDTO {
 
     public CommentDTO(final Comment comment, final URI baseUri) {
         this.id = comment.getId();
-        this.created = comment.getCreated();
+        this.created = comment.getCreated().toString();
         this.comment = comment.getComment();
 
         final Course course = comment.getCourse();
@@ -52,11 +52,11 @@ public class CommentDTO {
         this.comment = comment;
     }
 
-    public LocalDateTime getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
