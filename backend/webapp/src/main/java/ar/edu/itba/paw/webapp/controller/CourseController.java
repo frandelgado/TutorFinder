@@ -24,6 +24,7 @@ import java.net.URI;
 import java.util.List;
 
 
+//TODO: Chequear badRequest en resultados paginados
 @Path("courses")
 @Component
 public class CourseController extends BaseController{
@@ -83,10 +84,12 @@ public class CourseController extends BaseController{
         final PagedResults<Comment> comments = courseService.getComments(course, page);
 
         if(comments == null) {
-            return Response.noContent().build(); //TODO: Cuando cambie paginacion sacar chequeo.
+            return badRequest("Invalid page number");
         }
 
-        return Response.ok(new CommentListDTO(comments.getResults(), uriInfo.getBaseUri())).build();
+        final Link[] links = linkBuilder.buildLinks(uriInfo, comments);
+
+        return Response.ok(new CommentListDTO(comments.getResults(), comments.getTotal(), uriInfo.getBaseUri())).links(links).build();
     }
 
     @GET
@@ -100,6 +103,10 @@ public class CourseController extends BaseController{
                             @DefaultValue("1") @QueryParam("page") final int page) {
         final PagedResults<Course> courses = courseService.filterCourses(days, startHour, endHour,
                 minPrice, maxPrice, query, page);
+
+        if(courses == null) {
+            return badRequest("Invalid page number");
+        }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, courses);
 

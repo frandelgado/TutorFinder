@@ -72,6 +72,7 @@ public class CourseFileController extends BaseController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
+        //TODO: Verificar si el header es necesario
         return Response
                 .ok(courseFile.getContent(), MediaType.valueOf(courseFile.getType()))
                 .header("Content-Disposition","attachment; filename=\"" + courseFile.getName() +"\"")

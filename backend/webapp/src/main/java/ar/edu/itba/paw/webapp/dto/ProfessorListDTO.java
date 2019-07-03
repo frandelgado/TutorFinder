@@ -10,16 +10,15 @@ public class ProfessorListDTO {
 
     private List<ProfessorDTO> professors;
     private int count;
-    private int totalCount;
+    private long totalCount;
 
     public ProfessorListDTO() {}
 
-    public ProfessorListDTO(final List<Professor> professors, final URI baseUri) {
+    public ProfessorListDTO(final List<Professor> professors, final long totalCount, final URI baseUri) {
         this.professors = new LinkedList<>();
-        for(Professor professor : professors) {
-            this.professors.add(new ProfessorDTO(professor, baseUri));
-        }
+        professors.forEach(professor -> this.professors.add(new ProfessorDTO(professor, baseUri)));
         this.count = professors.size();
+        this.totalCount = totalCount;
     }
 
     public List<ProfessorDTO> getProfessors() {
@@ -38,11 +37,11 @@ public class ProfessorListDTO {
         this.count = count;
     }
 
-    public int getTotalCount() {
+    public long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
     }
 }

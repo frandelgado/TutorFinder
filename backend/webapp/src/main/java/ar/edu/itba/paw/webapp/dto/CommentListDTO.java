@@ -11,16 +11,17 @@ import java.util.List;
 public class CommentListDTO {
 
     private List<CommentDTO> comments;
-    private int totalCount;
+    private long totalCount;
     private int count;
 
     public CommentListDTO() {
     }
 
-    public CommentListDTO(final List<Comment> comments, final URI uri) {
+    public CommentListDTO(final List<Comment> comments, final long totalCount, final URI uri) {
         this.comments = new LinkedList<>();
         comments.forEach(comment -> this.comments.add(new CommentDTO(comment, uri)));
         this.count = comments.size();
+        this.totalCount = totalCount;
     }
 
     public List<CommentDTO> getComments() {
@@ -31,11 +32,11 @@ public class CommentListDTO {
         this.comments = comments;
     }
 
-    public int getTotalCount() {
+    public long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
     }
 

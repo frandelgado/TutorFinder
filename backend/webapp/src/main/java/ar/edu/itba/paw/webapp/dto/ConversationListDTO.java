@@ -12,15 +12,16 @@ public class ConversationListDTO {
 
     private List<ConversationDTO> conversations;
     private int count;
-    private int totalCount;
+    private long totalCount;
 
     public ConversationListDTO() {
     }
 
-    public ConversationListDTO(final List<Conversation> conversations, final URI uri) {
+    public ConversationListDTO(final List<Conversation> conversations, final long totalCount, final URI uri) {
         this.conversations = new LinkedList<>();
         conversations.forEach(conversation -> this.conversations.add(new ConversationDTO(conversation, uri)));
         this.count = conversations.size();
+        this.totalCount = totalCount;
     }
 
     public List<ConversationDTO> getConversations() {
@@ -39,11 +40,11 @@ public class ConversationListDTO {
         this.count = count;
     }
 
-    public int getTotalCount() {
+    public long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
     }
 }

@@ -8,19 +8,17 @@ import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.dto.form.MessageForm;
+import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.net.URI;
 
-
+//TODO: Chequear badRequest en resultados paginados
 @Path("conversations")
 @Component
 public class ConversationController extends BaseController {
@@ -28,6 +26,8 @@ public class ConversationController extends BaseController {
     @Autowired
     private ConversationService conversationService;
 
+    @Autowired
+    private PaginationLinkBuilder linkBuilder;
 
     @Context
     private UriInfo uriInfo;
@@ -40,10 +40,12 @@ public class ConversationController extends BaseController {
         final PagedResults<Conversation> conversations = conversationService.findByUserId(loggedUser.getId(), page);
 
         if(conversations == null) {
-            return Response.noContent().build(); //TODO: Cuando cambie paginacion sacar chequeo.
+            return badRequest("Invalid page number");
         }
 
-        return Response.ok(new ConversationListDTO(conversations.getResults(), uriInfo.getBaseUri())).build();
+        final Link[] links = linkBuilder.buildLinks(uriInfo, conversations);
+
+        return Response.ok(new ConversationListDTO(conversations.getResults(), conversations.getTotal(), uriInfo.getBaseUri())).links(links).build();
     }
 
     @GET

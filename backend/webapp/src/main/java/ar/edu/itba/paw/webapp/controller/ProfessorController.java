@@ -6,6 +6,7 @@ import ar.edu.itba.paw.webapp.dto.AreaDTO;
 import ar.edu.itba.paw.webapp.dto.CourseListDTO;
 import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
 import ar.edu.itba.paw.webapp.dto.ProfessorListDTO;
+import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,8 @@ public class ProfessorController extends BaseController{
     @Autowired
     private PasswordResetService passwordResetService;
 
+    @Autowired
+    private PaginationLinkBuilder linkBuilder;
 
     @Context
     private UriInfo uriInfo;
@@ -66,9 +69,13 @@ public class ProfessorController extends BaseController{
                                @DefaultValue("1") @QueryParam("page") final int page) {
         final PagedResults<Professor> professors = ps.filterByFullName(query, page);
 
-        final Link[] links= new Link[1];
+        if(professors == null) {
+            return badRequest("Invalid page number");
+        }
 
-        return Response.ok(new ProfessorListDTO(professors.getResults(), uriInfo.getBaseUri())).links(links).build();
+        final Link[] links = linkBuilder.buildLinks(uriInfo, professors);
+
+        return Response.ok(new ProfessorListDTO(professors.getResults(), professors.getTotal(), uriInfo.getBaseUri())).links(links).build();
     }
 
 
@@ -97,10 +104,12 @@ public class ProfessorController extends BaseController{
         final PagedResults<Course> results = cs.findCourseByProfessorId(professor.getId(), page);
 
         if(results == null) {
-            return Response.noContent().build(); //FIXME: Cuando cambie paginacion sacar chequeo.
+            return badRequest("Invalid page number");
         }
 
-        return Response.ok(new CourseListDTO(results.getResults(), results.getTotal(), uriInfo.getBaseUri())).build();
+        final Link[] links = linkBuilder.buildLinks(uriInfo, results);
+
+        return Response.ok(new CourseListDTO(results.getResults(), results.getTotal(), uriInfo.getBaseUri())).links(links).build();
     }
 
 
