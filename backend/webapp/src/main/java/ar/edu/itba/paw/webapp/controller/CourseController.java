@@ -10,6 +10,7 @@ import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.CourseForm;
 import ar.edu.itba.paw.webapp.dto.form.MessageForm;
+import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,8 @@ public class CourseController extends BaseController{
     @Autowired
     private ClassReservationService classReservationService;
 
+    @Autowired
+    private PaginationLinkBuilder linkBuilder;
 
     @Context
     private UriInfo uriInfo;
@@ -98,9 +101,9 @@ public class CourseController extends BaseController{
         final PagedResults<Course> courses = courseService.filterCourses(days, startHour, endHour,
                 minPrice, maxPrice, query, page);
 
-        final Link[] links = new Link[1];
+        final Link[] links = linkBuilder.buildLinks(uriInfo, courses);
 
-        return Response.ok(new CourseListDTO(courses.getResults(), uriInfo.getBaseUri())).links(links).build();
+        return Response.ok(new CourseListDTO(courses.getResults(), courses.getTotal(), uriInfo.getBaseUri())).links(links).build();
     }
 
 //    @POST
@@ -263,13 +266,6 @@ public class CourseController extends BaseController{
 
         return Response.noContent().build();
     }
-
-//    @InitBinder
-//    private void dateBinder(WebDataBinder binder) {
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
-//        binder.registerCustomEditor(Date.class, editor);
-//    }
 
     @PUT
     @Path("{professor}_{subject}")

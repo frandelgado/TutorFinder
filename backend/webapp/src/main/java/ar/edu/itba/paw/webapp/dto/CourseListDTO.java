@@ -13,15 +13,16 @@ public class CourseListDTO {
 
     private List<CourseDTO> courses;
     private int count;
-    private int totalCount;
+    private long totalCount;
 
     public CourseListDTO() {
     }
 
-    public CourseListDTO(final List<Course> courses, final URI baseUri) {
+    public CourseListDTO(final List<Course> courses, long totalCount, final URI baseUri) {
         this.courses = new LinkedList<>();
         courses.forEach(course -> this.courses.add(new CourseDTO(course, baseUri)));
         this.count = courses.size();
+        this.totalCount = totalCount;
     }
 
     @XmlElement
@@ -43,7 +44,7 @@ public class CourseListDTO {
     }
 
     @XmlElement
-    public int getTotalCount() {
+    public long getTotalCount() {
         return totalCount;
     }
 

@@ -12,15 +12,16 @@ public class AreaListDTO {
 
     private List<AreaDTO> areas;
     private int count;
-    private int totalCount;
+    private long totalCount;
 
     public AreaListDTO() {
     }
 
-    public AreaListDTO(final List<Area> areas, final URI uri) {
+    public AreaListDTO(final List<Area> areas, long totalCount, final URI uri) {
         this.areas = new LinkedList<>();
         areas.forEach(area -> this.areas.add(new AreaDTO(area, uri)));
         this.count = areas.size();
+        this.totalCount = totalCount;
     }
 
     public List<AreaDTO> getAreas() {
@@ -37,5 +38,13 @@ public class AreaListDTO {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public long getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(long totalCount) {
+        this.totalCount = totalCount;
     }
 }

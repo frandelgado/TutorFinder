@@ -100,7 +100,7 @@ public class ProfessorController extends BaseController{
             return Response.noContent().build(); //FIXME: Cuando cambie paginacion sacar chequeo.
         }
 
-        return Response.ok(new CourseListDTO(results.getResults(), uriInfo.getBaseUri())).build();
+        return Response.ok(new CourseListDTO(results.getResults(), results.getTotal(), uriInfo.getBaseUri())).build();
     }
 
 

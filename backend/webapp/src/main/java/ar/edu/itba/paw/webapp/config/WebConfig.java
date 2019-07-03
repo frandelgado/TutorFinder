@@ -46,7 +46,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableAsync
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence",
-        "ar.edu.itba.paw.webapp.validator" })
+        "ar.edu.itba.paw.webapp.validator", "ar.edu.itba.paw.webapp.utils" })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 
