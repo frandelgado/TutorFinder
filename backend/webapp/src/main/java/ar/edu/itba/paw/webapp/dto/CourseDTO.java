@@ -10,7 +10,7 @@ import java.net.URI;
 public class CourseDTO {
 
 //    private ProfessorDTO professor;
-//    private SubjectDTO subject;
+    private SubjectDTO subject;
     private String description;
     private Double price;
     private Double rating;
@@ -31,6 +31,7 @@ public class CourseDTO {
         this.price = course.getPrice();
         this.rating = course.getRating();
 
+        this.subject = new SubjectDTO(course.getSubject(), baseUri);
         this.url = baseUri.resolve("/courses/" + course.getProfessor().getId() + "_" + course.getSubject().getId());
         this.courseCommentsUrl = baseUri.resolve(this.url + "/comments");
         this.courseFilesUrl = baseUri.resolve(this.url + "/files");
@@ -82,5 +83,13 @@ public class CourseDTO {
 
     public void setUrl(URI url) {
         this.url = url;
+    }
+
+    public SubjectDTO getSubject() {
+        return subject;
+    }
+
+    public void setSubject(SubjectDTO subject) {
+        this.subject = subject;
     }
 }

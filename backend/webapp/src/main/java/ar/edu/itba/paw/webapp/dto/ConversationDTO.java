@@ -13,7 +13,7 @@ public class ConversationDTO {
     private long id;
 //    private UserDTO user;
 //    private ProfessorDTO professor;
-//    private SubjectDTO subject;
+    private SubjectDTO subject;
 
     @XmlElement(name = "messages_url")
     private URI messagesUrl;
@@ -26,7 +26,7 @@ public class ConversationDTO {
 
     public ConversationDTO(final Conversation conversation, final URI baseUri) {
         this.id = conversation.getId();
-        this.latestMessage = conversation.getLatestMessage();
+        this.subject = new SubjectDTO(conversation.getSubject(), baseUri);
         this.latestMessage = conversation.getLatestMessage().toString();
         this.messagesUrl = baseUri.resolve("conversations/" + id +"/messages");
     }
@@ -53,5 +53,13 @@ public class ConversationDTO {
 
     public void setLatestMessage(String latestMessage) {
         this.latestMessage = latestMessage;
+    }
+
+    public SubjectDTO getSubject() {
+        return subject;
+    }
+
+    public void setSubject(SubjectDTO subject) {
+        this.subject = subject;
     }
 }
