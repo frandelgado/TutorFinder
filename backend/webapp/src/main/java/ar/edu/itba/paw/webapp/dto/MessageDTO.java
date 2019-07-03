@@ -13,6 +13,7 @@ public class MessageDTO {
     private long id;
 //    private UserDTO sender;
     private String text;
+    //TODO: Check created data type
     private LocalDateTime created;
 
     @XmlElement(name = "conversation_url")

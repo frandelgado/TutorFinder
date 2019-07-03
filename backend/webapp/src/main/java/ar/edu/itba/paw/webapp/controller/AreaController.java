@@ -67,6 +67,22 @@ public class AreaController extends BaseController {
     }
 
     @GET
+    @Path("/{id}/image")
+    @Produces({"image/png", "image/jpeg"})
+    public Response getAreaPicture(@PathParam("id") final int id) {
+
+        final Area area = as.findAreaById(id);
+
+        if(area == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        final byte[] picture = area.getImage();
+
+        return Response.ok(picture).build();
+    }
+
+    @GET
     @Path("/{id}/courses")
     @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response area(@PathParam("id") final long id,

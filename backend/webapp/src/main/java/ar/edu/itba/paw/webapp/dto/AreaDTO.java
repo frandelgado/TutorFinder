@@ -16,7 +16,9 @@ public class AreaDTO {
 
     @XmlElement(name = "area_courses_url")
     private URI areaCoursesUrl;
-    //TODO: Imagen
+
+    @XmlElement(name = "area_image_url")
+    private URI areaImageUrl;
 
     public AreaDTO() {
     }
@@ -26,7 +28,8 @@ public class AreaDTO {
         this.description = area.getDescription();
         this.name = area.getName();
         this.url = baseUri.resolve("areas/" + id);
-        this.areaCoursesUrl = baseUri.resolve("areas/" + id +"/courses");
+        this.areaCoursesUrl = baseUri.resolve("areas/" + id + "/courses");
+        this.areaImageUrl = baseUri.resolve("areas/" + id + "/image");
     }
 
     public long getId() {
@@ -67,5 +70,13 @@ public class AreaDTO {
 
     public void setAreaCoursesUrl(URI areaCoursesUrl) {
         this.areaCoursesUrl = areaCoursesUrl;
+    }
+
+    public URI getAreaImageUrl() {
+        return areaImageUrl;
+    }
+
+    public void setAreaImageUrl(URI areaImageUrl) {
+        this.areaImageUrl = areaImageUrl;
     }
 }
