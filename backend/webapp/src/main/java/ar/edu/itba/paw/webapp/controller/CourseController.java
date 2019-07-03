@@ -106,35 +106,33 @@ public class CourseController extends BaseController{
         return Response.ok(new CourseListDTO(courses.getResults(), courses.getTotal(), uriInfo.getBaseUri())).links(links).build();
     }
 
-//    @POST
-//    @Path("{professor}_{subject}/contact")
-//    @Consumes(value = { MediaType.APPLICATION_JSON, })
-//    public Response contact(@PathParam("professor") final long professorId,
-//                            @PathParam("subject") final long subjectId,
-//                            final MessageForm message) throws DTOConstraintException {
-//
-//        validator.validate(message);
-//
-//        final User loggedUser = loggedUser();
-//        final boolean sent;
-//
-//        try {
-//            sent = conversationService.sendMessage(loggedUser.getId(), professorId, subjectId, message.getMessage());
-//        } catch (SameUserException e) {
-//            return badRequest("Can not contact yourself");
-//        } catch (UserNotInConversationException e) {
-//            return Response.status(Response.Status.FORBIDDEN).build();
-//        } catch (NonexistentConversationException e) {
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
-//
-//        if(!sent) {
-//            return badRequest("Error sending message");
-//        }
-//
-//        final URI uri = uriInfo.getBaseUriBuilder().path("/conversations/").build();
-//        return Response.created(uri).build();
-//    }
+    @POST
+    @Path("{professor}_{subject}/contact")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response contact(@PathParam("professor") final long professorId,
+                            @PathParam("subject") final long subjectId,
+                            @Valid final MessageForm message) {
+
+        final User loggedUser = loggedUser();
+        final Conversation conversation;
+
+        try {
+            conversation = conversationService.sendMessage(loggedUser.getId(), professorId, subjectId, message.getMessage());
+        } catch (SameUserException e) {
+            return badRequest("Can not contact yourself");
+        } catch (UserNotInConversationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (NonexistentConversationException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if(conversation == null) {
+            return badRequest("Error sending message");
+        }
+
+        final URI uri = uriInfo.getBaseUriBuilder().path("/conversations/" + conversation.getId()).build();
+        return Response.created(uri).build();
+    }
 
     @POST
     @Path("{professor}_{subject}/comments")
