@@ -97,16 +97,16 @@ public class CourseController extends BaseController{
             return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser, 1);
         }
 
-        final boolean sent;
+        final Conversation conversation;
         try {
-            sent = conversationService.sendMessage(loggedUser.getId(), form.getProfessorId(),
+            conversation = conversationService.sendMessage(loggedUser.getId(), form.getProfessorId(),
                     form.getSubjectId(), form.getBody());
         } catch (SameUserException e) {
             errors.rejectValue("body", "SameUserMessageError");
             form.setBody(null);
             return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
         }
-        if(sent) {
+        if(conversation != null) {
             errors.rejectValue("extraMessage", "MessageSent");
             form.setBody(null);
             return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
