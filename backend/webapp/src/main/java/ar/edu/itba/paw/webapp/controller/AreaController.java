@@ -6,8 +6,7 @@ import ar.edu.itba.paw.models.Area;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.webapp.dto.AreaDTO;
-import ar.edu.itba.paw.webapp.dto.AreaListDTO;
-import ar.edu.itba.paw.webapp.dto.CourseListDTO;
+import ar.edu.itba.paw.webapp.dto.CourseDTO;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 //TODO: Chequear minimo y maximo de paginacion error
 @Path("areas")
@@ -50,7 +51,13 @@ public class AreaController extends BaseController {
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, areas);
 
-        return Response.ok(new AreaListDTO(areas.getResults(), areas.getTotal(), uriInfo.getBaseUri())).links(links).build();
+        final GenericEntity<List<AreaDTO>> entity = new GenericEntity<List<AreaDTO>>(
+                areas.getResults().stream()
+                        .map(area -> new AreaDTO(area, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
     }
 
     @GET
@@ -103,6 +110,12 @@ public class AreaController extends BaseController {
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, results);
 
-        return Response.ok(new CourseListDTO(results.getResults(), results.getTotal(), uriInfo.getBaseUri())).links(links).build();
+        final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
+                results.getResults().stream()
+                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
     }
 }

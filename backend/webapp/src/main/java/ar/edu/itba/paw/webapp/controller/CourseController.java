@@ -3,10 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.dto.CommentListDTO;
-import ar.edu.itba.paw.webapp.dto.CourseDTO;
-import ar.edu.itba.paw.webapp.dto.CourseListDTO;
-import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
+import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.CourseForm;
 import ar.edu.itba.paw.webapp.dto.form.MessageForm;
@@ -22,6 +19,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 //TODO: Chequear badRequest en resultados paginados
@@ -89,7 +87,13 @@ public class CourseController extends BaseController{
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, comments);
 
-        return Response.ok(new CommentListDTO(comments.getResults(), comments.getTotal(), uriInfo.getBaseUri())).links(links).build();
+        final GenericEntity<List<CommentDTO>> entity = new GenericEntity<List<CommentDTO>>(
+                comments.getResults().stream()
+                        .map(comment -> new CommentDTO(comment, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
     }
 
     @GET
@@ -110,7 +114,13 @@ public class CourseController extends BaseController{
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, courses);
 
-        return Response.ok(new CourseListDTO(courses.getResults(), courses.getTotal(), uriInfo.getBaseUri())).links(links).build();
+        final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
+                courses.getResults().stream()
+                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
     }
 
     @POST

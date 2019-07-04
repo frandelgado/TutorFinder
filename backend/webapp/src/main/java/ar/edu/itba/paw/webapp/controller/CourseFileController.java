@@ -6,16 +6,14 @@ import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.CourseFile;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.webapp.dto.CourseFileListDTO;
+import ar.edu.itba.paw.webapp.dto.CourseFileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("courses/{professor}_{subject}/files")
 @Component
@@ -49,7 +47,13 @@ public class CourseFileController extends BaseController {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        return Response.ok(new CourseFileListDTO(courseFiles, uriInfo.getBaseUri())).build();
+        final GenericEntity<List<CourseFileDTO>> entity = new GenericEntity<List<CourseFileDTO>>(
+                courseFiles.stream()
+                        .map(file -> new CourseFileDTO(file, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).build();
     }
 
 

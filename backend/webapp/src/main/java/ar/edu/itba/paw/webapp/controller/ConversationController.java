@@ -17,6 +17,8 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 //TODO: Chequear badRequest en resultados paginados
 @Path("conversations")
@@ -45,7 +47,13 @@ public class ConversationController extends BaseController {
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, conversations);
 
-        return Response.ok(new ConversationListDTO(conversations.getResults(), conversations.getTotal(), uriInfo.getBaseUri())).links(links).build();
+        final GenericEntity<List<ConversationDTO>> entity = new GenericEntity<List<ConversationDTO>>(
+                conversations.getResults().stream()
+                        .map(conversation -> new ConversationDTO(conversation, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
     }
 
     @GET
@@ -86,7 +94,13 @@ public class ConversationController extends BaseController {
         }
         final Conversation ret = conversationService.initializeMessages(conversation);
 
-        return Response.ok(new MessageListDTO(ret.getMessages(), uriInfo.getBaseUri())).build();
+        final GenericEntity<List<MessageDTO>> entity = new GenericEntity<List<MessageDTO>>(
+                ret.getMessages().stream()
+                        .map(message -> new MessageDTO(message, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).build();
     }
 
     @POST

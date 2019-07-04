@@ -2,10 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.dto.AreaDTO;
-import ar.edu.itba.paw.webapp.dto.CourseListDTO;
-import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
-import ar.edu.itba.paw.webapp.dto.ProfessorListDTO;
+import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
@@ -24,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Path("professors")
@@ -75,7 +74,13 @@ public class ProfessorController extends BaseController{
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, professors);
 
-        return Response.ok(new ProfessorListDTO(professors.getResults(), professors.getTotal(), uriInfo.getBaseUri())).links(links).build();
+        final GenericEntity<List<ProfessorDTO>> entity = new GenericEntity<List<ProfessorDTO>>(
+                professors.getResults().stream()
+                        .map(professor -> new ProfessorDTO(professor, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
     }
 
 
@@ -109,7 +114,14 @@ public class ProfessorController extends BaseController{
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, results);
 
-        return Response.ok(new CourseListDTO(results.getResults(), results.getTotal(), uriInfo.getBaseUri())).links(links).build();
+        final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
+                results.getResults().stream()
+                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
+
     }
 
 
