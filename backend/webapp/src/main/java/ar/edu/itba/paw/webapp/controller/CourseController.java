@@ -7,7 +7,10 @@ import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.CourseForm;
 import ar.edu.itba.paw.webapp.dto.form.MessageForm;
+import ar.edu.itba.paw.webapp.dto.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 
 
 //TODO: Chequear badRequest en resultados paginados
+//TODO: Internacionalizar errores
 @Path("courses")
 @Component
 public class CourseController extends BaseController{
@@ -207,64 +211,94 @@ public class CourseController extends BaseController{
         return Response.created(uri).build();
     }
 
-//    @POST
-//    @Path("{professor}_{subject}/reservations")
-//    @Consumes(value = { MediaType.APPLICATION_JSON, })
-//    public Response reserveClass(@ModelAttribute("currentUser") final User user,
-//                                     @Valid @ModelAttribute("classReservationForm")
-//                                     final ClassReservationForm form,
-//                                     final BindingResult errors,
-//                                     @RequestParam("professor") final long professorId,
-//                                     @RequestParam("subject") final long subjectId) {
-//
-//        if(errors.hasErrors() || !form.validForm()) {
-//            if(!form.validForm()) {
-//                errors.rejectValue("endHour", "profile.add_schedule.timeError");
-//            }
-//            return reserveClass(user, form, professorId, subjectId);
-//        }
-//
-//        final LocalDate day = new LocalDate(form.getDay());
-//
-//        final LocalDateTime startTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
-//                day.getDayOfMonth(), form.getStartHour(), 0);
-//
-//        final LocalDateTime endTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
-//                day.getDayOfMonth(), form.getEndHour(), 0);
-//
-//        if(!startTime.isAfter(LocalDateTime.now())) {
-//            errors.rejectValue("day", "futureDateError");
-//            return reserveClass(user, form, professorId, subjectId);
-//        }
-//
-//        final ClassReservation reservation;
-//        try {
-//            reservation = classReservationService.reserve(startTime, endTime,
-//                    professorId, subjectId, user.getId());
-//        } catch (SameUserException e) {
-//            return redirectToErrorPage("sameUserReservation");
-//        } catch (NonexistentCourseException e) {
-//            return redirectToErrorPage("nonExistentCourse");
-//        } catch (NonExistentUserException e) {
-//            return redirectToErrorPage("nonExistentUser");
-//        } catch (ReservationTimeOutOfRange reservationTimeOutOfRange) {
-//            errors.rejectValue("day", "notAvailableTime");
-//            return reserveClass(user, form, professorId, subjectId);
-//        }
-//
-//        if(reservation == null) {
-//            return reserveClass(user, form, professorId, subjectId);
-//        }
-//
-//        return redirectWithNoExposedModalAttributes("/reservations");
-//    }
-
-
-    //TODO: Approve or deny (Ideas: put y delete / form with comment + status)
     @POST
-    @Path("/requests/{id}")
+    @Path("{professor}_{subject}/reservations")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
-    public Response answerClassRequest(@PathParam("id") final long classReservationId) {
+    public Response reserveClass(@PathParam("professor") final long professorId,
+                                 @PathParam("subject") final long subjectId,
+                                 @Valid final ClassReservationForm form) {
+
+        final User currentUser = loggedUser();
+
+        if(!form.validForm()) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            errors.addError(new ErrorDTO("startHour", "Start hour must precede end hour"));
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errors).build();
+        }
+
+        final LocalDate day = new LocalDate(form.getDay());
+
+        final LocalDateTime startTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
+                day.getDayOfMonth(), form.getStartHour(), 0);
+
+        final LocalDateTime endTime = new LocalDateTime(day.getYear(), day.getMonthOfYear(),
+                day.getDayOfMonth(), form.getEndHour(), 0);
+
+        if(!startTime.isAfter(LocalDateTime.now())) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            errors.addError(new ErrorDTO("startHour", "Date must be in the future"));
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errors).build();
+        }
+
+        final ClassReservation reservation;
+        try {
+            reservation = classReservationService.reserve(startTime, endTime,
+                    professorId, subjectId, currentUser.getId());
+        } catch (SameUserException e) {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(new ValidationErrorDTO("Can not request class from yourself"))
+                    .build();
+        } catch (NonexistentCourseException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ValidationErrorDTO("Course does not exist"))
+                    .build();
+        } catch (NonExistentUserException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ValidationErrorDTO("User does not exist"))
+                    .build();
+        } catch (ReservationTimeOutOfRange reservationTimeOutOfRange) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ValidationErrorDTO("Time not allowed by professor"))
+                    .build();
+        }
+
+        if(reservation == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        //TODO: Create endpoint
+        final URI uri = uriInfo.getBaseUriBuilder().path("/user/reservations/" + reservation.getClassRequestId()).build();
+
+        return Response.created(uri).build();
+    }
+
+
+    //TODO: Move to user/requests
+    @PUT
+    @Path("/requests/{id}")
+    public Response approveClassRequest(@PathParam("id") final long classReservationId) {
+
+        final User currentUser = loggedUser();
+
+        final ClassReservation classReservation;
+        try {
+            classReservation = classReservationService.confirm(classReservationId, currentUser.getId(), null);
+        } catch (UserAuthenticationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(classReservation == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/requests/{id}")
+    public Response denyClassRequest(@PathParam("id") final long classReservationId) {
 
         final User currentUser = loggedUser();
 
