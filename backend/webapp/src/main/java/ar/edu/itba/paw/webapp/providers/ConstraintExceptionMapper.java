@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.exceptionmapper;
+package ar.edu.itba.paw.webapp.providers;
 
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 
