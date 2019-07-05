@@ -7,12 +7,12 @@ import javax.validation.constraints.Size;
 
 public class CommentForm {
 
-    @NotNull
-    @Size(min = 1, max = 1024)
+    @NotNull(message = "{NotNull.commentForm.commentBody}")
+    @Size(min = 1, max = 1024, message = "{Size.commentForm.commentBody}")
     private String commentBody;
 
-    @Min(1)
-    @Max(5)
+    @Min(value = 1, message = "{Min.commentForm.rating}")
+    @Max(value = 5, message = "{Max.commentForm.rating}")
     private Integer rating;
 
     public String getCommentBody() {

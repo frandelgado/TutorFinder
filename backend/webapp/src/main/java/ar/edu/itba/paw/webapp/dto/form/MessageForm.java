@@ -5,8 +5,8 @@ import javax.validation.constraints.Size;
 
 public class MessageForm {
 
-    @NotNull
-    @Size(min = 1, max = 1024)
+    @NotNull(message = "{NotNull.messageForm.message}")
+    @Size(min = 1, max = 1024, message = "{Size.messageForm.message}")
     private String message;
 
     public String getMessage() {
