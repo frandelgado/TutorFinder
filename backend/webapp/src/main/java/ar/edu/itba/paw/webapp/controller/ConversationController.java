@@ -106,8 +106,7 @@ public class ConversationController extends BaseController {
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON, })
     @Path("/{id}")
-    public Response sendMessage(@PathParam("id") final long id, @Valid final MessageForm message)
-            throws ConstraintViolationException {
+    public Response sendMessage(@PathParam("id") final long id, @Valid final MessageForm message) {
 
         final User loggedUser = loggedUser();
 

@@ -57,6 +57,7 @@ public class CourseFileController extends BaseController {
     }
 
 
+    //TODO: Check same course
     @GET
     @Path("/{id}")
     @Produces(value = { MediaType.APPLICATION_OCTET_STREAM, })
@@ -114,6 +115,7 @@ public class CourseFileController extends BaseController {
 //                +"&subject=" + subjectId);
 //    }
 
+    //TODO: Check same course
     @DELETE
     @Path("/{id}")
     public Response deleteFile(@PathParam("professor") final long professorId,

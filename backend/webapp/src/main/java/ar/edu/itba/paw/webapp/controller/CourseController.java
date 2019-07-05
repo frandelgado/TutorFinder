@@ -160,7 +160,7 @@ public class CourseController extends BaseController{
     @Consumes(value = { MediaType.APPLICATION_JSON, })
     public Response comment(@Valid final CommentForm comment,
                             @PathParam("professor") final long professorId,
-                            @PathParam("subject") final long subjectId) throws ConstraintViolationException {
+                            @PathParam("subject") final long subjectId) {
 
         final User loggedUser = loggedUser();
 
@@ -185,7 +185,7 @@ public class CourseController extends BaseController{
 
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON, })
-    public Response create(@Valid final CourseForm form) throws ConstraintViolationException {
+    public Response create(@Valid final CourseForm form) {
 
         final User user = loggedUser();
 
@@ -321,7 +321,7 @@ public class CourseController extends BaseController{
     @Consumes(value = { MediaType.APPLICATION_JSON, })
     public Response modify(@Valid final CourseForm form,
                            @PathParam("professor") final long professorId,
-                           @PathParam("subject") final long subjectId) throws ConstraintViolationException {
+                           @PathParam("subject") final long subjectId) {
 
         final User user = loggedUser();
 
@@ -337,6 +337,24 @@ public class CourseController extends BaseController{
         }
 
         LOGGER.debug("Posting request for course modification for professor with id {} in subject with id {}", user.getId(), subjectId);
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("{professor}_{subject}")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response delete(@PathParam("professor") final long professorId,
+                           @PathParam("subject") final long subjectId) {
+
+        final User user = loggedUser();
+
+        final boolean deleted;
+        deleted = courseService.deleteCourse(user.getId(), subjectId);
+
+        if(!deleted) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
         return Response.noContent().build();
     }
 
