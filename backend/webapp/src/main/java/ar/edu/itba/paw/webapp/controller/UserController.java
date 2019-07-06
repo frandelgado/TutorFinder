@@ -1,8 +1,11 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.InvalidTokenException;
 import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
+import ar.edu.itba.paw.exceptions.TokenCrationException;
 import ar.edu.itba.paw.exceptions.UserAuthenticationException;
 import ar.edu.itba.paw.interfaces.service.ClassReservationService;
+import ar.edu.itba.paw.interfaces.service.PasswordResetService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.models.ClassReservation;
@@ -10,10 +13,13 @@ import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.dto.ClassReservationDTO;
+import ar.edu.itba.paw.webapp.dto.form.ResetPasswordRequestForm;
+import ar.edu.itba.paw.webapp.form.ResetPasswordForm;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
@@ -34,6 +40,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private PaginationLinkBuilder linkBuilder;
+
+    @Autowired
+    private PasswordResetService passwordResetService;
 
     @Context
     private UriInfo uriInfo;
@@ -163,5 +172,48 @@ public class UserController extends BaseController {
         }
 
         return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/forgot_password")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response forgotPassword(@Valid final ResetPasswordRequestForm form) {
+
+        final boolean created;
+        try {
+            created = passwordResetService.createToken(form.getEmail());
+        } catch (TokenCrationException e) {
+            //TODO: mail send error
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        if(!created) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.ok().build();
+    }
+
+    //TODO: Maybe url encoded
+    //TODO: Frontend has to check password repetition
+    //TODO: Automatic authentication?
+    @POST
+    @Path("/forgot_password/{token}")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    public Response forgotPassword(@Valid final ResetPasswordForm form,
+                                   @PathParam("token") final String token) {
+
+        final User changedUser;
+        try {
+            changedUser = passwordResetService.changePassword(token, form.getPassword());
+        } catch (InvalidTokenException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if(changedUser == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        return Response.ok().build();
     }
 }
