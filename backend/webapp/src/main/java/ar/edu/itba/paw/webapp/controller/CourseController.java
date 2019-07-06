@@ -268,53 +268,11 @@ public class CourseController extends BaseController{
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        //TODO: Create endpoint
         final URI uri = uriInfo.getBaseUriBuilder().path("/user/reservations/" + reservation.getClassRequestId()).build();
 
         return Response.created(uri).build();
     }
 
-
-    //TODO: Move to user/requests
-    @PUT
-    @Path("/requests/{id}")
-    public Response approveClassRequest(@PathParam("id") final long classReservationId) {
-
-        final User currentUser = loggedUser();
-
-        final ClassReservation classReservation;
-        try {
-            classReservation = classReservationService.confirm(classReservationId, currentUser.getId(), null);
-        } catch (UserAuthenticationException e) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        if(classReservation == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        return Response.ok().build();
-    }
-
-    @DELETE
-    @Path("/requests/{id}")
-    public Response denyClassRequest(@PathParam("id") final long classReservationId) {
-
-        final User currentUser = loggedUser();
-
-        final ClassReservation classReservation;
-        try {
-            classReservation = classReservationService.deny(classReservationId, currentUser.getId(), null);
-        } catch (UserAuthenticationException e) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        if(classReservation == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        return Response.noContent().build();
-    }
 
     @PUT
     @Path("{professor}_{subject}")
