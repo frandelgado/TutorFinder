@@ -27,7 +27,7 @@ public class UserController extends BaseController {
         final User loggedUser = loggedUser();
         final Professor professor = professorService.findById(loggedUser.getId());
 
-
-
+        //TODO: Everything
+        return Response.ok().build();
     }
 }
