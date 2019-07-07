@@ -22,8 +22,6 @@ public class UserDTO {
         this.name = user.getName();
         this.lastname = user.getLastname();
         this.email = user.getEmail();
-
-        //TODO: urls
     }
 
     public UserDTO(Long id, String username, String name, String lastName, String email) {

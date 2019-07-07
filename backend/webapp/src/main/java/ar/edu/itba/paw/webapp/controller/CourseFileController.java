@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.CourseFile;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.dto.CourseFileDTO;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.dto.form.UploadClassFileForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -60,7 +61,6 @@ public class CourseFileController extends BaseController {
     }
 
 
-    //TODO: Check same course
     @GET
     @Path("/{id}")
     @Produces(value = { MediaType.APPLICATION_OCTET_STREAM, })
@@ -78,6 +78,13 @@ public class CourseFileController extends BaseController {
 
         if(courseFile == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        final Course course = courseFile.getCourse();
+
+        if(course.getSubject().getId() != subjectId || course.getProfessor().getId() != professorId) {
+            final ValidationErrorDTO error = getErrors("invalidCourse");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         //TODO: Verificar si el header es necesario
@@ -113,7 +120,6 @@ public class CourseFileController extends BaseController {
         return Response.created(uri).build();
     }
 
-    //TODO: Check same course
     @DELETE
     @Path("/{id}")
     public Response deleteFile(@PathParam("professor") final long professorId,
@@ -122,6 +128,15 @@ public class CourseFileController extends BaseController {
 
         final User currentUser = loggedUser();
         try {
+            final CourseFile courseFile = cfs.findByIdForUser(id, currentUser);
+
+            final Course course = courseFile.getCourse();
+
+            if(course.getSubject().getId() != subjectId || course.getProfessor().getId() != professorId) {
+                final ValidationErrorDTO error = getErrors("invalidCourse");
+                return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+            }
+
             cfs.deleteById(id, currentUser);
         } catch (UserAuthenticationException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
