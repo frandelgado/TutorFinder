@@ -1,14 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.InvalidTokenException;
-import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
-import ar.edu.itba.paw.exceptions.TokenCrationException;
-import ar.edu.itba.paw.exceptions.UserAuthenticationException;
+import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.dto.ClassReservationDTO;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
 import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
+import ar.edu.itba.paw.webapp.dto.form.EditProfessorProfileForm;
 import ar.edu.itba.paw.webapp.dto.form.ResetPasswordRequestForm;
 import ar.edu.itba.paw.webapp.form.ResetPasswordForm;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
@@ -57,6 +55,27 @@ public class UserController extends BaseController {
         if(professor == null) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
+        return Response.ok(new ProfessorDTO(professor, uriInfo)).build();
+    }
+
+    @PUT
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Consumes(value = { MediaType.MULTIPART_FORM_DATA, })
+    public Response modify(@Valid @BeanParam final EditProfessorProfileForm form) {
+
+        final User loggedUser = loggedUser();
+        final Professor professor;
+
+        try {
+            professor = professorService.modify(loggedUser.getId(), form.getDescription(),
+                    form.getPicture().getValueAs(byte[].class));
+        } catch (DownloadFileException e) {
+            //TODO: ERROR
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (NonexistentProfessorException | ProfessorWithoutUserException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
         return Response.ok(new ProfessorDTO(professor, uriInfo)).build();
     }
 
