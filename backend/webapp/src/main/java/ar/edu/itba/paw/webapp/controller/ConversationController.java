@@ -6,13 +6,14 @@ import ar.edu.itba.paw.interfaces.service.ConversationService;
 import ar.edu.itba.paw.models.Conversation;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.webapp.dto.*;
+import ar.edu.itba.paw.webapp.dto.ConversationDTO;
+import ar.edu.itba.paw.webapp.dto.MessageDTO;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.dto.form.MessageForm;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -42,7 +43,8 @@ public class ConversationController extends BaseController {
         final PagedResults<Conversation> conversations = conversationService.findByUserId(loggedUser.getId(), page);
 
         if(conversations == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, conversations);
@@ -121,9 +123,8 @@ public class ConversationController extends BaseController {
         }
 
         if(!sent) {
-            final ValidationErrorDTO errors = new ValidationErrorDTO("Error sending message");
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(errors).build();
+            final ValidationErrorDTO error = getErrors("SendMessageError");
+            return Response.status(Response.Status.BAD_GATEWAY).entity(error).build();
         }
 
         final URI uri = uriInfo.getAbsolutePathBuilder().path("/messages").build();

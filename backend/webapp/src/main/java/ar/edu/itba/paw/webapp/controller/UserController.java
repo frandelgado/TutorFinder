@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,8 +74,8 @@ public class UserController extends BaseController {
             professor = professorService.modify(loggedUser.getId(), form.getDescription(),
                     form.getPictureBytes());
         } catch (DownloadFileException e) {
-            //TODO: ERROR
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            final ValidationErrorDTO error = getErrors("fileUploadError");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         } catch (NonexistentProfessorException | ProfessorWithoutUserException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
@@ -94,7 +93,8 @@ public class UserController extends BaseController {
         final PagedResults<Course> results = courseService.findCourseByProfessorId(loggedUser.getId(), page);
 
         if(results == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, results);
@@ -126,7 +126,8 @@ public class UserController extends BaseController {
         final PagedResults<ClassReservation> classReservations =  userService.pagedReservations(loggedUser.getId(), page);
 
         if(classReservations == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, classReservations);
@@ -151,8 +152,10 @@ public class UserController extends BaseController {
         if(classReservation == null)
             return Response.status(Response.Status.NOT_FOUND).build();
 
-        if(!classReservation.getStudent().getId().equals(loggedUser.getId()))
-            return Response.status(Response.Status.FORBIDDEN).build();
+        if(!classReservation.getStudent().getId().equals(loggedUser.getId())) {
+            final ValidationErrorDTO error = getErrors("sameUserReservation");
+            return Response.status(Response.Status.FORBIDDEN).entity(error).build();
+        }
 
         return Response.ok(new ClassReservationDTO(classReservation, uriInfo)).build();
     }
@@ -171,7 +174,8 @@ public class UserController extends BaseController {
         }
 
         if(classRequests == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, classRequests);
@@ -242,8 +246,8 @@ public class UserController extends BaseController {
         try {
             created = passwordResetService.createToken(form.getEmail());
         } catch (TokenCrationException e) {
-            //TODO: mail send error
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            final ValidationErrorDTO error = getErrors("SendMessageError");
+            return Response.status(Response.Status.BAD_GATEWAY).entity(error).build();
         }
 
         if(!created) {
@@ -267,7 +271,8 @@ public class UserController extends BaseController {
         try {
             changedUser = passwordResetService.changePassword(token, form.getPassword());
         } catch (InvalidTokenException e) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            final ValidationErrorDTO error = getErrors("invalidToken");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         if(changedUser == null) {
@@ -276,8 +281,7 @@ public class UserController extends BaseController {
 
         return Response.ok().build();
     }
-
-    //TODO: Internationalize errors
+    
     //TODO: Maybe change to /users
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON, })
@@ -289,20 +293,17 @@ public class UserController extends BaseController {
             user = userService.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
         } catch (EmailAlreadyInUseException e) {
             final ValidationErrorDTO errors = new ValidationErrorDTO();
-            errors.addError("email", "Email already in use");
-            return Response.status(Response.Status.CONFLICT)
-                    .entity(errors).build();
+            addError(errors, "RepeatedEmail", "email");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
         } catch (UsernameAndEmailAlreadyInUseException e) {
             final ValidationErrorDTO errors = new ValidationErrorDTO();
-            errors.addError("username", "Username already in use");
-            errors.addError("email", "Email already in use");
-            return Response.status(Response.Status.CONFLICT)
-                    .entity(errors).build();
+            addError(errors, "RepeatedEmail", "email");
+            addError(errors, "RepeatedUsername", "username");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
         } catch (UsernameAlreadyInUseException e) {
             final ValidationErrorDTO errors = new ValidationErrorDTO();
-            errors.addError("username", "Username already in use");
-            return Response.status(Response.Status.CONFLICT)
-                    .entity(errors).build();
+            addError(errors, "RepeatedUsername", "username");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
         }
 
         if(user == null) {
@@ -327,8 +328,8 @@ public class UserController extends BaseController {
             professor = professorService.create(loggedUser.getId(), form.getDescription(),
                     form.getPicture().getValueAs(byte[].class));
         } catch (DownloadFileException e) {
-            //TODO: ERROR
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            final ValidationErrorDTO error = getErrors("fileUploadError");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         } catch (ProfessorWithoutUserException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }

@@ -1,10 +1,14 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.dto.*;
+import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.PagedResults;
+import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.dto.CourseDTO;
+import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
-import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +16,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -69,7 +67,8 @@ public class ProfessorController extends BaseController{
         final PagedResults<Professor> professors = ps.filterByFullName(query, page);
 
         if(professors == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, professors);
@@ -109,7 +108,8 @@ public class ProfessorController extends BaseController{
         final PagedResults<Course> results = cs.findCourseByProfessorId(professor.getId(), page);
 
         if(results == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, results);

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.webapp.dto.AreaDTO;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,8 @@ public class AreaController extends BaseController {
         final PagedResults<Area> areas = as.filterAreasByName(query, page);
 
         if(areas == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, areas);
@@ -105,7 +107,8 @@ public class AreaController extends BaseController {
         final PagedResults<Course> results = cs.filterByAreaId(id, page);
 
         if(results == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, results);

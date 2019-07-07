@@ -3,11 +3,14 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.dto.*;
+import ar.edu.itba.paw.webapp.dto.CommentDTO;
+import ar.edu.itba.paw.webapp.dto.CourseDTO;
+import ar.edu.itba.paw.webapp.dto.ErrorDTO;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
+import ar.edu.itba.paw.webapp.dto.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.CourseForm;
 import ar.edu.itba.paw.webapp.dto.form.MessageForm;
-import ar.edu.itba.paw.webapp.dto.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -16,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -26,7 +28,6 @@ import java.util.stream.Collectors;
 
 
 //TODO: Chequear badRequest en resultados paginados
-//TODO: Internacionalizar errores
 @Path("courses")
 @Component
 public class CourseController extends BaseController{
@@ -86,7 +87,8 @@ public class CourseController extends BaseController{
         final PagedResults<Comment> comments = courseService.getComments(course, page);
 
         if(comments == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, comments);
@@ -113,7 +115,8 @@ public class CourseController extends BaseController{
                 minPrice, maxPrice, query, page);
 
         if(courses == null) {
-            return badRequest("Invalid page number");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, courses);
@@ -141,7 +144,8 @@ public class CourseController extends BaseController{
         try {
             conversation = conversationService.sendMessage(loggedUser.getId(), professorId, subjectId, message.getMessage());
         } catch (SameUserException e) {
-            return badRequest("Can not contact yourself");
+            final ValidationErrorDTO error = getErrors("SameUserMessageError");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         } catch (UserNotInConversationException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
         } catch (NonexistentConversationException e) {
@@ -149,7 +153,8 @@ public class CourseController extends BaseController{
         }
 
         if(conversation == null) {
-            return badRequest("Error sending message");
+            final ValidationErrorDTO error = getErrors("SendMessageError");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         }
 
         final URI uri = uriInfo.getBaseUriBuilder().path("/conversations/" + conversation.getId()).build();
@@ -171,16 +176,17 @@ public class CourseController extends BaseController{
             sent = courseService.comment(loggedUser.getId(), professorId, subjectId,
                     comment.getCommentBody(), comment.getRating());
         } catch (SameUserException e) {
-            return badRequest("Cannot comment on your course");
+            final ValidationErrorDTO error = getErrors("sameUserComment");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         } catch (NonAcceptedReservationException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
         if(!sent) {
-            return badRequest("Error commenting");
+            final ValidationErrorDTO error = getErrors("SendMessageError");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         }
 
-        //TODO: Ver si agregar page
         final URI uri = uriInfo.getAbsolutePathBuilder().build();
         return Response.created(uri).build();
     }
@@ -196,12 +202,13 @@ public class CourseController extends BaseController{
         try {
             course = courseService.create(user.getId(), form.getSubject(), form.getDescription(), form.getPrice());
         } catch (CourseAlreadyExistsException e) {
-            final ValidationErrorDTO errors = new ValidationErrorDTO("Course already exists");
-            return Response.status(Response.Status.CONFLICT).entity(errors).build();
+            final ValidationErrorDTO error = getErrors("courseAlreadyExists");
+            return Response.status(Response.Status.CONFLICT).entity(error).build();
         } catch (NonexistentProfessorException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
         } catch (NonexistentSubjectException e) {
-            return badRequest("Nonexistent Subject");
+            final ValidationErrorDTO error = getErrors("subjectDoesNotExist");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         if(course == null) {
@@ -226,9 +233,8 @@ public class CourseController extends BaseController{
 
         if(!form.validForm()) {
             final ValidationErrorDTO errors = new ValidationErrorDTO();
-            errors.addError(new ErrorDTO("startHour", "Start hour must precede end hour"));
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(errors).build();
+            addError(errors, "profile.add_schedule.timeError", "endHour");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
         }
 
         final LocalDate day = new LocalDate(form.getDay());
@@ -241,9 +247,8 @@ public class CourseController extends BaseController{
 
         if(!startTime.isAfter(LocalDateTime.now())) {
             final ValidationErrorDTO errors = new ValidationErrorDTO();
-            errors.addError(new ErrorDTO("startHour", "Date must be in the future"));
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(errors).build();
+            addError(errors, "futureDateError", "day");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
         }
 
         final ClassReservation reservation;
@@ -251,21 +256,17 @@ public class CourseController extends BaseController{
             reservation = classReservationService.reserve(startTime, endTime,
                     professorId, subjectId, currentUser.getId());
         } catch (SameUserException e) {
-            return Response.status(Response.Status.FORBIDDEN)
-                    .entity(new ValidationErrorDTO("Can not request class from yourself"))
-                    .build();
+            final ValidationErrorDTO error = getErrors("sameUserReservation");
+            return Response.status(Response.Status.FORBIDDEN).entity(error).build();
         } catch (NonexistentCourseException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(new ValidationErrorDTO("Course does not exist"))
-                    .build();
+            final ValidationErrorDTO error = getErrors("nonExistentCourse");
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         } catch (NonExistentUserException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(new ValidationErrorDTO("User does not exist"))
-                    .build();
+            final ValidationErrorDTO error = getErrors("nonExistentUser");
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         } catch (ReservationTimeOutOfRange reservationTimeOutOfRange) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ValidationErrorDTO("Time not allowed by professor"))
-                    .build();
+            final ValidationErrorDTO error = getErrors("notAvailableTime");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         if(reservation == null) {

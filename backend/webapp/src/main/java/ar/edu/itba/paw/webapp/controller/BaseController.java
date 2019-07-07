@@ -6,12 +6,15 @@ import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.Response;
+import java.util.Locale;
+import java.util.Map;
 
 @Component
 public class BaseController {
@@ -20,6 +23,9 @@ public class BaseController {
 
     @Autowired
     private UserService us;
+
+    @Autowired
+    private MessageSource messageSource;
 
     public User loggedUser() {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -53,5 +59,15 @@ public class BaseController {
         final ValidationErrorDTO errors = new ValidationErrorDTO(error);
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity(errors).build();
+    }
+
+    public ValidationErrorDTO getErrors(final String error) {
+        return new ValidationErrorDTO(messageSource.getMessage(error,
+                null, Locale.getDefault()));
+    }
+
+    public ValidationErrorDTO addError(final ValidationErrorDTO errors, final String error, final String field) {
+        errors.addError(field, messageSource.getMessage(error,null, Locale.getDefault()));
+        return errors;
     }
 }
