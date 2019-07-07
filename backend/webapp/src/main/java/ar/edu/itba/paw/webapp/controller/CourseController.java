@@ -130,6 +130,7 @@ public class CourseController extends BaseController{
     @POST
     @Path("{professor}_{subject}/contact")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response contact(@PathParam("professor") final long professorId,
                             @PathParam("subject") final long subjectId,
                             @Valid final MessageForm message) {
@@ -158,6 +159,7 @@ public class CourseController extends BaseController{
     @POST
     @Path("{professor}_{subject}/comments")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response comment(@Valid final CommentForm comment,
                             @PathParam("professor") final long professorId,
                             @PathParam("subject") final long subjectId) {
@@ -185,6 +187,7 @@ public class CourseController extends BaseController{
 
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response create(@Valid final CourseForm form) {
 
         final User user = loggedUser();
@@ -214,6 +217,7 @@ public class CourseController extends BaseController{
     @POST
     @Path("{professor}_{subject}/reservations")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response reserveClass(@PathParam("professor") final long professorId,
                                  @PathParam("subject") final long subjectId,
                                  @Valid final ClassReservationForm form) {
@@ -277,6 +281,7 @@ public class CourseController extends BaseController{
     @PUT
     @Path("{professor}_{subject}")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response modify(@Valid final CourseForm form,
                            @PathParam("professor") final long professorId,
                            @PathParam("subject") final long subjectId) {
@@ -301,6 +306,7 @@ public class CourseController extends BaseController{
     @DELETE
     @Path("{professor}_{subject}")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response delete(@PathParam("professor") final long professorId,
                            @PathParam("subject") final long subjectId) {
 

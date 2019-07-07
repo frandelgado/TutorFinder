@@ -177,6 +177,7 @@ public class UserController extends BaseController {
     @POST
     @Path("/forgot_password")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response forgotPassword(@Valid final ResetPasswordRequestForm form) {
 
         final boolean created;
@@ -200,6 +201,7 @@ public class UserController extends BaseController {
     @POST
     @Path("/forgot_password/{token}")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response forgotPassword(@Valid final ResetPasswordForm form,
                                    @PathParam("token") final String token) {
 

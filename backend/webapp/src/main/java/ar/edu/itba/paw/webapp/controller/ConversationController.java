@@ -105,6 +105,7 @@ public class ConversationController extends BaseController {
 
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
     @Path("/{id}")
     public Response sendMessage(@PathParam("id") final long id, @Valid final MessageForm message) {
 
