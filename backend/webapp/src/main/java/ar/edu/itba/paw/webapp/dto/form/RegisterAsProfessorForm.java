@@ -4,16 +4,19 @@ import ar.edu.itba.paw.webapp.validator.FileType;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class EditProfessorProfileForm {
+public class RegisterAsProfessorForm {
 
-    @Size(min = 50, max = 300, message = "{Size.editProfessorProfileForm.description}")
+    @NotNull(message = "{NotNull.description}")
+    @Size(min = 50, max = 300, message = "{Size.registerAsProfessorForm.description}")
     @FormDataParam("description")
     private String description;
 
 //    @FileSize(max = 81920)
-    @FileType(message = "{FileType.editProfessorProfileForm.picture}")
+    @NotNull(message = "{NotNull.registerAsProfessorForm.picture}")
+    @FileType(message = "{FileType.registerAsProfessorForm.picture}")
     @FormDataParam("picture")
     private FormDataBodyPart picture;
 
@@ -27,12 +30,6 @@ public class EditProfessorProfileForm {
 
     public FormDataBodyPart getPicture() {
         return picture;
-    }
-
-    public byte[] getPictureBytes() {
-        if(picture == null)
-            return null;
-        return picture.getValueAs(byte[].class);
     }
 
     public void setPicture(FormDataBodyPart picture) {

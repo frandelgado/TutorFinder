@@ -6,7 +6,10 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.dto.ClassReservationDTO;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
 import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.dto.form.EditProfessorProfileForm;
+import ar.edu.itba.paw.webapp.dto.form.RegisterAsProfessorForm;
+import ar.edu.itba.paw.webapp.dto.form.RegisterForm;
 import ar.edu.itba.paw.webapp.dto.form.ResetPasswordRequestForm;
 import ar.edu.itba.paw.webapp.form.ResetPasswordForm;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +73,7 @@ public class UserController extends BaseController {
 
         try {
             professor = professorService.modify(loggedUser.getId(), form.getDescription(),
-                    form.getPicture().getValueAs(byte[].class));
+                    form.getPictureBytes());
         } catch (DownloadFileException e) {
             //TODO: ERROR
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -270,5 +275,69 @@ public class UserController extends BaseController {
         }
 
         return Response.ok().build();
+    }
+
+    //TODO: Internationalize errors
+    //TODO: Maybe change to /users
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response register(@Valid final RegisterForm form) {
+
+        final User user;
+        try {
+            user = userService.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
+        } catch (EmailAlreadyInUseException e) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            errors.addError("email", "Email already in use");
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errors).build();
+        } catch (UsernameAndEmailAlreadyInUseException e) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            errors.addError("username", "Username already in use");
+            errors.addError("email", "Email already in use");
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errors).build();
+        } catch (UsernameAlreadyInUseException e) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            errors.addError("username", "Username already in use");
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errors).build();
+        }
+
+        if(user == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final URI uri = uriInfo.getBaseUri().resolve("/user");
+        return Response.created(uri).build();
+    }
+
+    //TODO: Check if modify can be the same form
+    @POST
+    @Consumes(value = { MediaType.MULTIPART_FORM_DATA, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Path("/upgrade")
+    public Response upgrade(@Valid @BeanParam final RegisterAsProfessorForm form) {
+
+        final User loggedUser = loggedUser();
+
+        final Professor professor;
+        try {
+            professor = professorService.create(loggedUser.getId(), form.getDescription(),
+                    form.getPicture().getValueAs(byte[].class));
+        } catch (DownloadFileException e) {
+            //TODO: ERROR
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (ProfessorWithoutUserException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(professor == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final URI uri = uriInfo.getBaseUri().resolve("/user");
+        return Response.created(uri).build();
     }
 }
