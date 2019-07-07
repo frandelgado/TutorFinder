@@ -4,15 +4,11 @@ import ar.edu.itba.paw.exceptions.InvalidTokenException;
 import ar.edu.itba.paw.exceptions.NonexistentProfessorException;
 import ar.edu.itba.paw.exceptions.TokenCrationException;
 import ar.edu.itba.paw.exceptions.UserAuthenticationException;
-import ar.edu.itba.paw.interfaces.service.ClassReservationService;
-import ar.edu.itba.paw.interfaces.service.PasswordResetService;
-import ar.edu.itba.paw.interfaces.service.ProfessorService;
-import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.models.ClassReservation;
-import ar.edu.itba.paw.models.PagedResults;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.interfaces.service.*;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.dto.ClassReservationDTO;
+import ar.edu.itba.paw.webapp.dto.CourseDTO;
+import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
 import ar.edu.itba.paw.webapp.dto.form.ResetPasswordRequestForm;
 import ar.edu.itba.paw.webapp.form.ResetPasswordForm;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
@@ -44,6 +40,9 @@ public class UserController extends BaseController {
     @Autowired
     private PasswordResetService passwordResetService;
 
+    @Autowired
+    private CourseService courseService;
+
     @Context
     private UriInfo uriInfo;
 
@@ -55,8 +54,43 @@ public class UserController extends BaseController {
         final User loggedUser = loggedUser();
         final Professor professor = professorService.findById(loggedUser.getId());
 
-        //TODO: Everything
-        return Response.ok().build();
+        if(professor == null) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        return Response.ok(new ProfessorDTO(professor, uriInfo)).build();
+    }
+
+    @GET
+    @Path("/courses")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response courses(@DefaultValue("1") @QueryParam("page") final int page) {
+
+        final User loggedUser = loggedUser();
+
+        final PagedResults<Course> results = courseService.findCourseByProfessorId(loggedUser.getId(), page);
+
+        if(results == null) {
+            return badRequest("Invalid page number");
+        }
+
+        final Link[] links = linkBuilder.buildLinks(uriInfo, results);
+
+        final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
+                results.getResults().stream()
+                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
+    }
+
+
+    @GET
+    @Path("/schedule")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response schedule(){
+        //TODO fill in when schedule model is revised.
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
 
     @GET

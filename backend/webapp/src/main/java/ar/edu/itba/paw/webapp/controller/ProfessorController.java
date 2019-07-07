@@ -76,7 +76,7 @@ public class ProfessorController extends BaseController{
 
         final GenericEntity<List<ProfessorDTO>> entity = new GenericEntity<List<ProfessorDTO>>(
                 professors.getResults().stream()
-                        .map(professor -> new ProfessorDTO(professor, uriInfo.getBaseUri()))
+                        .map(professor -> new ProfessorDTO(professor, uriInfo))
                         .collect(Collectors.toList())
         ){};
 
@@ -95,7 +95,7 @@ public class ProfessorController extends BaseController{
         if(professor == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(new ProfessorDTO(professor, uriInfo.getBaseUri())).build();
+        return Response.ok(new ProfessorDTO(professor, uriInfo)).build();
 
     }
 
@@ -131,5 +131,21 @@ public class ProfessorController extends BaseController{
     public Response professorSchedule(@PathParam("username") final String username){
         //TODO fill in when schedule model is revised.
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @GET
+    @Path("/{username}/image")
+    @Produces({"image/png", "image/jpeg"})
+    public Response getImage(@PathParam("username") final String username) {
+
+        final Professor professor = ps.findByUsername(username);
+
+        if(professor == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        final byte[] picture = professor.getPicture();
+
+        return Response.ok(picture).build();
     }
 }

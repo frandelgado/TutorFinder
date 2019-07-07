@@ -2,16 +2,17 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.User;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 
+@XmlRootElement
 public class UserDTO {
 
-    private Long id;
+    private long id;
     private String username;
     private String name;
-    private String lastName;
+    private String lastname;
     private String email;
-    private URI url;
 
     public UserDTO(){}
 
@@ -19,25 +20,25 @@ public class UserDTO {
         this.id = user.getId();
         this.username = user.getUsername();
         this.name = user.getName();
-        this.lastName = user.getLastname();
+        this.lastname = user.getLastname();
         this.email = user.getEmail();
-        this.url = baseUri;
+
+        //TODO: urls
     }
 
-    public UserDTO(Long id, String username, String name, String lastName, String email, URI url) {
+    public UserDTO(Long id, String username, String name, String lastName, String email) {
         this.id = id;
         this.username = username;
         this.name = name;
-        this.lastName = lastName;
+        this.lastname = lastName;
         this.email = email;
-        this.url = url;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -57,12 +58,12 @@ public class UserDTO {
         this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getEmail() {
@@ -71,13 +72,5 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public URI getUrl() {
-        return url;
-    }
-
-    public void setUrl(URI url) {
-        this.url = url;
     }
 }
