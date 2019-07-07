@@ -7,11 +7,14 @@ import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.CourseFile;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.dto.CourseFileDTO;
+import ar.edu.itba.paw.webapp.dto.form.UploadClassFileForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,35 +88,30 @@ public class CourseFileController extends BaseController {
     }
 
 
-//    @PUT
-//    @Path("/{id}")
-//    public ModelAndView uploadFile(@Valid @ModelAttribute("uploadClassFileForm") final UploadClassFileForm form,
-//                                   BindingResult result,
-//                                   @RequestParam("professor") final long professorId,
-//                                   @RequestParam("subject") final long subjectId,
-//                                   @ModelAttribute("currentUser") final User currentUser) {
-//
-//        CourseFile courseFile = null;
-//        if(result.hasErrors()) {
-//            return getCourseFiles(professorId, subjectId, currentUser, form);
-//        }
-//
-//        try {
-//            courseFile = cfs.save(professorId, subjectId, currentUser, form.getFile().getOriginalFilename(),
-//                    form.getDescription(), form.getFile().getContentType(), form.getFile().getBytes());
-//        } catch (IOException e) {
-//            return redirectToErrorPage("oops");
-//        } catch (UserAuthenticationException e) {
-//            return redirectToErrorPage("403");
-//        }
-//
-//        if(courseFile == null) {
-//            return getCourseFiles(professorId, subjectId, currentUser, form);
-//        }
-//
-//        return redirectWithNoExposedModalAttributes("/courseFiles?professor=" + professorId
-//                +"&subject=" + subjectId);
-//    }
+    @PUT
+    @Consumes(value = { MediaType.MULTIPART_FORM_DATA, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response uploadFile(@Valid @BeanParam final UploadClassFileForm form,
+                               @PathParam("professor") final long professorId,
+                               @PathParam("subject") final long subjectId) {
+
+        final User currentUser = loggedUser();
+        final CourseFile courseFile;
+
+        try {
+            courseFile = cfs.save(professorId, subjectId, currentUser, form.getFile().getName(),
+                    form.getDescription(), form.getFile().getContentDisposition().getType(), form.getFile().getValueAs(byte[].class));
+        }  catch (UserAuthenticationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(courseFile == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(courseFile.getId())).build();
+        return Response.created(uri).build();
+    }
 
     //TODO: Check same course
     @DELETE
