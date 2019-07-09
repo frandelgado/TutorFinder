@@ -50,12 +50,12 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
   <filter-mapping>
     <filter-name>encoding-filter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
   <jsp-config>
@@ -85,6 +85,6 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
   </servlet>
   <servlet-mapping>
     <servlet-name>jersey-servlet</servlet-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
 </web-app>
