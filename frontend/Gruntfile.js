@@ -14,6 +14,15 @@ module.exports = function (grunt) {
   grunt.initConfig({
     yeoman: appConfig,
     connect: {
+      proxies: [
+        {
+          context: '/api',
+          host: 'localhost',
+          port: 8080,
+          https: false,
+          changeOrigin: false
+        }
+      ],
       options: {
         port: 9000,
         hostname: 'localhost',
@@ -24,6 +33,7 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             return [
+              require('grunt-connect-proxy/lib/utils').proxyRequest,
             connect.static('.tmp'),
             connect().use('/bower_components', connect.static('./bower_components')),
             connect.static(appConfig.app)
@@ -461,6 +471,7 @@ module.exports = function (grunt) {
       'concurrent:server',
       'autoprefixer',
       'bower',
+      'configureProxies',
       'connect:livereload',
       'watch'
     ]);
