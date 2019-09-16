@@ -40,6 +40,7 @@
     <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
     <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
     <jersey.version>3.0-SNAPSHOT</jersey.version>
+    <jsonwebtoken.version>0.10.5</jsonwebtoken.version>
   </properties>
 
   <dependencyManagement>
@@ -259,6 +260,23 @@
         <groupId>org.glassfish.jersey.ext</groupId>
         <artifactId>jersey-bean-validation</artifactId>
         <version>${jersey.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-api</artifactId>
+        <version>${jsonwebtoken.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-impl</artifactId>
+        <version>${jsonwebtoken.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-jackson</artifactId>
+        <version>${jsonwebtoken.version}</version>
+        <scope>runtime</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
