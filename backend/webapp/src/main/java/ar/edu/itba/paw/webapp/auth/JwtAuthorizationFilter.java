@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
