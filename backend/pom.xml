@@ -29,7 +29,7 @@
     <org.mockito.version>1.9.5</org.mockito.version>
     <javax.mail.version>1.4</javax.mail.version>
     <joda-time.version>2.10</joda-time.version>
-    <org.junit.version>4.11</org.junit.version>
+    <org.junit.version>4.13.1</org.junit.version>
     <maven-war-plugin.version>2.6</maven-war-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
